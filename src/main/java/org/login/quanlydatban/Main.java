@@ -25,14 +25,17 @@ public class Main extends Application {
         session.getTransaction().begin();
 
         Ban ban = new Ban();
-        ban.setMaBan("1235");
+        ban.setMaBan("1234");
         ban.setLoaiBan(LoaiBan.BAN_2_NGUOI);
         ban.setKhuVuc(KhuVuc.A);
         ban.setTrangThaiBan(TrangThaiBan.BAN_TRONG);
-
+        LoaiMonAn loaiMonAn = new LoaiMonAn("001", "Lẩu", "Lẩu thái hải sản");
+        MonAn monAn = new MonAn(loaiMonAn, "002", "Lẩu thái hải sản full topping", 9.0, "Nồi", "lau.png", TrangThaiMonAn.CO_SAN);
+        session.save(monAn);
         session.save(ban);//persistent
         session.getTransaction().commit();
         session.close();
+
 
         stage.setTitle("Đăng nhập");
         stage.setScene(scene);
