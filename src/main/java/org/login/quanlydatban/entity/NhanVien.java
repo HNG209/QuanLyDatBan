@@ -5,6 +5,7 @@ import org.login.quanlydatban.entity.enums.TrangThaiNhanVien;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Set;
 
 @Entity
 @Table
@@ -34,7 +35,6 @@ public class NhanVien implements Serializable {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private TrangThaiNhanVien trangThaiNhanVien;
-
     public NhanVien(){
 
     }
@@ -113,6 +113,7 @@ public class NhanVien implements Serializable {
     public void setTrangThaiNhanVien(TrangThaiNhanVien trangThaiNhanVien) {
         this.trangThaiNhanVien = trangThaiNhanVien;
     }
+
 
     @Override
     public String toString() {

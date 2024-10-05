@@ -1,9 +1,7 @@
 package org.login.quanlydatban.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table
@@ -26,7 +24,6 @@ public class KhachHang {
 
     @Column(nullable = false)
     private String email;
-
 
     private int diemTichLuy = 0;
 
@@ -89,4 +86,5 @@ public class KhachHang {
     public void setTenKhachHang(String tenKhachHang) {
         this.tenKhachHang = tenKhachHang;
     }
+
 }

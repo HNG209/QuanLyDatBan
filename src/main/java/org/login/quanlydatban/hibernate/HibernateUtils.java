@@ -5,10 +5,7 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.cfg.Environment;
 import org.hibernate.service.ServiceRegistry;
-import org.login.quanlydatban.entity.Ban;
-import org.login.quanlydatban.entity.LoaiMonAn;
-import org.login.quanlydatban.entity.NhanVien;
-import org.login.quanlydatban.entity.TaiKhoan;
+import org.login.quanlydatban.entity.*;
 
 import java.util.Properties;
 
@@ -32,10 +29,13 @@ public class HibernateUtils {
         configuration.addAnnotatedClass(NhanVien.class);
         configuration.addAnnotatedClass(LoaiMonAn.class);
         configuration.addAnnotatedClass(Ban.class);
-
+        configuration.addAnnotatedClass(MonAn.class);
+        configuration.addAnnotatedClass(KhachHang.class);
+        configuration.addAnnotatedClass(PhienThongKe.class);
+        configuration.addAnnotatedClass(HoaDon.class);
 
         ServiceRegistry registry = new StandardServiceRegistryBuilder()
-                .applySettings(configuration.getProperties())
+                .applySettings(configuration.getProperties())   
                 .build();
 
         FACTORY = configuration.buildSessionFactory(registry);
