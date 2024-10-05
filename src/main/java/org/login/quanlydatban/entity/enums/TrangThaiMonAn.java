@@ -1,4 +1,4 @@
-package org.login.quanlydatban.entity;
+package org.login.quanlydatban.entity.enums;
 
 import java.io.Serializable;
 

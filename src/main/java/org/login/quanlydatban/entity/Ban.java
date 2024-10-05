@@ -1,5 +1,9 @@
 package org.login.quanlydatban.entity;
 
+import org.login.quanlydatban.entity.enums.KhuVuc;
+import org.login.quanlydatban.entity.enums.LoaiBan;
+import org.login.quanlydatban.entity.enums.TrangThaiBan;
+
 import javax.persistence.*;
 
 @Entity

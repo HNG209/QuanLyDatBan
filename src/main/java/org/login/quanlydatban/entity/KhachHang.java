@@ -10,7 +10,6 @@ import javax.persistence.Table;
 public class KhachHang {
 
     @Id
-    @Column(nullable = false)
     private String maKhachHang;
 
     @Column(nullable = false)

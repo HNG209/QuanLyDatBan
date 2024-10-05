@@ -17,6 +17,10 @@ public class TaiKhoan implements Serializable {
     @Column(nullable = false)
     private String password;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    private NhanVien nhanVien;
+
+
     public TaiKhoan() {
     }
 
@@ -48,5 +52,23 @@ public class TaiKhoan implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public NhanVien getNhanVien() {
+        return nhanVien;
+    }
+
+    public void setNhanVien(NhanVien nhanVien) {
+        this.nhanVien = nhanVien;
+    }
+
+    @Override
+    public String toString() {
+        return "TaiKhoan{" +
+                "id=" + id +
+                ", userName='" + userName + '\'' +
+                ", password='" + password + '\'' +
+                ", nhanVien=" + nhanVien +
+                '}';
     }
 }

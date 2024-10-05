@@ -1,4 +1,4 @@
-package org.login.quanlydatban.entity;
+package org.login.quanlydatban.entity.enums;
 
 public enum LoaiBan {
     BAN_2_NGUOI,

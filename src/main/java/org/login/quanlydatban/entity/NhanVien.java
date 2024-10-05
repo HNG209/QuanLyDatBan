@@ -1,5 +1,7 @@
 package org.login.quanlydatban.entity;
 
+import org.login.quanlydatban.entity.enums.TrangThaiNhanVien;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -110,5 +112,19 @@ public class NhanVien implements Serializable {
 
     public void setTrangThaiNhanVien(TrangThaiNhanVien trangThaiNhanVien) {
         this.trangThaiNhanVien = trangThaiNhanVien;
+    }
+
+    @Override
+    public String toString() {
+        return "NhanVien{" +
+                "maNhanVien='" + maNhanVien + '\'' +
+                ", tenNhanVien='" + tenNhanVien + '\'' +
+                ", sdt='" + sdt + '\'' +
+                ", cccd='" + cccd + '\'' +
+                ", diaChi='" + diaChi + '\'' +
+                ", gioiTinh=" + gioiTinh +
+                ", ngaySinh=" + ngaySinh +
+                ", trangThaiNhanVien=" + trangThaiNhanVien +
+                '}';
     }
 }

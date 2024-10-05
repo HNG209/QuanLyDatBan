@@ -7,15 +7,12 @@ import javax.persistence.Table;
 
 @Entity
 @Table
-
-
 public class LoaiMonAn {
     @Id
     private String maLoaiMonAn;
 
     @Column(nullable = false)
     private String tenLoaiMonAn;
-
 
     @Column(nullable = true)
     private String moTaLoaiMonAn;
@@ -46,7 +43,6 @@ public class LoaiMonAn {
         return moTaLoaiMonAn;
     }
 
-
     public void setMaLoaiMonAn(String maLoaiMonAn) {
         this.maLoaiMonAn = maLoaiMonAn;
     }
@@ -57,5 +53,14 @@ public class LoaiMonAn {
 
     public void setMoTaLoaiMonAn(String moTaLoaiMonAn) {
         this.moTaLoaiMonAn = moTaLoaiMonAn;
+    }
+
+    @Override
+    public String toString() {
+        return "LoaiMonAn{" +
+                "maLoaiMonAn='" + maLoaiMonAn + '\'' +
+                ", tenLoaiMonAn='" + tenLoaiMonAn + '\'' +
+                ", moTaLoaiMonAn='" + moTaLoaiMonAn + '\'' +
+                '}';
     }
 }
