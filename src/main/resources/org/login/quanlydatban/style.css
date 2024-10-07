@@ -1,0 +1,37 @@
+.bg1 {
+    -fx-background-color: white;
+}
+
+.exit-button {
+    -fx-background-color: red;
+    -fx-text-fill: black;
+}
+
+.gradient1 {
+    -fx-background-color: linear-gradient(to top, FFA62F, FFE8C8);
+}
+
+.gradient2 {
+    -fx-background-color: linear-gradient(to top, FFE8C8, white);
+}
+
+.round-box {
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-background-color: #ffffff;
+}
+
+.small-round-box {
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+    -fx-background-color: #ffffff;
+}
+
+.button:hover {
+    -fx-background-color: #2980b9;
+    -fx-text-fill: #ecf0f1;
+}
+
+.mouse-move:hover{
+    -fx-background-color: -fx-shadow-highlight-color, -fx-outer-border, -fx-inner-border, -fx-body-color;
+}

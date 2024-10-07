@@ -8,9 +8,6 @@ import java.io.Serializable;
 public class TaiKhoan implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
     @Column(nullable = false)
     private String userName;
 
@@ -20,22 +17,12 @@ public class TaiKhoan implements Serializable {
     @OneToOne(fetch = FetchType.LAZY)
     private NhanVien nhanVien;
 
-
     public TaiKhoan() {
     }
 
-    public TaiKhoan(Long id, String userName, String password) {
-        this.id = id;
+    public TaiKhoan(String userName, String password) {
         this.userName = userName;
         this.password = password;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getUserName() {
@@ -65,7 +52,6 @@ public class TaiKhoan implements Serializable {
     @Override
     public String toString() {
         return "TaiKhoan{" +
-                "id=" + id +
                 ", userName='" + userName + '\'' +
                 ", password='" + password + '\'' +
                 ", nhanVien=" + nhanVien +

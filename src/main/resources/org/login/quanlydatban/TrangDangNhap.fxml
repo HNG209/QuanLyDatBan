@@ -1,6 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" />
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="350.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.login.quanlydatban.controller.DangNhapController">
+   <children>
+      <HBox prefHeight="350.0" prefWidth="500.0" stylesheets="@style.css">
+         <children>
+            <Pane prefHeight="350.0" prefWidth="256.0" styleClass="gradient1">
+               <children>
+                  <ImageView blendMode="MULTIPLY" fitHeight="252.0" fitWidth="189.0" layoutX="2.0" layoutY="49.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@tobologo.png" />
+                     </image>
+                  </ImageView>
+               </children></Pane>
+            <Pane prefHeight="400.0" prefWidth="372.0" styleClass="gradient2">
+               <children>
+                  <Pane layoutX="38.0" layoutY="119.0" prefHeight="212.0" prefWidth="246.0" style="-fx-background-color: white;" styleClass="round-box" />
+                  <TextField fx:id="username" layoutX="53.0" layoutY="144.0" onKeyPressed="#nhanEnterDeDangNhap" prefHeight="25.0" prefWidth="215.0" />
+                  <Label layoutX="53.0" layoutY="127.0" prefHeight="17.0" prefWidth="95.0" text="Tên đăng nhập:" />
+                  <Label layoutX="53.0" layoutY="173.0" prefHeight="17.0" prefWidth="87.0" text="Mật khẩu:" />
+                  <Button layoutX="53.0" layoutY="236.0" mnemonicParsing="false" onAction="#dangNhap" prefHeight="25.0" prefWidth="215.0" style="-fx-background-color: ACD793;" styleClass="small-round-box" text="Đăng nhập" />
+                  <Button layoutX="53.0" layoutY="274.0" mnemonicParsing="false" onAction="#thoat" prefWidth="215.0" style="-fx-background-color: FFA62F;" styleClass="small-round-box" text="Thoát" />
+                  <PasswordField fx:id="password" layoutX="53.0" layoutY="190.0" onKeyPressed="#nhanEnterDeDangNhap" prefHeight="25.0" prefWidth="215.0" />
+                  <ImageView blendMode="MULTIPLY" fitHeight="120.0" fitWidth="87.0" layoutX="111.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@tobologo.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="31.0" fitWidth="31.0" layoutX="276.0" layoutY="2.0" onMouseClicked="#thoat" pickOnBounds="true" preserveRatio="true" styleClass="mouse-move">
+                     <image>
+                        <Image url="@exit.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="img" fitHeight="25.0" fitWidth="25.0" layoutX="237.0" layoutY="190.0" onMouseClicked="#hienMatKhau" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@hide.png" />
+                     </image>
+                  </ImageView>
+                  <TextField fx:id="showPasswordField" layoutX="53.0" layoutY="190.0" onKeyPressed="#nhanEnterDeDangNhap" prefHeight="25.0" prefWidth="215.0" visible="false" />
+               </children>
+            </Pane>
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>

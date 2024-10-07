@@ -4,14 +4,15 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 @Table
 public class PhienThongKe {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int maPhienThongKe;
+    private String maPhienThongKe;
 
     private String chiTiet;
 
@@ -23,12 +24,23 @@ public class PhienThongKe {
 
     public PhienThongKe(){}
 
-    public int getMaPhienThongKe() {
-        return maPhienThongKe;
+    @PrePersist
+    public void generateId() {
+        if (this.maPhienThongKe == null) {
+            this.maPhienThongKe = generateCustomId();
+        }
     }
 
-    public void setMaPhienThongKe(int maPhienThongKe) {
-        this.maPhienThongKe = maPhienThongKe;
+    private String generateCustomId() {
+        // Define your starting prefix (e.g., "ID-")
+        String prefix = "ID-";
+
+        // Get the current date-time series
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+        String dateTimeSeries = LocalDateTime.now().format(formatter);
+
+        // Combine prefix and date-time series
+        return prefix + dateTimeSeries;
     }
 
     public String getChiTiet() {
@@ -39,12 +51,12 @@ public class PhienThongKe {
         this.chiTiet = chiTiet;
     }
 
-    public LocalDate getThoiGianThongKe() {
-        return thoiGianThongKe;
+    public NhanVien getNhanVien() {
+        return nhanVien;
     }
 
-    public void setThoiGianThongKe(LocalDate thoiGianThongKe) {
-        this.thoiGianThongKe = thoiGianThongKe;
+    public void setNhanVien(NhanVien nhanVien) {
+        this.nhanVien = nhanVien;
     }
 
     @Override
