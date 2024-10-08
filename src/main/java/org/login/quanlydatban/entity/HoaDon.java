@@ -27,9 +27,6 @@ public class HoaDon {
     @JoinColumn(name = "maNhanVien")
     private NhanVien nhanVien;
 
-    @OneToMany(mappedBy = "hoaDon", cascade = CascadeType.REMOVE)
-    private Set<ChiTietHoaDon> chiTietHoaDon;
-
     @Enumerated(EnumType.STRING)
     private TrangThaiHoaDon trangThaiHoaDon = TrangThaiHoaDon.CHUA_THANH_TOAN;
 

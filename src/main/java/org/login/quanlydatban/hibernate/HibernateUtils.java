@@ -19,8 +19,8 @@ public class HibernateUtils {
         properties.put(Environment.DIALECT, "org.hibernate.dialect.MySQL8Dialect");
         properties.put(Environment.DRIVER, "com.mysql.cj.jdbc.Driver");
         properties.put(Environment.URL, "jdbc:mysql://localhost/nhahangtobo");
-        properties.put(Environment.USER, "root");
-        properties.put(Environment.PASS, "29092004");
+        properties.put(Environment.USER, "sa");
+        properties.put(Environment.PASS, "sapassword");
         properties.put(Environment.HBM2DDL_AUTO, "update");
         properties.put(Environment.SHOW_SQL, "true");
 
@@ -33,8 +33,6 @@ public class HibernateUtils {
         configuration.addAnnotatedClass(KhachHang.class);
         configuration.addAnnotatedClass(PhienThongKe.class);
         configuration.addAnnotatedClass(HoaDon.class);
-        configuration.addAnnotatedClass(ChiTietHoaDon.class);
-        configuration.addAnnotatedClass(LichDat.class);
 
         ServiceRegistry registry = new StandardServiceRegistryBuilder()
                 .applySettings(configuration.getProperties())   

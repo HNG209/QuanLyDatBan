@@ -25,9 +25,6 @@ public class KhachHang {
     @Column(nullable = false)
     private String email;
 
-    @OneToMany(mappedBy = "khachHang")
-    private Set<LichDat> lichDatSet;
-
     private int diemTichLuy = 0;
 
     public KhachHang() {
@@ -89,4 +86,5 @@ public class KhachHang {
     public void setTenKhachHang(String tenKhachHang) {
         this.tenKhachHang = tenKhachHang;
     }
+
 }

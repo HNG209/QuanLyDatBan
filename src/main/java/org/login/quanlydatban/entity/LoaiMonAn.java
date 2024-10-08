@@ -21,6 +21,10 @@ public class LoaiMonAn {
     public LoaiMonAn() {
     }
 
+    public LoaiMonAn(String maLoaiMonAn) {
+        this.maLoaiMonAn = maLoaiMonAn;
+    }
+
     public LoaiMonAn(String maLoaiMonAn, String tenLoaiMonAn, String moTaLoaiMonAn) {
         this.maLoaiMonAn = maLoaiMonAn;
         this.tenLoaiMonAn = tenLoaiMonAn;
