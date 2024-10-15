@@ -21,11 +21,24 @@ public class LichDat {
     private NhanVien nhanVien;
 
     @Column(nullable = false)
-    private int soLuongNguoi = 5;
+    private int soLuongNguoi;
 
     @OneToOne
     private Ban ban;
 
     @OneToOne
     private HoaDon hoaDon;
+
+    public LichDat() {
+    }
+
+    public LichDat(String maLichDat, LocalDate thoiGianDat, KhachHang khachHang, NhanVien nhanVien, int soLuongNguoi, Ban ban, HoaDon hoaDon) {
+        this.maLichDat = maLichDat;
+        this.thoiGianDat = thoiGianDat;
+        this.khachHang = khachHang;
+        this.nhanVien = nhanVien;
+        this.soLuongNguoi = soLuongNguoi;
+        this.ban = ban;
+        this.hoaDon = hoaDon;
+    }
 }

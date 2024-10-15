@@ -35,10 +35,6 @@ public class NhanVien implements Serializable {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private TrangThaiNhanVien trangThaiNhanVien;
-
-    @OneToMany(mappedBy = "nhanVien")
-    private Set<LichDat> lichDatSet;
-
     public NhanVien(){
 
     }
@@ -117,6 +113,7 @@ public class NhanVien implements Serializable {
     public void setTrangThaiNhanVien(TrangThaiNhanVien trangThaiNhanVien) {
         this.trangThaiNhanVien = trangThaiNhanVien;
     }
+
 
     @Override
     public String toString() {
