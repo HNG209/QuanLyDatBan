@@ -1,19 +1,28 @@
     package org.login.quanlydatban.controller;
 
     import javafx.beans.binding.Bindings;
+    import javafx.event.ActionEvent;
     import javafx.fxml.FXML;
+    import javafx.fxml.FXMLLoader;
     import javafx.fxml.Initializable;
+    import javafx.scene.Node;
+    import javafx.scene.Parent;
+    import javafx.scene.Scene;
     import javafx.scene.control.PasswordField;
     import javafx.scene.control.TextField;
     import javafx.scene.image.Image;
     import javafx.scene.image.ImageView;
     import javafx.scene.input.KeyCode;
+    import javafx.stage.Stage;
+    import javafx.stage.StageStyle;
     import org.hibernate.Session;
     import org.login.quanlydatban.entity.TaiKhoan;
     import org.login.quanlydatban.hibernate.HibernateUtils;
 
     import javax.naming.Binding;
+    import java.io.IOException;
     import java.net.URL;
+    import java.util.Objects;
     import java.util.ResourceBundle;
 
     public class DangNhapController implements Initializable {
@@ -29,7 +38,11 @@
         public void nhanEnterDeDangNhap(){
             username.setOnKeyPressed(event -> {
                 if (event.getCode() == KeyCode.ENTER) {
-                    dangNhap();
+                    try {
+                        dangNhap();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
                     password.requestFocus();
 
                 }
@@ -37,18 +50,25 @@
 
             password.setOnKeyPressed(event -> {
                 if (event.getCode() == KeyCode.ENTER) {
-                    dangNhap();
+                    try {
+                        dangNhap();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
             });
             showPasswordField.setOnKeyPressed(event -> {
                 if (event.getCode() == KeyCode.ENTER) {
-                    dangNhap();
+                    try {
+                        dangNhap();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
             });
-
         }
         @FXML
-        public void dangNhap(){
+        public void dangNhap() throws IOException {
             Session session = HibernateUtils.getFactory().openSession();
             session.getTransaction().begin();
 
@@ -59,7 +79,7 @@
                 }
                 else if(taiKhoan.getPassword().equals(password.getText())){
                     System.out.println("dang nhap thanh cong");
-                    System.out.println(taiKhoan);
+                    showTrangChu();
                 }
                 else
                     System.out.println("sai mat khau");
@@ -100,4 +120,21 @@
 
         }
 
+        public void showTrangChu() throws IOException {
+            FXMLLoader loader = new FXMLLoader(DangNhapController.class.getResource("/org/login/quanlydatban/TrangChu.fxml"));
+            Parent root = loader.load();
+
+            //close current stage, stage with UNDECORATED style
+            Stage stage = (Stage) username.getScene().getWindow();
+            stage.close();
+
+            //init a new stage with no style add on
+            stage = new Stage();
+            Scene scene = new Scene(root);
+            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/org/login/quanlydatban/style.css")).toExternalForm());
+
+            stage.setScene(scene);
+            stage.centerOnScreen();
+            stage.show();
+        }
     }
