@@ -8,12 +8,34 @@
 }
 
 .gradient1 {
-    -fx-background-color: linear-gradient(to top, FFA62F, FFE8C8);
+    -fx-background-color: linear-gradient(to top, #FFA62F, #FFE8C8);
 }
 
 .gradient2 {
-    -fx-background-color: linear-gradient(to top, FFE8C8, white);
+    -fx-background-color: linear-gradient(to top, #FFE8C8, white);
 }
+
+.gradient3 {
+    -fx-background-color: linear-gradient(to bottom right, #F3B664, #EC8F5E);
+}
+
+/*color theme*/
+.light-coral {
+    -fx-background-color: #EC8F5E;
+}
+
+.sunset-orange {
+    -fx-background-color: #F3B664;
+}
+
+.pale-lemon {
+    -fx-background-color: #F1EB90;
+}
+
+.sage-green {
+    -fx-background-color: #9FBB73;
+}
+/*end defining theme*/
 
 .round-box {
     -fx-background-radius: 10;

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
+
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
+   <top>
+      <Pane prefHeight="100.0" prefWidth="1280.0" styleClass="gradient1" BorderPane.alignment="CENTER">
+         <children>
+            <MenuBar layoutY="64.0" prefHeight="38.0" prefWidth="1598.0" styleClass="gradient3">
+              <menus>
+                <Menu mnemonicParsing="false" text="Trang chủ">
+                  <items>
+                    <MenuItem mnemonicParsing="false" text="Close" />
+                  </items>
+                     <graphic>
+                        <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@trangchu.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Nhà hàng">
+                  <items>
+                    <MenuItem mnemonicParsing="false" text="Delete" />
+                  </items>
+                     <graphic>
+                        <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@quanlinhahang.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Thực đơn">
+                  <items>
+                    <MenuItem mnemonicParsing="false" text="About" />
+                  </items>
+                     <graphic>
+                        <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@thucdon%20(2).png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                </Menu>
+                  <Menu mnemonicParsing="false" text="Nhân viên">
+                    <items>
+                      <MenuItem mnemonicParsing="false" text="Action 1" />
+                    </items>
+                     <graphic>
+                        <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@quanlinhanvien.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Menu>
+                  <Menu mnemonicParsing="false" text="Thống kê">
+                     <items>
+                        <MenuItem mnemonicParsing="false" text="Action 1" />
+                     </items>
+                     <graphic>
+                        <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@thongke.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Menu>
+              </menus>
+            </MenuBar>
+            <ImageView blendMode="MULTIPLY" fitHeight="56.0" fitWidth="85.0" layoutX="10.0" layoutY="2.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@tobologo.png" />
+               </image>
+            </ImageView>
+            <ImageView blendMode="MULTIPLY" fitHeight="67.0" fitWidth="130.0" layoutX="32.0" layoutY="4.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@logo-text.jpg" />
+               </image>
+            </ImageView>
+         </children>
+      </Pane>
+   </top>
+</BorderPane>
