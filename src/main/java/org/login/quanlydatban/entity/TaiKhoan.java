@@ -14,7 +14,7 @@ public class TaiKhoan implements Serializable {
     @Column(nullable = false)
     private String password;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     private NhanVien nhanVien;
 
     public TaiKhoan() {

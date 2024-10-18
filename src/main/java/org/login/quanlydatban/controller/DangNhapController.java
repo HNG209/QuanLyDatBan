@@ -16,6 +16,7 @@
     import javafx.stage.Stage;
     import javafx.stage.StageStyle;
     import org.hibernate.Session;
+    import org.login.quanlydatban.dao.TaiKhoanDAO;
     import org.login.quanlydatban.entity.TaiKhoan;
     import org.login.quanlydatban.hibernate.HibernateUtils;
 
@@ -34,6 +35,8 @@
         private TextField username;
         @FXML
         private ImageView img;
+
+        private TaiKhoanDAO taiKhoanDAO;
         @FXML
         public void nhanEnterDeDangNhap(){
             username.setOnKeyPressed(event -> {
@@ -69,25 +72,19 @@
         }
         @FXML
         public void dangNhap() throws IOException {
-            Session session = HibernateUtils.getFactory().openSession();
-            session.getTransaction().begin();
-
-            TaiKhoan taiKhoan = session.get(TaiKhoan.class, username.getText());
+            TaiKhoan taiKhoan = taiKhoanDAO.getTaiKhoan(username.getText());
             if(taiKhoan != null){
                 if(password.getText().equals("")) {
                     System.out.println("Vui long nhap mat khau");
                 }
                 else if(taiKhoan.getPassword().equals(password.getText())){
                     System.out.println("dang nhap thanh cong");
-                    showTrangChu();
+                    showTrangChu(taiKhoan);
                 }
                 else
                     System.out.println("sai mat khau");
             }
             else System.out.println("khong ton tai");
-
-            session.getTransaction().commit();
-            session.close();
         }
         @FXML
         public void hienMatKhau() {
@@ -117,10 +114,10 @@
 
         @Override
         public void initialize(URL url, ResourceBundle resourceBundle) {
-
+            taiKhoanDAO = new TaiKhoanDAO();
         }
 
-        public void showTrangChu() throws IOException {
+        public void showTrangChu(TaiKhoan taiKhoan) throws IOException {
             FXMLLoader loader = new FXMLLoader(DangNhapController.class.getResource("/org/login/quanlydatban/TrangChu.fxml"));
             Parent root = loader.load();
 
@@ -132,6 +129,10 @@
             stage = new Stage();
             Scene scene = new Scene(root);
             scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/org/login/quanlydatban/style.css")).toExternalForm());
+
+            //passing information to TrangChu
+            TrangChuController trangChuController = loader.getController();
+            trangChuController.setTaiKhoan(taiKhoan);
 
             stage.setScene(scene);
             stage.centerOnScreen();
