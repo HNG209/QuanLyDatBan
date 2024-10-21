@@ -28,7 +28,7 @@ public class TrangChuController {
 
     @FXML
     public void datMon() throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/TrangDatMon.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/TrangDatMon.fxml"));
         AnchorPane anchorPane = loader.load();
 
         borderPane.setCenter(anchorPane);

@@ -18,9 +18,9 @@
    <children>
       <ScrollPane fx:id="scrollPane" layoutX="19.2" layoutY="51.2" prefHeight="566.0" prefWidth="686.0" AnchorPane.bottomAnchor="18.0" AnchorPane.leftAnchor="19.0" AnchorPane.rightAnchor="575.0" AnchorPane.topAnchor="51.0">
          <content>
-            <FlowPane fx:id="flowPane" hgap="30.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="563.0" prefWidth="687.0" styleClass="gradient2" vgap="30.0">
+            <FlowPane fx:id="flowPane" alignment="CENTER" hgap="30.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="563.0" prefWidth="687.0" styleClass="gradient2" vgap="30.0">
                <padding>
-                  <Insets bottom="30.0" left="25.0" right="30.0" top="30.0" />
+                  <Insets left="10.0" right="20.0" top="10.0" />
                </padding></FlowPane>
          </content>
       </ScrollPane>
@@ -46,7 +46,7 @@
          <graphic>
             <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@find.png" />
+                  <Image url="@../icons/find.png" />
                </image>
             </ImageView>
          </graphic>
@@ -54,7 +54,7 @@
       <ComboBox layoutX="48.8" layoutY="17.0" prefHeight="26.0" prefWidth="309.0" promptText="Chọn danh mục tìm kiếm" style="-fx-background-color: white; -fx-border-color: #F3B664;" styleClass="round-box" AnchorPane.leftAnchor="49.0" />
       <ImageView fitHeight="29.0" fitWidth="29.0" layoutX="19.0" layoutY="16.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="19.0">
          <image>
-            <Image url="@filter.png" />
+            <Image url="@../icons/filter.png" />
          </image>
       </ImageView>
    </children>

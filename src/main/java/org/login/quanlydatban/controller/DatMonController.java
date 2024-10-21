@@ -6,6 +6,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.shape.Rectangle;
 
 import java.io.IOException;
 import java.net.URL;
@@ -24,10 +25,14 @@ public class DatMonController implements Initializable {
         flowPane.prefHeightProperty().bind(scrollPane.heightProperty());
         flowPane.prefWidthProperty().bind(scrollPane.widthProperty());
 
-        for (int i = 0; i < 30; i++){
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/TestPane.fxml"));
+        for (int i = 0; i < 20; i++){
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/uicomponents/CardMonAn.fxml"));
             try {
                 AnchorPane pane = loader.load();
+
+                CardMonAnController controller = loader.getController();
+                controller.setIndex(i);
+
                 flowPane.getChildren().add(pane);
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -36,8 +41,8 @@ public class DatMonController implements Initializable {
 
         scrollPane.vvalueProperty().addListener((obs, oldValue, newValue) -> {
             if(newValue.doubleValue() == 1.0){
-                for (int i = 0; i < 30; i++){
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/TestPane.fxml"));
+                for (int i = 0; i < 20; i++){
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/uicomponents/CardMonAn.fxml"));
                     try {
                         AnchorPane pane = loader.load();
                         flowPane.getChildren().add(pane);

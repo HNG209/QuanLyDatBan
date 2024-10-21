@@ -1,11 +1,8 @@
     package org.login.quanlydatban.controller;
 
-    import javafx.beans.binding.Bindings;
-    import javafx.event.ActionEvent;
     import javafx.fxml.FXML;
     import javafx.fxml.FXMLLoader;
     import javafx.fxml.Initializable;
-    import javafx.scene.Node;
     import javafx.scene.Parent;
     import javafx.scene.Scene;
     import javafx.scene.control.PasswordField;
@@ -14,13 +11,9 @@
     import javafx.scene.image.ImageView;
     import javafx.scene.input.KeyCode;
     import javafx.stage.Stage;
-    import javafx.stage.StageStyle;
-    import org.hibernate.Session;
     import org.login.quanlydatban.dao.TaiKhoanDAO;
     import org.login.quanlydatban.entity.TaiKhoan;
-    import org.login.quanlydatban.hibernate.HibernateUtils;
 
-    import javax.naming.Binding;
     import java.io.IOException;
     import java.net.URL;
     import java.util.Objects;
@@ -89,8 +82,8 @@
         @FXML
         public void hienMatKhau() {
             String currentImageUrl = img.getImage().getUrl();
-            String showImageUrl = getClass().getResource("/org/login/quanlydatban/show.png").toString();
-            String hideImageUrl = getClass().getResource("/org/login/quanlydatban/hide.png").toString();
+            String showImageUrl = getClass().getResource("/org/login/quanlydatban/icons/show.png").toString();
+            String hideImageUrl = getClass().getResource("/org/login/quanlydatban/icons/hide.png").toString();
 
             if (currentImageUrl.equals(hideImageUrl)) {
                 showPasswordField.setText(password.getText());
@@ -118,7 +111,7 @@
         }
 
         public void showTrangChu(TaiKhoan taiKhoan) throws IOException {
-            FXMLLoader loader = new FXMLLoader(DangNhapController.class.getResource("/org/login/quanlydatban/TrangChu.fxml"));
+            FXMLLoader loader = new FXMLLoader(DangNhapController.class.getResource("/org/login/quanlydatban/views/TrangChu.fxml"));
             Parent root = loader.load();
 
             //close current stage, stage with UNDECORATED style
@@ -128,7 +121,7 @@
             //init a new stage with no style add on
             stage = new Stage();
             Scene scene = new Scene(root);
-            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/org/login/quanlydatban/style.css")).toExternalForm());
+            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/org/login/quanlydatban/stylesheets/style.css")).toExternalForm());
 
             //passing information to TrangChu
             TrangChuController trangChuController = loader.getController();

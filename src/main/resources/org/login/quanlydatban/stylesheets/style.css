@@ -55,3 +55,14 @@
 .mouse-move:hover{
     -fx-background-color: -fx-shadow-highlight-color, -fx-outer-border, -fx-inner-border, -fx-body-color;
 }
+
+.rounded-pane {
+    -fx-background-radius: 25;     /* Radius for background */
+
+    -fx-border-color: #000000;     /* Border color */
+    -fx-border-width: 2;           /* Border width */
+    -fx-border-radius: 25;         /* Radius for border */
+
+    -fx-padding: 10;               /* Padding inside the pane */
+}
+
