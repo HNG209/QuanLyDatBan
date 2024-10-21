@@ -40,13 +40,11 @@
 .round-box {
     -fx-background-radius: 10;
     -fx-border-radius: 10;
-    -fx-background-color: #ffffff;
 }
 
 .small-round-box {
     -fx-background-radius: 5;
     -fx-border-radius: 5;
-    -fx-background-color: #ffffff;
 }
 
 .button:hover {
