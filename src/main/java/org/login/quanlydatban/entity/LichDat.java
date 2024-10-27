@@ -1,17 +1,23 @@
 package org.login.quanlydatban.entity;
 
+import org.login.quanlydatban.entity.enums.LoaiTiec;
+
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table
-public class LichDat {
+public class LichDat implements Serializable {
     @Id
     private String maLichDat;
 
     @Column(nullable = false)
-    private LocalDate thoiGianDat;
+    private LocalDateTime thoiGianDat;
 
+    @Column(nullable = false)
+    private LocalDateTime thoiGianNhanBan;
     @ManyToOne
     @JoinColumn(name = "maKhachHang")
     private KhachHang khachHang;
@@ -29,16 +35,9 @@ public class LichDat {
     @OneToOne
     private HoaDon hoaDon;
 
-    public LichDat() {
-    }
+    @Column
+    @Enumerated(EnumType.STRING)
+    private LoaiTiec loaiTiec;
 
-    public LichDat(String maLichDat, LocalDate thoiGianDat, KhachHang khachHang, NhanVien nhanVien, int soLuongNguoi, Ban ban, HoaDon hoaDon) {
-        this.maLichDat = maLichDat;
-        this.thoiGianDat = thoiGianDat;
-        this.khachHang = khachHang;
-        this.nhanVien = nhanVien;
-        this.soLuongNguoi = soLuongNguoi;
-        this.ban = ban;
-        this.hoaDon = hoaDon;
-    }
+    public LichDat() {}
 }

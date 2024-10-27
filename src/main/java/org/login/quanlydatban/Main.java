@@ -21,10 +21,7 @@ public class Main extends Application {
         Scene scene = new Scene(fxmlLoader.load());
 
         Session session = HibernateUtils.getFactory().openSession();
-//        session.getTransaction().begin();
-//
-//
-//        session.getTransaction().commit();
+
         session.close();
 
         stage.setTitle("Đăng nhập");

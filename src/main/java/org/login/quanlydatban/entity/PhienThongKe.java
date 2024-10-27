@@ -3,17 +3,19 @@ package org.login.quanlydatban.entity;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 @Entity
 @Table
-public class PhienThongKe {
+public class PhienThongKe implements Serializable {
 
     @Id
     private String maPhienThongKe;
 
+    @Column
     private String chiTiet;
 
     @CreationTimestamp
@@ -22,7 +24,7 @@ public class PhienThongKe {
     @OneToOne
     private NhanVien nhanVien;
 
-    public PhienThongKe(){}
+    public PhienThongKe() {}
 
     @PrePersist
     public void generateId() {
