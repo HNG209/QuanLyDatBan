@@ -39,17 +39,6 @@ public class NhanVien implements Serializable {
 
     }
 
-    public NhanVien(String maNhanVien, String tenNhanVien, String sdt, String cccd, String diaChi, boolean gioiTinh, LocalDate ngaySinh, TrangThaiNhanVien trangThaiNhanVien) {
-        this.maNhanVien = maNhanVien;
-        this.tenNhanVien = tenNhanVien;
-        this.sdt = sdt;
-        this.cccd = cccd;
-        this.diaChi = diaChi;
-        this.gioiTinh = gioiTinh;
-        this.ngaySinh = ngaySinh;
-        this.trangThaiNhanVien = trangThaiNhanVien;
-    }
-
     public String getMaNhanVien() {
         return maNhanVien;
     }

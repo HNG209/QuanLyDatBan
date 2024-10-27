@@ -1,11 +1,12 @@
 package org.login.quanlydatban.entity;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Set;
 
 @Entity
 @Table
-public class KhachHang {
+public class KhachHang implements Serializable {
 
     @Id
     private String maKhachHang;

@@ -5,10 +5,11 @@ import org.login.quanlydatban.entity.enums.LoaiBan;
 import org.login.quanlydatban.entity.enums.TrangThaiBan;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table
-public class Ban {
+public class Ban implements Serializable {
     @Id
     private String maBan;
 

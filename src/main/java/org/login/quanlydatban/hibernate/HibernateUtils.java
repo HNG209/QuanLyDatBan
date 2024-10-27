@@ -25,8 +25,8 @@ public class HibernateUtils {
         properties.put(Environment.SHOW_SQL, "true");
 
         configuration.setProperties(properties);
-        configuration.addAnnotatedClass(TaiKhoan.class);
         configuration.addAnnotatedClass(NhanVien.class);
+        configuration.addAnnotatedClass(TaiKhoan.class);
         configuration.addAnnotatedClass(LoaiMonAn.class);
         configuration.addAnnotatedClass(Ban.class);
         configuration.addAnnotatedClass(MonAn.class);

@@ -4,17 +4,18 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.io.Serializable;
 
 @Entity
 @Table
-public class LoaiMonAn {
+public class LoaiMonAn implements Serializable {
     @Id
     private String maLoaiMonAn;
 
     @Column(nullable = false)
     private String tenLoaiMonAn;
 
-    @Column(nullable = true)
+    @Column
     private String moTaLoaiMonAn;
 
 

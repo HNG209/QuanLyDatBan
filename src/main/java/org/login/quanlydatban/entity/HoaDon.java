@@ -3,12 +3,13 @@ package org.login.quanlydatban.entity;
 import org.login.quanlydatban.entity.enums.TrangThaiHoaDon;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Set;
 
 @Entity
 @Table
-public class HoaDon {
+public class HoaDon implements Serializable {
     @Id
     private String maHoaDon;
 
