@@ -46,4 +46,15 @@ public class TrangChuController {
         anchorPane.prefWidthProperty().bind(borderPane.widthProperty());
         anchorPane.prefHeightProperty().bind(borderPane.heightProperty());
     }
+
+    public void thucDon() throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/TrangThucDon.fxml"));
+        AnchorPane anchorPane = loader.load();
+
+        borderPane.setCenter(anchorPane);
+
+        anchorPane.prefWidthProperty().bind(borderPane.widthProperty());
+        anchorPane.prefHeightProperty().bind(borderPane.heightProperty());
+    }
+
 }
