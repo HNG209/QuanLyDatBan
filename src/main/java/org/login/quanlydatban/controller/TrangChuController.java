@@ -1,10 +1,16 @@
 package org.login.quanlydatban.controller;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.Stage;
 import org.login.quanlydatban.entity.TaiKhoan;
 
 import java.io.IOException;
@@ -47,6 +53,10 @@ public class TrangChuController {
 
         anchorPane.prefWidthProperty().bind(borderPane.widthProperty());
         anchorPane.prefHeightProperty().bind(borderPane.heightProperty());
+
+
+
+
     }
     @FXML
     public void thongKe() throws IOException {
