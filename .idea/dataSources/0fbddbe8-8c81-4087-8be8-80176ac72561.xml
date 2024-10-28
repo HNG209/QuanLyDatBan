@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dataSource name="nhahangtobo@localhost">
-  <database-model serializer="dbm" dbms="MYSQL" family-id="MYSQL" format-version="4.49">
+  <database-model serializer="dbm" dbms="MYSQL" family-id="MYSQL" format-version="4.53">
     <root id="1">
       <DefaultCasing>lower/lower</DefaultCasing>
       <DefaultEngine>InnoDB</DefaultEngine>
@@ -1109,8 +1109,7 @@ your_database_name|schema||admin|localhost|UPDATE|G</Grants>
     </schema>
     <schema id="296" parent="1" name="nhahangtobo">
       <Current>1</Current>
-      <IntrospectionTimestamp>2024-10-04.19:58:01</IntrospectionTimestamp>
-      <LocalIntrospectionTimestamp>2024-10-04.05:58:01</LocalIntrospectionTimestamp>
+      <LastIntrospectionLocalTimestamp>2024-10-04.05:58:01</LastIntrospectionLocalTimestamp>
       <CollationName>utf8mb4_0900_ai_ci</CollationName>
     </schema>
     <user id="297" parent="1" name="admin">
@@ -1177,24 +1176,24 @@ your_database_name|schema||admin|localhost|UPDATE|G</Grants>
       <CollationName>utf8mb4_0900_ai_ci</CollationName>
     </table>
     <column id="312" parent="302" name="maBan">
-      <DasType>varchar(255)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
+      <StoredType>varchar(255)|0s</StoredType>
     </column>
     <column id="313" parent="302" name="khuVuc">
-      <DasType>varchar(255)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>2</Position>
+      <StoredType>varchar(255)|0s</StoredType>
     </column>
     <column id="314" parent="302" name="loaiBan">
-      <DasType>varchar(255)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>3</Position>
+      <StoredType>varchar(255)|0s</StoredType>
     </column>
     <column id="315" parent="302" name="trangThaiBan">
-      <DasType>varchar(255)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>4</Position>
+      <StoredType>varchar(255)|0s</StoredType>
     </column>
     <index id="316" parent="302" name="PRIMARY">
       <ColNames>maBan</ColNames>
@@ -1207,22 +1206,22 @@ your_database_name|schema||admin|localhost|UPDATE|G</Grants>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
     </key>
     <column id="318" parent="303" name="Id">
-      <DasType>int|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
+      <StoredType>int|0s</StoredType>
     </column>
     <column id="319" parent="303" name="soLuong">
-      <DasType>int|0s</DasType>
       <NotNull>1</NotNull>
       <Position>2</Position>
+      <StoredType>int|0s</StoredType>
     </column>
     <column id="320" parent="303" name="maHoaDon">
-      <DasType>varchar(255)|0s</DasType>
       <Position>3</Position>
+      <StoredType>varchar(255)|0s</StoredType>
     </column>
     <column id="321" parent="303" name="maMonAn">
-      <DasType>varchar(255)|0s</DasType>
       <Position>4</Position>
+      <StoredType>varchar(255)|0s</StoredType>
     </column>
     <foreign-key id="322" parent="303" name="FK48lko1mwj5apm7o0w68jp3ugw">
       <ColNames>maHoaDon</ColNames>
@@ -1253,34 +1252,34 @@ your_database_name|schema||admin|localhost|UPDATE|G</Grants>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
     </key>
     <column id="328" parent="304" name="maHoaDon">
-      <DasType>varchar(255)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
+      <StoredType>varchar(255)|0s</StoredType>
     </column>
     <column id="329" parent="304" name="ngayLap">
-      <DasType>date|0s</DasType>
       <NotNull>1</NotNull>
       <Position>2</Position>
+      <StoredType>date|0s</StoredType>
     </column>
     <column id="330" parent="304" name="phuThu">
-      <DasType>double|0s</DasType>
       <Position>3</Position>
+      <StoredType>double|0s</StoredType>
     </column>
     <column id="331" parent="304" name="trangThaiHoaDon">
-      <DasType>varchar(255)|0s</DasType>
       <Position>4</Position>
+      <StoredType>varchar(255)|0s</StoredType>
     </column>
     <column id="332" parent="304" name="maBan">
-      <DasType>varchar(255)|0s</DasType>
       <Position>5</Position>
+      <StoredType>varchar(255)|0s</StoredType>
     </column>
     <column id="333" parent="304" name="maKhachHang">
-      <DasType>varchar(255)|0s</DasType>
       <Position>6</Position>
+      <StoredType>varchar(255)|0s</StoredType>
     </column>
     <column id="334" parent="304" name="maNhanVien">
-      <DasType>varchar(255)|0s</DasType>
       <Position>7</Position>
+      <StoredType>varchar(255)|0s</StoredType>
     </column>
     <foreign-key id="335" parent="304" name="FKq60j9bbiw23tw04gf3lj6n72g">
       <ColNames>maBan</ColNames>
@@ -1320,39 +1319,39 @@ your_database_name|schema||admin|localhost|UPDATE|G</Grants>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
     </key>
     <column id="343" parent="305" name="maKhachHang">
-      <DasType>varchar(255)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
+      <StoredType>varchar(255)|0s</StoredType>
     </column>
     <column id="344" parent="305" name="cccd">
-      <DasType>varchar(255)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>2</Position>
+      <StoredType>varchar(255)|0s</StoredType>
     </column>
     <column id="345" parent="305" name="diaChi">
-      <DasType>varchar(255)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>3</Position>
+      <StoredType>varchar(255)|0s</StoredType>
     </column>
     <column id="346" parent="305" name="diemTichLuy">
-      <DasType>int|0s</DasType>
       <NotNull>1</NotNull>
       <Position>4</Position>
+      <StoredType>int|0s</StoredType>
     </column>
     <column id="347" parent="305" name="email">
-      <DasType>varchar(255)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>5</Position>
+      <StoredType>varchar(255)|0s</StoredType>
     </column>
     <column id="348" parent="305" name="sdt">
-      <DasType>varchar(255)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>6</Position>
+      <StoredType>varchar(255)|0s</StoredType>
     </column>
     <column id="349" parent="305" name="tenKhachHang">
-      <DasType>varchar(255)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>7</Position>
+      <StoredType>varchar(255)|0s</StoredType>
     </column>
     <index id="350" parent="305" name="PRIMARY">
       <ColNames>maKhachHang</ColNames>
@@ -1365,35 +1364,35 @@ your_database_name|schema||admin|localhost|UPDATE|G</Grants>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
     </key>
     <column id="352" parent="306" name="maLichDat">
-      <DasType>varchar(255)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
+      <StoredType>varchar(255)|0s</StoredType>
     </column>
     <column id="353" parent="306" name="soLuongNguoi">
-      <DasType>int|0s</DasType>
       <NotNull>1</NotNull>
       <Position>2</Position>
+      <StoredType>int|0s</StoredType>
     </column>
     <column id="354" parent="306" name="thoiGianDat">
-      <DasType>date|0s</DasType>
       <NotNull>1</NotNull>
       <Position>3</Position>
+      <StoredType>date|0s</StoredType>
     </column>
     <column id="355" parent="306" name="ban_maBan">
-      <DasType>varchar(255)|0s</DasType>
       <Position>4</Position>
+      <StoredType>varchar(255)|0s</StoredType>
     </column>
     <column id="356" parent="306" name="maKhachHang">
-      <DasType>varchar(255)|0s</DasType>
       <Position>5</Position>
+      <StoredType>varchar(255)|0s</StoredType>
     </column>
     <column id="357" parent="306" name="maNhanVien">
-      <DasType>varchar(255)|0s</DasType>
       <Position>6</Position>
+      <StoredType>varchar(255)|0s</StoredType>
     </column>
     <column id="358" parent="306" name="hoaDon_maHoaDon">
-      <DasType>varchar(255)|0s</DasType>
       <Position>7</Position>
+      <StoredType>varchar(255)|0s</StoredType>
     </column>
     <foreign-key id="359" parent="306" name="FK7qa2njpmq3g4xp84odanmguy2">
       <ColNames>ban_maBan</ColNames>
@@ -1442,18 +1441,18 @@ your_database_name|schema||admin|localhost|UPDATE|G</Grants>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
     </key>
     <column id="369" parent="307" name="maLoaiMonAn">
-      <DasType>varchar(255)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
+      <StoredType>varchar(255)|0s</StoredType>
     </column>
     <column id="370" parent="307" name="moTaLoaiMonAn">
-      <DasType>varchar(255)|0s</DasType>
       <Position>2</Position>
+      <StoredType>varchar(255)|0s</StoredType>
     </column>
     <column id="371" parent="307" name="tenLoaiMonAn">
-      <DasType>varchar(255)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>3</Position>
+      <StoredType>varchar(255)|0s</StoredType>
     </column>
     <index id="372" parent="307" name="PRIMARY">
       <ColNames>maLoaiMonAn</ColNames>
@@ -1466,32 +1465,32 @@ your_database_name|schema||admin|localhost|UPDATE|G</Grants>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
     </key>
     <column id="374" parent="308" name="maMonAn">
-      <DasType>varchar(255)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
+      <StoredType>varchar(255)|0s</StoredType>
     </column>
     <column id="375" parent="308" name="donGia">
-      <DasType>double|0s</DasType>
       <NotNull>1</NotNull>
       <Position>2</Position>
+      <StoredType>double|0s</StoredType>
     </column>
     <column id="376" parent="308" name="donViTinh">
-      <DasType>varchar(255)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>3</Position>
+      <StoredType>varchar(255)|0s</StoredType>
     </column>
     <column id="377" parent="308" name="hinhAnh">
-      <DasType>varchar(255)|0s</DasType>
       <Position>4</Position>
+      <StoredType>varchar(255)|0s</StoredType>
     </column>
     <column id="378" parent="308" name="tenMonAn">
-      <DasType>varchar(255)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>5</Position>
+      <StoredType>varchar(255)|0s</StoredType>
     </column>
     <column id="379" parent="308" name="loaiMonAn_maLoaiMonAn">
-      <DasType>varchar(255)|0s</DasType>
       <Position>6</Position>
+      <StoredType>varchar(255)|0s</StoredType>
     </column>
     <foreign-key id="380" parent="308" name="FK2fi71efhfsmqftk6dctdlkn33">
       <ColNames>loaiMonAn_maLoaiMonAn</ColNames>
@@ -1513,44 +1512,44 @@ your_database_name|schema||admin|localhost|UPDATE|G</Grants>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
     </key>
     <column id="384" parent="309" name="maNhanVien">
-      <DasType>varchar(255)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
+      <StoredType>varchar(255)|0s</StoredType>
     </column>
     <column id="385" parent="309" name="cccd">
-      <DasType>varchar(255)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>2</Position>
+      <StoredType>varchar(255)|0s</StoredType>
     </column>
     <column id="386" parent="309" name="diaChi">
-      <DasType>varchar(255)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>3</Position>
+      <StoredType>varchar(255)|0s</StoredType>
     </column>
     <column id="387" parent="309" name="gioiTinh">
-      <DasType>bit(1)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>4</Position>
+      <StoredType>bit(1)|0s</StoredType>
     </column>
     <column id="388" parent="309" name="ngaySinh">
-      <DasType>date|0s</DasType>
       <NotNull>1</NotNull>
       <Position>5</Position>
+      <StoredType>date|0s</StoredType>
     </column>
     <column id="389" parent="309" name="sdt">
-      <DasType>varchar(255)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>6</Position>
+      <StoredType>varchar(255)|0s</StoredType>
     </column>
     <column id="390" parent="309" name="tenNhanVien">
-      <DasType>varchar(255)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>7</Position>
+      <StoredType>varchar(255)|0s</StoredType>
     </column>
     <column id="391" parent="309" name="trangThaiNhanVien">
-      <DasType>varchar(255)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>8</Position>
+      <StoredType>varchar(255)|0s</StoredType>
     </column>
     <index id="392" parent="309" name="PRIMARY">
       <ColNames>maNhanVien</ColNames>
@@ -1563,21 +1562,21 @@ your_database_name|schema||admin|localhost|UPDATE|G</Grants>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
     </key>
     <column id="394" parent="310" name="maPhienThongKe">
-      <DasType>varchar(255)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
+      <StoredType>varchar(255)|0s</StoredType>
     </column>
     <column id="395" parent="310" name="chiTiet">
-      <DasType>varchar(255)|0s</DasType>
       <Position>2</Position>
+      <StoredType>varchar(255)|0s</StoredType>
     </column>
     <column id="396" parent="310" name="thoiGianThongKe">
-      <DasType>date|0s</DasType>
       <Position>3</Position>
+      <StoredType>date|0s</StoredType>
     </column>
     <column id="397" parent="310" name="nhanVien_maNhanVien">
-      <DasType>varchar(255)|0s</DasType>
       <Position>4</Position>
+      <StoredType>varchar(255)|0s</StoredType>
     </column>
     <foreign-key id="398" parent="310" name="FKqyps56guw6iowms77jrxrhupu">
       <ColNames>nhanVien_maNhanVien</ColNames>
@@ -1600,23 +1599,23 @@ your_database_name|schema||admin|localhost|UPDATE|G</Grants>
     </key>
     <column id="402" parent="311" name="id">
       <AutoIncrement>2</AutoIncrement>
-      <DasType>bigint|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
+      <StoredType>bigint|0s</StoredType>
     </column>
     <column id="403" parent="311" name="password">
-      <DasType>varchar(255)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>2</Position>
+      <StoredType>varchar(255)|0s</StoredType>
     </column>
     <column id="404" parent="311" name="userName">
-      <DasType>varchar(255)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>3</Position>
+      <StoredType>varchar(255)|0s</StoredType>
     </column>
     <column id="405" parent="311" name="nhanVien_maNhanVien">
-      <DasType>varchar(255)|0s</DasType>
       <Position>4</Position>
+      <StoredType>varchar(255)|0s</StoredType>
     </column>
     <foreign-key id="406" parent="311" name="FK984h79m97rns3p1oukl7p94tm">
       <ColNames>nhanVien_maNhanVien</ColNames>
