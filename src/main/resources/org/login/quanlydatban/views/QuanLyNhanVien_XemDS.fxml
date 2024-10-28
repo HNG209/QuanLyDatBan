@@ -40,12 +40,12 @@
             <Image url="@../icons/send.png" />
          </image>
       </ImageView>
-      <Button id="btnthemmoi" layoutX="538.0" layoutY="39.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="130.0" style="-fx-background-color: #8FA679;" stylesheets="@../stylesheets/style.css" text="       Thêm mới">
+      <Button fx:id="btnthem" layoutX="538.0" layoutY="39.0" mnemonicParsing="false" onAction="#themNhanVien" prefHeight="38.0" prefWidth="130.0" style="-fx-background-color: #8FA679;" stylesheets="@../stylesheets/style.css" text="Thêm mới">
          <font>
             <Font name="Times New Roman Bold Italic" size="14.0" />
          </font>
       </Button>
-      <ImageView fitHeight="27.0" fitWidth="25.0" layoutX="552.0" layoutY="43.0">
+      <ImageView fitHeight="27.0" fitWidth="25.0" layoutX="546.0" layoutY="44.0">
          <image>
             <Image url="@../icons/plus.png" />
          </image>
