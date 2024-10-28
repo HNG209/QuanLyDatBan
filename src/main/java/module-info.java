@@ -5,6 +5,7 @@ module org.login.quanlydatban {
     requires java.persistence;
     requires java.naming;
     requires java.sql;
+    requires java.desktop;
 
     opens org.login.quanlydatban.entity to org.hibernate.orm.core;
     opens org.login.quanlydatban to javafx.fxml;
