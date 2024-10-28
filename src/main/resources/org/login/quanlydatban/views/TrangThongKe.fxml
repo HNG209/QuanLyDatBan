@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.collections.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="635.0" prefWidth="1280.0" stylesheets="@../stylesheets/style.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.login.quanlydatban.controller.ThongKeController">
+    <children>
+        <!-- Top Pane with Labels -->
+        <HBox alignment="CENTER" spacing="20.0" style="-fx-padding: 10 0;" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+            <VBox alignment="CENTER" prefHeight="100" prefWidth="250" spacing="10">
+                <Label text="Doanh thu trong ngày:" textAlignment="CENTER">
+                    <font>
+                        <Font name="System Bold" size="18.0" />
+                    </font>
+                </Label>
+                <Label fx:id="doanhThuTrongNgay" style="-fx-font-size: 16px; -fx-font-weight: bold;" text="0 VND" />
+            <styleClass>
+               <String fx:value="gradient3" />
+               <String fx:value="round-box" />
+            </styleClass>
+            </VBox>
+            <VBox alignment="CENTER" prefHeight="100" prefWidth="250" spacing="10">
+                <Label text="Số hóa đơn trong ngày:">
+                    <font>
+                        <Font name="System Bold" size="18.0" />
+                    </font>
+                </Label>
+                <Label fx:id="soHDTrongNgay" style="-fx-font-size: 16px; -fx-font-weight: bold;" text="0" />
+            <styleClass>
+               <String fx:value="gradient3" />
+               <String fx:value="round-box" />
+            </styleClass>
+            </VBox>
+            <VBox alignment="CENTER" prefHeight="100" prefWidth="250.0" spacing="10">
+                <Label text="Tổng doanh thu:">
+                    <font>
+                        <Font name="System Bold" size="18.0" />
+                    </font>
+                </Label>
+                <Label fx:id="tongDoanhThu" style="-fx-font-size: 16px; -fx-font-weight: bold;" text="0 VND" />
+            <styleClass>
+               <String fx:value="round-box" />
+               <String fx:value="gradient3" />
+            </styleClass>
+            </VBox>
+            <VBox alignment="CENTER" prefHeight="100" prefWidth="250.0" spacing="10">
+                <Label text="Tổng hóa đơn:">
+                    <font>
+                        <Font name="System Bold" size="18.0" />
+                    </font>
+                </Label>
+                <Label fx:id="tongHoaDon" style="-fx-font-size: 16px; -fx-font-weight: bold;" text="0" />
+            <styleClass>
+               <String fx:value="gradient3" />
+               <String fx:value="round-box" />
+            </styleClass>
+            </VBox>
+         <padding>
+            <Insets bottom="40.0" />
+         </padding>
+        </HBox>
+        <HBox layoutX="30.0" layoutY="121.0" spacing="10">
+            <ComboBox fx:id="tieuChiThongKe" promptText="Chọn khoảng thời gian" styleClass="small-round-box">
+                <items>
+                    <FXCollections fx:factory="observableArrayList">
+                        <String fx:value="Theo tháng" />
+                        <String fx:value="Theo quý" />
+                        <String fx:value="Theo năm" />
+                    </FXCollections>
+                </items>
+            <HBox.margin>
+               <Insets />
+            </HBox.margin>
+            </ComboBox>
+
+            <ComboBox fx:id="namThongKe" promptText="Chọn năm" styleClass="small-round-box">
+                <items>
+                    <FXCollections fx:factory="observableArrayList">
+                        <String fx:value="2023" />
+                        <String fx:value="2024" />
+                        <String fx:value="2025" />
+                    </FXCollections>
+                </items>
+            </ComboBox>
+         <padding>
+            <Insets top="10.0" />
+         </padding>
+        </HBox>
+        <TabPane layoutX="37.0" layoutY="170.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="455.0" prefWidth="791.0" style="-fx-background-insets: red;" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="459.0" AnchorPane.topAnchor="170.0">
+            <tabs>
+                <Tab text="Thống kê doanh thu">
+                    <content>
+                        <VBox prefHeight="486.0" prefWidth="739.0" spacing="10" VBox.vgrow="ALWAYS">
+                            <children>
+                                <LineChart fx:id="bieuDoDuongDoanhThu" prefHeight="376.0" prefWidth="741.0" style="-fx-font-weight: bold;" title="Thống kê doanh thu" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" VBox.vgrow="ALWAYS">
+                                    <xAxis>
+                                        <CategoryAxis label="Thời gian" prefWidth="663.0" />
+                                    </xAxis>
+                                    <yAxis>
+                                        <NumberAxis label="Doanh thu" />
+                                    </yAxis>
+                                </LineChart>
+                            </children>
+                        </VBox>
+                    </content>
+                </Tab>
+                <Tab text="Thống kê hóa đơn">
+                    <content>
+                        <VBox spacing="10" VBox.vgrow="ALWAYS">
+                            <children>
+                                <LineChart fx:id="bieuDoDuongHoaDon" style="-fx-font-weight: bold;" title="Thống kê số lượng hóa đơn" VBox.vgrow="ALWAYS">
+                                    <xAxis>
+                                        <CategoryAxis label="Thời gian" />
+                                    </xAxis>
+                                    <yAxis>
+                                        <NumberAxis label="Số lượng hóa đơn" />
+                                    </yAxis>
+                                </LineChart>
+                            </children>
+                        </VBox>
+                    </content>
+                </Tab>
+            </tabs>
+            <styleClass>
+                <String fx:value="bg1" />
+                <String fx:value="rounded-pane" />
+            </styleClass>
+        </TabPane>
+         <PieChart fx:id="bieuDoTronMonAn" layoutX="857.0" layoutY="170.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="455.0" prefWidth="387.0" style="-fx-font-weight: bold;" title="Top 10 món ăn bán chạy" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="170.0">
+         <styleClass>
+            <String fx:value="rounded-pane" />
+            <String fx:value="bg1" />
+         </styleClass></PieChart>
+      <HBox alignment="CENTER" layoutX="10.0" layoutY="10.0" spacing="20.0" style="-fx-padding: 10 0;" />
+
+
+    </children>
+</AnchorPane>
