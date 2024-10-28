@@ -81,7 +81,7 @@
                   </Menu>
                 <Menu mnemonicParsing="false" text="Thực đơn">
                   <items>
-                    <MenuItem mnemonicParsing="false" text="Quản lý thực đơn" />
+                    <MenuItem mnemonicParsing="false" onAction="#thucDon" text="Quản lý thực đơn" />
                   </items>
                      <graphic>
                         <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
