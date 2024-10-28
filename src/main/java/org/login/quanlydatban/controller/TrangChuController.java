@@ -48,7 +48,7 @@ public class TrangChuController {
     }
 
     public void thucDon() throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/TrangThucDon.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/TrangThucDon.fxml"));
         AnchorPane anchorPane = loader.load();
 
         borderPane.setCenter(anchorPane);
