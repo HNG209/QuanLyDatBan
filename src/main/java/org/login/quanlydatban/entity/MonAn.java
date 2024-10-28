@@ -32,4 +32,45 @@ public class MonAn implements Serializable {
     private TrangThaiMonAn trangThaiMonAn;
 
     public MonAn() {}
+
+    @Override
+    public String toString() {
+        return "MonAn{" +
+                "maMonAn='" + maMonAn + '\'' +
+                ", loaiMonAn=" + loaiMonAn +
+                ", tenMonAn='" + tenMonAn + '\'' +
+                ", donGia=" + donGia +
+                ", donViTinh='" + donViTinh + '\'' +
+                ", hinhAnh='" + hinhAnh + '\'' +
+                ", trangThaiMonAn=" + trangThaiMonAn +
+                '}';
+    }
+
+    public String getMaMonAn() {
+        return maMonAn;
+    }
+
+    public LoaiMonAn getLoaiMonAn() {
+        return loaiMonAn;
+    }
+
+    public String getTenMonAn() {
+        return tenMonAn;
+    }
+
+    public double getDonGia() {
+        return donGia;
+    }
+
+    public String getDonViTinh() {
+        return donViTinh;
+    }
+
+    public String getHinhAnh() {
+        return hinhAnh;
+    }
+
+    public TrangThaiMonAn getTrangThaiMonAn() {
+        return trangThaiMonAn;
+    }
 }

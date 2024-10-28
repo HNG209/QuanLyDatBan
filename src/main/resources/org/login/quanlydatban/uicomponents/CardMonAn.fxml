@@ -15,12 +15,12 @@
             <Image url="@../icons/empty.png" />
          </image>
       </ImageView>
-      <Label layoutX="15.0" layoutY="131.0" prefHeight="18.0" prefWidth="118.0" text="Tên món">
+      <Label fx:id="tenMon" layoutX="15.0" layoutY="131.0" prefHeight="18.0" prefWidth="118.0" text="Tên món">
          <font>
             <Font name="System Bold" size="12.0" />
          </font>
       </Label>
-      <Label layoutX="15.0" layoutY="148.0" prefHeight="18.0" prefWidth="46.0" text="Giá tiền:">
+      <Label fx:id="giaTien" layoutX="15.0" layoutY="148.0" prefHeight="18.0" prefWidth="46.0" text="Giá tiền:">
          <font>
             <Font size="10.0" />
          </font>
