@@ -1,19 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.RadioButton?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.text.Font?>
+<?import java.lang.*?>
+<?import javafx.collections.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="600.0" prefWidth="1280.0" styleClass="gradient3" stylesheets="@../stylesheets/style.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.login.quanlydatban.controller.TrangQuanLyNhanVien_XemDSController">
+<AnchorPane prefHeight="600.0" prefWidth="1280.0" styleClass="gradient3" stylesheets="@../stylesheets/style.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.login.quanlydatban.controller.TrangQuanLyNhanVien_XemDSController">
    <children>
       <TableView layoutY="188.8" prefHeight="411.0" prefWidth="1288.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="189.0">
         <columns>
@@ -31,32 +25,48 @@
             <Font name="Times New Roman" size="18.0" />
          </font>
       </Label>
-      <TextField layoutX="14.0" layoutY="35.0" prefHeight="38.0" prefWidth="268.0" promptText="nhập để tìm kiếm" style="-fx-background-color: #FFFFFF;" />
-      <ComboBox id="cbxsapxep" layoutX="940.0" layoutY="38.0" prefHeight="38.0" prefWidth="130.0" promptText="Sắp xếp theo" style="-fx-background-color: #8FA679;" stylesheets="@../stylesheets/style.css" />
-      <RadioButton layoutX="1076.0" layoutY="36.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="67.0" text="Tăng" />
-      <Button layoutX="1162.0" layoutY="38.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="82.0" style="-fx-background-color: #8FA679;" text="Lọc" />
-      <ImageView fitHeight="30.0" fitWidth="34.0" layoutX="407.0" layoutY="39.0">
+      <TextField layoutX="14.0" layoutY="51.0" prefHeight="38.0" prefWidth="268.0" promptText="nhập để tìm kiếm" style="-fx-background-color: #FFFFFF;" />
+      <ComboBox id="cbxsapxep" layoutX="940.0" layoutY="51.0" prefHeight="38.0" prefWidth="130.0" promptText="Sắp xếp theo" style="-fx-background-color: #8FA679;" stylesheets="@../stylesheets/style.css">
+         <items>
+            <FXCollections fx:factory="observableArrayList">
+               <String fx:value="Theo ID" />
+               <String fx:value="Theo họ và tên" />
+               <String fx:value="Theo địa chỉ" />
+               <String fx:value="Theo cccd" />
+               <String fx:value="Theo chức vụ" />
+            </FXCollections>
+         </items>
+      </ComboBox>
+      <RadioButton layoutX="1075.0" layoutY="52.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="67.0" text="Tăng" />
+      <Button layoutX="1162.0" layoutY="48.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="82.0" style="-fx-background-color: #8FA679;" text="Lọc">
+         <font>
+            <Font size="14.0" />
+         </font></Button>
+      <ImageView fitHeight="30.0" fitWidth="34.0" layoutX="451.0" layoutY="56.0">
          <image>
             <Image url="@../icons/send.png" />
          </image>
       </ImageView>
-      <Button fx:id="btnthem" layoutX="538.0" layoutY="39.0" mnemonicParsing="false" onAction="#themNhanVien" prefHeight="38.0" prefWidth="130.0" style="-fx-background-color: #8FA679;" stylesheets="@../stylesheets/style.css" text="Thêm mới">
+      <Button fx:id="btnthem" layoutX="546.0" layoutY="51.0" lineSpacing="1.0" mnemonicParsing="false" onAction="#themNhanVien" prefHeight="38.0" prefWidth="130.0" style="-fx-background-color: #8FA679;" stylesheets="@../stylesheets/style.css" text="Thêm mới">
          <font>
-            <Font name="Times New Roman Bold Italic" size="14.0" />
+            <Font size="14.0" />
          </font>
       </Button>
-      <ImageView fitHeight="27.0" fitWidth="25.0" layoutX="546.0" layoutY="44.0">
+      <ImageView fitHeight="27.0" fitWidth="25.0" layoutX="553.0" layoutY="57.0">
          <image>
             <Image url="@../icons/plus.png" />
          </image>
       </ImageView>
-      <Button id="btnxuatfile" layoutX="737.0" layoutY="40.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="112.0" style="-fx-background-color: #8FA679;" text="      Xuất file" />
-      <ImageView fitHeight="30.0" fitWidth="25.0" layoutX="746.0" layoutY="40.0">
+      <Button id="btnxuatfile" layoutX="737.0" layoutY="50.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="112.0" style="-fx-background-color: #8FA679;" text="      Xuất file">
+         <font>
+            <Font size="14.0" />
+         </font></Button>
+      <ImageView fitHeight="30.0" fitWidth="25.0" layoutX="746.0" layoutY="50.0">
          <image>
             <Image url="@../icons/share.png" />
          </image>
       </ImageView>
-      <Pane layoutX="906.0" layoutY="38.0" prefHeight="38.0" prefWidth="34.0" style="-fx-background-color: #8FA679;" stylesheets="@../stylesheets/style.css">
+      <Pane layoutX="905.0" layoutY="51.0" prefHeight="38.0" prefWidth="34.0" style="-fx-background-color: #8FA679;" stylesheets="@../stylesheets/style.css">
          <children>
             <ImageView fitHeight="27.0" fitWidth="34.0" layoutX="-3.0" layoutY="8.0">
                <image>
@@ -65,7 +75,17 @@
             </ImageView>
          </children>
       </Pane>
-      <RadioButton layoutX="1076.0" layoutY="61.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="74.0" text="Giảm" />
-      <ComboBox layoutX="281.0" layoutY="35.0" prefHeight="38.0" prefWidth="112.0" />
+      <RadioButton layoutX="1075.0" layoutY="71.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="74.0" text="Giảm" />
+      <ComboBox fx:id="cbxtimkiem" layoutX="281.0" layoutY="51.0" prefHeight="38.0" prefWidth="162.0" promptText="Tìm kiếm theo tiêu chí">
+         <items>
+            <FXCollections fx:factory="observableArrayList">
+               <String fx:value="Theo ID" />
+               <String fx:value="Theo họ và tên" />
+               <String fx:value="Theo địa chỉ" />
+               <String fx:value="Theo cccd" />
+               <String fx:value="Theo chức vụ" />
+            </FXCollections>
+         </items>
+      </ComboBox>
    </children>
 </AnchorPane>
