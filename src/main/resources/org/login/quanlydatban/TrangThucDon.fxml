@@ -73,7 +73,7 @@
                <graphic>
                   <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../../../../../../New%20folder/PNGnekHung/add.png" />
+                        <Image url="@add.png" />
                      </image>
                   </ImageView>
                </graphic>
@@ -89,7 +89,7 @@
                <graphic>
                   <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../../../../../../New%20folder/PNGnekHung/trash.png" />
+                        <Image url="@trash.png" />
                      </image>
                   </ImageView>
                </graphic>
@@ -132,7 +132,7 @@
       <Button layoutX="832.0" layoutY="390.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="118.0" styleClass="round-box" text="Tải ảnh" AnchorPane.rightAnchor="334.0" />
       <ImageView fitHeight="140.0" fitWidth="140.0" layoutX="814.0" layoutY="271.0" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="326.0">
          <image>
-            <Image url="@../../../../../../../New%20folder/PNGnekHung/restaurant.png" />
+            <Image url="@restaurant.png" />
          </image>
       </ImageView>
    </children>
