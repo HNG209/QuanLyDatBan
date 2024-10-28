@@ -40,8 +40,8 @@ public class TrangChuController {
 
 
     @FXML
-    public void xemdsnhanvien() throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/"));
+    public void quanlynhanvien() throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/QuanLyNhanVien_XemDS.fxml"));
         AnchorPane anchorPane = loader.load();
 
         borderPane.setCenter(anchorPane);
