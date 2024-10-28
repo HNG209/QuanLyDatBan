@@ -36,6 +36,18 @@ public class TrangChuController {
         anchorPane.prefWidthProperty().bind(borderPane.widthProperty());
         anchorPane.prefHeightProperty().bind(borderPane.heightProperty());
     }
+
+
+    @FXML
+    public void xemdsnhanvien() throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/"));
+        AnchorPane anchorPane = loader.load();
+
+        borderPane.setCenter(anchorPane);
+
+        anchorPane.prefWidthProperty().bind(borderPane.widthProperty());
+        anchorPane.prefHeightProperty().bind(borderPane.heightProperty());
+    }
     @FXML
     public void thongKe() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/TrangThongKe.fxml"));
