@@ -26,7 +26,7 @@
       </ScrollPane>
       <Pane layoutX="714.0" layoutY="17.0" prefHeight="600.0" prefWidth="546.0" AnchorPane.bottomAnchor="18.0" AnchorPane.rightAnchor="19.200000000000045" AnchorPane.topAnchor="16.600000000000023">
          <children>
-            <TableView layoutX="7.0" layoutY="11.0" prefHeight="273.0" prefWidth="532.0">
+            <TableView fx:id="orderTable" layoutX="7.0" layoutY="11.0" prefHeight="273.0" prefWidth="532.0">
               <columns>
                 <TableColumn prefWidth="59.999937534332275" text="Mã" />
                 <TableColumn prefWidth="153.59998321533203" text="Tên món" />
