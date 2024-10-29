@@ -7,6 +7,7 @@ module org.login.quanlydatban {
     requires java.sql;
 
     opens org.login.quanlydatban.entity to org.hibernate.orm.core;
+    opens org.login.quanlydatban.entity.keygenerator to org.hibernate.orm.core;
     opens org.login.quanlydatban to javafx.fxml;
     opens org.login.quanlydatban.controller to javafx.fxml;
     opens org.login.quanlydatban.uicomponents to javafx.fxml;
