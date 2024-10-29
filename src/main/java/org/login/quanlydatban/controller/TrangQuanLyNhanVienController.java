@@ -25,8 +25,6 @@ public class TrangQuanLyNhanVienController {
                 JFileChooser fileChooser = new JFileChooser();
                 fileChooser.setDialogTitle("Chọn ảnh");
                 fileChooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("Image Files", "jpg"));
-
-
                 // Mở hộp thoại và chờ người dùng chọn file
                 int userSelection = fileChooser.showOpenDialog(null);
 
