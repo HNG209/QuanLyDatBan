@@ -15,7 +15,7 @@
 
 <AnchorPane layoutX="1.0" minHeight="635.0" minWidth="662.0" prefHeight="635.0" prefWidth="662.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.login.quanlydatban.controller.TrangQuanLyNhanVienController">
    <children>
-      <Pane layoutY="-7.0" prefHeight="63.0" prefWidth="1280.0" stylesheets="@../stylesheets/style.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+      <Pane layoutY="-7.0" prefHeight="63.0" prefWidth="1280.0" stylesheets="@style.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <padding>
             <Insets left="20.0" />
          </padding>
@@ -30,7 +30,7 @@
             </Label>
          </children>
       </Pane>
-      <Pane layoutX="-7.0" layoutY="56.0" prefHeight="582.0" prefWidth="670.0" stylesheets="@../stylesheets/style.css" AnchorPane.bottomAnchor="-3.0" AnchorPane.leftAnchor="-7.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="56.0">
+      <Pane layoutX="-7.0" layoutY="56.0" prefHeight="582.0" prefWidth="670.0" stylesheets="@style.css" AnchorPane.bottomAnchor="-3.0" AnchorPane.leftAnchor="-7.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="56.0">
          <children>
             <Label layoutX="23.0" layoutY="23.0" prefHeight="20.0" prefWidth="95.0" text="ID nhân viên:">
                <font>
@@ -103,10 +103,10 @@
                   <Font name="System Bold" size="14.0" />
                </font>
             </Label>
-            <Button layoutX="424.0" layoutY="440.0" lineSpacing="2.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="125.0" stylesheets="@../stylesheets/style.css" text="Tải ảnh" />
+            <Button layoutX="424.0" layoutY="440.0" lineSpacing="2.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="125.0" stylesheets="@style.css" text="Tải ảnh" />
             <ImageView fitHeight="401.0" fitWidth="227.0" layoutX="373.0" layoutY="102.0" pickOnBounds="true" preserveRatio="true" style="-fx-effect: #ADA399;">
                <image>
-
+                  <Image url="@../../../../../../../../../OneDrive/Documents/Máy%20tính/z5541937611319_5ad015635cd3828706f22c2b6c311771.jpg" />
                </image>
             </ImageView>
          </children>
