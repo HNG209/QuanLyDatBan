@@ -3,6 +3,7 @@ package org.login.quanlydatban.controller;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.AnchorPane;
@@ -24,6 +25,9 @@ public class DatMonController implements Initializable {
 
     @FXML
     private TableView<?> orderTable;
+
+    @FXML
+    private Label data;
 
     private MonAnDAO monAnDAO;
     @Override
@@ -76,5 +80,9 @@ public class DatMonController implements Initializable {
 //
 //            }
 //        });
+    }
+
+    public void setData(int i){
+        this.data.setText(String.valueOf(i));
     }
 }
