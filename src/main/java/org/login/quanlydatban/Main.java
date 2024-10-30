@@ -23,25 +23,32 @@ public class Main extends Application {
 
         //test ne bay
         Session session = HibernateUtils.getFactory().openSession();
-        session.getTransaction().begin();
-
-        Ban ban = session.get(Ban.class, "B1");
-
-        KhachHang khachHang = session.get(KhachHang.class, "KH12345");
-
-        NhanVien nhanVien = session.get(NhanVien.class, "NV001");
-
-        HoaDon hoaDon = new HoaDon();
-        hoaDon.setBan(ban);
-        hoaDon.setKhachHang(khachHang);
-        hoaDon.setNhanVien(nhanVien);
-        hoaDon.setTrangThaiHoaDon(TrangThaiHoaDon.CHUA_THANH_TOAN);
-        hoaDon.setPhuThu(10_000.0);
-        hoaDon.setNgayLap(LocalDate.now());
-
-        session.save(hoaDon);
-
-        session.getTransaction().commit();
+//        session.getTransaction().begin();
+//
+//        Ban ban = session.get(Ban.class, "B1");
+//
+//        KhachHang khachHang = session.get(KhachHang.class, "KH12345");
+//
+//        NhanVien nhanVien = session.get(NhanVien.class, "NV001");
+//
+//        HoaDon hoaDon = new HoaDon();
+//        hoaDon.setBan(ban);
+//        hoaDon.setKhachHang(khachHang);
+//        hoaDon.setNhanVien(nhanVien);
+//        hoaDon.setTrangThaiHoaDon(TrangThaiHoaDon.CHUA_THANH_TOAN);
+//        hoaDon.setPhuThu(10_000.0);
+//        hoaDon.setNgayLap(LocalDate.now());
+//
+//        ChiTietHoaDon chiTietHoaDon = new ChiTietHoaDon();
+//
+//        session.save(hoaDon);
+//        chiTietHoaDon.setHoaDon(hoaDon);
+//        chiTietHoaDon.setMonAn(session.get(MonAn.class, "Mon1"));
+//        chiTietHoaDon.setSoLuong(10);
+//
+//        session.save(chiTietHoaDon);
+//
+//        session.getTransaction().commit();
         session.close();
         //chay roi mo database len coi bang hoadon
 
