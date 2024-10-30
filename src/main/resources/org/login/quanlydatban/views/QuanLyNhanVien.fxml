@@ -7,7 +7,6 @@
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
@@ -15,22 +14,26 @@
 
 <AnchorPane layoutX="1.0" minHeight="635.0" minWidth="662.0" prefHeight="635.0" prefWidth="662.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.login.quanlydatban.controller.TrangQuanLyNhanVienController">
    <children>
-      <Pane layoutY="-7.0" prefHeight="63.0" prefWidth="1280.0" stylesheets="@style.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+      <Pane layoutY="-7.0" prefHeight="63.0" prefWidth="1280.0" stylesheets="@../stylesheets/style.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <padding>
             <Insets left="20.0" />
          </padding>
          <children>
-            <Label layoutX="-6.0" layoutY="7.0" prefHeight="55.0" prefWidth="670.0" styleClass="round-box2" text="                                                           Thêm nhân viên" textAlignment="CENTER">
+            <Label layoutX="-6.0" layoutY="7.0" prefHeight="55.0" prefWidth="670.0" stylesheets="@../stylesheets/style.css" text="                                                           Thêm nhân viên" textAlignment="CENTER">
                <font>
                   <Font name="Times New Roman Bold Italic" size="18.0" />
                </font>
                <padding>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </padding>
+               <styleClass>
+                  <String fx:value="round-box2" />
+                  <String fx:value="sage-green" />
+               </styleClass>
             </Label>
          </children>
       </Pane>
-      <Pane layoutX="-7.0" layoutY="56.0" prefHeight="582.0" prefWidth="670.0" stylesheets="@style.css" AnchorPane.bottomAnchor="-3.0" AnchorPane.leftAnchor="-7.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="56.0">
+      <Pane layoutX="-7.0" layoutY="56.0" prefHeight="582.0" prefWidth="670.0" styleClass="small-round-box" stylesheets="@../stylesheets/style.css" AnchorPane.bottomAnchor="-3.0" AnchorPane.leftAnchor="-7.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="56.0">
          <children>
             <Label layoutX="23.0" layoutY="23.0" prefHeight="20.0" prefWidth="95.0" text="ID nhân viên:">
                <font>
@@ -86,13 +89,13 @@
                </font>
             </Label>
             <ComboBox layoutX="23.0" layoutY="394.0" prefHeight="30.0" prefWidth="149.0" />
-            <Button layoutX="21.0" layoutY="521.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="125.0" styleClass="sage-green" text="Lưu lại">
+            <Button layoutX="21.0" layoutY="521.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="125.0" styleClass="sage-green" stylesheets="@../stylesheets/style.css" text="Lưu lại">
                <font>
                   <Font name="Times New Roman Bold" size="14.0" />
                </font>
 
             </Button>
-            <Button layoutX="186.0" layoutY="521.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="125.0" styleClass="sunset-orange" text="Hủy bỏ">
+            <Button layoutX="186.0" layoutY="521.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="125.0" styleClass="sunset-orange" stylesheets="@../stylesheets/style.css" text="Hủy bỏ">
                <Font name="System Bold" size="14.0" />
                <font>
                   <Font name="System Bold" size="14.0" />
@@ -103,20 +106,16 @@
                   <Font name="System Bold" size="14.0" />
                </font>
             </Label>
-            <Button layoutX="424.0" layoutY="440.0" lineSpacing="2.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="125.0" stylesheets="@style.css" text="Tải ảnh" />
-            <ImageView fitHeight="401.0" fitWidth="227.0" layoutX="373.0" layoutY="102.0" pickOnBounds="true" preserveRatio="true" style="-fx-effect: #ADA399;">
-               <image>
-                  <Image url="@../../../../../../../../../OneDrive/Documents/Máy%20tính/z5541937611319_5ad015635cd3828706f22c2b6c311771.jpg" />
-               </image>
-            </ImageView>
+            <Button fx:id="btnTaiAnh" layoutX="424.0" layoutY="440.0" lineSpacing="2.0" mnemonicParsing="false" onAction="#taiAnh" prefHeight="30.0" prefWidth="125.0" stylesheets="@../stylesheets/style.css" text="Tải ảnh" />
+            <Pane layoutX="381.0" layoutY="111.0" prefHeight="314.0" prefWidth="203.0" style="-fx-background-color: #ADA399;">
+               <children>
+                  <ImageView fitHeight="297.0" fitWidth="183.0" layoutX="9.0" layoutY="12.0" pickOnBounds="true" preserveRatio="true" />
+               </children>
+            </Pane>
          </children>
          <padding>
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
          </padding>
-         <styleClass>
-            <String fx:value="small-round-box" />
-            <String fx:value="gradient1" />
-         </styleClass>
       </Pane>
    </children>
 </AnchorPane>
