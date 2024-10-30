@@ -28,7 +28,6 @@ public class TrangQuanLyNhanVienController implements Initializable {
 
     @FXML
     public  void taiAnh(){
-        btnTaiAnh = new Button();
         btnTaiAnh.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {

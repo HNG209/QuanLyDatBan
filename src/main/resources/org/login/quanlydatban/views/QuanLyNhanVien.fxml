@@ -7,11 +7,13 @@
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
+<?import javafx.collections.FXCollections?>
 <AnchorPane layoutX="1.0" minHeight="635.0" minWidth="662.0" prefHeight="635.0" prefWidth="662.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.login.quanlydatban.controller.TrangQuanLyNhanVienController">
    <children>
       <Pane layoutY="-7.0" prefHeight="63.0" prefWidth="1280.0" stylesheets="@../stylesheets/style.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
@@ -81,14 +83,37 @@
                </font>
             </Label>
             <DatePicker layoutX="21.0" layoutY="463.0" prefHeight="30.0" prefWidth="290.0" />
-            <ComboBox layoutX="179.0" layoutY="394.0" prefHeight="30.0" prefWidth="129.0" />
-            <ComboBox layoutX="186.0" layoutY="57.0" prefHeight="33.0" prefWidth="125.0" />
+            <ComboBox fx:id="trangthailamviec" layoutX="179.0" layoutY="394.0" prefHeight="30.0" prefWidth="129.0">
+               <items>
+                  <FXCollections fx:factory="observableArrayList">
+                     <String fx:value="ĐANG LÀM" />
+                     <String fx:value="NGHỈ PHÉP" />
+                     <String fx:value="NGHỈ VIỆC" />
+
+                  </FXCollections>
+               </items>
+            </ComboBox>
+            <ComboBox fx:id="gioitinh" layoutX="186.0" layoutY="57.0" prefHeight="33.0" prefWidth="125.0">
+               <items>
+                  <FXCollections fx:factory="observableArrayList">
+                     <String fx:value="Nam" />
+                     <String fx:value="Nữ" />
+                  </FXCollections>
+               </items>
+            </ComboBox>
             <Label layoutX="193.0" layoutY="23.0" prefHeight="17.0" prefWidth="77.0" text="Giới tính">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
             </Label>
-            <ComboBox layoutX="23.0" layoutY="394.0" prefHeight="30.0" prefWidth="149.0" />
+            <ComboBox fx:id="chucvu" layoutX="23.0" layoutY="394.0" prefHeight="30.0" prefWidth="149.0">
+               <items>
+                  <FXCollections fx:factory="observableArrayList">
+                     <String fx:value="Nhân viên" />
+                     <String fx:value="Quản lý" />
+                  </FXCollections>
+               </items>
+            </ComboBox>
             <Button layoutX="21.0" layoutY="521.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="125.0" styleClass="sage-green" stylesheets="@../stylesheets/style.css" text="Lưu lại">
                <font>
                   <Font name="Times New Roman Bold" size="14.0" />
@@ -107,9 +132,12 @@
                </font>
             </Label>
             <Button fx:id="btnTaiAnh" layoutX="424.0" layoutY="440.0" lineSpacing="2.0" mnemonicParsing="false" onAction="#taiAnh" prefHeight="30.0" prefWidth="125.0" stylesheets="@../stylesheets/style.css" text="Tải ảnh" />
-            <Pane layoutX="381.0" layoutY="111.0" prefHeight="314.0" prefWidth="203.0" style="-fx-background-color: #ADA399;">
+            <Pane layoutX="381.0" layoutY="147.0" prefHeight="260.0" prefWidth="206.0" style="-fx-background-color: #ADA399;">
                <children>
-                  <ImageView fitHeight="297.0" fitWidth="183.0" layoutX="9.0" layoutY="12.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fx:id="image1" fitHeight="225.0" fitWidth="179.0" layoutX="14.0" layoutY="43.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../Image/img.png" />
+                     </image></ImageView>
                </children>
             </Pane>
          </children>
