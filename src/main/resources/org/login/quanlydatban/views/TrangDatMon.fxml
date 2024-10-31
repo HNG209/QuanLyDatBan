@@ -4,7 +4,6 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -15,7 +14,7 @@
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.Pane?>
 
-<AnchorPane prefHeight="635.0" prefWidth="1280.0" styleClass="gradient1" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.login.quanlydatban.controller.DatMonController">
+<AnchorPane fx:id="anchorPane" prefHeight="635.0" prefWidth="1280.0" styleClass="gradient1" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.login.quanlydatban.controller.DatMonController">
    <children>
       <ScrollPane fx:id="scrollPane" layoutX="19.2" layoutY="51.2" prefHeight="566.0" prefWidth="686.0" AnchorPane.bottomAnchor="18.0" AnchorPane.leftAnchor="19.0" AnchorPane.rightAnchor="575.0" AnchorPane.topAnchor="51.0">
          <content>
@@ -36,7 +35,6 @@
                   <TableColumn prefWidth="101.59994506835938" text="Đơn vị tính" />
               </columns>
             </TableView>
-            <Label fx:id="data" alignment="CENTER" layoutX="7.0" layoutY="328.0" prefHeight="17.0" prefWidth="532.0" text="data" />
          </children>
          <styleClass>
             <String fx:value="gradient2" />
@@ -53,10 +51,15 @@
             </ImageView>
          </graphic>
       </Button>
-      <ComboBox layoutX="48.8" layoutY="17.0" prefHeight="26.0" prefWidth="309.0" promptText="Chọn danh mục tìm kiếm" style="-fx-background-color: white; -fx-border-color: #F3B664;" styleClass="round-box" AnchorPane.leftAnchor="49.0" />
-      <ImageView fitHeight="29.0" fitWidth="29.0" layoutX="19.0" layoutY="16.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="19.0">
+      <ComboBox layoutX="88.8" layoutY="17.0" prefHeight="27.0" prefWidth="269.0" promptText="Chọn danh mục tìm kiếm" style="-fx-background-color: white; -fx-border-color: #F3B664;" styleClass="round-box" AnchorPane.leftAnchor="89.0" />
+      <ImageView fitHeight="29.0" fitWidth="29.0" layoutX="55.0" layoutY="16.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="55.0">
          <image>
             <Image url="@../icons/filter.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="29.0" fitWidth="29.0" layoutX="20.0" layoutY="17.0" onMouseClicked="#back" pickOnBounds="true" preserveRatio="true" styleClass="image-hover-effect">
+         <image>
+            <Image url="@../icons/turn-around.png" />
          </image>
       </ImageView>
    </children>

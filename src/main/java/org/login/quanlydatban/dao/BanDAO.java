@@ -1,7 +1,7 @@
 package org.login.quanlydatban.dao;
 
 import org.hibernate.Session;
-import org.login.quanlydatban.entity.MonAn;
+import org.login.quanlydatban.entity.Ban;
 import org.login.quanlydatban.hibernate.HibernateUtils;
 
 import javax.persistence.Query;
@@ -10,27 +10,28 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.util.List;
 
-public class MonAnDAO {
-    private List<MonAn> listMonAn;
+public class BanDAO {
+    private List<Ban> listBan;
 
-    public List<MonAn> readAll() {
+    public List<Ban> readAll() {
         Session session = HibernateUtils.getFactory().openSession();
 
         CriteriaBuilder builder = session.getCriteriaBuilder();
-        CriteriaQuery<MonAn> query = builder.createQuery(MonAn.class);
-        Root root = query.from(MonAn.class);
+        CriteriaQuery<Ban> query = builder.createQuery(Ban.class);
+        Root root = query.from(Ban.class);
 
         query = query.select(root);
 
         Query q = session.createQuery(query);
-        listMonAn = q.getResultList();
+
+        listBan = q.getResultList();
 
         session.close();
 
-        return listMonAn;
+        return this.listBan;
     }
 
-    public List<MonAn> getListMonAn() {
-        return this.listMonAn;
+    public List<Ban> getListBan() {
+        return this.listBan;
     }
 }

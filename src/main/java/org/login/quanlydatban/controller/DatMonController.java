@@ -6,10 +6,12 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
-import javafx.scene.shape.Rectangle;
 import org.login.quanlydatban.dao.MonAnDAO;
+import org.login.quanlydatban.entity.Ban;
 import org.login.quanlydatban.entity.MonAn;
 
 import java.io.IOException;
@@ -27,14 +29,16 @@ public class DatMonController implements Initializable {
     private TableView<?> orderTable;
 
     @FXML
-    private Label data;
+    private AnchorPane anchorPane;
 
     private MonAnDAO monAnDAO;
+
+    private Ban ban;
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
         monAnDAO = new MonAnDAO();
-        monAnDAO.readMonAn();
+        monAnDAO.readAll();
         flowPane.prefHeightProperty().bind(scrollPane.heightProperty());
         flowPane.prefWidthProperty().bind(scrollPane.widthProperty());
 
@@ -51,20 +55,6 @@ public class DatMonController implements Initializable {
                 throw new RuntimeException(e);
             }
         }
-//        for (int i = 0; i < 20; i++){
-//            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/uicomponents/CardMonAn.fxml"));
-//            try {
-//                AnchorPane pane = loader.load();
-//
-//                CardMonAnController controller = loader.getController();
-//                controller.setIndex(i);
-//
-//                flowPane.getChildren().add(pane);
-//            } catch (IOException e) {
-//                throw new RuntimeException(e);
-//            }
-//        }
-
         monAnDAO.getListMonAn();
 //        scrollPane.vvalueProperty().addListener((obs, oldValue, newValue) -> {
 //            if(newValue.doubleValue() == 1.0){
@@ -82,7 +72,19 @@ public class DatMonController implements Initializable {
 //        });
     }
 
-    public void setData(int i){
-        this.data.setText(String.valueOf(i));
+    public void setBan(Ban ban) {
+        this.ban = ban;
+    }
+
+    @FXML
+    void back(MouseEvent event) throws IOException {
+        if(anchorPane.getParent() instanceof BorderPane){
+            BorderPane pane = (BorderPane) anchorPane.getParent();
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/TrangChonBan.fxml"));
+            AnchorPane anchorPane = loader.load();
+
+            pane.setCenter(anchorPane);
+        }
     }
 }
