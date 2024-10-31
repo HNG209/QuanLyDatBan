@@ -32,6 +32,8 @@ public class NhanVien implements Serializable {
     @Column(nullable = false)
     private LocalDate ngaySinh;
 
+    @Column(nullable = false)
+    private String hinhAnh;
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private TrangThaiNhanVien trangThaiNhanVien;
@@ -103,6 +105,13 @@ public class NhanVien implements Serializable {
         this.trangThaiNhanVien = trangThaiNhanVien;
     }
 
+    public String getHinhAnh() {
+        return hinhAnh;
+    }
+
+    public void setHinhAnh(String hinhAnh) {
+        this.hinhAnh = hinhAnh;
+    }
 
     @Override
     public String toString() {

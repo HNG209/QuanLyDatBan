@@ -12,7 +12,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-
+import org.apache.poi.ss.usermodel.Workbook;
 import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
@@ -52,6 +52,12 @@ public class TrangQuanLyNhanVienController implements Initializable {
 
             }
         });
+    }
+
+
+    @FXML
+    public void xuatfileExcel(){
+        // lam excel
     }
 
     @Override
