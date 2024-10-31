@@ -1,5 +1,6 @@
 package org.login.quanlydatban.entity;
 
+import org.login.quanlydatban.entity.enums.ChucVu;
 import org.login.quanlydatban.entity.enums.TrangThaiNhanVien;
 
 import javax.persistence.*;
@@ -34,11 +35,24 @@ public class NhanVien implements Serializable {
 
     @Column(nullable = false)
     private String hinhAnh;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private TrangThaiNhanVien trangThaiNhanVien;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private ChucVu chucVuNhanVien;
+
     public NhanVien(){
 
+    }
+    public ChucVu getChucVuNhanVien() {
+        return chucVuNhanVien;
+    }
+
+    public void setChucVuNhanVien(ChucVu chucVuNhanVien) {
+        this.chucVuNhanVien = chucVuNhanVien;
     }
 
     public String getMaNhanVien() {

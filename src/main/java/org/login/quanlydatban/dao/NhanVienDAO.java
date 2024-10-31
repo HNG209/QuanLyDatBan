@@ -5,11 +5,13 @@ import org.hibernate.Transaction;
 import org.hibernate.mapping.Array;
 import org.hibernate.query.Query;
 import org.login.quanlydatban.entity.NhanVien;
+import org.login.quanlydatban.entity.TaiKhoan;
 import org.login.quanlydatban.hibernate.HibernateUtils;
 
 import java.util.List;
 
 public class NhanVienDAO {
+    private NhanVien nhanVien;
     public List<NhanVien> getAllTaiKhoan() {
         List<NhanVien> taiKhoanList = null;
         Session session = HibernateUtils.getFactory().openSession();
@@ -27,6 +29,20 @@ public class NhanVienDAO {
             session.close();
         }
         return taiKhoanList;
+    }
+
+    public NhanVien getNhanVien(String tenString){
+        Session session = HibernateUtils.getFactory().openSession();
+        session.getTransaction().begin();
+        if(nhanVien != null){
+            if(nhanVien.getTenNhanVien().equals(tenString)){
+                return nhanVien;
+            }
+        }
+        nhanVien = session.get(NhanVien.class, tenString);
+        session.getTransaction().commit();
+        session.close();
+        return nhanVien;
     }
 
 }
