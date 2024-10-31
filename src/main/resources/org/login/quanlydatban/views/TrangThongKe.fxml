@@ -64,8 +64,8 @@
             <Insets bottom="40.0" />
          </padding>
         </HBox>
-        <HBox layoutX="30.0" layoutY="121.0" spacing="10">
-            <ComboBox fx:id="tieuChiThongKe" promptText="Chọn khoảng thời gian" styleClass="small-round-box">
+        <HBox alignment="CENTER" layoutX="4.0" layoutY="121.0" prefHeight="38.0" prefWidth="1271.0" spacing="10">
+            <ComboBox fx:id="tieuChiThongKe" prefHeight="26.0" prefWidth="348.0" promptText="Chọn khoảng thời gian" style="-fx-background-color: white;" styleClass="small-round-box">
                 <items>
                     <FXCollections fx:factory="observableArrayList">
                         <String fx:value="Theo tháng" />
@@ -78,12 +78,9 @@
             </HBox.margin>
             </ComboBox>
 
-            <ComboBox fx:id="namThongKe" promptText="Chọn năm" styleClass="small-round-box">
+            <ComboBox fx:id="namThongKe" prefHeight="26.0" prefWidth="146.0" promptText="Chọn năm" style="-fx-background-color: white;" styleClass="small-round-box">
                 <items>
                     <FXCollections fx:factory="observableArrayList">
-                        <String fx:value="2023" />
-                        <String fx:value="2024" />
-                        <String fx:value="2025" />
                     </FXCollections>
                 </items>
             </ComboBox>
@@ -91,20 +88,20 @@
             <Insets top="10.0" />
          </padding>
         </HBox>
-        <TabPane layoutX="37.0" layoutY="170.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="455.0" prefWidth="791.0" style="-fx-background-insets: red;" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="459.0" AnchorPane.topAnchor="170.0">
+        <TabPane layoutX="37.0" layoutY="170.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="455.0" prefWidth="791.0" stylesheets="@../stylesheets/style.css" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="459.0" AnchorPane.topAnchor="170.0">
             <tabs>
                 <Tab text="Thống kê doanh thu">
                     <content>
                         <VBox prefHeight="486.0" prefWidth="739.0" spacing="10" VBox.vgrow="ALWAYS">
                             <children>
-                                <LineChart fx:id="bieuDoDuongDoanhThu" prefHeight="376.0" prefWidth="741.0" style="-fx-font-weight: bold;" title="Thống kê doanh thu" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" VBox.vgrow="ALWAYS">
+                                <BarChart fx:id="bieuDoCotDoanhThu" prefHeight="376.0" prefWidth="741.0" style="-fx-font-weight: bold;" title="Thống kê doanh thu" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" VBox.vgrow="ALWAYS">
                                     <xAxis>
-                                        <CategoryAxis label="Thời gian" prefWidth="663.0" />
+                                        <CategoryAxis label="Thời gian" prefWidth="663.0" fx:id="xDoanhThu" />
                                     </xAxis>
                                     <yAxis>
-                                        <NumberAxis label="Doanh thu" />
+                                        <NumberAxis fx:id="yDoanhThu" label="Doanh thu" />
                                     </yAxis>
-                                </LineChart>
+                                </BarChart>
                             </children>
                         </VBox>
                     </content>
@@ -113,18 +110,19 @@
                     <content>
                         <VBox spacing="10" VBox.vgrow="ALWAYS">
                             <children>
-                                <LineChart fx:id="bieuDoDuongHoaDon" style="-fx-font-weight: bold;" title="Thống kê số lượng hóa đơn" VBox.vgrow="ALWAYS">
+                                <BarChart fx:id="bieuDoCotHoaDon" style="-fx-font-weight: bold;" title="Thống kê số lượng hóa đơn" VBox.vgrow="ALWAYS">
                                     <xAxis>
-                                        <CategoryAxis label="Thời gian" />
+                                        <CategoryAxis label="Thời gian" fx:id="xHoaDon" />
                                     </xAxis>
                                     <yAxis>
-                                        <NumberAxis label="Số lượng hóa đơn" />
+                                        <NumberAxis fx:id="yHoaDon" label="Số lượng hóa đơn" />
                                     </yAxis>
-                                </LineChart>
+                                </BarChart>
                             </children>
                         </VBox>
                     </content>
                 </Tab>
+
             </tabs>
             <styleClass>
                 <String fx:value="bg1" />
