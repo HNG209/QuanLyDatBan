@@ -65,26 +65,23 @@ public class ThongKeController {
         capNhatComboBoxNamThongKe("NV01");
         tieuChiThongKe.getSelectionModel().select("Theo tháng");
         namThongKe.getSelectionModel().select(0);
-
-        // Listener cho ComboBox tieuChiThongKe
+        capNhatDuLieuDoanhThuVaHoaDon("NV01");
+        capNhatDuLieuChoBieuDoTron("NV01");
+        capNhatDuLieuChoBieuDoCot("NV01");
         tieuChiThongKe.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if ("Theo tháng".equals(newValue) || "Theo quý".equals(newValue)) {
                 namThongKe.setVisible(true);
             } else {
                 namThongKe.setVisible(false);
             }
-            // Cập nhật lại dữ liệu khi thay đổi tiêu chí
             capNhatDuLieuChoBieuDoCot("NV01");
         });
 
-        // Listener cho ComboBox namThongKe
         namThongKe.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            // Cập nhật lại dữ liệu khi thay đổi năm
             capNhatDuLieuChoBieuDoCot("NV01");
         });
 
-        capNhatDuLieuDoanhThuVaHoaDon("NV01");
-        capNhatDuLieuChoBieuDoTron("NV01"); // Gọi ngay khi khởi tạo
+
     }
 
 
