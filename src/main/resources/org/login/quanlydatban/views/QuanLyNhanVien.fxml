@@ -52,15 +52,15 @@
                   <Font name="System Bold" size="14.0" />
                </font>
             </Label>
-            <TextField layoutX="21.0" layoutY="57.0" prefHeight="33.0" prefWidth="157.0" />
-            <TextField layoutX="21.0" layoutY="190.0" prefHeight="33.0" prefWidth="290.0" />
-            <TextField layoutX="21.0" layoutY="253.0" maxWidth="380.0" prefHeight="35.0" prefWidth="290.0" />
+            <TextField fx:id="maNhanVien" layoutX="21.0" layoutY="57.0" prefHeight="33.0" prefWidth="157.0" />
+            <TextField fx:id="diaChi" layoutX="21.0" layoutY="190.0" prefHeight="33.0" prefWidth="290.0" />
+            <TextField fx:id="cccd" layoutX="21.0" layoutY="253.0" maxWidth="380.0" prefHeight="35.0" prefWidth="290.0" />
             <Label layoutX="21.0" layoutY="165.0" text="Địa chỉ thường trú:">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
             </Label>
-            <TextField layoutX="21.0" layoutY="124.0" prefHeight="33.0" prefWidth="290.0" />
+            <TextField fx:id="hoTen" layoutX="21.0" layoutY="124.0" prefHeight="33.0" prefWidth="290.0" />
             <Label layoutX="23.0" layoutY="361.0" text="Chức vụ">
                <font>
                   <Font name="System Bold" size="14.0" />
@@ -71,7 +71,7 @@
                   <Font name="System Bold" size="14.0" />
                </font>
             </Label>
-            <TextField layoutX="21.0" layoutY="319.0" prefHeight="35.0" prefWidth="290.0" />
+            <TextField fx:id="dienThoai" layoutX="21.0" layoutY="319.0" prefHeight="35.0" prefWidth="290.0" />
             <Label layoutX="24.0" layoutY="435.0" text="Ngày/ tháng/năm">
                <font>
                   <Font name="System Bold" size="14.0" />
@@ -82,8 +82,8 @@
                   <Font name="System Bold" size="14.0" />
                </font>
             </Label>
-            <DatePicker layoutX="21.0" layoutY="463.0" prefHeight="30.0" prefWidth="290.0" />
-            <ComboBox fx:id="trangthailamviec" layoutX="179.0" layoutY="394.0" prefHeight="30.0" prefWidth="129.0">
+            <DatePicker fx:id="ngaySinh" layoutX="21.0" layoutY="463.0" prefHeight="30.0" prefWidth="290.0" />
+            <ComboBox fx:id="trangThaiLamViec" layoutX="179.0" layoutY="394.0" prefHeight="30.0" prefWidth="129.0">
                <items>
                   <FXCollections fx:factory="observableArrayList">
                      <String fx:value="ĐANG LÀM" />
@@ -91,14 +91,12 @@
                   </FXCollections>
                </items>
             </ComboBox>
-            <ComboBox fx:id="gioitinh" layoutX="186.0" layoutY="57.0" prefHeight="33.0" prefWidth="125.0">
+            <ComboBox fx:id="gioiTinh" layoutX="186.0" layoutY="57.0" prefHeight="33.0" prefWidth="125.0">
                <items>
                   <FXCollections fx:factory="observableArrayList">
-                     <String fx:value="Theo ID" />
-                     <String fx:value="Theo họ và tên" />
-                     <String fx:value="Theo địa chỉ" />
-                     <String fx:value="Theo cccd" />
-                     <String fx:value="Theo chức vụ" />
+                     <String fx:value="NAM" />
+                     <String fx:value="NỮ" />
+
                   </FXCollections>
                </items>
             </ComboBox>
@@ -107,7 +105,7 @@
                   <Font name="System Bold" size="14.0" />
                </font>
             </Label>
-            <ComboBox fx:id="chucvu" layoutX="23.0" layoutY="394.0" prefHeight="30.0" prefWidth="149.0">
+            <ComboBox fx:id="chucVu" layoutX="23.0" layoutY="394.0" prefHeight="30.0" prefWidth="149.0">
                <items>
                   <FXCollections fx:factory="observableArrayList">
                      <String fx:value="Nhân viên" />
@@ -116,13 +114,13 @@
                   </FXCollections>
                </items>
             </ComboBox>
-            <Button layoutX="21.0" layoutY="521.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="125.0" styleClass="sage-green" stylesheets="@../stylesheets/style.css" text="Lưu lại">
+            <Button fx:id="btnLuu" layoutX="21.0" layoutY="521.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="125.0" styleClass="sage-green" stylesheets="@../stylesheets/style.css" text="Lưu lại">
                <font>
                   <Font name="Times New Roman Bold" size="14.0" />
                </font>
 
             </Button>
-            <Button layoutX="186.0" layoutY="521.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="125.0" styleClass="sunset-orange" stylesheets="@../stylesheets/style.css" text="Hủy bỏ">
+            <Button fx:id="btnHuyBo" layoutX="186.0" layoutY="521.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="125.0" styleClass="sunset-orange" stylesheets="@../stylesheets/style.css" text="Hủy bỏ">
                <Font name="System Bold" size="14.0" />
                <font>
                   <Font name="System Bold" size="14.0" />
@@ -133,15 +131,12 @@
                   <Font name="System Bold" size="14.0" />
                </font>
             </Label>
-            <Button fx:id="btnTaiAnh" layoutX="422.0" layoutY="478.0" lineSpacing="2.0" mnemonicParsing="false" onAction="#taiAnh" prefHeight="30.0" prefWidth="125.0" stylesheets="@../stylesheets/style.css" text="Tải ảnh" />
-            <Pane layoutX="381.0" layoutY="130.0" prefHeight="319.0" prefWidth="207.0" style="-fx-background-color: #ADA399;">
-               <children>
-                  <ImageView fx:id="image1" fitHeight="273.0" fitWidth="199.0" layoutX="4.0" layoutY="39.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../Image/img.png" />
-                     </image></ImageView>
-               </children>
-            </Pane>
+            <Button fx:id="btnTaiAnh" layoutX="430.0" layoutY="448.0" lineSpacing="2.0" mnemonicParsing="false" onAction="#taiAnh" prefHeight="30.0" prefWidth="125.0" stylesheets="@../stylesheets/style.css" text="Tải ảnh" />
+            <ImageView fx:id="image1" fitHeight="273.0" fitWidth="199.0" layoutX="393.0" layoutY="141.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../Image/img.png" />
+               </image>
+            </ImageView>
          </children>
          <padding>
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
