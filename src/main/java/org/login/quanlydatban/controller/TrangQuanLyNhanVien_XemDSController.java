@@ -1,5 +1,7 @@
 package org.login.quanlydatban.controller;
 
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -58,6 +60,9 @@ public class TrangQuanLyNhanVien_XemDSController implements Initializable {
                     // Tải giao diện từ file FXML
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/QuanLyNhanVien.fxml"));
                     Parent newWindow = loader.load();
+                    TrangQuanLyNhanVienController nv = loader.getController();
+                    System.out.println(getNhanvien().toString());
+                    nv.setTenNhanVien(getNhanvien().toString());
                     // Tạo một cửa sổ mới
                     Stage stage = new Stage();
                     stage.setScene(new Scene(newWindow));
@@ -81,12 +86,17 @@ public class TrangQuanLyNhanVien_XemDSController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         nhanVienDAO = new NhanVienDAO();
         List<NhanVien>  listNhanVien = nhanVienDAO.getAllTaiKhoan();
+        tableNhanVien.setPrefHeight(60);
         // Thiết lập các cột cho TableView
         try {
             nhanVienID.setCellValueFactory(new PropertyValueFactory<>("maNhanVien"));
             tenNhanVien.setCellValueFactory(new PropertyValueFactory<>("tenNhanVien"));
             diaChi.setCellValueFactory(new PropertyValueFactory<>("diaChi"));
-            gioiTinh.setCellValueFactory(new PropertyValueFactory<>("gioiTinh"));
+            gioiTinh.setCellValueFactory(cellData -> {
+                boolean isNam = cellData.getValue().isGioiTinh();
+                return new SimpleStringProperty(!isNam ? "Nam" : "Nữ");
+            });
+
             trangThai.setCellValueFactory(new PropertyValueFactory<>("trangThaiNhanVien"));
             soDienThoai.setCellValueFactory(new PropertyValueFactory<>("sdt"));
 

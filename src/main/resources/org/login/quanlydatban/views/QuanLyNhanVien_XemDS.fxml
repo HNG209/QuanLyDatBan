@@ -20,8 +20,8 @@
       <TableView fx:id="tableNhanVien" layoutY="188.8" prefHeight="411.0" prefWidth="1288.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="189.0">
         <columns>
           <TableColumn id="nhanvienIDtb" fx:id="nhanVienID" prefWidth="143.99999117851257" text="ID Nhân Viên" />
-          <TableColumn fx:id="tenNhanVien" prefWidth="318.40000915527344" text="Tên Nhân Viên" />
-            <TableColumn fx:id="soDienThoai" prefWidth="191.199951171875" text="Số điện thoại" />
+          <TableColumn fx:id="tenNhanVien" prefWidth="289.6000213623047" text="Tên Nhân Viên" />
+            <TableColumn fx:id="soDienThoai" prefWidth="227.20001220703125" text="Số điện thoại" />
             <TableColumn fx:id="gioiTinh" prefWidth="137.60003662109375" text="Giới tính" />
             <TableColumn fx:id="trangThai" prefWidth="160.0001220703125" text="Trạng thái" />
             <TableColumn fx:id="diaChi" prefWidth="143.199951171875" text="Địa chỉ" />
