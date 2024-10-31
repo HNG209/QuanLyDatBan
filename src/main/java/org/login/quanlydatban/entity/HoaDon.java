@@ -5,6 +5,7 @@ import org.login.quanlydatban.entity.enums.TrangThaiHoaDon;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -20,6 +21,9 @@ public class HoaDon implements Serializable {
     @JoinColumn(name = "maBan")
     private Ban ban;
 
+    @OneToMany
+    @JoinColumn(name = "maHoaDon")
+    private List<ChiTietHoaDon> chiTietHoaDon;
     @ManyToOne
     @JoinColumn(name = "maKhachHang")
     private KhachHang khachHang;
