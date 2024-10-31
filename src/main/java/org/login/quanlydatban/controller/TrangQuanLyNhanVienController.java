@@ -279,16 +279,8 @@ public class TrangQuanLyNhanVienController implements Initializable {
                    maNhanVien.setText(maNhanVien1);
                }
            });
-
-
            // them nhan vien
            // xuat file
-
-
-
-
-
-
     }
 }
 
