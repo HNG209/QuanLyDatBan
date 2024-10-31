@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" styleClass="gradient1" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.login.quanlydatban.controller.TrangChuController">
+<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" styleClass="gradient1" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.login.quanlydatban.controller.TrangChuController">
    <top>
       <VBox>
          <children>
@@ -39,7 +39,7 @@
                               <Image url="@../icons/user.png" />
                            </image>
                         </ImageView>
-                        <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="154.0" layoutY="11.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="154.0" layoutY="11.0" pickOnBounds="true" preserveRatio="true" styleClass="image-hover-effect">
                            <image>
                               <Image url="@../icons/cogwheel.png" />
                            </image>
