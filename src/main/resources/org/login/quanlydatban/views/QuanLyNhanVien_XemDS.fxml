@@ -1,23 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import javafx.collections.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import java.lang.String?>
+<?import javafx.collections.FXCollections?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="600.0" prefWidth="1280.0" styleClass="gradient3" stylesheets="@../stylesheets/style.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.login.quanlydatban.controller.TrangQuanLyNhanVien_XemDSController">
+<AnchorPane prefHeight="600.0" prefWidth="1280.0" styleClass="gradient3" stylesheets="@../stylesheets/style.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.login.quanlydatban.controller.TrangQuanLyNhanVien_XemDSController">
    <children>
-      <TableView layoutY="188.8" prefHeight="411.0" prefWidth="1288.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="189.0">
+      <TableView fx:id="tableNhanVien" layoutY="188.8" prefHeight="411.0" prefWidth="1288.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="189.0">
         <columns>
-          <TableColumn prefWidth="143.99999117851257" text="ID Nhân Viên" />
-          <TableColumn prefWidth="318.40000915527344" text="Tên Nhân Viên" />
-            <TableColumn minWidth="8.0" prefWidth="191.19998168945312" text="Chức vụ" />
-            <TableColumn prefWidth="191.199951171875" text="Số điện thoại" />
-            <TableColumn prefWidth="137.60003662109375" text="Giới tính" />
-            <TableColumn prefWidth="160.0001220703125" text="Trạng thái" />
-            <TableColumn prefWidth="143.199951171875" text="Chỉnh sửa" />
+          <TableColumn id="nhanvienIDtb" fx:id="nhanVienID" prefWidth="143.99999117851257" text="ID Nhân Viên" />
+          <TableColumn fx:id="tenNhanVien" prefWidth="318.40000915527344" text="Tên Nhân Viên" />
+            <TableColumn fx:id="soDienThoai" prefWidth="191.199951171875" text="Số điện thoại" />
+            <TableColumn fx:id="gioiTinh" prefWidth="137.60003662109375" text="Giới tính" />
+            <TableColumn fx:id="trangThai" prefWidth="160.0001220703125" text="Trạng thái" />
+            <TableColumn fx:id="diaChi" prefWidth="143.199951171875" text="Địa chỉ" />
         </columns>
       </TableView>
       <Label alignment="CENTER" layoutY="140.0" prefHeight="38.0" prefWidth="1288.0" text="Danh sách nhân viên" textAlignment="CENTER">
@@ -25,8 +32,8 @@
             <Font name="Times New Roman" size="18.0" />
          </font>
       </Label>
-      <TextField layoutX="14.0" layoutY="51.0" prefHeight="38.0" prefWidth="268.0" promptText="nhập để tìm kiếm" style="-fx-background-color: #FFFFFF;" />
-      <ComboBox id="cbxsapxep" layoutX="940.0" layoutY="51.0" prefHeight="38.0" prefWidth="130.0" promptText="Sắp xếp theo" style="-fx-background-color: #8FA679;" stylesheets="@../stylesheets/style.css">
+      <TextField fx:id="searchID" layoutX="14.0" layoutY="51.0" prefHeight="38.0" prefWidth="352.0" promptText="nhập để tìm kiếm" style="-fx-background-color: #FFFFFF;" />
+      <ComboBox id="cbxsapxep" fx:id="cbxloc" layoutX="940.0" layoutY="51.0" prefHeight="38.0" prefWidth="130.0" promptText="Sắp xếp theo" style="-fx-background-color: #8FA679;" stylesheets="@../stylesheets/style.css">
          <items>
             <FXCollections fx:factory="observableArrayList">
                <String fx:value="Theo ID" />
@@ -38,11 +45,11 @@
          </items>
       </ComboBox>
       <RadioButton layoutX="1075.0" layoutY="52.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="67.0" text="Tăng" />
-      <Button layoutX="1162.0" layoutY="48.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="82.0" style="-fx-background-color: #8FA679;" text="Lọc">
+      <Button fx:id="btnloc" layoutX="1162.0" layoutY="48.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="82.0" style="-fx-background-color: #8FA679;" text="Lọc">
          <font>
             <Font size="14.0" />
          </font></Button>
-      <ImageView fitHeight="30.0" fitWidth="34.0" layoutX="451.0" layoutY="56.0">
+      <ImageView fx:id="btnGo" fitHeight="30.0" fitWidth="34.0" layoutX="379.0" layoutY="56.0">
          <image>
             <Image url="@../icons/send.png" />
          </image>
@@ -57,7 +64,7 @@
             <Image url="@../icons/plus.png" />
          </image>
       </ImageView>
-      <Button id="btnxuatfile" layoutX="737.0" layoutY="50.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="112.0" style="-fx-background-color: #8FA679;" text="      Xuất file">
+      <Button id="btnxuatfile" layoutX="737.0" layoutY="50.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="112.0" style="-fx-background-color: #8FA679;" text="      Xuất file" fx:id="xuatFile">
          <font>
             <Font size="14.0" />
          </font></Button>
@@ -76,16 +83,6 @@
          </children>
       </Pane>
       <RadioButton layoutX="1075.0" layoutY="71.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="74.0" text="Giảm" />
-      <ComboBox fx:id="cbxtimkiem" layoutX="281.0" layoutY="51.0" prefHeight="38.0" prefWidth="162.0" promptText="Tìm kiếm theo tiêu chí">
-         <items>
-            <FXCollections fx:factory="observableArrayList">
-               <String fx:value="Theo ID" />
-               <String fx:value="Theo họ và tên" />
-               <String fx:value="Theo địa chỉ" />
-               <String fx:value="Theo cccd" />
-               <String fx:value="Theo chức vụ" />
-            </FXCollections>
-         </items>
-      </ComboBox>
+      <Label fx:id="tenNhanVien23" layoutX="284.0" layoutY="132.0" prefHeight="18.0" prefWidth="148.0" text="Ngocdung1234" />
    </children>
 </AnchorPane>

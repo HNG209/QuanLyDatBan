@@ -11,6 +11,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import org.login.quanlydatban.entity.NhanVien;
 import org.login.quanlydatban.entity.TaiKhoan;
 
 import java.io.IOException;
@@ -23,6 +24,7 @@ public class TrangChuController {
 
     @FXML
     private BorderPane borderPane;
+
 
     public void setTaiKhoan(TaiKhoan taiKhoan){
         this.taiKhoan = taiKhoan;
@@ -49,14 +51,12 @@ public class TrangChuController {
     public void quanlynhanvien() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/QuanLyNhanVien_XemDS.fxml"));
         AnchorPane anchorPane = loader.load();
-
+        TrangQuanLyNhanVien_XemDSController nv = loader.getController();
+        System.out.println(taiKhoan.getUserName().toString());
+        nv.setNhanvien(taiKhoan.getUserName().toString());
         borderPane.setCenter(anchorPane);
-
         anchorPane.prefWidthProperty().bind(borderPane.widthProperty());
         anchorPane.prefHeightProperty().bind(borderPane.heightProperty());
-
-
-
 
     }
     @FXML
@@ -74,7 +74,6 @@ public class TrangChuController {
     public void thucDon() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/TrangThucDon.fxml"));
         AnchorPane anchorPane = loader.load();
-
         borderPane.setCenter(anchorPane);
 
         anchorPane.prefWidthProperty().bind(borderPane.widthProperty());
@@ -85,9 +84,13 @@ public class TrangChuController {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/TrangHoaDon.fxml"));
         AnchorPane anchorPane = loader.load();
 
+<<<<<<< HEAD
         borderPane.setCenter(anchorPane);
 
         anchorPane.prefWidthProperty().bind(borderPane.widthProperty());
         anchorPane.prefHeightProperty().bind(borderPane.heightProperty());
     }
+=======
+
+>>>>>>> 45a084b (sang thu nam)
 }
