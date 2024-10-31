@@ -28,6 +28,7 @@
         private TextField username;
         @FXML
         private ImageView img;
+        private  TrangChuController trangchuctr;
 
         private TaiKhoanDAO taiKhoanDAO;
         @FXML
@@ -107,6 +108,7 @@
 
         @Override
         public void initialize(URL url, ResourceBundle resourceBundle) {
+
             taiKhoanDAO = new TaiKhoanDAO();
         }
 
@@ -126,7 +128,6 @@
             //passing information to TrangChu
             TrangChuController trangChuController = loader.getController();
             trangChuController.setTaiKhoan(taiKhoan);
-
             stage.setScene(scene);
             stage.centerOnScreen();
             stage.show();
