@@ -4,12 +4,14 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import org.login.quanlydatban.entity.Ban;
+import org.login.quanlydatban.entity.enums.TrangThaiBan;
 
 import java.io.IOException;
 import java.net.URL;
@@ -37,15 +39,23 @@ public class CardBanController implements Initializable {
     private Ban ban;
     @FXML
     void chonBan(ActionEvent event) throws IOException {
-        if(anchorPane.getParent().getParent().getParent().getParent().getParent().getParent() instanceof BorderPane){
-            BorderPane pane = (BorderPane) anchorPane.getParent().getParent().getParent().getParent().getParent().getParent();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/TrangDatMon.fxml"));
-            AnchorPane anchorPane = loader.load();
-            DatMonController controller = loader.getController();
+        if(ban.getTrangThaiBan() != TrangThaiBan.TAM_NGUNG_PHUC_VU){
+            if(anchorPane.getParent().getParent().getParent().getParent().getParent().getParent() instanceof BorderPane){
+                BorderPane pane = (BorderPane) anchorPane.getParent().getParent().getParent().getParent().getParent().getParent();
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/TrangDatMon.fxml"));
+                AnchorPane anchorPane = loader.load();
+                DatMonController controller = loader.getController();
 
-            controller.setBan(ban);
+                controller.setBan(ban);
 
-            pane.setCenter(anchorPane);
+                pane.setCenter(anchorPane);
+            }
+        }
+        else {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Thao tác không thể được thực hiện");
+            alert.setHeaderText("Bàn đang trong trạng thái bảo trì, không thể phu vụ ngay bây giờ");
+            alert.showAndWait();
         }
     }
 

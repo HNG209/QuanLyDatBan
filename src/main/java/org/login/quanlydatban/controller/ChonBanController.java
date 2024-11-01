@@ -4,12 +4,16 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import org.login.quanlydatban.dao.BanDAO;
 import org.login.quanlydatban.entity.Ban;
+import org.login.quanlydatban.entity.enums.LoaiBan;
+import org.login.quanlydatban.entity.enums.TrangThaiBan;
 
 import java.io.IOException;
 import java.net.URL;
@@ -25,6 +29,9 @@ public class ChonBanController implements Initializable {
 
     @FXML
     private AnchorPane anchorPane;
+
+    @FXML
+    private Label selectedLoaiBan;
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         flowPane.prefHeightProperty().bind(scrollPane.heightProperty());
@@ -46,5 +53,30 @@ public class ChonBanController implements Initializable {
                 throw new RuntimeException(e);
             }
         }
+    }
+
+    @FXML
+    void showBanDaDat(MouseEvent event) {
+        selectedLoaiBan.setText(TrangThaiBan.DA_DAT.toString());
+    }
+
+    @FXML
+    void showBanDangPhucVu(MouseEvent event) {
+        selectedLoaiBan.setText(TrangThaiBan.DANG_PHUC_VU.toString());
+    }
+
+    @FXML
+    void showBanHong(MouseEvent event) {
+        selectedLoaiBan.setText(TrangThaiBan.TAM_NGUNG_PHUC_VU.toString());
+    }
+
+    @FXML
+    void showBanTrong(MouseEvent event) {
+        selectedLoaiBan.setText(TrangThaiBan.BAN_TRONG.toString());
+    }
+
+    @FXML
+    void showAll(MouseEvent event) {
+        selectedLoaiBan.setText("TẤT CẢ BÀN");
     }
 }

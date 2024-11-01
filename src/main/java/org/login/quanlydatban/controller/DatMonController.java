@@ -33,6 +33,8 @@ public class DatMonController implements Initializable {
 
     private MonAnDAO monAnDAO;
 
+    @FXML
+    private Label tableName;
     private Ban ban;
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -74,6 +76,7 @@ public class DatMonController implements Initializable {
 
     public void setBan(Ban ban) {
         this.ban = ban;
+        tableName.setText(ban.getMaBan());
     }
 
     @FXML
