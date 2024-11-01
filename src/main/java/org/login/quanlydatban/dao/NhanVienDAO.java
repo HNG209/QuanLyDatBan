@@ -45,4 +45,25 @@ public class NhanVienDAO {
         return nhanVien;
     }
 
+    // them nhan vien xuong co so du lieu
+    public void addNhanVien(NhanVien nhanVien) {
+        Session session = HibernateUtils.getFactory().openSession();
+        Transaction transaction = null;
+
+        try {
+            transaction = session.beginTransaction(); // Bắt đầu giao dịch
+            session.save(nhanVien); // Lưu nhân viên vào cơ sở dữ liệu
+            transaction.commit(); // Cam kết giao dịch
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback(); // Hoàn tác giao dịch nếu có lỗi
+            }
+            e.printStackTrace(); // In ra lỗi
+        } finally {
+            session.close(); // Đảm bảo đóng session
+        }
+    }
+
+
+
 }
