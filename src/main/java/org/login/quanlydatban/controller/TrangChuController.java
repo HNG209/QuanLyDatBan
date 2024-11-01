@@ -13,7 +13,7 @@ public class TrangChuController {
     @FXML
     private Label tenNhanVien;
 
-    private TaiKhoan taiKhoan;
+    public static TaiKhoan taiKhoan;
 
     @FXML
     private BorderPane borderPane;
@@ -40,7 +40,8 @@ public class TrangChuController {
     public void thongKe() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/TrangThongKe.fxml"));
         AnchorPane anchorPane = loader.load();
-
+        ThongKeController thongKeController = loader.getController();
+        thongKeController.setTaiKhoan(this.taiKhoan);
         borderPane.setCenter(anchorPane);
 
         anchorPane.prefWidthProperty().bind(borderPane.widthProperty());
