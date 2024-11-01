@@ -1,17 +1,10 @@
 package org.login.quanlydatban.controller;
 
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
-import javafx.stage.Stage;
-import org.login.quanlydatban.entity.NhanVien;
 import org.login.quanlydatban.entity.TaiKhoan;
 
 import java.io.IOException;
@@ -51,8 +44,8 @@ public class TrangChuController {
     public void quanlynhanvien() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/QuanLyNhanVien_XemDS.fxml"));
         AnchorPane anchorPane = loader.load();
-        TrangQuanLyNhanVien_XemDSController nv = loader.getController();
-        System.out.println(taiKhoan.getUserName().toString());
+        TrangQuanLyNhanVien nv = loader.getController();
+        //System.out.println(taiKhoan.getUserName().toString());
         nv.setNhanvien(taiKhoan.getUserName().toString());
         borderPane.setCenter(anchorPane);
         anchorPane.prefWidthProperty().bind(borderPane.widthProperty());

@@ -51,6 +51,20 @@ public class NhanVien implements Serializable {
         return chucVuNhanVien;
     }
 
+
+    public NhanVien(String maNhanVien, String tenNhanVien, String sdt, String cccd, String diaChi, boolean gioiTinh, LocalDate ngaySinh, String hinhAnh, TrangThaiNhanVien trangThaiNhanVien, ChucVu chucVuNhanVien) {
+        this.maNhanVien = maNhanVien;
+        this.tenNhanVien = tenNhanVien;
+        this.sdt = sdt;
+        this.cccd = cccd;
+        this.diaChi = diaChi;
+        this.gioiTinh = gioiTinh;
+        this.ngaySinh = ngaySinh;
+        this.hinhAnh = hinhAnh;
+        this.trangThaiNhanVien = trangThaiNhanVien;
+        this.chucVuNhanVien = chucVuNhanVien;
+    }
+
     public void setChucVuNhanVien(ChucVu chucVuNhanVien) {
         this.chucVuNhanVien = chucVuNhanVien;
     }

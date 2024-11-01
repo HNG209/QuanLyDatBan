@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="600.0" prefWidth="1280.0" styleClass="gradient3" stylesheets="@../stylesheets/style.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.login.quanlydatban.controller.TrangQuanLyNhanVien_XemDSController">
+<AnchorPane prefHeight="600.0" prefWidth="1280.0" styleClass="gradient3" stylesheets="@../stylesheets/style.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.login.quanlydatban.controller.TrangQuanLyNhanVien">
    <children>
       <TableView fx:id="tableNhanVien" layoutY="188.8" prefHeight="411.0" prefWidth="1288.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="189.0">
         <columns>
@@ -49,11 +49,6 @@
          <font>
             <Font size="14.0" />
          </font></Button>
-      <ImageView fx:id="btnGo" fitHeight="30.0" fitWidth="34.0" layoutX="379.0" layoutY="56.0">
-         <image>
-            <Image url="@../icons/send.png" />
-         </image>
-      </ImageView>
       <Button fx:id="btnthem" layoutX="546.0" layoutY="51.0" lineSpacing="1.0" mnemonicParsing="false" onAction="#themNhanVien" prefHeight="38.0" prefWidth="130.0" style="-fx-background-color: #8FA679;" stylesheets="@../stylesheets/style.css" text="Thêm mới">
          <font>
             <Font size="14.0" />
@@ -64,7 +59,7 @@
             <Image url="@../icons/plus.png" />
          </image>
       </ImageView>
-      <Button id="btnxuatfile" layoutX="737.0" layoutY="50.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="112.0" style="-fx-background-color: #8FA679;" text="      Xuất file" fx:id="xuatFile">
+      <Button fx:id="btnxuatFile" layoutX="737.0" layoutY="50.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="112.0" style="-fx-background-color: #8FA679;" text="      Xuất file">
          <font>
             <Font size="14.0" />
          </font></Button>
@@ -83,6 +78,5 @@
          </children>
       </Pane>
       <RadioButton layoutX="1075.0" layoutY="71.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="74.0" text="Giảm" />
-      <Label fx:id="tenNhanVien23" layoutX="284.0" layoutY="132.0" prefHeight="18.0" prefWidth="148.0" text="Ngocdung1234" />
    </children>
 </AnchorPane>
