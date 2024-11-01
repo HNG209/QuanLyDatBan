@@ -62,23 +62,24 @@ public class ThongKeController {
     @FXML
     public void initialize() {
         hoaDonDAO = new HoaDonDAO();
-        capNhatComboBoxNamThongKe("NV01");
+        String maNV = TrangChuController.taiKhoan.getNhanVien().getMaNhanVien();
+        capNhatComboBoxNamThongKe(maNV);
         tieuChiThongKe.getSelectionModel().select("Theo tháng");
         namThongKe.getSelectionModel().select(0);
-        capNhatDuLieuDoanhThuVaHoaDon("NV01");
-        capNhatDuLieuChoBieuDoTron("NV01");
-        capNhatDuLieuChoBieuDoCot("NV01");
+        capNhatDuLieuDoanhThuVaHoaDon(maNV);
+        capNhatDuLieuChoBieuDoTron(maNV);
+        capNhatDuLieuChoBieuDoCot(maNV);
         tieuChiThongKe.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if ("Theo tháng".equals(newValue) || "Theo quý".equals(newValue)) {
                 namThongKe.setVisible(true);
             } else {
                 namThongKe.setVisible(false);
             }
-            capNhatDuLieuChoBieuDoCot("NV01");
+            capNhatDuLieuChoBieuDoCot(maNV);
         });
 
         namThongKe.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            capNhatDuLieuChoBieuDoCot("NV01");
+            capNhatDuLieuChoBieuDoCot(maNV);
         });
 
 
