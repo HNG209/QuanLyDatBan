@@ -32,6 +32,18 @@
         private TaiKhoanDAO taiKhoanDAO;
         @FXML
         public void nhanEnterDeDangNhap(){
+             showPasswordField.textProperty().addListener((observable, oldValue, newValue) -> {
+                if (!password.getText().equals(newValue)) {
+                    password.setText(newValue);
+                }
+            });
+
+            // Khi có thay đổi ở trường password, cập nhật trường pwd
+            password.textProperty().addListener((observable, oldValue, newValue) -> {
+                if (!showPasswordField.getText().equals(newValue)) {
+                    showPasswordField.setText(newValue);
+                }
+            });
             username.setOnKeyPressed(event -> {
                 if (event.getCode() == KeyCode.ENTER) {
                     try {
