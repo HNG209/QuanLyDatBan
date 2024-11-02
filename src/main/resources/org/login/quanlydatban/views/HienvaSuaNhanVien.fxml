@@ -126,13 +126,13 @@
                         <Font name="System Bold" size="14.0" />
                     </font>
                 </Button>
-                <Label layoutX="406.0" layoutY="88.0" text="Ảnh 3 x 4 của nhân viên">
+                <Label layoutX="426.0" layoutY="74.0" text="Ảnh 3 x 4 của nhân viên">
                     <font>
                         <Font name="System Bold" size="14.0" />
                     </font>
                 </Label>
-                <Button fx:id="btnTaiAnh" layoutX="430.0" layoutY="448.0" lineSpacing="2.0" mnemonicParsing="false"  prefHeight="30.0" prefWidth="125.0" onAction="#taiAnh" stylesheets="@../stylesheets/style.css" text="Tải ảnh" />
-                <ImageView fx:id="image1" fitHeight="198.0" fitWidth="199.0" layoutX="393.0" layoutY="141.0" pickOnBounds="true" preserveRatio="true">
+                <Button fx:id="btnTaiAnh" layoutX="442.0" layoutY="394.0" lineSpacing="2.0" mnemonicParsing="false" onAction="#taiAnh" prefHeight="30.0" prefWidth="125.0" stylesheets="@../stylesheets/style.css" text="Tải ảnh" />
+                <ImageView fx:id="image1" fitHeight="194.0" fitWidth="176.0" layoutX="442.0" layoutY="137.0" pickOnBounds="true" preserveRatio="true">
                     <image>
                         <Image url="@../Image/img.png" />
                     </image>

@@ -13,8 +13,9 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.login.quanlydatban.dao.NhanVienDAO;
 import org.login.quanlydatban.entity.NhanVien;
+import org.login.quanlydatban.entity.enums.ChucVu;
+import org.login.quanlydatban.entity.enums.TrangThaiNhanVien;
 import org.login.quanlydatban.hibernate.HibernateUtils;
-
 import java.io.File;
 import java.io.Serializable;
 import java.net.URL;
@@ -53,9 +54,26 @@ public class TrangHienNhanVien implements Initializable {
     private ComboBox<String> chucVu; // cbx chuc vu
     @FXML
     private DatePicker ngaySinh;
-    private String maNhanVien12;
 
+    private String duongdan;
 
+    private TrangQuanLyNhanVien trangQuanLyNhanVien;
+
+    private String getMaNhanVien;
+    private  NhanVien nv;
+    private   NhanVienDAO nvdao;
+
+    public void SetTrangQuanLyNhanVien(TrangQuanLyNhanVien trangQuanLyNhanVien) {
+        this.trangQuanLyNhanVien = trangQuanLyNhanVien;
+    }
+
+    public String getGetMaNhanVien() {
+        return getMaNhanVien;
+    }
+
+    public void setGetMaNhanVien(String getMaNhanVien) {
+        this.getMaNhanVien = getMaNhanVien;
+    }
 
     @FXML
     public  void taiAnh(){
@@ -83,12 +101,6 @@ public class TrangHienNhanVien implements Initializable {
 
             }
         });
-    }
-    // them nhan vien
-    public void ThemNhanVien(String tenNhanVien){
-        NhanVienDAO nvdao = new NhanVienDAO();
-        NhanVien nv = nvdao.getNhanVien(tenNhanVien);
-
     }
 
 
@@ -180,7 +192,6 @@ public class TrangHienNhanVien implements Initializable {
     }
 
 
-
     public Long getMaxIdFromDatabase(String prefix) {
         Session session = HibernateUtils.getFactory().openSession();
         Transaction transaction = null;
@@ -249,9 +260,75 @@ public class TrangHienNhanVien implements Initializable {
         alert.setContentText(message);
         alert.showAndWait();
     }
+    // Load du lieu len form
+    public void loaddulieulenform(NhanVien nhanVien){
+        String imageUrl = nhanVien.getHinhAnh();
+        // Tạo đối tượng Image từ URL
+        Image image = new Image("file:" + imageUrl);
+        // Tạo ImageView và đặt hình ảnh vào
+        image1.setImage(image);
+        maNhanVien.setText(nhanVien.getMaNhanVien());
+        hoTen.setText(nhanVien.getTenNhanVien());
+        diaChi.setText(nhanVien.getDiaChi());
+        cccd.setText(nhanVien.getCccd());
+        dienThoai.setText(nhanVien.getSdt());
+        ngaySinh.setValue(nhanVien.getNgaySinh());
+        if(nhanVien.getChucVuNhanVien().equals(ChucVu.NHAN_VIEN)){
+             chucVu.setValue("Nhân viên");
+        }else{
+            chucVu.setValue("Quản Lý");
+        }
 
+        // gioi tinh
+        if(nhanVien.isGioiTinh() == false){
+            gioiTinh.setValue("NAM");
+        }else{
+            gioiTinh.setValue("NỮ");
+        }
+        //Trang thai nhan vien
+        if(nhanVien.getTrangThaiNhanVien().equals(TrangThaiNhanVien.DANG_LAM)){
+            trangThaiLamViec.setValue("DANG_LAM");
+
+        }else if(nhanVien.getTrangThaiNhanVien().equals(TrangThaiNhanVien.NGHI_PHEP)){
+            trangThaiLamViec.setValue("NGHI_PHEP");
+        }else
+            trangThaiLamViec.setValue("NGHI_VIEC");
+
+
+    }
+
+
+    public void suaNhanVien(){
+
+        Boolean gt = gioiTinh.getValue().equals("NAM") ? false : true;
+        TrangThaiNhanVien tt = null;
+        if(trangThaiLamViec.getValue().equals("ĐANG LÀM")){
+            tt = TrangThaiNhanVien.DANG_LAM;
+        }else if(trangThaiLamViec.getValue().equals("NGHỈ PHÉP")){
+            tt = TrangThaiNhanVien.NGHI_PHEP;
+        }else if(trangThaiLamViec.getValue().equals("NGHỈ VIỆC")){
+            tt = TrangThaiNhanVien.NGHI_VIEC;
+        }
+
+        ChucVu cv = null;
+        if(chucVu.getValue().equals("Nhân viên")){
+            cv = ChucVu.NHAN_VIEN;
+        }else if(chucVu.getValue().equals("Quản Lý")){
+            cv = ChucVu.QUAN_LY;
+        }
+
+        NhanVien nv = new NhanVien(maNhanVien.getText().toString(),hoTen.getText().toString(),dienThoai.getText().toString(),cccd.getText().toString(),diaChi.getText().toString(),gt,ngaySinh.getValue(),duongdan,tt,cv);
+        NhanVienDAO nvd = new NhanVienDAO();
+        nvd.updateNhanVien(nv);
+
+        System.out.println(maNhanVien.getText().toString()+ hoTen.getText().toString()+dienThoai.getText().toString()+ cccd.getText().toString()+ diaChi.getText().toString()+ ngaySinh.getValue()+ duongdan + tt + cv);
+        System.out.println(gt+"");
+
+    }
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+//        System.out.println(getGetMaNhanVien() +" Ban trang sau khi thuc hien");
+
         maNhanVien.setEditable(false);
         hoTen.focusedProperty().addListener((obs, oldVal, newVal) ->{
             if(!newVal){
@@ -299,15 +376,11 @@ public class TrangHienNhanVien implements Initializable {
         btnLuu.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                if(tencheck(hoTen) && cancuoccongdancheck(cccd) && sdtcheck(dienThoai)&& diaChicheck(diaChi)){
-                    if(!chucvuCheck(chucVu)){
-                        showWarn("Ban can lua chon chuc vu");
-                    }else if(!trangThaiCheck(trangThaiLamViec)){
-                        showWarn("Ban can lua trang thai lam viec");
-                    }else if(!gioiTinhCheck(gioiTinh)){
-                        showWarn("Ban can lua trang thai lam viec");
-                    }else{
-                        //ThemNhanVien();
+                if(tencheck(hoTen) && cancuoccongdancheck(cccd) && sdtcheck(dienThoai) && diaChicheck(diaChi)){
+                    if(chucvuCheck(chucVu) && trangThaiCheck(trangThaiLamViec) && gioiTinhCheck(gioiTinh)){
+                        chinhSuaNhanVien();
+                       // nvdao.addNhanVien(nv);
+                        trangQuanLyNhanVien.xetLaiduLieuChoBang();
                     }
                 }else{
                     showWarn("Ban can nhap day du thong tin");
@@ -324,10 +397,38 @@ public class TrangHienNhanVien implements Initializable {
             }
         });
 
-        // them nhan vien
 
-
-        // xuat file
 
     }
+
+    public void chinhSuaNhanVien(){
+        nvdao = new NhanVienDAO();
+        NhanVien nv1 = nvdao.getNhanVien(getMaNhanVien);
+        duongdan = nv1.getHinhAnh();
+        Boolean gt = gioiTinh.getValue().equals("NAM") ? false : true;
+        TrangThaiNhanVien tt = null;
+        if(trangThaiLamViec.getValue().equals("ĐANG LÀM")){
+            tt = TrangThaiNhanVien.DANG_LAM;
+        }else if(trangThaiLamViec.getValue().equals("NGHỈ PHÉP")){
+            tt = TrangThaiNhanVien.NGHI_PHEP;
+        }else if(trangThaiLamViec.getValue().equals("NGHỈ VIỆC")){
+            tt = TrangThaiNhanVien.NGHI_VIEC;
+        }
+
+        ChucVu cv = null;
+        if(chucVu.getValue().equals("Nhân viên")){
+            cv = ChucVu.NHAN_VIEN;
+        }else if(chucVu.getValue().equals("Quản Lý")){
+            cv = ChucVu.QUAN_LY;
+        }
+
+        nv = new NhanVien(maNhanVien.getText().toString(),hoTen.getText().toString(),dienThoai.getText().toString(),cccd.getText().toString(),diaChi.getText().toString(),gt,ngaySinh.getValue(),duongdan.toString(),tt,cv);
+        System.out.println(nv.toString());
+        NhanVienDAO nvd = new NhanVienDAO();
+        nvd.updateNhanVien(maNhanVien.getText(),nv);
+
+        System.out.println(maNhanVien.getText().toString()+ hoTen.getText().toString()+dienThoai.getText().toString()+ cccd.getText().toString()+ diaChi.getText().toString()+ ngaySinh.getValue()+ duongdan + tt + cv);
+        System.out.println(gt+"");
+    }
+
 }
