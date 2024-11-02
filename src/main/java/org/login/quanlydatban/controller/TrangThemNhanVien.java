@@ -55,10 +55,13 @@ public class TrangThemNhanVien implements Initializable {
     private ComboBox<String> chucVu; // cbx chuc vu
     @FXML
     private DatePicker ngaySinh;
-
     private String duongdan;// duong dan cua anh
+    private TrangQuanLyNhanVien trangQuanLyNhanVien;
 
 
+    public void SetTrangQuanLyNhanVien(TrangQuanLyNhanVien trangQuanLyNhanVien) {
+        this.trangQuanLyNhanVien = trangQuanLyNhanVien;
+    }
 
     @FXML
     public  void taiAnh(){
@@ -67,6 +70,7 @@ public class TrangThemNhanVien implements Initializable {
             public void handle(ActionEvent event) {
                 System.out.println("Nhan nut tai anh");
                 FileChooser fileChooser = new FileChooser();
+
                 fileChooser.setInitialDirectory(new File("E:\\QuanLyDatBanNhom2\\QuanLyDatBan\\src\\main\\resources\\org\\login\\quanlydatban\\Image"));
                 fileChooser.setTitle("Mở file");
 
@@ -106,7 +110,7 @@ public class TrangThemNhanVien implements Initializable {
 
     // cccd, 11 so
     public boolean cancuoccongdancheck(TextField cccd){
-        if(!cccd.getText().matches("^[0-9]{11}$")){
+        if(!cccd.getText().matches("^[0-9]{12}$")){
             showWarn("Can cuoc cong dan khong hop le");
             return false;
         }
@@ -213,6 +217,7 @@ public class TrangThemNhanVien implements Initializable {
         return maxId;
     }
 
+    // ham sua nhan vien
 
     public String getTenNhanVien() {
         return tenNhanVien;
@@ -303,22 +308,16 @@ public class TrangThemNhanVien implements Initializable {
            btnLuu.setOnAction(new EventHandler<ActionEvent>() {
                @Override
                public void handle(ActionEvent event) {
-                   if(tencheck(hoTen) && cancuoccongdancheck(cccd) && sdtcheck(dienThoai)&& diaChicheck(diaChi)){
-                       if(!chucvuCheck(chucVu)){
-                           showWarn("Ban can lua chon chuc vu");
-                       }else if(!trangThaiCheck(trangThaiLamViec)){
-                           showWarn("Ban can lua trang thai lam viec");
-                       }else if(!gioiTinhCheck(gioiTinh)){
-                           showWarn("Ban can lua trang thai lam viec");
-                       }else{
+                   if(tencheck(hoTen) && cancuoccongdancheck(cccd) && sdtcheck(dienThoai) && diaChicheck(diaChi)){
+                       if(chucvuCheck(chucVu) && trangThaiCheck(trangThaiLamViec) && gioiTinhCheck(gioiTinh)){
                            ThemNhanVien();
+                           trangQuanLyNhanVien.xetLaiduLieuChoBang();
                        }
                    }else{
                        showWarn("Ban can nhap day du thong tin");
                    }
                }
            });
-
            btnHuyBo.setOnAction(new EventHandler<ActionEvent>() {
                @Override
                public void handle(ActionEvent event) {
@@ -338,20 +337,20 @@ public class TrangThemNhanVien implements Initializable {
     // String diaChi, boolean gioiTinh, LocalDate ngaySinh, String hinhAnh,
     // TrangThaiNhanVien trangThaiNhanVien, ChucVu chucVuNhanVien) {
     public void ThemNhanVien(){
-         Boolean gt = gioiTinh.getItems().equals("NAM") ? false : true;
+         Boolean gt = gioiTinh.getValue().equals("NAM") ? false : true;
          TrangThaiNhanVien tt = null;
-         if(trangThaiLamViec.getItems().equals("DANG_LAM")){
+         if(trangThaiLamViec.getValue().equals("ĐANG LÀM")){
              tt = TrangThaiNhanVien.DANG_LAM;
-         }else if(trangThaiLamViec.getItems().equals("NGHI_PHEP")){
+         }else if(trangThaiLamViec.getValue().equals("NGHỈ PHÉP")){
              tt = TrangThaiNhanVien.NGHI_PHEP;
-         }else if(trangThaiLamViec.getItems().equals("NGHI_VIEC")){
+         }else if(trangThaiLamViec.getValue().equals("NGHỈ VIỆC")){
             tt = TrangThaiNhanVien.NGHI_VIEC;
          }
 
          ChucVu cv = null;
-        if(chucVu.getItems().equals("NHAN_VIEN")){
+        if(chucVu.getValue().equals("Nhân viên")){
             cv = ChucVu.NHAN_VIEN;
-        }else if(chucVu.getItems().equals("QUAN_LY")){
+        }else if(chucVu.getValue().equals("Quản Lý")){
             cv = ChucVu.QUAN_LY;
         }
 
@@ -359,6 +358,8 @@ public class TrangThemNhanVien implements Initializable {
          NhanVienDAO nvd = new NhanVienDAO();
          nvd.addNhanVien(nv);
 
+         System.out.println(maNhanVien.getText().toString()+ hoTen.getText().toString()+dienThoai.getText().toString()+ cccd.getText().toString()+ diaChi.getText().toString()+ ngaySinh.getValue()+ duongdan + tt + cv);
+         System.out.println(gt+"");
     }
 
 }

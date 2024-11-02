@@ -32,8 +32,8 @@
             <Font name="Times New Roman" size="18.0" />
          </font>
       </Label>
-      <TextField fx:id="searchID" layoutX="14.0" layoutY="51.0" prefHeight="38.0" prefWidth="352.0" promptText="nhập để tìm kiếm" style="-fx-background-color: #FFFFFF;" />
-      <ComboBox id="cbxsapxep" fx:id="cbxloc" layoutX="940.0" layoutY="51.0" prefHeight="38.0" prefWidth="130.0" promptText="Sắp xếp theo" style="-fx-background-color: #8FA679;" stylesheets="@../stylesheets/style.css">
+      <TextField fx:id="searchID" layoutX="14.0" layoutY="51.0" prefHeight="47.0" prefWidth="395.0" promptText="nhập để tìm kiếm" style="-fx-background-color: #FFFFFF;" styleClass="round-box" />
+      <ComboBox id="cbxsapxep" fx:id="cbxloc" layoutX="887.0" layoutY="25.0" prefHeight="74.0" prefWidth="158.0" promptText="Sắp xếp theo" style="-fx-background-color: #8FA679;" styleClass="round-box" stylesheets="@../stylesheets/style.css">
          <items>
             <FXCollections fx:factory="observableArrayList">
                <String fx:value="Theo ID" />
@@ -44,39 +44,39 @@
             </FXCollections>
          </items>
       </ComboBox>
-      <RadioButton layoutX="1075.0" layoutY="52.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="67.0" text="Tăng" />
-      <Button fx:id="btnloc" layoutX="1162.0" layoutY="48.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="82.0" style="-fx-background-color: #8FA679;" text="Lọc">
+      <RadioButton layoutX="1049.0" layoutY="39.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="67.0" text="Tăng" />
+      <Button fx:id="btnloc" layoutX="1112.0" layoutY="26.0" mnemonicParsing="false" prefHeight="74.0" prefWidth="130.0" style="-fx-background-color: #8FA679;" styleClass="round-box" stylesheets="@../stylesheets/style.css" text="Lọc">
          <font>
-            <Font size="14.0" />
+            <Font size="18.0" />
          </font></Button>
-      <Button fx:id="btnthem" layoutX="546.0" layoutY="51.0" lineSpacing="1.0" mnemonicParsing="false" onAction="#themNhanVien" prefHeight="38.0" prefWidth="130.0" style="-fx-background-color: #8FA679;" stylesheets="@../stylesheets/style.css" text="Thêm mới">
+      <Button fx:id="btnthem" layoutX="486.0" layoutY="27.0" lineSpacing="1.0" mnemonicParsing="false" onAction="#themNhanVien" prefHeight="73.0" prefWidth="158.0" style="-fx-background-color: #8FA679;" styleClass="round-box" stylesheets="@../stylesheets/style.css" text="    Thêm mới">
          <font>
-            <Font size="14.0" />
+            <Font size="18.0" />
          </font>
       </Button>
-      <ImageView fitHeight="27.0" fitWidth="25.0" layoutX="553.0" layoutY="57.0">
+      <ImageView fitHeight="30.0" fitWidth="31.0" layoutX="495.0" layoutY="47.0">
          <image>
             <Image url="@../icons/plus.png" />
          </image>
       </ImageView>
-      <Button fx:id="btnxuatFile" layoutX="737.0" layoutY="50.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="112.0" style="-fx-background-color: #8FA679;" text="      Xuất file">
+      <Button fx:id="btnxuatFile" layoutX="658.0" layoutY="29.0" lineSpacing="1.0" mnemonicParsing="false" prefHeight="74.0" prefWidth="149.0" style="-fx-background-color: #8FA679;" styleClass="round-box" text="      Xuất file">
          <font>
-            <Font size="14.0" />
+            <Font size="18.0" />
          </font></Button>
-      <ImageView fitHeight="30.0" fitWidth="25.0" layoutX="746.0" layoutY="50.0">
+      <ImageView fitHeight="30.0" fitWidth="31.0" layoutX="677.0" layoutY="46.0">
          <image>
             <Image url="@../icons/share.png" />
          </image>
       </ImageView>
-      <Pane layoutX="905.0" layoutY="51.0" prefHeight="38.0" prefWidth="34.0" style="-fx-background-color: #8FA679;" stylesheets="@../stylesheets/style.css">
+      <Pane layoutX="819.0" layoutY="26.0" prefHeight="74.0" prefWidth="74.0" style="-fx-background-color: #8FA679;" styleClass="round-box" stylesheets="@../stylesheets/style.css">
          <children>
-            <ImageView fitHeight="27.0" fitWidth="34.0" layoutX="-3.0" layoutY="8.0">
+            <ImageView fitHeight="30.0" fitWidth="25.0" layoutX="25.0" layoutY="22.0">
                <image>
                   <Image url="@../icons/sort.png" />
                </image>
             </ImageView>
          </children>
       </Pane>
-      <RadioButton layoutX="1075.0" layoutY="71.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="74.0" text="Giảm" />
+      <RadioButton layoutX="1049.0" layoutY="64.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="74.0" text="Giảm" />
    </children>
 </AnchorPane>
