@@ -20,7 +20,7 @@ public class HibernateUtils {
         properties.put(Environment.DRIVER, "com.mysql.cj.jdbc.Driver");
         properties.put(Environment.URL, "jdbc:mysql://localhost/nhahangtobo");
         properties.put(Environment.USER, "root");
-        properties.put(Environment.PASS, "29092004");
+        properties.put(Environment.PASS, "25082004");
         properties.put(Environment.HBM2DDL_AUTO, "update");
         properties.put(Environment.SHOW_SQL, "true");
 
@@ -43,6 +43,22 @@ public class HibernateUtils {
         FACTORY = configuration.buildSessionFactory(registry);
     }
 
+
+    // phan them vao
+//    public static SessionFactory getSessionFactory() {
+//        return sessionFactory;
+//    }
+//    private static final SessionFactory sessionFactory = buildSessionFactory();
+//
+//    private static SessionFactory buildSessionFactory() {
+//        try {
+//            // Tạo SessionFactory từ file cấu hình hibernate.cfg.xml
+//            return new Configuration().configure().buildSessionFactory();
+//        } catch (Throwable ex) {
+//            throw new ExceptionInInitializerError(ex);
+//        }
+//    }
+    //------------------------------------------------
     public static SessionFactory getFactory(){
         return FACTORY;
     }
