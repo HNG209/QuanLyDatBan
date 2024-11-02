@@ -49,6 +49,7 @@ public class TrangQuanLyNhanVien implements Initializable {
     private TableColumn<NhanVien, String> soDienThoai; // 4 Cột sdt
 
     private NhanVienDAO employeeList1;
+    private String maNhanVien;
 
 
     public void XuatFile(){
@@ -58,6 +59,14 @@ public class TrangQuanLyNhanVien implements Initializable {
 
             }
         });
+    }
+
+    public String getMaNhanVien() {
+        return maNhanVien;
+    }
+
+    public void setMaNhanVien(String maNhanVien) {
+        this.maNhanVien = maNhanVien;
     }
 
     // them nhan vien
@@ -73,8 +82,8 @@ public class TrangQuanLyNhanVien implements Initializable {
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/QuanLyNhanVien.fxml"));
                     Parent newWindow = loader.load();
                     TrangThemNhanVien nv = loader.getController();
-                    System.out.println(getNhanvien().toString());
                     nv.setTenNhanVien(getNhanvien().toString());
+                    nv.SetTrangQuanLyNhanVien(TrangQuanLyNhanVien.this);
                     // Tạo một cửa sổ mới
                     Stage stage = new Stage();
                     stage.setScene(new Scene(newWindow));
@@ -86,6 +95,32 @@ public class TrangQuanLyNhanVien implements Initializable {
             }
         });
     }
+
+
+    // xet lai du lieu cho bang nhan vien
+    public void xetLaiduLieuChoBang(){
+        try {
+            nhanVienDAO = new NhanVienDAO();
+            List<NhanVien>  listNhanVien = nhanVienDAO.getAllTaiKhoan();
+            nhanVienID.setCellValueFactory(new PropertyValueFactory<>("maNhanVien"));
+            tenNhanVien.setCellValueFactory(new PropertyValueFactory<>("tenNhanVien"));
+            diaChi.setCellValueFactory(new PropertyValueFactory<>("diaChi"));
+            gioiTinh.setCellValueFactory(cellData -> {
+                boolean isNam = cellData.getValue().isGioiTinh();
+                return new SimpleStringProperty(!isNam ? "Nam" : "Nữ");
+            });
+
+            trangThai.setCellValueFactory(new PropertyValueFactory<>("trangThaiNhanVien"));
+            soDienThoai.setCellValueFactory(new PropertyValueFactory<>("sdt"));
+
+            // Chuyển danh sách nhân viên thành ObservableList và thêm vào TableView
+            ObservableList<NhanVien> observableList = FXCollections.observableArrayList(listNhanVien);
+            tableNhanVien.setItems(observableList);
+        } catch (Exception e) {
+            e.printStackTrace(); // In ra thông tin lỗi
+        }
+    }
+
 
     public String getNhanvien() {
         return nhanvien;
@@ -102,8 +137,6 @@ public class TrangQuanLyNhanVien implements Initializable {
         nhanVienDAO = new NhanVienDAO();
         List<NhanVien>  listNhanVien = nhanVienDAO.getAllTaiKhoan();
         tableNhanVien.setPrefHeight(60);
-        System.out.println( listNhanVien.get(0).getTenNhanVien()+ " "+  listNhanVien.get(0).getMaNhanVien());
-        System.out.println( listNhanVien.get(1).getTenNhanVien() +" "+  listNhanVien.get(1).getMaNhanVien());
         // Thiết lập các cột cho TableView
         try {
             nhanVienID.setCellValueFactory(new PropertyValueFactory<>("maNhanVien"));
@@ -143,7 +176,7 @@ public class TrangQuanLyNhanVien implements Initializable {
                         return employee.getCccd() != null && employee.getCccd().contains(lowerCaseFilter);
                     }
                     // Duyệt theo mã nhân viên
-                } else if (lowerCaseFilter.matches("^(QL|NV)")) {
+                } else if (lowerCaseFilter.matches("^(QL|NV)\\d{4}$")) {
                     return employee.getMaNhanVien() != null && employee.getMaNhanVien().contains(lowerCaseFilter);
                     // Duyệt theo tên
                 } else
@@ -160,17 +193,27 @@ public class TrangQuanLyNhanVien implements Initializable {
         tableNhanVien.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                NhanVien selectedEmployee = tableNhanVien.getSelectionModel().getSelectedItem();
-                if (mouseEvent.getClickCount() == 1) { // Kiểm tra nhấp chuột đơn
+
+                if (mouseEvent.getClickCount() == 1) { // Kiểm tra nhấp chuột đơn,nv.getNgaySinh()
                     try {
-                        String id = selectedEmployee.getMaNhanVien(); // Lấy ID của nhân viên
-                        NhanVien nv  = listNhanVien.stream().filter(e -> e.getMaNhanVien().equals(id)).findFirst().orElse(null);
-                        // Tải giao diện từ file FXML
+
+                        int rowIndex = tableNhanVien.getSelectionModel().getSelectedIndex();
+                        String cellValue = tableNhanVien.getItems().get(rowIndex).getMaNhanVien();
+                        NhanVienDAO nvdao = new  NhanVienDAO();
+                        NhanVien nvtim = nvdao.getNhanVien(cellValue);
+                        if(nvtim != null){
+                            System.out.println(nvtim.getTenNhanVien());
+                            System.out.println("ma nahn vien"+ cellValue);
+                            System.out.println("nhan vien da lick co ten la "+ nvtim.getMaNhanVien());
+                        }
+
                         FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/HienvaSuaNhanVien.fxml"));
                         Parent newWindow = loader.load();
                         TrangHienNhanVien nvfml = loader.getController();
-                       // nv.setNhanvien(taiKhoan.getUserName().toString());
-                        // Tạo một cửa sổ mới
+                        nvfml.SetTrangQuanLyNhanVien(TrangQuanLyNhanVien.this);
+                        nvfml.setGetMaNhanVien(cellValue);
+                        nvfml.loaddulieulenform(nvtim);
+                        System.out.println(nvfml.getGetMaNhanVien()+" ma nhan vien sau khi truyen ");
                         Stage stage = new Stage();
                         stage.setScene(new Scene(newWindow));
                         stage.setTitle("Quản Lý Nhân Viên");
@@ -181,15 +224,36 @@ public class TrangQuanLyNhanVien implements Initializable {
 
                 }
 
-            }
+           }
 
-        });
+   });
 
-
+//         tableNhanVien.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue)->{
+//                     int selectedIndex = 0;
+//                     if(newValue != null)
+//                        selectedIndex = tableNhanVien.getSelectionModel().getSelectedIndex(); // Lấy chỉ số của dòng được chọn
+//                        NhanVien rowData = tableNhanVien.getItems().get(selectedIndex); // Lấy mảng chuỗi từ chỉ số hàng
+//                        String cellValueID = rowData.getMaNhanVien(); // Lấy giá trị từ cột
+//                        NhanVien nv = listNhanVien.stream().filter(e -> e.getMaNhanVien().equals(cellValueID)).findFirst().orElse(null);
+//                        // Tải giao diện từ file FXML
+//                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/HienvaSuaNhanVien.fxml"));
+//                        Parent newWindow = null;
+//                        try {
+//                         newWindow = loader.load();
+//                        } catch (IOException e) {
+//                         throw new RuntimeException(e);
+//                        }
+//                        TrangHienNhanVien nvfml = loader.getController();
+//                        System.out.println(cellValueID);
+//
+//                        nvfml.SetTrangQuanLyNhanVien(TrangQuanLyNhanVien.this, nv);
+//
+//                        Stage stage = new Stage();
+//                        stage.setScene(new Scene(newWindow));
+//                        stage.setTitle("Quản Lý Nhân Viên");
+//                        stage.show();
+//
+//
+//        });
     }
-
-
-
-
-
 }
