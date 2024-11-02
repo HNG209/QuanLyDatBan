@@ -4,10 +4,7 @@ import org.hibernate.Session;
 import org.login.quanlydatban.entity.*;
 import org.login.quanlydatban.hibernate.HibernateUtils;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Join;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -104,8 +101,7 @@ public class HoaDonDAO {
             return results;
         }
 
-        // Method to get total revenue and invoice count by quarter for a specific employee
-        public List<Object[]> layDoanhThuVaSoHoaDonTheoQuy(String maNhanVien, Integer nam) {
+        public List<Object[]> layDoanhThuVaSoHoaDonTheoQuy(String maNhanVien, int nam) {
             Session session = HibernateUtils.getFactory().openSession();
             List<Object[]> results = new ArrayList<>();
 
@@ -120,7 +116,7 @@ public class HoaDonDAO {
 
                 query.where(builder.equal(joinNV.get("maNhanVien"), maNhanVien));
 
-                if (nam != null) {
+                if (nam != 0) {
                     query.where(builder.equal(builder.function("YEAR", Integer.class, rootHD.get("ngayLap")), nam));
                 }
 
@@ -175,7 +171,7 @@ public class HoaDonDAO {
 
     }
 
-    public List<Object[]> layTop5MonAnCoDoanhThuCaoNhatTheoMaNV(String maNV) {
+    public List<Object[]> layDoanhThuTheoLoaiMonAn(int nam, int quy, int thang) {
         List<Object[]> result = new ArrayList<>();
 
         try (Session session = HibernateUtils.getFactory().openSession()) {
@@ -186,34 +182,54 @@ public class HoaDonDAO {
             // Thực hiện các join cần thiết
             Join<ChiTietHoaDon, MonAn> joinMA = rootCTHD.join("monAn"); // Join với bảng MonAn
             Join<MonAn, LoaiMonAn> joinLoaiMA = joinMA.join("loaiMonAn"); // Join với bảng LoaiMonAn
-            Join<ChiTietHoaDon, HoaDonDAO> joinHD = rootCTHD.join("hoaDon"); // Join với bảng HoaDon
-            Join<HoaDon, NhanVien> joinNV = joinHD.join("nhanVien"); // Join với bảng NhanVien
+            Join<ChiTietHoaDon, HoaDon> joinHD = rootCTHD.join("hoaDon"); // Join với bảng HoaDon
 
-            // Tính tổng doanh thu theo món ăn
+            // Tính tổng doanh thu theo loại món ăn
             query.multiselect(
-                    joinMA.get("tenMonAn"), // Tên món ăn
+                    joinLoaiMA.get("tenLoaiMonAn"), // Tên loại món ăn
                     builder.sum(builder.prod(joinMA.get("donGia"), rootCTHD.get("soLuong"))) // Tính tổng doanh thu
             );
 
-            // Thêm điều kiện để chỉ lấy hóa đơn do nhân viên có mã maNV lập
-            query.where(builder.equal(joinNV.get("maNhanVien"), maNV));
 
-            // Nhóm theo món ăn
-            query.groupBy(joinMA.get("tenMonAn"));
+            List<Predicate> predicates = new ArrayList<>();
 
-            // Sắp xếp theo tổng doanh thu giảm dần
+
+            if ( nam != 0) {
+                predicates.add(builder.equal(builder.function("year", Integer.class, joinHD.get("ngayLap")), nam));
+
+
+                if (quy != 0 && thang == 0) {
+                    predicates.add(builder.equal(
+                            builder.function("quarter", Integer.class, joinHD.get("ngayLap")), quy
+                    ));
+                }
+
+
+                if (thang != 0) {
+                    predicates.add(builder.equal(builder.function("month", Integer.class, joinHD.get("ngayLap")), thang));
+                }
+            }
+
+
+            if (!predicates.isEmpty()) {
+                query.where(predicates.toArray(new Predicate[0]));
+            }
+
+
+            query.groupBy(joinLoaiMA.get("tenLoaiMonAn"));
+
             query.orderBy(builder.desc(builder.sum(builder.prod(joinMA.get("donGia"), rootCTHD.get("soLuong")))));
 
-            // Giới hạn số lượng kết quả là 5
+
             result = session.createQuery(query)
-                    .setMaxResults(5) // Chỉ lấy 5 món ăn có doanh thu cao nhất
                     .getResultList();
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return result; // Trả về danh sách kết quả
+        return result;
     }
+
     public List<Integer> layCacNamLapHoaDonTheoMaNV(String maNV) {
         Session session = HibernateUtils.getFactory().openSession();
         List<Integer> years = new ArrayList<>();

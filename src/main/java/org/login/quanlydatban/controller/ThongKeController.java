@@ -10,7 +10,6 @@ import org.login.quanlydatban.entity.TaiKhoan;
 
 import java.text.DecimalFormat;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -28,23 +27,26 @@ public class ThongKeController {
     private Label tongHoaDon;
 
     @FXML
-    private ComboBox<String> tieuChiThongKe;
+    private ComboBox<String> tieuChiThongKeBieuDoCot;
 
     @FXML
-    private ComboBox<String> namThongKe;
+    private ComboBox<String> namThongKeBieuDoCot;
 
+    @FXML
+    private ComboBox<String> namThongKeMonAn;
+    @FXML
+    private ComboBox<String> quyThongKeMonAn;
+    @FXML
+    private ComboBox<String> thangThongKeMonAn;
     @FXML
     private BarChart<String, Number> bieuDoCotDoanhThu; // Thay đổi tên thành bieuDoCotDoanhThu
 
     @FXML
     private CategoryAxis xDoanhThu;
-    @FXML
-    private NumberAxis yDoanhThu;
 
     @FXML
     private CategoryAxis xHoaDon;
-    @FXML
-    private NumberAxis yHoaDon;
+
     @FXML
     private BarChart<String, Number> bieuDoCotHoaDon;
 
@@ -64,31 +66,37 @@ public class ThongKeController {
         hoaDonDAO = new HoaDonDAO();
         String maNV = TrangChuController.taiKhoan.getNhanVien().getMaNhanVien();
         capNhatComboBoxNamThongKe(maNV);
-        tieuChiThongKe.getSelectionModel().select("Theo tháng");
-        namThongKe.getSelectionModel().select(0);
+        tieuChiThongKeBieuDoCot.getSelectionModel().select("Theo tháng");
+        namThongKeBieuDoCot.getSelectionModel().select(0);
         capNhatDuLieuDoanhThuVaHoaDon(maNV);
-        capNhatDuLieuChoBieuDoTron(maNV);
+        capNhatDuLieuThongKeMonAnVaLoaiMonAn();
         capNhatDuLieuChoBieuDoCot(maNV);
-        tieuChiThongKe.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+        tieuChiThongKeBieuDoCot.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if ("Theo tháng".equals(newValue) || "Theo quý".equals(newValue)) {
-                namThongKe.setVisible(true);
+                namThongKeBieuDoCot.setVisible(true);
             } else {
-                namThongKe.setVisible(false);
+                namThongKeBieuDoCot.setVisible(false);
             }
             capNhatDuLieuChoBieuDoCot(maNV);
         });
-
-        namThongKe.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+        namThongKeBieuDoCot.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             capNhatDuLieuChoBieuDoCot(maNV);
         });
-
-
+        namThongKeMonAn.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            capNhatDuLieuThongKeMonAnVaLoaiMonAn();
+        });
+        thangThongKeMonAn.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            quyThongKeMonAn.getSelectionModel().select(0);
+            capNhatDuLieuThongKeMonAnVaLoaiMonAn();
+        });
+        quyThongKeMonAn.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            thangThongKeMonAn.getSelectionModel().select(0);
+            capNhatDuLieuThongKeMonAnVaLoaiMonAn();
+        });
     }
 
-
-
     private void capNhatDuLieuDoanhThuVaHoaDon(String maNV) {
-        Object[] tongDoanhThuVaHoaDon = hoaDonDAO.layDoanhThuVaSoHoaDonTheoMaNV(maNV,null);
+        Object[] tongDoanhThuVaHoaDon = hoaDonDAO.layDoanhThuVaSoHoaDonTheoMaNV(maNV, null);
         Object[] tongDoanhThuVaHoaDonTheoNgay = hoaDonDAO.layDoanhThuVaSoHoaDonTheoMaNV(maNV, LocalDate.now());
         DecimalFormat df = new DecimalFormat("#,### VND");
         if (tongDoanhThuVaHoaDonTheoNgay != null && tongDoanhThuVaHoaDonTheoNgay.length >= 2) {
@@ -105,9 +113,8 @@ public class ThongKeController {
             tongDoanhThu.setText(df.format(0));
             tongHoaDon.setText("0");
         }
-
-
     }
+
     private void capNhatDuLieuDoanhThuTheoThangHoacQuy(String maNV, int nam, String donVi) {
         List<Object[]> doanhThuVaHoaDon;
         if ("Tháng".equals(donVi)) {
@@ -115,27 +122,20 @@ public class ThongKeController {
         } else if ("Quý".equals(donVi)) {
             doanhThuVaHoaDon = hoaDonDAO.layDoanhThuVaSoHoaDonTheoQuy(maNV, nam);
         } else {
-            return; // Nếu không phải tháng hoặc quý thì trả về
+            return;
         }
-
-        // Tạo mảng mặc định với giá trị 0 cho từng tháng (12 tháng) hoặc quý (4 quý)
         int soPhanTu = "Tháng".equals(donVi) ? 12 : 4;
         Number[] doanhThuTheoThoiGian = new Number[soPhanTu];
-        Arrays.fill(doanhThuTheoThoiGian, 0); // Điền mặc định giá trị 0
-
-        // Lặp qua dữ liệu và cập nhật mảng theo tháng hoặc quý có dữ liệu
+        Arrays.fill(doanhThuTheoThoiGian, 0);
         for (Object[] data : doanhThuVaHoaDon) {
-            int index = ((Number) data[0]).intValue() - ( "Tháng".equals(donVi) ? 1 : 1); // Lấy chỉ số tháng hoặc quý và điều chỉnh
+            int index = ((Number) data[0]).intValue() - ("Tháng".equals(donVi) ? 1 : 1);
             doanhThuTheoThoiGian[index] = (Number) data[1]; // Lấy doanh thu
         }
-
-        // Hiển thị dữ liệu trên biểu đồ
         XYChart.Series<String, Number> series = new XYChart.Series<>();
         series.setName("Doanh thu theo " + donVi);
         for (int i = 0; i < doanhThuTheoThoiGian.length; i++) {
             series.getData().add(new XYChart.Data<>(donVi + " " + (i + 1), doanhThuTheoThoiGian[i]));
         }
-
         bieuDoCotDoanhThu.getData().clear();
         bieuDoCotDoanhThu.getData().add(series);
         xDoanhThu.setAnimated(false);
@@ -148,58 +148,47 @@ public class ThongKeController {
         } else if ("Quý".equals(donVi)) {
             doanhThuVaHoaDon = hoaDonDAO.layDoanhThuVaSoHoaDonTheoQuy(maNV, nam);
         } else {
-            return; // Nếu không phải tháng hoặc quý thì trả về
+            return;
         }
-
-        // Tạo mảng mặc định với giá trị 0 cho từng tháng (12 tháng) hoặc quý (4 quý)
         int soPhanTu = "Tháng".equals(donVi) ? 12 : 4;
-        Number[] hoaDonTheoThoiGian = new Number[soPhanTu];
-        Arrays.fill(hoaDonTheoThoiGian, 0); // Điền mặc định giá trị 0
-
-        // Lặp qua dữ liệu và cập nhật mảng theo tháng hoặc quý có dữ liệu
+        long[] hoaDonTheoThoiGian = new long[soPhanTu];
+        Arrays.fill(hoaDonTheoThoiGian, 0);
         for (Object[] data : doanhThuVaHoaDon) {
-            int index = ((Number) data[0]).intValue() - ( "Tháng".equals(donVi) ? 1 : 1); // Lấy chỉ số tháng hoặc quý và điều chỉnh
-            hoaDonTheoThoiGian[index] = (Number) data[2]; // Lấy số hóa đơn
+            int index = ((Number) data[0]).intValue() - ("Tháng".equals(donVi) ? 1 : 1);
+            hoaDonTheoThoiGian[index] = (long) data[2];
         }
-
-        // Hiển thị dữ liệu trên biểu đồ
         XYChart.Series<String, Number> series = new XYChart.Series<>();
         series.setName("Số hóa đơn theo " + donVi);
         for (int i = 0; i < hoaDonTheoThoiGian.length; i++) {
             series.getData().add(new XYChart.Data<>(donVi + " " + (i + 1), hoaDonTheoThoiGian[i]));
         }
-
         bieuDoCotHoaDon.getData().clear();
         bieuDoCotHoaDon.getData().add(series);
         xHoaDon.setAnimated(false);
+        NumberAxis yAxis = (NumberAxis) bieuDoCotHoaDon.getYAxis();
+        yAxis.setTickUnit(1);
+        yAxis.setMinorTickVisible(false);
+        long maxSoHoaDon = Arrays.stream(hoaDonTheoThoiGian).max().orElse(0);
+        yAxis.setUpperBound(maxSoHoaDon + 1);
+        yAxis.setAutoRanging(false);
     }
-
-
 
     private void capNhatDuLieuHoaDonTheoNam(String maNV) {
         List<Object[]> hoaDonVaSoHoaDon = hoaDonDAO.layDoanhThuVaSoHoaDonTheoNam(maNV);
         long[] soHoaDonTheoNam = new long[hoaDonVaSoHoaDon.size()];
-
         for (int i = 0; i < hoaDonVaSoHoaDon.size(); i++) {
             soHoaDonTheoNam[i] = (long) hoaDonVaSoHoaDon.get(i)[2];
         }
         XYChart.Series<String, Number> series = new XYChart.Series<>();
-
         for (int i = 0; i < hoaDonVaSoHoaDon.size(); i++) {
             series.getData().add(new XYChart.Data<>(String.valueOf(hoaDonVaSoHoaDon.get(i)[0]), soHoaDonTheoNam[i]));
         }
-
         bieuDoCotHoaDon.getData().clear();
         bieuDoCotHoaDon.getData().add(series);
         xHoaDon.setAnimated(false);
-
-        // Đảm bảo trục Y luôn hiển thị số nguyên
         NumberAxis yAxis = (NumberAxis) bieuDoCotHoaDon.getYAxis();
-        yAxis.setLowerBound(0);
         yAxis.setTickUnit(1);
         yAxis.setMinorTickVisible(false);
-
-        // Thiết lập giá trị tối đa cho trục Y
         long maxSoHoaDon = Arrays.stream(soHoaDonTheoNam).max().orElse(0);
         yAxis.setUpperBound(maxSoHoaDon + 1);
         yAxis.setAutoRanging(false);
@@ -208,30 +197,26 @@ public class ThongKeController {
     private void capNhatDuLieuDoanhThuTheoNam(String maNV) {
         List<Object[]> hoaDonVaSoHoaDon = hoaDonDAO.layDoanhThuVaSoHoaDonTheoNam(maNV);
         Double[] soHoaDonTheoNam = new Double[hoaDonVaSoHoaDon.size()];
-
         for (int i = 0; i < hoaDonVaSoHoaDon.size(); i++) {
             soHoaDonTheoNam[i] = (Double) hoaDonVaSoHoaDon.get(i)[1];
         }
         XYChart.Series<String, Number> series = new XYChart.Series<>();
-
         for (int i = 0; i < hoaDonVaSoHoaDon.size(); i++) {
             series.getData().add(new XYChart.Data<>(String.valueOf(hoaDonVaSoHoaDon.get(i)[0]), soHoaDonTheoNam[i]));
         }
-
         bieuDoCotDoanhThu.getData().clear();
         bieuDoCotDoanhThu.getData().add(series);
         xHoaDon.setAnimated(false);
-
-        // Đảm bảo trục Y luôn hiển thị số nguyên
         NumberAxis yAxis = (NumberAxis) bieuDoCotDoanhThu.getYAxis();
         yAxis.setLowerBound(0);
         yAxis.setTickUnit(1);
         yAxis.setMinorTickVisible(false);
+
     }
 
     private void capNhatDuLieuChoBieuDoCot(String maNV) {
-        String tieuChi = tieuChiThongKe.getSelectionModel().getSelectedItem();
-        int nam = Integer.parseInt(namThongKe.getSelectionModel().getSelectedItem());
+        String tieuChi = tieuChiThongKeBieuDoCot.getSelectionModel().getSelectedItem();
+        int nam = Integer.parseInt(namThongKeBieuDoCot.getSelectionModel().getSelectedItem());
         if ("Theo tháng".equals(tieuChi)) {
             capNhatDuLieuDoanhThuTheoThangHoacQuy(maNV, nam, "Tháng");
             capNhatDuLieuHoaDonTheoThangHoacQuy(maNV, nam, "Tháng");
@@ -246,74 +231,69 @@ public class ThongKeController {
         bieuDoCotDoanhThu.setAnimated(false);
     }
 
+    private void capNhatDuLieuThongKeMonAnVaLoaiMonAn() {
+        List<Object[]> dsMonAn;
+        int nam = 0, thang = 0, quy = 0;
+        try {
+            nam = Integer.parseInt(namThongKeMonAn.getSelectionModel().getSelectedItem());
+            try {
+                thang = Integer.parseInt(thangThongKeMonAn.getSelectionModel().getSelectedItem());
 
-    private void capNhatDuLieuChoBieuDoTron(String maNV) {
-        List<Object[]> dsMonAn = hoaDonDAO.layTop5MonAnCoDoanhThuCaoNhatTheoMaNV(maNV);
+            } catch (NumberFormatException e) {
+                thang = 0;
+            }
+            try {
 
-        // Xóa dữ liệu cũ trước khi thêm dữ liệu mới
+                quy = Integer.parseInt(quyThongKeMonAn.getSelectionModel().getSelectedItem());
+            } catch (NumberFormatException e) {
+                quy = 0;
+            }
+        } catch (NumberFormatException e) {
+            nam = 0;
+        }
+        dsMonAn = hoaDonDAO.layDoanhThuTheoLoaiMonAn(nam, quy, thang);
         bieuDoTronMonAn.getData().clear();
-
         double tongDoanhThu = 0;
-
-        // Tính tổng doanh thu
         for (Object[] loaiMonAnData : dsMonAn) {
-            Number doanhThu = (Number) loaiMonAnData[1]; // Doanh thu
-            tongDoanhThu += doanhThu.doubleValue(); // Cộng dồn doanh thu
+            Number doanhThu = (Number) loaiMonAnData[1];
+            tongDoanhThu += doanhThu.doubleValue();
         }
 
-        // Thêm dữ liệu vào biểu đồ tròn với tỷ lệ phần trăm
         for (Object[] loaiMonAnData : dsMonAn) {
-            String tenMonAn = (String) loaiMonAnData[0]; // Tên món ăn
-            Number doanhThu = (Number) loaiMonAnData[1]; // Doanh thu
+            String tenMonAn = (String) loaiMonAnData[0];
+            Number doanhThu = (Number) loaiMonAnData[1];
+            double phanTram = (tongDoanhThu > 0) ? (doanhThu.doubleValue() / tongDoanhThu) * 100 : 0;
+            PieChart.Data slice = new PieChart.Data(tenMonAn, doanhThu.doubleValue());
+            bieuDoTronMonAn.getData().add(slice);
+            Label ghiChu = new Label(tenMonAn);
+            ghiChu.setStyle("-fx-font-size: 10px;");
 
-            // Tính tỷ lệ phần trăm
-            double phanTram = (doanhThu.doubleValue() / tongDoanhThu) * 100;
-
-            // Tạo một phần dữ liệu cho biểu đồ tròn
-            PieChart.Data slice = new PieChart.Data(tenMonAn + " (" + String.format("%.1f", phanTram) + "%)", doanhThu.doubleValue());
-            bieuDoTronMonAn.getData().add(slice); // Thêm vào biểu đồ
-
-            // Tạo tooltip cho mỗi phần
             Tooltip tooltip = new Tooltip();
             slice.getNode().setOnMouseEntered(event -> {
-                // Hiển thị tooltip khi rê chuột vào
-                tooltip.setText(tenMonAn + ": " + String.format("%.1f", phanTram) + "%");
-                tooltip.show(slice.getNode(), event.getScreenX(), event.getScreenY() + 10); // Hiển thị tooltip gần chuột
+                tooltip.setText(tenMonAn + " (" + String.format("%.1f", phanTram) + "%)");
+                tooltip.show(slice.getNode(), event.getScreenX(), event.getScreenY() + 10);
             });
 
             slice.getNode().setOnMouseExited(event -> {
-                // Ẩn tooltip khi không còn rê chuột
-                tooltip.hide(); // Ẩn tooltip khi chuột rời khỏi
+                tooltip.hide();
             });
         }
-
-        // Phóng to biểu đồ
-        bieuDoTronMonAn.setPrefWidth(400); // Kích thước chiều rộng
-        bieuDoTronMonAn.setPrefHeight(400); // Kích thước chiều cao
-
-        // Thiết lập kiểu chữ cho ghi chú
-        for (PieChart.Data data : bieuDoTronMonAn.getData()) {
-            data.getNode().setStyle("-fx-font-size: 10px;"); // Thiết lập kích thước chữ ghi chú
-        }
-
-        // Ẩn các mũi tên chỉa vào biểu đồ tròn
-        bieuDoTronMonAn.setLabelsVisible(false); // Ẩn nhãn và mũi tên
+        bieuDoTronMonAn.setLabelsVisible(false);
     }
 
 
-
-
-
-
-
     private void capNhatComboBoxNamThongKe(String maNV) {
-        List<Integer> dsNam = hoaDonDAO.layCacNamLapHoaDonTheoMaNV(maNV); // Lấy danh sách năm từ DAO
-        namThongKe.getItems().clear();
+        List<Integer> dsNam = hoaDonDAO.layCacNamLapHoaDonTheoMaNV(maNV);
+        namThongKeBieuDoCot.getItems().clear();
+        namThongKeMonAn.getItems().clear();
+        namThongKeMonAn.getItems().add("Tất cả");
         if (dsNam != null && !dsNam.isEmpty()) {
             for (Integer nam : dsNam) {
-                namThongKe.getItems().add(nam.toString()); // Chuyển đổi Integer sang String
+                namThongKeBieuDoCot.getItems().add(nam.toString());
+                namThongKeMonAn.getItems().add(nam.toString());
             }
         }
+
     }
 
 }
