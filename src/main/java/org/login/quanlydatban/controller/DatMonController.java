@@ -45,7 +45,7 @@ public class DatMonController implements Initializable {
         flowPane.prefWidthProperty().bind(scrollPane.widthProperty());
 
         for (MonAn i : monAnDAO.getListMonAn()){
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/uicomponents/CardMonAn.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/uicomponents/CardMonAn_TrangDatMon.fxml"));
             try {
                 AnchorPane pane = loader.load();
 
@@ -61,7 +61,7 @@ public class DatMonController implements Initializable {
 //        scrollPane.vvalueProperty().addListener((obs, oldValue, newValue) -> {
 //            if(newValue.doubleValue() == 1.0){
 //                for (int i = 0; i < 20; i++){
-//                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/uicomponents/CardMonAn.fxml"));
+//                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/uicomponents/CardMonAn_TrangDatMon.fxml"));
 //                    try {
 //                        AnchorPane pane = loader.load();
 //                        flowPane.getChildren().add(pane);
