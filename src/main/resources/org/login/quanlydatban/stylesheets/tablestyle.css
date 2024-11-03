@@ -1,0 +1,38 @@
+/* Style for TableView with Rounded Corners */
+.table-view {
+    -fx-background-color: #f3f3f3;
+    -fx-border-color: #ccc;
+    -fx-border-width: 1px;
+    -fx-border-radius: 15px;     /* Round corners for the entire TableView */
+    -fx-background-radius: 15px; /* Apply rounded corners to background */
+}
+
+/* Style for Table Header with Rounded Corners */
+.table-view .column-header-background {
+    -fx-background-color: #4CAF50;
+    -fx-border-radius: 15px 15px 0 0; /* Rounded top corners */
+    -fx-background-radius: 15px 15px 0 0;
+}
+
+/* Style for Table Rows */
+.table-row-cell {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #dddddd;
+}
+
+/* Alternating Row Colors */
+.table-row-cell:odd {
+    -fx-background-color: #f9f9f9;
+}
+
+.table-row-cell:selected {
+    -fx-background-color: #DCE775;
+    -fx-text-fill: #333;
+}
+
+/* Style for individual table cells */
+.table-cell {
+    -fx-padding: 8px;
+    -fx-font-size: 14px;
+    -fx-background-radius: 15px; /* Round corners for cells */
+}

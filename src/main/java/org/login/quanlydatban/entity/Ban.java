@@ -65,4 +65,14 @@ public class Ban implements Serializable {
     public void setKhuVuc(KhuVuc khuVuc) {
         this.khuVuc = khuVuc;
     }
+
+    @Override
+    public String toString() {
+        return "Ban{" +
+                "maBan='" + maBan + '\'' +
+                ", loaiBan=" + loaiBan +
+                ", trangThaiBan=" + trangThaiBan +
+                ", khuVuc=" + khuVuc +
+                '}';
+    }
 }
