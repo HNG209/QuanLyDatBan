@@ -12,13 +12,16 @@ public class CardMonAnController {
     @FXML
     private Label tenMon;
     private MonAn monAn;
+
+    private DatMonController controller;
     @FXML
     public void them(){
-        System.out.println(monAn);
+
     }
 
-    public void setMonAn(MonAn monAn) {
+    public void setMonAn(MonAn monAn, DatMonController controller) {
         this.monAn = monAn;
+        this.controller = controller;
         tenMon.setText(monAn.getTenMonAn());
         giaTien.setText(String.valueOf(monAn.getDonGia()));
     }

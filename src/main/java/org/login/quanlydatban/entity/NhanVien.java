@@ -1,5 +1,6 @@
 package org.login.quanlydatban.entity;
 
+import org.login.quanlydatban.entity.enums.ChucVu;
 import org.login.quanlydatban.entity.enums.TrangThaiNhanVien;
 
 import javax.persistence.*;
@@ -32,11 +33,40 @@ public class NhanVien implements Serializable {
     @Column(nullable = false)
     private LocalDate ngaySinh;
 
+    @Column(nullable = false)
+    private String hinhAnh;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private TrangThaiNhanVien trangThaiNhanVien;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private ChucVu chucVuNhanVien;
+
     public NhanVien(){
 
+    }
+    public ChucVu getChucVuNhanVien() {
+        return chucVuNhanVien;
+    }
+
+
+    public NhanVien(String maNhanVien, String tenNhanVien, String sdt, String cccd, String diaChi, boolean gioiTinh, LocalDate ngaySinh, String hinhAnh, TrangThaiNhanVien trangThaiNhanVien, ChucVu chucVuNhanVien) {
+        this.maNhanVien = maNhanVien;
+        this.tenNhanVien = tenNhanVien;
+        this.sdt = sdt;
+        this.cccd = cccd;
+        this.diaChi = diaChi;
+        this.gioiTinh = gioiTinh;
+        this.ngaySinh = ngaySinh;
+        this.hinhAnh = hinhAnh;
+        this.trangThaiNhanVien = trangThaiNhanVien;
+        this.chucVuNhanVien = chucVuNhanVien;
+    }
+
+    public void setChucVuNhanVien(ChucVu chucVuNhanVien) {
+        this.chucVuNhanVien = chucVuNhanVien;
     }
 
     public String getMaNhanVien() {
@@ -103,6 +133,13 @@ public class NhanVien implements Serializable {
         this.trangThaiNhanVien = trangThaiNhanVien;
     }
 
+    public String getHinhAnh() {
+        return hinhAnh;
+    }
+
+    public void setHinhAnh(String hinhAnh) {
+        this.hinhAnh = hinhAnh;
+    }
 
     @Override
     public String toString() {

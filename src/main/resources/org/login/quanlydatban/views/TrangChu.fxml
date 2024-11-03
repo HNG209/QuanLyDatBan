@@ -101,7 +101,7 @@
                 </Menu>
                   <Menu mnemonicParsing="false" text="Nhân viên">
                     <items>
-                      <MenuItem mnemonicParsing="false" text="Quản lý nhân viên" />
+                      <MenuItem mnemonicParsing="false" onAction="#quanlynhanvien" text="Quản lý nhân viên" />
                         <MenuItem mnemonicParsing="false" text="Quản lý tài khoản" />
                     </items>
                      <graphic>

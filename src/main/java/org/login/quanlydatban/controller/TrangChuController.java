@@ -13,10 +13,11 @@ public class TrangChuController {
     @FXML
     private Label tenNhanVien;
 
-    private TaiKhoan taiKhoan;
+    public static TaiKhoan taiKhoan;
 
     @FXML
     private BorderPane borderPane;
+
 
     public void setTaiKhoan(TaiKhoan taiKhoan){
         this.taiKhoan = taiKhoan;
@@ -37,11 +38,26 @@ public class TrangChuController {
         anchorPane.prefWidthProperty().bind(borderPane.widthProperty());
         anchorPane.prefHeightProperty().bind(borderPane.heightProperty());
     }
+
+
+    @FXML
+    public void quanlynhanvien() throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/QuanLyNhanVien_XemDS.fxml"));
+        AnchorPane anchorPane = loader.load();
+        TrangQuanLyNhanVien nv = loader.getController();
+        //System.out.println(taiKhoan.getUserName().toString());
+        nv.setNhanvien(taiKhoan.getUserName().toString());
+        borderPane.setCenter(anchorPane);
+        anchorPane.prefWidthProperty().bind(borderPane.widthProperty());
+        anchorPane.prefHeightProperty().bind(borderPane.heightProperty());
+
+    }
     @FXML
     public void thongKe() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/TrangThongKe.fxml"));
         AnchorPane anchorPane = loader.load();
-
+        ThongKeController thongKeController = loader.getController();
+        thongKeController.setTaiKhoan(this.taiKhoan);
         borderPane.setCenter(anchorPane);
 
         anchorPane.prefWidthProperty().bind(borderPane.widthProperty());
@@ -51,7 +67,6 @@ public class TrangChuController {
     public void thucDon() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/TrangThucDon.fxml"));
         AnchorPane anchorPane = loader.load();
-
         borderPane.setCenter(anchorPane);
 
         anchorPane.prefWidthProperty().bind(borderPane.widthProperty());

@@ -206,6 +206,7 @@
                         <TextField GridPane.columnIndex="1" GridPane.rowIndex="3" />
                         <Label text="Trạng thái" GridPane.rowIndex="4" />
                         <ComboBox prefHeight="25.0" prefWidth="255.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                        <ComboBox layoutX="301.0" layoutY="177.0" prefHeight="25.0" prefWidth="255.0" />
                      </children>
                   </GridPane>
                </children>
