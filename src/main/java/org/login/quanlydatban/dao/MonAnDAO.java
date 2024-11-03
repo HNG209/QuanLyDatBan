@@ -29,7 +29,6 @@ public class MonAnDAO {
 
         return listMonAn;
     }
-
     public List<MonAn> getListMonAn() {
         return this.listMonAn;
     }

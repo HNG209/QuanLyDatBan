@@ -12,7 +12,8 @@ import java.util.List;
 
 public class HoaDonDAO {
 
-        private List<Object[]> dsHoaDon;
+    private List<Object[]> dsHoaDon;
+
     public Object[] layDoanhThuVaSoHoaDonTheoMaNV(String maNhanVien, LocalDate ngay) {
         Session session = HibernateUtils.getFactory().openSession();
         Object[] result = null;
@@ -65,109 +66,109 @@ public class HoaDonDAO {
     }
 
     // Method to get total revenue and invoice count by month for a specific employee
-        public List<Object[]> layDoanhThuVaSoHoaDonTheoThang(String maNhanVien, Integer nam) {
-            Session session = HibernateUtils.getFactory().openSession();
-            List<Object[]> results = new ArrayList<>();
+    public List<Object[]> layDoanhThuVaSoHoaDonTheoThang(String maNhanVien, Integer nam) {
+        Session session = HibernateUtils.getFactory().openSession();
+        List<Object[]> results = new ArrayList<>();
 
-            try {
-                CriteriaBuilder builder = session.getCriteriaBuilder();
-                CriteriaQuery<Object[]> query = builder.createQuery(Object[].class);
-                Root<HoaDon> rootHD = query.from(HoaDon.class);
+        try {
+            CriteriaBuilder builder = session.getCriteriaBuilder();
+            CriteriaQuery<Object[]> query = builder.createQuery(Object[].class);
+            Root<HoaDon> rootHD = query.from(HoaDon.class);
 
-                Join<HoaDon, NhanVien> joinNV = rootHD.join("nhanVien");
-                Join<HoaDon, ChiTietHoaDon> joinCTHD = rootHD.join("chiTietHoaDon");
-                Join<ChiTietHoaDon, MonAn> joinMA = joinCTHD.join("monAn");
+            Join<HoaDon, NhanVien> joinNV = rootHD.join("nhanVien");
+            Join<HoaDon, ChiTietHoaDon> joinCTHD = rootHD.join("chiTietHoaDon");
+            Join<ChiTietHoaDon, MonAn> joinMA = joinCTHD.join("monAn");
 
-                query.where(builder.equal(joinNV.get("maNhanVien"), maNhanVien));
+            query.where(builder.equal(joinNV.get("maNhanVien"), maNhanVien));
 
-                if (nam != null) {
-                    query.where(builder.equal(builder.function("YEAR", Integer.class, rootHD.get("ngayLap")), nam));
-                }
-
-                query.multiselect(
-                        builder.function("MONTH", Integer.class, rootHD.get("ngayLap")),
-                        builder.sum(builder.prod(joinMA.get("donGia"), joinCTHD.get("soLuong"))),
-                        builder.countDistinct(rootHD.get("maHoaDon"))
-                );
-                query.groupBy(builder.function("MONTH", Integer.class, rootHD.get("ngayLap")));
-
-                results = session.createQuery(query).getResultList();
-            } catch (Exception e) {
-                e.printStackTrace();
-            } finally {
-                session.close();
+            if (nam != null) {
+                query.where(builder.equal(builder.function("YEAR", Integer.class, rootHD.get("ngayLap")), nam));
             }
 
-            return results;
+            query.multiselect(
+                    builder.function("MONTH", Integer.class, rootHD.get("ngayLap")),
+                    builder.sum(builder.prod(joinMA.get("donGia"), joinCTHD.get("soLuong"))),
+                    builder.countDistinct(rootHD.get("maHoaDon"))
+            );
+            query.groupBy(builder.function("MONTH", Integer.class, rootHD.get("ngayLap")));
+
+            results = session.createQuery(query).getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            session.close();
         }
 
-        public List<Object[]> layDoanhThuVaSoHoaDonTheoQuy(String maNhanVien, int nam) {
-            Session session = HibernateUtils.getFactory().openSession();
-            List<Object[]> results = new ArrayList<>();
+        return results;
+    }
 
-            try {
-                CriteriaBuilder builder = session.getCriteriaBuilder();
-                CriteriaQuery<Object[]> query = builder.createQuery(Object[].class);
-                Root<HoaDon> rootHD = query.from(HoaDon.class);
+    public List<Object[]> layDoanhThuVaSoHoaDonTheoQuy(String maNhanVien, int nam) {
+        Session session = HibernateUtils.getFactory().openSession();
+        List<Object[]> results = new ArrayList<>();
 
-                Join<HoaDon, NhanVien> joinNV = rootHD.join("nhanVien");
-                Join<HoaDon, ChiTietHoaDon> joinCTHD = rootHD.join("chiTietHoaDon");
-                Join<ChiTietHoaDon, MonAn> joinMA = joinCTHD.join("monAn");
+        try {
+            CriteriaBuilder builder = session.getCriteriaBuilder();
+            CriteriaQuery<Object[]> query = builder.createQuery(Object[].class);
+            Root<HoaDon> rootHD = query.from(HoaDon.class);
 
-                query.where(builder.equal(joinNV.get("maNhanVien"), maNhanVien));
+            Join<HoaDon, NhanVien> joinNV = rootHD.join("nhanVien");
+            Join<HoaDon, ChiTietHoaDon> joinCTHD = rootHD.join("chiTietHoaDon");
+            Join<ChiTietHoaDon, MonAn> joinMA = joinCTHD.join("monAn");
 
-                if (nam != 0) {
-                    query.where(builder.equal(builder.function("YEAR", Integer.class, rootHD.get("ngayLap")), nam));
-                }
+            query.where(builder.equal(joinNV.get("maNhanVien"), maNhanVien));
 
-                query.multiselect(
-                        builder.function("QUARTER", Integer.class, rootHD.get("ngayLap")),
-                        builder.sum(builder.prod(joinMA.get("donGia"), joinCTHD.get("soLuong"))),
-                        builder.countDistinct(rootHD.get("maHoaDon"))
-                );
-                query.groupBy(builder.function("QUARTER", Integer.class, rootHD.get("ngayLap")));
-
-                results = session.createQuery(query).getResultList();
-            } catch (Exception e) {
-                e.printStackTrace();
-            } finally {
-                session.close();
+            if (nam != 0) {
+                query.where(builder.equal(builder.function("YEAR", Integer.class, rootHD.get("ngayLap")), nam));
             }
 
-            return results;
+            query.multiselect(
+                    builder.function("QUARTER", Integer.class, rootHD.get("ngayLap")),
+                    builder.sum(builder.prod(joinMA.get("donGia"), joinCTHD.get("soLuong"))),
+                    builder.countDistinct(rootHD.get("maHoaDon"))
+            );
+            query.groupBy(builder.function("QUARTER", Integer.class, rootHD.get("ngayLap")));
+
+            results = session.createQuery(query).getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            session.close();
         }
 
-        // Method to get total revenue and invoice count by year for a specific employee
-        public List<Object[]> layDoanhThuVaSoHoaDonTheoNam(String maNhanVien) {
-            Session session = HibernateUtils.getFactory().openSession();
-            List<Object[]> results = new ArrayList<>();
+        return results;
+    }
 
-            try {
-                CriteriaBuilder builder = session.getCriteriaBuilder();
-                CriteriaQuery<Object[]> query = builder.createQuery(Object[].class);
-                Root<HoaDon> rootHD = query.from(HoaDon.class);
+    // Method to get total revenue and invoice count by year for a specific employee
+    public List<Object[]> layDoanhThuVaSoHoaDonTheoNam(String maNhanVien) {
+        Session session = HibernateUtils.getFactory().openSession();
+        List<Object[]> results = new ArrayList<>();
 
-                Join<HoaDon, NhanVien> joinNV = rootHD.join("nhanVien");
-                Join<HoaDon, ChiTietHoaDon> joinCTHD = rootHD.join("chiTietHoaDon");
-                Join<ChiTietHoaDon, MonAn> joinMA = joinCTHD.join("monAn");
+        try {
+            CriteriaBuilder builder = session.getCriteriaBuilder();
+            CriteriaQuery<Object[]> query = builder.createQuery(Object[].class);
+            Root<HoaDon> rootHD = query.from(HoaDon.class);
 
-                query.where(builder.equal(joinNV.get("maNhanVien"), maNhanVien));
+            Join<HoaDon, NhanVien> joinNV = rootHD.join("nhanVien");
+            Join<HoaDon, ChiTietHoaDon> joinCTHD = rootHD.join("chiTietHoaDon");
+            Join<ChiTietHoaDon, MonAn> joinMA = joinCTHD.join("monAn");
 
-                query.multiselect(
-                        builder.function("YEAR", Integer.class, rootHD.get("ngayLap")),
-                        builder.sum(builder.prod(joinMA.get("donGia"), joinCTHD.get("soLuong"))),
-                        builder.countDistinct(rootHD.get("maHoaDon"))
-                );
-                query.groupBy(builder.function("YEAR", Integer.class, rootHD.get("ngayLap")));
+            query.where(builder.equal(joinNV.get("maNhanVien"), maNhanVien));
 
-                results = session.createQuery(query).getResultList();
-            } catch (Exception e) {
-                e.printStackTrace();
-            } finally {
-                session.close();
-            }
+            query.multiselect(
+                    builder.function("YEAR", Integer.class, rootHD.get("ngayLap")),
+                    builder.sum(builder.prod(joinMA.get("donGia"), joinCTHD.get("soLuong"))),
+                    builder.countDistinct(rootHD.get("maHoaDon"))
+            );
+            query.groupBy(builder.function("YEAR", Integer.class, rootHD.get("ngayLap")));
 
-            return results;
+            results = session.createQuery(query).getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+
+        return results;
 
     }
 
@@ -194,7 +195,7 @@ public class HoaDonDAO {
             List<Predicate> predicates = new ArrayList<>();
 
 
-            if ( nam != 0) {
+            if (nam != 0) {
                 predicates.add(builder.equal(builder.function("year", Integer.class, joinHD.get("ngayLap")), nam));
 
 
@@ -260,6 +261,51 @@ public class HoaDonDAO {
         }
 
         return years; // Trả về danh sách các năm đã lập hóa đơn
+    }
+
+    public List<Object[]> layBangXepHangMonAnTheoSoLuongBanVaDoanhThu(int nam, int thang, int quy) {
+        Session session = HibernateUtils.getFactory().openSession();
+        List<Object[]> result = new ArrayList<>();
+        try {
+            CriteriaBuilder builder = session.getCriteriaBuilder();
+            CriteriaQuery<Object[]> query = builder.createQuery(Object[].class);
+            Root<HoaDon> rootHD = query.from(HoaDon.class);
+
+            Join<ChiTietHoaDon, HoaDon> joinCTHD = rootHD.join("chiTietHoaDon");
+            Join<ChiTietHoaDon, MonAn> joinMA = joinCTHD.join("monAn");
+
+            query.multiselect(
+                    joinMA.get("tenMonAn"),
+                    builder.sum(builder.prod(joinMA.get("donGia"), joinCTHD.get("soLuong"))),
+                    builder.sum(joinCTHD.get("soLuong"))
+            );
+            List<Predicate> predicates = new ArrayList<>();
+            if (nam != 0) {
+                predicates.add(builder.equal(builder.function("year", Integer.class, rootHD.get("ngayLap")), nam));
+                if (quy != 0 && thang == 0) {
+                    predicates.add(builder.equal(
+                            builder.function("quarter", Integer.class, rootHD.get("ngayLap")), quy
+                    ));
+                }
+                if (thang != 0) {
+                    predicates.add(builder.equal(builder.function("month", Integer.class, rootHD.get("ngayLap")), thang));
+                }
+            }
+            if (!predicates.isEmpty()) {
+                query.where(predicates.toArray(new Predicate[0]));
+            }
+            query.groupBy(joinMA.get("tenMonAn"));
+            query.orderBy(builder.desc(builder.sum(joinCTHD.get("soLuong"))),builder.desc(builder.sum(builder.prod(joinMA.get("donGia"), joinCTHD.get("soLuong")))));
+            result = session.createQuery(query)
+                    .getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+        session.close();
+        return result;
+
     }
 
 
