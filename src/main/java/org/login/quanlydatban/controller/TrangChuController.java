@@ -77,13 +77,9 @@ public class TrangChuController {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/TrangHoaDon.fxml"));
         AnchorPane anchorPane = loader.load();
 
-<<<<<<< HEAD
         borderPane.setCenter(anchorPane);
 
         anchorPane.prefWidthProperty().bind(borderPane.widthProperty());
         anchorPane.prefHeightProperty().bind(borderPane.heightProperty());
     }
-=======
-
->>>>>>> 45a084b (sang thu nam)
 }
