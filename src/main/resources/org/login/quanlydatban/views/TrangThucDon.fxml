@@ -18,7 +18,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="635.0" prefWidth="1280.0" styleClass="gradient1" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.login.quanlydatban.controller.ThucDonController">
+<AnchorPane prefHeight="635.0" prefWidth="1280.0" styleClass="gradient1" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.login.quanlydatban.controller.ThucDonController">
    <children>
       <Pane layoutX="715.0" layoutY="51.0" prefHeight="565.0" prefWidth="548.0" style="-fx-background-color: white;" styleClass="round-box" AnchorPane.bottomAnchor="19.0" AnchorPane.rightAnchor="17.0" AnchorPane.topAnchor="51.0">
          <children>
@@ -26,12 +26,12 @@
             <Label layoutX="22.0" layoutY="406.0" prefHeight="18.0" prefWidth="75.0" text="Mô tả" />
             <TextArea layoutX="101.0" layoutY="406.0" prefHeight="70.0" prefWidth="426.0" styleClass="round-box" />
             <Label layoutX="22.0" layoutY="257.0" prefHeight="18.0" prefWidth="87.0" text="Hình ảnh" />
-            <ImageView fitHeight="140.0" fitWidth="140.0" layoutX="101.0" layoutY="249.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="118.0" fitWidth="118.0" layoutX="103.0" layoutY="247.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../icons/restaurant.png" />
                </image>
             </ImageView>
-            <Button layoutX="114.0" layoutY="368.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="118.0" styleClass="round-box" text="Tải ảnh" />
+            <Button layoutX="103.0" layoutY="369.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="118.0" styleClass="round-box" text="Tải ảnh" />
             <TextField layoutX="101.0" layoutY="199.0" prefHeight="26.0" prefWidth="426.0" styleClass="round-box" />
             <Label layoutX="22.0" layoutY="203.0" prefHeight="18.0" prefWidth="87.0" text="Giá" />
             <TextField layoutX="101.0" layoutY="156.0" prefHeight="26.0" prefWidth="426.0" styleClass="round-box" />
