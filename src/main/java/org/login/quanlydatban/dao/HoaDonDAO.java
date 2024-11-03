@@ -1,169 +1,312 @@
 package org.login.quanlydatban.dao;
 
+import org.hibernate.Session;
+import org.login.quanlydatban.entity.*;
+import org.login.quanlydatban.hibernate.HibernateUtils;
+
+import javax.persistence.criteria.*;
 import java.sql.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 public class HoaDonDAO {
 
-    private Connection connection;
+    private List<Object[]> dsHoaDon;
 
-    public HoaDonDAO(Connection connection) {
-        this.connection = connection;
+    public Object[] layDoanhThuVaSoHoaDonTheoMaNV(String maNhanVien, LocalDate ngay) {
+        Session session = HibernateUtils.getFactory().openSession();
+        Object[] result = null;
+
+        try {
+            CriteriaBuilder builder = session.getCriteriaBuilder();
+            CriteriaQuery<Object[]> query = builder.createQuery(Object[].class);
+
+            // Define root for HoaDon table
+            Root<HoaDon> rootHD = query.from(HoaDon.class);
+
+            // Perform joins with other tables
+            Join<HoaDon, NhanVien> joinNV = rootHD.join("nhanVien"); // "nhanVien" is the field in HoaDon that references NhanVien
+            Join<HoaDon, ChiTietHoaDon> joinCTHD = rootHD.join("chiTietHoaDon"); // "chiTietHoaDons" is the collection in HoaDon
+            Join<ChiTietHoaDon, MonAn> joinMA = joinCTHD.join("monAn"); // "monAn" is the field in ChiTietHoaDon that references MonAn
+
+            // Add where conditions
+            if (ngay != null) {
+                query.where(
+                        builder.equal(joinNV.get("maNhanVien"), maNhanVien),
+                        builder.equal(rootHD.get("ngayLap"), ngay) // Assuming "ngayLap" is the date field in HoaDon
+                );
+            } else {
+                query.where(
+                        builder.equal(joinNV.get("maNhanVien"), maNhanVien)
+                );
+            }
+
+            // Select fields for total revenue and invoice count
+            query.multiselect(
+                    builder.sum(builder.prod(joinMA.get("donGia"), joinCTHD.get("soLuong"))), // Total revenue
+                    builder.countDistinct(rootHD.get("maHoaDon")) // Invoice count
+            );
+
+            // Group by NhanVien
+            query.groupBy(joinNV.get("maNhanVien"));
+
+            // Execute query and get result
+            List<Object[]> results = session.createQuery(query).getResultList();
+            if (!results.isEmpty()) {
+                result = results.get(0); // Get the first result
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+
+        return result; // Returns total revenue and invoice count, or null if no result
     }
 
-    // Phương thức tính tổng doanh thu theo ngày hiện tại
-    public double getTongDoanhThuTheoNgay(LocalDate ngay, String maNhanVien) throws SQLException {
-        String sql = "SELECT SUM(ma.donGia * ct.soLuong) AS tong_doanh_thu " +
-                "FROM HoaDon hd " +
-                "JOIN ChiTietHoaDon ct ON hd.maHoaDon = ct.maHoaDon " +
-                "JOIN MonAn ma ON ct.maMonAn = ma.maMonAn " +
-                "WHERE DATE(hd.ngayLap) = ? AND hd.maNhanVien = ?";
+    // Method to get total revenue and invoice count by month for a specific employee
+    public List<Object[]> layDoanhThuVaSoHoaDonTheoThang(String maNhanVien, Integer nam) {
+        Session session = HibernateUtils.getFactory().openSession();
+        List<Object[]> results = new ArrayList<>();
 
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setDate(1, Date.valueOf(ngay));
-            stmt.setString(2, maNhanVien);
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getDouble("tong_doanh_thu");
+        try {
+            CriteriaBuilder builder = session.getCriteriaBuilder();
+            CriteriaQuery<Object[]> query = builder.createQuery(Object[].class);
+            Root<HoaDon> rootHD = query.from(HoaDon.class);
+
+            Join<HoaDon, NhanVien> joinNV = rootHD.join("nhanVien");
+            Join<HoaDon, ChiTietHoaDon> joinCTHD = rootHD.join("chiTietHoaDon");
+            Join<ChiTietHoaDon, MonAn> joinMA = joinCTHD.join("monAn");
+
+            query.where(builder.equal(joinNV.get("maNhanVien"), maNhanVien));
+
+            if (nam != null) {
+                query.where(builder.equal(builder.function("YEAR", Integer.class, rootHD.get("ngayLap")), nam));
+            }
+
+            query.multiselect(
+                    builder.function("MONTH", Integer.class, rootHD.get("ngayLap")),
+                    builder.sum(builder.prod(joinMA.get("donGia"), joinCTHD.get("soLuong"))),
+                    builder.countDistinct(rootHD.get("maHoaDon"))
+            );
+            query.groupBy(builder.function("MONTH", Integer.class, rootHD.get("ngayLap")));
+
+            results = session.createQuery(query).getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+
+        return results;
+    }
+
+    public List<Object[]> layDoanhThuVaSoHoaDonTheoQuy(String maNhanVien, int nam) {
+        Session session = HibernateUtils.getFactory().openSession();
+        List<Object[]> results = new ArrayList<>();
+
+        try {
+            CriteriaBuilder builder = session.getCriteriaBuilder();
+            CriteriaQuery<Object[]> query = builder.createQuery(Object[].class);
+            Root<HoaDon> rootHD = query.from(HoaDon.class);
+
+            Join<HoaDon, NhanVien> joinNV = rootHD.join("nhanVien");
+            Join<HoaDon, ChiTietHoaDon> joinCTHD = rootHD.join("chiTietHoaDon");
+            Join<ChiTietHoaDon, MonAn> joinMA = joinCTHD.join("monAn");
+
+            query.where(builder.equal(joinNV.get("maNhanVien"), maNhanVien));
+
+            if (nam != 0) {
+                query.where(builder.equal(builder.function("YEAR", Integer.class, rootHD.get("ngayLap")), nam));
+            }
+
+            query.multiselect(
+                    builder.function("QUARTER", Integer.class, rootHD.get("ngayLap")),
+                    builder.sum(builder.prod(joinMA.get("donGia"), joinCTHD.get("soLuong"))),
+                    builder.countDistinct(rootHD.get("maHoaDon"))
+            );
+            query.groupBy(builder.function("QUARTER", Integer.class, rootHD.get("ngayLap")));
+
+            results = session.createQuery(query).getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+
+        return results;
+    }
+
+    // Method to get total revenue and invoice count by year for a specific employee
+    public List<Object[]> layDoanhThuVaSoHoaDonTheoNam(String maNhanVien) {
+        Session session = HibernateUtils.getFactory().openSession();
+        List<Object[]> results = new ArrayList<>();
+
+        try {
+            CriteriaBuilder builder = session.getCriteriaBuilder();
+            CriteriaQuery<Object[]> query = builder.createQuery(Object[].class);
+            Root<HoaDon> rootHD = query.from(HoaDon.class);
+
+            Join<HoaDon, NhanVien> joinNV = rootHD.join("nhanVien");
+            Join<HoaDon, ChiTietHoaDon> joinCTHD = rootHD.join("chiTietHoaDon");
+            Join<ChiTietHoaDon, MonAn> joinMA = joinCTHD.join("monAn");
+
+            query.where(builder.equal(joinNV.get("maNhanVien"), maNhanVien));
+
+            query.multiselect(
+                    builder.function("YEAR", Integer.class, rootHD.get("ngayLap")),
+                    builder.sum(builder.prod(joinMA.get("donGia"), joinCTHD.get("soLuong"))),
+                    builder.countDistinct(rootHD.get("maHoaDon"))
+            );
+            query.groupBy(builder.function("YEAR", Integer.class, rootHD.get("ngayLap")));
+
+            results = session.createQuery(query).getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+
+        return results;
+
+    }
+
+    public List<Object[]> layDoanhThuTheoLoaiMonAn(int nam, int quy, int thang) {
+        List<Object[]> result = new ArrayList<>();
+
+        try (Session session = HibernateUtils.getFactory().openSession()) {
+            CriteriaBuilder builder = session.getCriteriaBuilder();
+            CriteriaQuery<Object[]> query = builder.createQuery(Object[].class);
+            Root<ChiTietHoaDon> rootCTHD = query.from(ChiTietHoaDon.class);
+
+            // Thực hiện các join cần thiết
+            Join<ChiTietHoaDon, MonAn> joinMA = rootCTHD.join("monAn"); // Join với bảng MonAn
+            Join<MonAn, LoaiMonAn> joinLoaiMA = joinMA.join("loaiMonAn"); // Join với bảng LoaiMonAn
+            Join<ChiTietHoaDon, HoaDon> joinHD = rootCTHD.join("hoaDon"); // Join với bảng HoaDon
+
+            // Tính tổng doanh thu theo loại món ăn
+            query.multiselect(
+                    joinLoaiMA.get("tenLoaiMonAn"), // Tên loại món ăn
+                    builder.sum(builder.prod(joinMA.get("donGia"), rootCTHD.get("soLuong"))) // Tính tổng doanh thu
+            );
+
+
+            List<Predicate> predicates = new ArrayList<>();
+
+
+            if (nam != 0) {
+                predicates.add(builder.equal(builder.function("year", Integer.class, joinHD.get("ngayLap")), nam));
+
+
+                if (quy != 0 && thang == 0) {
+                    predicates.add(builder.equal(
+                            builder.function("quarter", Integer.class, joinHD.get("ngayLap")), quy
+                    ));
+                }
+
+
+                if (thang != 0) {
+                    predicates.add(builder.equal(builder.function("month", Integer.class, joinHD.get("ngayLap")), thang));
                 }
             }
+
+
+            if (!predicates.isEmpty()) {
+                query.where(predicates.toArray(new Predicate[0]));
+            }
+
+
+            query.groupBy(joinLoaiMA.get("tenLoaiMonAn"));
+
+            query.orderBy(builder.desc(builder.sum(builder.prod(joinMA.get("donGia"), rootCTHD.get("soLuong")))));
+
+
+            result = session.createQuery(query)
+                    .getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        return 0;
+
+        return result;
     }
 
-    // Phương thức tính tổng số hóa đơn theo ngày hiện tại
-    public int getTongSoHoaDonTheoNgay(LocalDate ngay, String maNhanVien) throws SQLException {
-        String sql = "SELECT COUNT(*) AS Tong_So_Hoa_Don " +
-                "FROM HoaDon hd " +
-                "WHERE DATE(ngayLap) = ? AND hd.maNhanVien = ?";
+    public List<Integer> layCacNamLapHoaDonTheoMaNV(String maNV) {
+        Session session = HibernateUtils.getFactory().openSession();
+        List<Integer> years = new ArrayList<>();
 
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setDate(1, Date.valueOf(ngay));
-            stmt.setString(2, maNhanVien);
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getInt("Tong_So_Hoa_Don");
+        try {
+            CriteriaBuilder builder = session.getCriteriaBuilder();
+            CriteriaQuery<Integer> query = builder.createQuery(Integer.class);
+            Root<HoaDon> rootHD = query.from(HoaDon.class);
+
+            // Join với bảng NhanVien
+            Join<HoaDon, NhanVien> joinNV = rootHD.join("nhanVien");
+
+            // Thêm điều kiện lọc theo mã nhân viên
+            query.where(builder.equal(joinNV.get("maNhanVien"), maNV));
+
+            // Chọn năm lập hóa đơn
+            query.select(builder.function("YEAR", Integer.class, rootHD.get("ngayLap")));
+
+            // Thêm nhóm theo năm
+            query.groupBy(builder.function("YEAR", Integer.class, rootHD.get("ngayLap")));
+
+            // Thực hiện truy vấn
+            years = session.createQuery(query).getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+
+        return years; // Trả về danh sách các năm đã lập hóa đơn
+    }
+
+    public List<Object[]> layBangXepHangMonAnTheoSoLuongBanVaDoanhThu(int nam, int thang, int quy) {
+        Session session = HibernateUtils.getFactory().openSession();
+        List<Object[]> result = new ArrayList<>();
+        try {
+            CriteriaBuilder builder = session.getCriteriaBuilder();
+            CriteriaQuery<Object[]> query = builder.createQuery(Object[].class);
+            Root<HoaDon> rootHD = query.from(HoaDon.class);
+
+            Join<ChiTietHoaDon, HoaDon> joinCTHD = rootHD.join("chiTietHoaDon");
+            Join<ChiTietHoaDon, MonAn> joinMA = joinCTHD.join("monAn");
+
+            query.multiselect(
+                    joinMA.get("tenMonAn"),
+                    builder.sum(builder.prod(joinMA.get("donGia"), joinCTHD.get("soLuong"))),
+                    builder.sum(joinCTHD.get("soLuong"))
+            );
+            List<Predicate> predicates = new ArrayList<>();
+            if (nam != 0) {
+                predicates.add(builder.equal(builder.function("year", Integer.class, rootHD.get("ngayLap")), nam));
+                if (quy != 0 && thang == 0) {
+                    predicates.add(builder.equal(
+                            builder.function("quarter", Integer.class, rootHD.get("ngayLap")), quy
+                    ));
+                }
+                if (thang != 0) {
+                    predicates.add(builder.equal(builder.function("month", Integer.class, rootHD.get("ngayLap")), thang));
                 }
             }
-        }
-        return 0;
-    }
-
-    // Phương thức tính tổng doanh thu theo tháng
-    public double getTongDoanhThuTheoThang(int thang, int nam, String maNhanVien) throws SQLException {
-        String sql = "SELECT SUM(ma.donGia * ct.soLuong) AS tong_doanh_thu " +
-                "FROM HoaDon hd " +
-                "JOIN ChiTietHoaDon ct ON hd.maHoaDon = ct.maHoaDon " +
-                "JOIN MonAn ma ON ct.maMonAn = ma.maMonAn " +
-                "WHERE MONTH(hd.ngayLap) = ? AND YEAR(hd.ngayLap) = ? AND hd.maNhanVien = ?";
-
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setInt(1, thang);
-            stmt.setInt(2, nam);
-            stmt.setString(3, maNhanVien);
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getDouble("tong_doanh_thu");
-                }
+            if (!predicates.isEmpty()) {
+                query.where(predicates.toArray(new Predicate[0]));
             }
+            query.groupBy(joinMA.get("tenMonAn"));
+            query.orderBy(builder.desc(builder.sum(joinCTHD.get("soLuong"))),builder.desc(builder.sum(builder.prod(joinMA.get("donGia"), joinCTHD.get("soLuong")))));
+            result = session.createQuery(query)
+                    .getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            session.close();
         }
-        return 0;
+        session.close();
+        return result;
+
     }
 
-    // Phương thức tính tổng số hóa đơn theo tháng
-    public int getTongSoHoaDonTheoThang(int thang, int nam, String maNhanVien) throws SQLException {
-        String sql = "SELECT COUNT(*) AS Tong_So_Hoa_Don " +
-                "FROM HoaDon hd " +
-                "WHERE MONTH(hd.ngayLap) = ? AND YEAR(hd.ngayLap) = ? AND hd.maNhanVien = ?";
 
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setInt(1, thang);
-            stmt.setInt(2, nam);
-            stmt.setString(3, maNhanVien);
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getInt("Tong_So_Hoa_Don");
-                }
-            }
-        }
-        return 0;
-    }
-
-    // Phương thức tính tổng doanh thu theo năm
-    public double getTongDoanhThuTheoNam(int nam, String maNhanVien) throws SQLException {
-        String sql = "SELECT SUM(ma.donGia * ct.soLuong) AS tong_doanh_thu " +
-                "FROM HoaDon hd " +
-                "JOIN ChiTietHoaDon ct ON hd.maHoaDon = ct.maHoaDon " +
-                "JOIN MonAn ma ON ct.maMonAn = ma.maMonAn " +
-                "WHERE YEAR(hd.ngayLap) = ? AND hd.maNhanVien = ?";
-
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setInt(1, nam);
-            stmt.setString(2, maNhanVien);
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getDouble("tong_doanh_thu");
-                }
-            }
-        }
-        return 0;
-    }
-
-    // Phương thức tính tổng số hóa đơn theo năm
-    public int getTongSoHoaDonTheoNam(int nam, String maNhanVien) throws SQLException {
-        String sql = "SELECT COUNT(*) AS tong_so_HoaDon " +
-                "FROM HoaDon hd " +
-                "WHERE YEAR(hd.ngayLap) = ? AND hd.maNhanVien = ?";
-
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setInt(1, nam);
-            stmt.setString(2, maNhanVien);
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getInt("tong_so_HoaDon");
-                }
-            }
-        }
-        return 0;
-    }
-
-    // Phương thức tính tổng doanh thu theo quý
-    public double getTongDoanhThuTheoQuy(int quy, int nam, String maNhanVien) throws SQLException {
-        String sql = "SELECT SUM(ma.donGia * ct.soLuong) AS tong_doanh_thu " +
-                "FROM HoaDon hd " +
-                "JOIN ChiTietHoaDon ct ON hd.maHoaDon = ct.maHoaDon " +
-                "JOIN MonAn ma ON ct.maMonAn = ma.maMonAn " +
-                "WHERE QUARTER(hd.ngayLap) = ? AND YEAR(hd.ngayLap) = ? AND hd.maNhanVien = ?";
-
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setInt(1, quy);
-            stmt.setInt(2, nam);
-            stmt.setString(3, maNhanVien);
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getDouble("tong_doanh_thu");
-                }
-            }
-        }
-        return 0;
-    }
-
-    // Phương thức tính tổng số hóa đơn theo quý
-    public int getTongSoHoaDonTheoQuy(int quy, int nam, String maNhanVien) throws SQLException {
-        String sql = "SELECT COUNT(*) AS Tong_So_Hoa_Don " +
-                "FROM HoaDon hd " +
-                "WHERE QUARTER(hd.ngayLap) = ? AND YEAR(hd.ngayLap) = ? AND hd.maNhanVien = ?";
-
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setInt(1, quy);
-            stmt.setInt(2, nam);
-            stmt.setString(3, maNhanVien);
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getInt("Tong_So_Hoa_Don");
-                }
-            }
-        }
-        return 0;
-    }
 }
