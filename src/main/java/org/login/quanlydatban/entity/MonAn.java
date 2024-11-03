@@ -3,6 +3,7 @@ package org.login.quanlydatban.entity;
 import org.login.quanlydatban.entity.enums.TrangThaiMonAn;
 
 import javax.persistence.*;
+import javax.xml.namespace.QName;
 import java.io.Serializable;
 
 @Entity
@@ -12,7 +13,8 @@ public class MonAn implements Serializable {
     @Id
     private String maMonAn;
 
-    @OneToOne
+    @ManyToOne
+    @JoinColumn(name = "maLoaiMonAn")
     private LoaiMonAn loaiMonAn;
 
     @Column
