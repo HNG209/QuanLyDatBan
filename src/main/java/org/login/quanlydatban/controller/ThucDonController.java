@@ -7,8 +7,12 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 import org.login.quanlydatban.dao.MonAnDAO;
 import org.login.quanlydatban.entity.MonAn;
+import org.login.quanlydatban.hibernate.HibernateUtils;
 
 import java.io.IOException;
 import java.net.URL;
@@ -20,6 +24,8 @@ public class ThucDonController implements Initializable {
 
     @FXML
     private ScrollPane scrollPane;
+
+
 
     @FXML
     private TableView<?> orderTable;
@@ -75,6 +81,27 @@ public class ThucDonController implements Initializable {
 //
 //            }
 //        });
+    }
+
+
+    public void themMonAn() {
+        Session session = HibernateUtils.getFactory().openSession();
+        Transaction transaction = null;
+
+        try {
+            transaction = session.beginTransaction();
+
+      //      session.save(monAnDAO.getListMonAn());
+            transaction.commit();
+
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
     }
 
 
