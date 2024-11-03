@@ -79,3 +79,11 @@
     -fx-scale-y: 1.1;
 }
 
+.underlined-style {
+    -fx-background-color: transparent;  /* Makes background transparent */
+    -fx-border-width: 0 0 1 0;         /* Adds underline at the bottom */
+    -fx-border-color: #F3B664;           /* Sets underline color */
+    -fx-padding: 0 0 5 0;              /* Adjusts padding */
+}
+
+
