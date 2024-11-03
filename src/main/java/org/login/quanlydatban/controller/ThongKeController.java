@@ -1,10 +1,14 @@
 package org.login.quanlydatban.controller;
 
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleLongProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.chart.*;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.Tooltip;
+import javafx.scene.control.*;
 import org.login.quanlydatban.dao.HoaDonDAO;
 import org.login.quanlydatban.entity.TaiKhoan;
 
@@ -52,11 +56,26 @@ public class ThongKeController {
 
     @FXML
     private PieChart bieuDoTronMonAn;
+    @FXML
+    private TableView<Object[]> bangXepHangMonAn;
+
+
+    @FXML
+    private TableColumn<Object[], Integer> thuTuCol;
+
+    @FXML
+    private TableColumn<Object[], String> tenMonCol;
+
+    @FXML
+    private TableColumn<Object[], Long> soLuongCol;
+
+    @FXML
+    private TableColumn<Object[], String> doanhThuCol;
 
     private HoaDonDAO hoaDonDAO;
-
+    private ObservableList<Object[]> bxh = FXCollections.observableArrayList();
     private TaiKhoan taiKhoan;
-
+    private final DecimalFormat df = new DecimalFormat("#,### VND");
     public void setTaiKhoan(TaiKhoan taiKhoan) {
         this.taiKhoan = taiKhoan;
     }
@@ -65,12 +84,19 @@ public class ThongKeController {
     public void initialize() {
         hoaDonDAO = new HoaDonDAO();
         String maNV = TrangChuController.taiKhoan.getNhanVien().getMaNhanVien();
+
+        thuTuCol.setCellValueFactory(cellData -> new SimpleIntegerProperty((Integer) cellData.getValue()[0]).asObject());
+        tenMonCol.setCellValueFactory(cellData -> new SimpleStringProperty((String) cellData.getValue()[1]));
+        soLuongCol.setCellValueFactory(cellData -> new SimpleLongProperty((Long)(cellData.getValue()[2])).asObject());
+        doanhThuCol.setCellValueFactory(cellData -> new SimpleStringProperty((String) cellData.getValue()[3]));
+        bangXepHangMonAn.setItems(bxh);
         capNhatComboBoxNamThongKe(maNV);
         tieuChiThongKeBieuDoCot.getSelectionModel().select("Theo tháng");
         namThongKeBieuDoCot.getSelectionModel().select(0);
         capNhatDuLieuDoanhThuVaHoaDon(maNV);
         capNhatDuLieuThongKeMonAnVaLoaiMonAn();
         capNhatDuLieuChoBieuDoCot(maNV);
+        capNhatBangXepHangMonAn();
         tieuChiThongKeBieuDoCot.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if ("Theo tháng".equals(newValue) || "Theo quý".equals(newValue)) {
                 namThongKeBieuDoCot.setVisible(true);
@@ -84,21 +110,24 @@ public class ThongKeController {
         });
         namThongKeMonAn.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             capNhatDuLieuThongKeMonAnVaLoaiMonAn();
+            capNhatBangXepHangMonAn();
         });
         thangThongKeMonAn.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             quyThongKeMonAn.getSelectionModel().select(0);
             capNhatDuLieuThongKeMonAnVaLoaiMonAn();
+            capNhatBangXepHangMonAn();
         });
         quyThongKeMonAn.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             thangThongKeMonAn.getSelectionModel().select(0);
             capNhatDuLieuThongKeMonAnVaLoaiMonAn();
+            capNhatBangXepHangMonAn();
         });
     }
 
     private void capNhatDuLieuDoanhThuVaHoaDon(String maNV) {
         Object[] tongDoanhThuVaHoaDon = hoaDonDAO.layDoanhThuVaSoHoaDonTheoMaNV(maNV, null);
         Object[] tongDoanhThuVaHoaDonTheoNgay = hoaDonDAO.layDoanhThuVaSoHoaDonTheoMaNV(maNV, LocalDate.now());
-        DecimalFormat df = new DecimalFormat("#,### VND");
+
         if (tongDoanhThuVaHoaDonTheoNgay != null && tongDoanhThuVaHoaDonTheoNgay.length >= 2) {
             doanhThuTrongNgay.setText(df.format(tongDoanhThuVaHoaDonTheoNgay[0]));
             soHDTrongNgay.setText(String.valueOf(tongDoanhThuVaHoaDonTheoNgay[1]));
@@ -295,5 +324,38 @@ public class ThongKeController {
         }
 
     }
+    private void capNhatBangXepHangMonAn() {
+        List<Object[]> bhx;
+        int nam = 0, thang = 0, quy = 0;
+        int i = 1;
+        try {
+            nam = Integer.parseInt(namThongKeMonAn.getSelectionModel().getSelectedItem());
+        } catch (NumberFormatException e) {
+            nam = 0;
+        }
+
+        try {
+            thang = Integer.parseInt(thangThongKeMonAn.getSelectionModel().getSelectedItem());
+        } catch (NumberFormatException e) {
+            thang = 0;
+        }
+
+        try {
+            quy = Integer.parseInt(quyThongKeMonAn.getSelectionModel().getSelectedItem());
+        } catch (NumberFormatException e) {
+            quy = 0;
+        }
+
+        // Lấy dữ liệu bảng xếp hạng từ cơ sở dữ liệu
+        bhx = hoaDonDAO.layBangXepHangMonAnTheoSoLuongBanVaDoanhThu(nam, thang, quy);
+
+        // Xóa các dữ liệu cũ trong bảng
+        bangXepHangMonAn.getItems().clear();
+        // Thêm từng dòng dữ liệu vào bảng, với thứ tự tăng dần
+        for (Object[] object : bhx) {
+            bangXepHangMonAn.getItems().add(new Object[]{i++, object[0], object[2], df.format(object[1])});
+        }
+    }
+
 
 }

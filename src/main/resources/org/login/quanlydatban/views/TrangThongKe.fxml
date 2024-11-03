@@ -8,13 +8,75 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="635.0" prefWidth="1280.0" stylesheets="@../stylesheets/style.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.login.quanlydatban.controller.ThongKeController">
+<AnchorPane prefHeight="635.0" prefWidth="1280.0" styleClass="bg1" stylesheets="@../stylesheets/style.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.login.quanlydatban.controller.ThongKeController">
     <children>
-      <HBox alignment="CENTER" layoutX="39.0" layoutY="14.0" prefHeight="115.0" prefWidth="762.0" spacing="20.0" AnchorPane.leftAnchor="39.0" AnchorPane.rightAnchor="479.0" AnchorPane.topAnchor="14.0">
+      <AnchorPane layoutX="832.0" layoutY="34.0" prefHeight="635.0" prefWidth="448.0" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+         <children>
+               <PieChart fx:id="bieuDoTronMonAn" layoutY="336.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="303.0" prefWidth="311.0" style="-fx-font-weight: bold; -fx-border-color: white;" title="Tỉ lệ doanh thu theo loại món ăn" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="270.0">
+               <styleClass>
+                  <String fx:value="rounded-pane" />
+                  <String fx:value="bg1" />
+               </styleClass>
+            </PieChart>
+                <TableView fx:id="bangXepHangMonAn" layoutX="24.0" layoutY="104.0" prefHeight="217.0" prefWidth="424.0" style="-fx-border-color: white;" styleClass="rounded-pane" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
+                    <columns>
+                        <TableColumn fx:id="thuTuCol" prefWidth="45.0" resizable="false" text="Thứ tự" />
+                        <TableColumn fx:id="tenMonCol" prefWidth="124.0" resizable="false" text="Tên món" />
+                        <TableColumn fx:id="soLuongCol" prefWidth="95.0" resizable="false" text="Số lượng bán" />
+                        <TableColumn fx:id="doanhThuCol" prefWidth="124.0" resizable="false" text="Tổng doanh thu" />
+                    </columns>
+                </TableView>
+            <HBox alignment="CENTER" prefHeight="35.0" prefWidth="384.0" spacing="15.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <ComboBox fx:id="namThongKeMonAn" prefHeight="26.0" prefWidth="100.0" promptText="Tất cả" style="-fx-background-color: white;" styleClass="round-box">
+                   <items>
+                       <FXCollections fx:factory="observableArrayList">
+                 </FXCollections>
+                   </items>
+                  </ComboBox>
+                  <ComboBox fx:id="quyThongKeMonAn" layoutX="10.0" layoutY="10.0" prefHeight="26.0" prefWidth="100.0" promptText="Chọn quý" style="-fx-background-color: white;" styleClass="round-box">
+                      <items>
+                          <FXCollections fx:factory="observableArrayList">
+                              <String fx:value="Chọn quý" />
+                              <String fx:value="1" />
+                              <String fx:value="2" />
+                              <String fx:value="3" />
+                              <String fx:value="4" />
+                          </FXCollections>
+                      </items>
+                  </ComboBox>
+                  <ComboBox fx:id="thangThongKeMonAn" layoutX="10.0" layoutY="10.0" prefHeight="26.0" prefWidth="109.0" promptText="Chọn tháng" style="-fx-background-color: white;" styleClass="round-box">
+                      <items>
+                          <FXCollections fx:factory="observableArrayList">
+                              <String fx:value="Chọn tháng" />
+                              <String fx:value="1" />
+                              <String fx:value="2" />
+                              <String fx:value="3" />
+                              <String fx:value="4" />
+                              <String fx:value="5" />
+                              <String fx:value="6" />
+                              <String fx:value="7" />
+                              <String fx:value="8" />
+                              <String fx:value="9" />
+                              <String fx:value="10" />
+                              <String fx:value="11" />
+                              <String fx:value="12" />
+                          </FXCollections>
+                      </items>
+                  </ComboBox>
+               </children>
+            </HBox>
+         </children>
+         <styleClass>
+            <String fx:value="gradient1" />
+            <String fx:value="rounded-pane" />
+         </styleClass>
+      </AnchorPane>
+      <HBox alignment="CENTER" layoutX="9.0" layoutY="25.0" prefHeight="90.0" prefWidth="792.0" spacing="20.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="470.0" AnchorPane.topAnchor="10.0">
          <children>
             <VBox alignment="CENTER" prefHeight="102.0" prefWidth="206.0" spacing="10">
                <styleClass>
-                  <String fx:value="gradient3" />
+                  <String fx:value="gradient1" />
                   <String fx:value="round-box" />
                </styleClass>
                <children>
@@ -26,9 +88,9 @@
                   <Label fx:id="doanhThuTrongNgay" style="-fx-font-size: 16px; -fx-font-weight: bold;" text="0 VND" />
                </children>
             </VBox>
-            <VBox alignment="CENTER" prefHeight="118.0" prefWidth="206.0" spacing="10">
+            <VBox alignment="CENTER" prefHeight="118.0" prefWidth="202.0" spacing="10">
                <styleClass>
-                  <String fx:value="gradient3" />
+                  <String fx:value="gradient1" />
                   <String fx:value="round-box" />
                </styleClass>
                <children>
@@ -42,7 +104,7 @@
             </VBox>
             <VBox alignment="CENTER" prefHeight="100.0" prefWidth="150.0" spacing="10">
                <styleClass>
-                  <String fx:value="gradient3" />
+                  <String fx:value="gradient1" />
                   <String fx:value="round-box" />
                </styleClass>
                <children>
@@ -57,7 +119,7 @@
             <VBox alignment="CENTER" prefHeight="118.0" prefWidth="155.0" spacing="10">
                <styleClass>
                   <String fx:value="round-box" />
-                  <String fx:value="gradient3" />
+                  <String fx:value="gradient1" />
                </styleClass>
                <children>
                   <Label text="Tổng doanh thu:">
@@ -70,122 +132,77 @@
             </VBox>
          </children>
       </HBox>
-        <HBox alignment="CENTER" layoutX="33.0" layoutY="121.0" prefHeight="44.0" prefWidth="773.0" spacing="10" AnchorPane.leftAnchor="33.0" AnchorPane.rightAnchor="474.0" AnchorPane.topAnchor="121.0">
-            <ComboBox fx:id="tieuChiThongKeBieuDoCot" prefHeight="25.0" prefWidth="304.0" promptText="Chọn khoảng thời gian" style="-fx-background-color: white;" styleClass="small-round-box">
-                <items>
-                    <FXCollections fx:factory="observableArrayList">
-                        <String fx:value="Theo tháng" />
-                        <String fx:value="Theo quý" />
-                        <String fx:value="Theo năm" />
-                    </FXCollections>
-                </items>
-            <HBox.margin>
-               <Insets />
-            </HBox.margin>
-            </ComboBox>
-            <ComboBox fx:id="namThongKeBieuDoCot" prefHeight="25.0" prefWidth="146.0" promptText="Chọn năm" style="-fx-background-color: white;" styleClass="small-round-box">
-                <items>
-                    <FXCollections fx:factory="observableArrayList">
-                    </FXCollections>
-                </items>
-            </ComboBox>
-         <padding>
-            <Insets top="10.0" />
-         </padding>
-        </HBox>
-        <TabPane layoutX="32.8" layoutY="172.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="446.0" prefWidth="770.0" stylesheets="@../stylesheets/style.css" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="17.0" AnchorPane.leftAnchor="33.0" AnchorPane.rightAnchor="474.0" AnchorPane.topAnchor="172.0">
-            <tabs>
-                <Tab text="Thống kê doanh thu">
-                    <content>
-                        <VBox prefHeight="486.0" prefWidth="739.0" spacing="10" VBox.vgrow="ALWAYS">
-                            <children>
-                                <BarChart fx:id="bieuDoCotDoanhThu" prefHeight="394.0" prefWidth="749.0" style="-fx-font-weight: bold;" title="Thống kê doanh thu" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" VBox.vgrow="ALWAYS">
-                                    <xAxis>
-                                        <CategoryAxis label="Thời gian" prefWidth="663.0" fx:id="xDoanhThu" />
-                                    </xAxis>
-                                    <yAxis>
-                                        <NumberAxis fx:id="yDoanhThu" label="Doanh thu" />
-                                    </yAxis>
-                                </BarChart>
-                            </children>
-                        </VBox>
-                    </content>
-                </Tab>
-                <Tab text="Thống kê hóa đơn">
-                    <content>
-                        <VBox spacing="10" VBox.vgrow="ALWAYS">
-                            <children>
-                                <BarChart fx:id="bieuDoCotHoaDon" style="-fx-font-weight: bold;" title="Thống kê số lượng hóa đơn" VBox.vgrow="ALWAYS">
-                                    <xAxis>
-                                        <CategoryAxis label="Thời gian" fx:id="xHoaDon" />
-                                    </xAxis>
-                                    <yAxis>
-                                        <NumberAxis fx:id="yHoaDon" label="Số lượng hóa đơn" />
-                                    </yAxis>
-                                </BarChart>
-                            </children>
-                        </VBox>
-                    </content>
-                </Tab>
+      <AnchorPane layoutX="37.0" layoutY="134.0" prefHeight="500.0" prefWidth="800.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="470.0" AnchorPane.topAnchor="120.0">
+         <children>
+              <TabPane layoutX="0.8" layoutY="47.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="438.0" prefWidth="762.0" style="-fx-border-color: white;" stylesheets="@../stylesheets/style.css" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="47.0">
+                  <tabs>
+                      <Tab text="Thống kê doanh thu">
+                          <content>
+                              <VBox prefHeight="486.0" prefWidth="739.0" spacing="10" VBox.vgrow="ALWAYS">
+                                  <children>
+                                      <BarChart fx:id="bieuDoCotDoanhThu" prefHeight="386.0" prefWidth="716.0" style="-fx-font-weight: bold;" title="Thống kê doanh thu" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" VBox.vgrow="ALWAYS">
+                                          <xAxis>
+                                              <CategoryAxis label="Thời gian" prefWidth="663.0" fx:id="xDoanhThu" />
+                                          </xAxis>
+                                          <yAxis>
+                                              <NumberAxis fx:id="yDoanhThu" label="Doanh thu" />
+                                          </yAxis>
+                                      </BarChart>
+                                  </children>
+                              </VBox>
+                          </content>
+                      </Tab>
+                      <Tab text="Thống kê hóa đơn">
+                          <content>
+                              <VBox spacing="10" VBox.vgrow="ALWAYS">
+                                  <children>
+                                      <BarChart fx:id="bieuDoCotHoaDon" style="-fx-font-weight: bold;" title="Thống kê số lượng hóa đơn" VBox.vgrow="ALWAYS">
+                                          <xAxis>
+                                              <CategoryAxis label="Thời gian" fx:id="xHoaDon" />
+                                          </xAxis>
+                                          <yAxis>
+                                              <NumberAxis fx:id="yHoaDon" label="Số lượng hóa đơn" />
+                                          </yAxis>
+                                      </BarChart>
+                                  </children>
+                              </VBox>
+                          </content>
+                      </Tab>
 
-               </tabs>
-            <styleClass>
-                <String fx:value="bg1" />
-                <String fx:value="rounded-pane" />
-            </styleClass>
-        </TabPane>
-         <PieChart fx:id="bieuDoTronMonAn" layoutX="855.0" layoutY="312.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="306.0" prefWidth="414.0" style="-fx-font-weight: bold;" title="Tỉ lệ doanh thu theo loại món ăn" AnchorPane.bottomAnchor="17.0" AnchorPane.rightAnchor="31.0" AnchorPane.topAnchor="312.0">
+                     </tabs>
+                  <styleClass>
+                      <String fx:value="bg1" />
+                      <String fx:value="rounded-pane" />
+                  </styleClass>
+              </TabPane>
+              <HBox alignment="CENTER" layoutX="2.4" layoutY="0.8" prefHeight="35.0" prefWidth="762.0" spacing="10" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="-2.0" AnchorPane.topAnchor="1.0">
+                  <ComboBox fx:id="tieuChiThongKeBieuDoCot" prefHeight="25.0" prefWidth="304.0" promptText="Chọn khoảng thời gian" style="-fx-background-color: white;" styleClass="small-round-box">
+                      <items>
+                          <FXCollections fx:factory="observableArrayList">
+                              <String fx:value="Theo tháng" />
+                              <String fx:value="Theo quý" />
+                              <String fx:value="Theo năm" />
+                          </FXCollections>
+                      </items>
+                  <HBox.margin>
+                     <Insets />
+                  </HBox.margin>
+                  </ComboBox>
+                  <ComboBox fx:id="namThongKeBieuDoCot" prefHeight="25.0" prefWidth="146.0" promptText="Chọn năm" style="-fx-background-color: white;" styleClass="small-round-box">
+                      <items>
+                          <FXCollections fx:factory="observableArrayList">
+                    </FXCollections>
+                      </items>
+                  </ComboBox>
+               <padding>
+                  <Insets top="10.0" />
+               </padding>
+              </HBox>
+         </children>
          <styleClass>
             <String fx:value="rounded-pane" />
-            <String fx:value="bg1" />
-         </styleClass></PieChart>
-          <TableView fx:id="orderTable" layoutX="835.0" layoutY="54.0" prefHeight="238.0" prefWidth="411.0" styleClass="rounded-pane" AnchorPane.rightAnchor="34.0" AnchorPane.topAnchor="54.0">
-              <columns>
-                  <TableColumn prefWidth="59.999937534332275" text="Thứ tự" />
-                  <TableColumn prefWidth="108.00006866455078" text="Tên món" />
-                  <TableColumn prefWidth="100.0" text="Số lượng bán" />
-                  <TableColumn prefWidth="123.2000732421875" text="Tổng doanh thu" />
-              </columns>
-          </TableView>
-      <HBox alignment="CENTER" layoutX="834.0" layoutY="9.0" prefHeight="35.0" prefWidth="414.0" spacing="15.0" AnchorPane.rightAnchor="32.0" AnchorPane.topAnchor="9.0">
-         <children>
-            <ComboBox fx:id="namThongKeMonAn" prefHeight="26.0" prefWidth="100.0" promptText="Tất cả" style="-fx-background-color: white;" styleClass="round-box">
-             <items>
-                 <FXCollections fx:factory="observableArrayList">
-                 </FXCollections>
-             </items>
-            </ComboBox>
-            <ComboBox fx:id="quyThongKeMonAn" layoutX="10.0" layoutY="10.0" prefHeight="26.0" prefWidth="100.0" promptText="Chọn quý" style="-fx-background-color: white;" styleClass="round-box">
-                <items>
-                    <FXCollections fx:factory="observableArrayList">
-                        <String fx:value="Chọn quý" />
-                        <String fx:value="1" />
-                        <String fx:value="2" />
-                        <String fx:value="3" />
-                        <String fx:value="4" />
-                    </FXCollections>
-                </items>
-            </ComboBox>
-            <ComboBox fx:id="thangThongKeMonAn" layoutX="10.0" layoutY="10.0" prefHeight="26.0" prefWidth="109.0" promptText="Chọn tháng" style="-fx-background-color: white;" styleClass="round-box">
-                <items>
-                    <FXCollections fx:factory="observableArrayList">
-                        <String fx:value="Chọn tháng" />
-                        <String fx:value="1" />
-                        <String fx:value="2" />
-                        <String fx:value="3" />
-                        <String fx:value="4" />
-                        <String fx:value="5" />
-                        <String fx:value="6" />
-                        <String fx:value="7" />
-                        <String fx:value="8" />
-                        <String fx:value="9" />
-                        <String fx:value="10" />
-                        <String fx:value="11" />
-                        <String fx:value="12" />
-                    </FXCollections>
-                </items>
-            </ComboBox>
-         </children>
-      </HBox>
+            <String fx:value="gradient1" />
+         </styleClass>
+      </AnchorPane>
     </children>
 </AnchorPane>
