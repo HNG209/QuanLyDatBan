@@ -6,11 +6,12 @@ import java.io.Serializable;
 @Entity
 @Table
 public class TaiKhoan implements Serializable {
+    // bien luu ten nhan vien
 
     @Id
     @Column(nullable = false)
     private String userName;
-
+    private static String tenNhanVien;
     @Column(nullable = false)
     private String password;
 
