@@ -28,7 +28,8 @@ public class TrangChuController {
 
     @FXML
     public void datMon() throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/TrangDatMon.fxml"));
+        //first go to chonBan -> datMon
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/TrangChonBan.fxml"));
         AnchorPane anchorPane = loader.load();
 
         borderPane.setCenter(anchorPane);

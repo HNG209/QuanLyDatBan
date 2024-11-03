@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="anchorPane" prefHeight="635.0" prefWidth="1280.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.login.quanlydatban.controller.ChonBanController">
+   <children>
+      <ScrollPane fx:id="scrollPane" layoutY="94.0" prefHeight="543.0" prefWidth="1280.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="94.0">
+         <content>
+            <FlowPane fx:id="flowPane" alignment="CENTER" hgap="30.0" prefHeight="540.0" prefWidth="1280.0" styleClass="gradient2" vgap="30.0">
+               <padding>
+                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+               </padding>
+            </FlowPane>
+         </content>
+      </ScrollPane>
+      <GridPane alignment="CENTER" hgap="20.0" layoutX="302.0" layoutY="10.0" prefHeight="74.0" prefWidth="744.0" AnchorPane.leftAnchor="302.0" AnchorPane.rightAnchor="202.0">
+        <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Pane onMouseClicked="#showBanTrong" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
+               <styleClass>
+                  <String fx:value="sage-green" />
+                  <String fx:value="image-hover-effect" />
+                  <String fx:value="round-box" />
+               </styleClass>
+            </Pane>
+            <Pane onMouseClicked="#showBanDangPhucVu" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <styleClass>
+                  <String fx:value="pale-lemon" />
+                  <String fx:value="image-hover-effect" />
+                  <String fx:value="round-box" />
+               </styleClass>
+            </Pane>
+            <Pane onMouseClicked="#showBanDaDat" prefHeight="200.0" prefWidth="131.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
+               <styleClass>
+                  <String fx:value="sunset-orange" />
+                  <String fx:value="image-hover-effect" />
+                  <String fx:value="round-box" />
+               </styleClass>
+            </Pane>
+            <Pane onMouseClicked="#showBanHong" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="3" GridPane.rowIndex="1">
+               <styleClass>
+                  <String fx:value="light-coral" />
+                  <String fx:value="image-hover-effect" />
+                  <String fx:value="round-box" />
+               </styleClass>
+            </Pane>
+            <Label alignment="CENTER" prefHeight="18.0" prefWidth="202.0" text="Bàn trống" />
+            <Label alignment="CENTER" prefHeight="18.0" prefWidth="194.0" text="Bàn đang phục vụ" GridPane.columnIndex="1" />
+            <Label alignment="CENTER" prefHeight="18.0" prefWidth="261.0" text="Bàn đã đặt" GridPane.columnIndex="2" />
+            <Label alignment="CENTER" prefHeight="18.0" prefWidth="286.0" text="Bàn tạm ngưng phục vụ" GridPane.columnIndex="3" />
+            <Label alignment="CENTER" prefHeight="18.0" prefWidth="110.0" text="Tất cả bàn" GridPane.columnIndex="4" />
+            <Pane prefHeight="33.0" prefWidth="118.0" GridPane.columnIndex="4" GridPane.rowIndex="1">
+               <children>
+                  <ImageView fitHeight="43.0" fitWidth="58.0" layoutX="34.0" layoutY="-7.0" onMouseClicked="#showAll" pickOnBounds="true" preserveRatio="true" styleClass="image-hover-effect">
+                     <image>
+                        <Image url="@../icons/bantrong.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </Pane>
+         </children>
+         <padding>
+            <Insets bottom="10.0" left="20.0" right="20.0" />
+         </padding>
+      </GridPane>
+      <Label layoutX="88.0" layoutY="26.0" prefHeight="30.0" prefWidth="103.0" text="Chọn bàn" AnchorPane.leftAnchor="88.0">
+         <font>
+            <Font name="System Bold Italic" size="20.0" />
+         </font>
+      </Label>
+      <ImageView fitHeight="58.0" fitWidth="58.0" layoutX="23.2" layoutY="12.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="23.2">
+         <image>
+            <Image url="@../icons/bantrong.png" />
+         </image>
+      </ImageView>
+      <Label layoutX="25.0" layoutY="66.0" prefHeight="18.0" prefWidth="79.0" text="Đang hiển thị:" />
+      <Label fx:id="selectedLoaiBan" layoutX="104.0" layoutY="66.0" prefHeight="18.0" prefWidth="150.0" text="TẤT CẢ BÀN" />
+   </children>
+</AnchorPane>
