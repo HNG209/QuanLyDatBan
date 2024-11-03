@@ -1,8 +1,19 @@
 package org.login.quanlydatban.entity.enums;
 
 public enum TrangThaiBan {
-    DANG_PHUC_VU,
-    DA_DAT,
-    TAM_NGUNG_PHUC_VU,
-    BAN_TRONG
+    DANG_PHUC_VU("ĐANG PHỤC VỤ"),
+    DA_DAT("ĐÃ ĐẶT"),
+    TAM_NGUNG_PHUC_VU("TẠM NGƯNG PHỤC VỤ"),
+    BAN_TRONG("BÀN TRỐNG");
+
+    private String name;
+
+    private TrangThaiBan(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return this.name;
+    }
 }

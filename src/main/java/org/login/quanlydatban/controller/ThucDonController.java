@@ -34,53 +34,53 @@ public class ThucDonController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
-        monAnDAO = new MonAnDAO();
-        monAnDAO.readMonAn();
-        flowPane.prefHeightProperty().bind(scrollPane.heightProperty());
-        flowPane.prefWidthProperty().bind(scrollPane.widthProperty());
-
-        for (MonAn i : monAnDAO.getListMonAn()){
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/uicomponents/CardMonAn2.fxml"));
-            try {
-                AnchorPane pane = loader.load();
-
-                CardMonAnController controller = loader.getController();
-                controller.setMonAn(i);
-
-                flowPane.getChildren().add(pane);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-//        for (int i = 0; i < 20; i++){
-//            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/uicomponents/CardMonAn.fxml"));
+//        monAnDAO = new MonAnDAO();
+//        monAnDAO.readMonAn();
+//        flowPane.prefHeightProperty().bind(scrollPane.heightProperty());
+//        flowPane.prefWidthProperty().bind(scrollPane.widthProperty());
+//
+//        for (MonAn i : monAnDAO.getListMonAn()){
+//            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/uicomponents/CardMonAn2.fxml"));
 //            try {
 //                AnchorPane pane = loader.load();
 //
 //                CardMonAnController controller = loader.getController();
-//                controller.setIndex(i);
+//                controller.setMonAn(i);
 //
 //                flowPane.getChildren().add(pane);
 //            } catch (IOException e) {
 //                throw new RuntimeException(e);
 //            }
 //        }
-
-        monAnDAO.getListMonAn();
-//        scrollPane.vvalueProperty().addListener((obs, oldValue, newValue) -> {
-//            if(newValue.doubleValue() == 1.0){
-//                for (int i = 0; i < 20; i++){
-//                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/uicomponents/CardMonAn.fxml"));
-//                    try {
-//                        AnchorPane pane = loader.load();
-//                        flowPane.getChildren().add(pane);
-//                    } catch (IOException e) {
-//                        throw new RuntimeException(e);
-//                    }
-//                }
+////        for (int i = 0; i < 20; i++){
+////            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/uicomponents/CardMonAn.fxml"));
+////            try {
+////                AnchorPane pane = loader.load();
+////
+////                CardMonAnController controller = loader.getController();
+////                controller.setIndex(i);
+////
+////                flowPane.getChildren().add(pane);
+////            } catch (IOException e) {
+////                throw new RuntimeException(e);
+////            }
+////        }
 //
-//            }
-//        });
+//        monAnDAO.getListMonAn();
+////        scrollPane.vvalueProperty().addListener((obs, oldValue, newValue) -> {
+////            if(newValue.doubleValue() == 1.0){
+////                for (int i = 0; i < 20; i++){
+////                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/uicomponents/CardMonAn.fxml"));
+////                    try {
+////                        AnchorPane pane = loader.load();
+////                        flowPane.getChildren().add(pane);
+////                    } catch (IOException e) {
+////                        throw new RuntimeException(e);
+////                    }
+////                }
+////
+////            }
+////        });
     }
 
 

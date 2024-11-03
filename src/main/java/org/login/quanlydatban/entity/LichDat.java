@@ -6,6 +6,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 @Table
@@ -39,5 +40,20 @@ public class LichDat implements Serializable {
     @Enumerated(EnumType.STRING)
     private LoaiTiec loaiTiec;
 
+    @PrePersist
+    public void generateId() {
+        if (this.maLichDat == null) {
+            this.maLichDat = generateCustomId();
+        }
+    }
+
+    private String generateCustomId() {
+        String prefix = "LD";
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("ddMMyyyyHHmmss");
+        String dateTimeSeries = LocalDateTime.now().format(formatter);
+
+        return prefix + dateTimeSeries;
+    }
     public LichDat() {}
 }

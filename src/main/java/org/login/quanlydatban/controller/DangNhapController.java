@@ -28,10 +28,23 @@
         private TextField username;
         @FXML
         private ImageView img;
+        private  TrangChuController trangchuctr;
 
         private TaiKhoanDAO taiKhoanDAO;
         @FXML
         public void nhanEnterDeDangNhap(){
+             showPasswordField.textProperty().addListener((observable, oldValue, newValue) -> {
+                if (!password.getText().equals(newValue)) {
+                    password.setText(newValue);
+                }
+            });
+
+            // Khi có thay đổi ở trường password, cập nhật trường pwd
+            password.textProperty().addListener((observable, oldValue, newValue) -> {
+                if (!showPasswordField.getText().equals(newValue)) {
+                    showPasswordField.setText(newValue);
+                }
+            });
             username.setOnKeyPressed(event -> {
                 if (event.getCode() == KeyCode.ENTER) {
                     try {
@@ -107,6 +120,7 @@
 
         @Override
         public void initialize(URL url, ResourceBundle resourceBundle) {
+
             taiKhoanDAO = new TaiKhoanDAO();
         }
 
@@ -126,7 +140,6 @@
             //passing information to TrangChu
             TrangChuController trangChuController = loader.getController();
             trangChuController.setTaiKhoan(taiKhoan);
-
             stage.setScene(scene);
             stage.centerOnScreen();
             stage.show();
