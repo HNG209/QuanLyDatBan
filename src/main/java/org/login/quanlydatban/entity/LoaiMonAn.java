@@ -1,5 +1,7 @@
 package org.login.quanlydatban.entity;
 
+import org.login.quanlydatban.entity.enums.LoaiMonEnum;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
@@ -11,7 +13,7 @@ public class LoaiMonAn implements Serializable {
     private String maLoaiMonAn;
 
     @Column(nullable = false)
-    private String tenLoaiMonAn;
+    private LoaiMonEnum tenLoaiMonAn;
 
     @OneToMany
     @JoinColumn(name = "maLoaiMonAn")
@@ -27,7 +29,7 @@ public class LoaiMonAn implements Serializable {
         this.maLoaiMonAn = maLoaiMonAn;
     }
 
-    public LoaiMonAn(String maLoaiMonAn, String tenLoaiMonAn, String moTaLoaiMonAn) {
+    public LoaiMonAn(String maLoaiMonAn, LoaiMonEnum tenLoaiMonAn, String moTaLoaiMonAn) {
         this.maLoaiMonAn = maLoaiMonAn;
         this.tenLoaiMonAn = tenLoaiMonAn;
         this.moTaLoaiMonAn = moTaLoaiMonAn;
@@ -37,7 +39,7 @@ public class LoaiMonAn implements Serializable {
         return maLoaiMonAn;
     }
 
-    public String getTenLoaiMonAn() {
+    public LoaiMonEnum getTenLoaiMonAn() {
         return tenLoaiMonAn;
     }
 
@@ -49,7 +51,7 @@ public class LoaiMonAn implements Serializable {
         this.maLoaiMonAn = maLoaiMonAn;
     }
 
-    public void setTenLoaiMonAn(String tenLoaiMonAn) {
+    public void setTenLoaiMonAn(LoaiMonEnum tenLoaiMonAn) {
         this.tenLoaiMonAn = tenLoaiMonAn;
     }
 
