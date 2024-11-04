@@ -14,6 +14,8 @@ public class CardMonAnController {
     private MonAn monAn;
 
     private DatMonController controller;
+    private ThucDonController controllerThucDon;
+
     @FXML
     public void them(){
 
@@ -22,6 +24,13 @@ public class CardMonAnController {
     public void setMonAn(MonAn monAn, DatMonController controller) {
         this.monAn = monAn;
         this.controller = controller;
+        tenMon.setText(monAn.getTenMonAn());
+        giaTien.setText(String.valueOf(monAn.getDonGia()));
+    }
+
+    public void setMonAnThucDon(MonAn monAn, ThucDonController controller) {
+        this.monAn = monAn;
+        this.controllerThucDon = controller;
         tenMon.setText(monAn.getTenMonAn());
         giaTien.setText(String.valueOf(monAn.getDonGia()));
     }
