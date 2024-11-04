@@ -63,7 +63,6 @@ public class TrangHienNhanVien implements Initializable {
     private String getMaNhanVien;
     private  NhanVien nv;
     private   NhanVienDAO nvdao;
-    private URL resourceUrl = getClass().getResource("/org/login/quanlydatban/Image/");
     public void SetTrangQuanLyNhanVien(TrangQuanLyNhanVien trangQuanLyNhanVien) {
         this.trangQuanLyNhanVien = trangQuanLyNhanVien;
     }
