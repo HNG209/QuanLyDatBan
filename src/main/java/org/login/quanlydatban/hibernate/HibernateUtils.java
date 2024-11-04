@@ -6,6 +6,7 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.cfg.Environment;
 import org.hibernate.service.ServiceRegistry;
 import org.login.quanlydatban.entity.*;
+import org.login.quanlydatban.entity.keygenerator.DailyCounter;
 
 import java.util.Properties;
 
@@ -20,7 +21,7 @@ public class HibernateUtils {
         properties.put(Environment.DRIVER, "com.mysql.cj.jdbc.Driver");
         properties.put(Environment.URL, "jdbc:mysql://localhost/nhahangtobo");
         properties.put(Environment.USER, "root");
-        properties.put(Environment.PASS, "D124321394#");
+        properties.put(Environment.PASS, "29092004");
         properties.put(Environment.HBM2DDL_AUTO, "update");
         properties.put(Environment.SHOW_SQL, "true");
 
@@ -35,6 +36,7 @@ public class HibernateUtils {
         configuration.addAnnotatedClass(HoaDon.class);
         configuration.addAnnotatedClass(ChiTietHoaDon.class);
         configuration.addAnnotatedClass(LichDat.class);
+        configuration.addAnnotatedClass(DailyCounter.class);
 
         ServiceRegistry registry = new StandardServiceRegistryBuilder()
                 .applySettings(configuration.getProperties())   

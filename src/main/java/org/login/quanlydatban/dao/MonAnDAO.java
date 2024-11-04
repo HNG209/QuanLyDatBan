@@ -13,7 +13,7 @@ import java.util.List;
 public class MonAnDAO {
     private List<MonAn> listMonAn;
 
-    public List<MonAn> readMonAn() {
+    public List<MonAn> readAll() {
         Session session = HibernateUtils.getFactory().openSession();
 
         CriteriaBuilder builder = session.getCriteriaBuilder();
@@ -29,7 +29,6 @@ public class MonAnDAO {
 
         return listMonAn;
     }
-
     public List<MonAn> getListMonAn() {
         return this.listMonAn;
     }

@@ -13,7 +13,7 @@ public class TrangChuController {
     @FXML
     private Label tenNhanVien;
 
-    private TaiKhoan taiKhoan;
+    public static TaiKhoan taiKhoan;
 
     @FXML
     private BorderPane borderPane;
@@ -29,7 +29,8 @@ public class TrangChuController {
 
     @FXML
     public void datMon() throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/TrangDatMon.fxml"));
+        //first go to chonBan -> datMon
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/TrangChonBan.fxml"));
         AnchorPane anchorPane = loader.load();
 
         borderPane.setCenter(anchorPane);
@@ -55,7 +56,8 @@ public class TrangChuController {
     public void thongKe() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/TrangThongKe.fxml"));
         AnchorPane anchorPane = loader.load();
-
+        ThongKeController thongKeController = loader.getController();
+        thongKeController.setTaiKhoan(this.taiKhoan);
         borderPane.setCenter(anchorPane);
 
         anchorPane.prefWidthProperty().bind(borderPane.widthProperty());
@@ -70,6 +72,14 @@ public class TrangChuController {
         anchorPane.prefWidthProperty().bind(borderPane.widthProperty());
         anchorPane.prefHeightProperty().bind(borderPane.heightProperty());
     }
+    @FXML
+    public void xemHoaDon() throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/TrangHoaDon.fxml"));
+        AnchorPane anchorPane = loader.load();
 
+        borderPane.setCenter(anchorPane);
 
+        anchorPane.prefWidthProperty().bind(borderPane.widthProperty());
+        anchorPane.prefHeightProperty().bind(borderPane.heightProperty());
+    }
 }

@@ -39,7 +39,7 @@
                               <Image url="@../icons/user.png" />
                            </image>
                         </ImageView>
-                        <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="154.0" layoutY="11.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="154.0" layoutY="11.0" pickOnBounds="true" preserveRatio="true" styleClass="image-hover-effect">
                            <image>
                               <Image url="@../icons/cogwheel.png" />
                            </image>
@@ -65,6 +65,7 @@
                 <Menu mnemonicParsing="false" text="Nhà hàng">
                   <items>
                     <MenuItem mnemonicParsing="false" onAction="#datMon" text="Đặt món" />
+                        <MenuItem mnemonicParsing="false" onAction="#xemHoaDon" text="Quản lý hóa đơn" />
                   </items>
                      <graphic>
                         <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
