@@ -76,25 +76,25 @@ public class ThucDonController implements Initializable {
     }
 
 
-    public void themMonAn() {
-        Session session = HibernateUtils.getFactory().openSession();
-        Transaction transaction = null;
-
-        try {
-            transaction = session.beginTransaction();
-
-      //      session.save(monAnDAO.getListMonAn());
-            transaction.commit();
-
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            e.printStackTrace();
-        } finally {
-            session.close();
-        }
-    }
+//    public void themMonAn() {
+//        Session session = HibernateUtils.getFactory().openSession();
+//        Transaction transaction = null;
+//
+//        try {
+//            transaction = session.beginTransaction();
+//
+//      //      session.save(monAnDAO.getListMonAn());
+//            transaction.commit();
+//
+//        } catch (Exception e) {
+//            if (transaction != null) {
+//                transaction.rollback();
+//            }
+//            e.printStackTrace();
+//        } finally {
+//            session.close();
+//        }
+//    }
 
 
 }
