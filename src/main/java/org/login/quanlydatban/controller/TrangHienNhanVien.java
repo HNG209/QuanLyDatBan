@@ -401,6 +401,8 @@ public class TrangHienNhanVien implements Initializable {
 
     }
 
+
+    // suy nghi cho fix cho ma nhan vien va quan li
     public void chinhSuaNhanVien(){
         nvdao = new NhanVienDAO();
         NhanVien nv1 = nvdao.getNhanVien(getMaNhanVien);

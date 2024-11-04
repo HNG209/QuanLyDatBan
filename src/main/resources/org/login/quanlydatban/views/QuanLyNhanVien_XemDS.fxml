@@ -59,7 +59,7 @@
             <Image url="@../icons/plus.png" />
          </image>
       </ImageView>
-      <Button fx:id="btnxuatFile" layoutX="658.0" layoutY="29.0" lineSpacing="1.0" mnemonicParsing="false" prefHeight="74.0" prefWidth="149.0" style="-fx-background-color: #8FA679;" styleClass="round-box" text="      Xuất file">
+      <Button fx:id="btnxuatFile" layoutX="658.0" layoutY="27.0" lineSpacing="1.0" mnemonicParsing="false" prefHeight="74.0" prefWidth="149.0" style="-fx-background-color: #8FA679;" styleClass="round-box" text="      Xuất file">
          <font>
             <Font size="18.0" />
          </font></Button>
@@ -68,9 +68,9 @@
             <Image url="@../icons/share.png" />
          </image>
       </ImageView>
-      <Pane layoutX="819.0" layoutY="26.0" prefHeight="74.0" prefWidth="74.0" style="-fx-background-color: #8FA679;" styleClass="round-box" stylesheets="@../stylesheets/style.css">
+      <Pane layoutX="819.0" layoutY="26.0" prefHeight="74.0" prefWidth="67.0" style="-fx-background-color: #8FA679;" styleClass="round-box" stylesheets="@../stylesheets/style.css">
          <children>
-            <ImageView fitHeight="30.0" fitWidth="25.0" layoutX="25.0" layoutY="22.0">
+            <ImageView fitHeight="30.0" fitWidth="25.0" layoutX="21.0" layoutY="22.0">
                <image>
                   <Image url="@../icons/sort.png" />
                </image>

@@ -90,25 +90,37 @@ public class NhanVienDAO {
         try {
             transaction = session.beginTransaction(); // Bắt đầu giao dịch
 
-            // Tìm nhân viên theo mã
+            // Tìm nhân viên theo mã cũ
             NhanVien nhanVienCu = session.createQuery("FROM NhanVien WHERE maNhanVien = :maNhanVien", NhanVien.class)
                     .setParameter("maNhanVien", maNhanVien)
                     .uniqueResult();
 
             if (nhanVienCu != null) {
-                nhanVienCu.setMaNhanVien(nhanVienMoi.getMaNhanVien());
-                // Cập nhật thông tin nhân viên cũ từ nhân viên mới
-                nhanVienCu.setTenNhanVien(nhanVienMoi.getTenNhanVien());
-                nhanVienCu.setNgaySinh(nhanVienMoi.getNgaySinh());
-                nhanVienCu.setDiaChi(nhanVienMoi.getDiaChi());
-                nhanVienCu.setGioiTinh(nhanVienMoi.isGioiTinh());
-               // nhanVienCu.setHinhAnh(nhanVienMoi.getHinhAnh());
-                nhanVienCu.setSdt(nhanVienMoi.getSdt());
-                nhanVienCu.setCccd(nhanVienMoi.getCccd());
-//              nhanVienCu.setTrangThaiNhanVien(nhanVienMoi.getTrangThaiNhanVien());
-//              nhanVienCu.setChucVuNhanVien(nhanVienMoi.getChucVuNhanVien());
-                session.update(nhanVienCu); // Cập nhật nhân viên vào cơ sở dữ liệu
+                if (nhanVienMoi == null) {
+                    System.out.println("Thông tin nhân viên mới không hợp lệ.");
+                    return;
+                }
+
+                // Lưu thông tin nhân viên mới vào cơ sở dữ liệu
+                // Tạo đối tượng nhân viên mới với mã mới
+                NhanVien nhanVienMoiDaTao = new NhanVien();
+                nhanVienMoiDaTao.setMaNhanVien(nhanVienMoi.getMaNhanVien());
+                nhanVienMoiDaTao.setTenNhanVien(nhanVienMoi.getTenNhanVien());
+                nhanVienMoiDaTao.setNgaySinh(nhanVienMoi.getNgaySinh());
+                nhanVienMoiDaTao.setDiaChi(nhanVienMoi.getDiaChi());
+                nhanVienMoiDaTao.setGioiTinh(nhanVienMoi.isGioiTinh());
+                nhanVienMoiDaTao.setHinhAnh(nhanVienMoi.getHinhAnh());
+                nhanVienMoiDaTao.setSdt(nhanVienMoi.getSdt());
+                nhanVienMoiDaTao.setCccd(nhanVienMoi.getCccd());
+                nhanVienMoiDaTao.setTrangThaiNhanVien(nhanVienMoi.getTrangThaiNhanVien());
+                nhanVienMoiDaTao.setChucVuNhanVien(nhanVienMoi.getChucVuNhanVien());
+
+                // Xóa nhân viên cũ
+                session.delete(nhanVienCu);
+                // Lưu nhân viên mới
+                session.save(nhanVienMoiDaTao); // Lưu nhân viên mới vào cơ sở dữ liệu
                 transaction.commit(); // Cam kết giao dịch
+                System.out.println("Cập nhật thành công.");
             } else {
                 System.out.println("Không tìm thấy nhân viên với mã: " + maNhanVien);
             }
@@ -121,7 +133,6 @@ public class NhanVienDAO {
             session.close(); // Đảm bảo đóng session
         }
     }
-
 
 
 
