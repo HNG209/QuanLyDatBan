@@ -48,16 +48,16 @@ public class ThucDonController implements Initializable {
     private String duongDanAnh;
 
     @FXML
-    private TextField tenMonAn;
+    private TextField txtTenMonAn;
 
     @FXML
-    private TextField giatxt;
+    private TextField txtGia;
 
 //    @FXML
-//    private TextField moTa;
+//    private TextField txfMoTa;
 
     @FXML
-    private TextField donViTinh;
+    private TextField txtDonViTinh;
 
     @FXML
     private ComboBox<String> cbloaiMonAn;
@@ -69,6 +69,9 @@ public class ThucDonController implements Initializable {
 
     @FXML
     private Button btnThemMon;
+
+    @FXML
+    private Button btnXoaRong;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -114,6 +117,20 @@ public class ThucDonController implements Initializable {
                  layDuLieu();
              }
          });
+
+        btnXoaRong.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                txtTenMonAn.requestFocus();
+                txtTenMonAn.setText("");
+                cbloaiMonAn.getSelectionModel().selectFirst();
+                cbtrangThaiMon.getSelectionModel().selectFirst();
+                txtDonViTinh.setText("");
+                txtGia.setText("");
+                anhMon.setImage(null);
+                //txfMoTa.setText("");
+            }
+        });
 
         monAnDAO.getAllMonAn();
         flowPane.prefHeightProperty().bind(scrollPane.heightProperty());
@@ -224,8 +241,12 @@ public class ThucDonController implements Initializable {
     public void layDuLieu() {
         LoaiMonAn loaiMon1 = new LoaiMonAn();
         MonAnDAO madao = new MonAnDAO();// Initialize loaiMon1
+
+        String loaiMonAnValue = cbloaiMonAn.getValue();
+
         TrangThaiMonAn trangThaiMonAn = null;
-        double gia = Double.parseDouble(giatxt.getText());
+
+        double gia = Double.parseDouble(txtGia.getText());
 
         LoaiMonAn loai = new LoaiMonAn();
 
@@ -255,7 +276,7 @@ public class ThucDonController implements Initializable {
         }
 
         // Assuming trangThaiMon is a field that gets the status value from the UI
-        String trangThaiValue = trangThaiMon.getValue(); // Get the selected value as a String
+        String trangThaiValue = cbtrangThaiMon.getValue(); // Get the selected value as a String
 
         // Set the trangThaiMonAn based on the selected status
         switch (trangThaiValue) {
@@ -271,7 +292,7 @@ public class ThucDonController implements Initializable {
         }
 
         // Create the MonAn object
-        MonAn monAn = new MonAn(generateMaMonAn(), loaiMon1, tenMonAn.getText(), gia, donViTinh.getText(), duongDanAnh, trangThaiMonAn);
+        MonAn monAn = new MonAn(generateMaMonAn(), loaiMon1, txtTenMonAn.getText(), gia, txtDonViTinh.getText(), duongDanAnh, trangThaiMonAn);
 
         madao.themMonAn(monAn);
 
@@ -279,8 +300,6 @@ public class ThucDonController implements Initializable {
         // MonAnDAO mad = new MonAnDAO();
         // mad.themMonAn(monAn);
     }
-
-
 
 }
 
