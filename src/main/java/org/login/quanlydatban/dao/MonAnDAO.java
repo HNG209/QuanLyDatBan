@@ -53,6 +53,8 @@ public class MonAnDAO {
         }
     }
 
+
+
     public void capNhatMonAn(MonAn monAn) {
         Session session = HibernateUtils.getFactory().openSession();
         Transaction transaction = null;
@@ -80,9 +82,9 @@ public class MonAnDAO {
         try {
             transaction = session.beginTransaction();
 
-            MonAn MonAnCu = session.createQuery("FROM MonAn WHERE maMonAn = :maNhanVien", NhanVien.class)
-                    .setParameter("maNhanVien", maNhanVien)
-                    .uniqueResult();
+//            MonAn MonAnCu = session.createQuery("FROM MonAn WHERE maMonAn = :maNhanVien", NhanVien.class)
+//                    .setParameter("maNhanVien", maNhanVien)
+//                    .uniqueResult();
 
             session.update(monAn);
             transaction.commit();
