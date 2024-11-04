@@ -217,28 +217,18 @@ public class ThucDonController implements Initializable {
     public void layDuLieu() {
         LoaiMonAn loaiMon1 = new LoaiMonAn(); // Initialize loaiMon1
         TrangThaiMonAn trangThaiMonAn = null;
+        double gia = Double.parseDouble(giatxt.getText()); // Ensure this does not throw an exception
 
-        // Ensure to handle possible exceptions
-        double gia = 0.0;
-        try {
-            gia = Double.parseDouble(giatxt.getText().trim()); // Trim whitespace
-        } catch (NumberFormatException e) {
-            System.out.println("Invalid price input: " + giatxt.getText());
-            return; // Exit if the price input is invalid
-        }
-
-        // Assuming loaiMonAn is a ComboBox or similar component
+        // Assuming loaiMonAn is a ComboBox or similar component that provides a selected value
         String loaiMonAnValue = loaiMonAn.getValue(); // Get the selected value as a String
-        // Remove extra spaces and check for case insensitivity
-        loaiMonAnValue = loaiMonAnValue.trim();
 
         // Set the tenLoaiMonAn based on the selected value
         switch (loaiMonAnValue) {
-            case "Mon Trang Mieng":
-                loaiMon1.setTenLoaiMonAn(LoaiMonEnum.TRANG_MIENG);
-                break;
             case "Mon Chien Gion":
                 loaiMon1.setTenLoaiMonAn(LoaiMonEnum.MON_CHIEN_GION);
+                break;
+            case "Trang Mieng":
+                loaiMon1.setTenLoaiMonAn(LoaiMonEnum.TRANG_MIENG);
                 break;
             case "Khai Vi":
                 loaiMon1.setTenLoaiMonAn(LoaiMonEnum.KHAI_VI);
@@ -259,7 +249,6 @@ public class ThucDonController implements Initializable {
 
         // Assuming trangThaiMon is a field that gets the status value from the UI
         String trangThaiValue = trangThaiMon.getValue(); // Get the selected value as a String
-        trangThaiValue = trangThaiValue.trim(); // Remove any extra spaces
 
         // Set the trangThaiMonAn based on the selected status
         switch (trangThaiValue) {
@@ -277,13 +266,12 @@ public class ThucDonController implements Initializable {
         // Create the MonAn object
         MonAn monAn = new MonAn(generateMaMonAn(), loaiMon1, tenMonAn.getText(), gia, donViTinh.getText(), duongDanAnh, trangThaiMonAn);
 
-        System.out.println("Generated MonAn Code: " + generateMaMonAn());
+        System.out.println(generateMaMonAn());
 
         // Uncomment and use MonAnDAO when ready
         // MonAnDAO mad = new MonAnDAO();
         // mad.themMonAn(monAn);
     }
-
 
 
 
