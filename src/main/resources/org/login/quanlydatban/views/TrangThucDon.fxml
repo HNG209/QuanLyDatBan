@@ -38,13 +38,26 @@
             <TextField fx:id="donViTinh" layoutX="101.0" layoutY="156.0" prefHeight="26.0" prefWidth="426.0" styleClass="round-box" />
             <Label layoutX="22.0" layoutY="160.0" prefHeight="18.0" prefWidth="87.0" text="Đơn vị tính" />
             <Label layoutX="21.0" layoutY="69.0" prefHeight="18.0" prefWidth="75.0" text="Loại món ăn" />
-            <ComboBox fx:id="loaiMonAn" layoutX="101.0" layoutY="66.0" prefHeight="26.0" prefWidth="426.0" styleClass="round-box" />
+            <ComboBox fx:id="loaiMonAn" layoutX="101.0" layoutY="66.0" prefHeight="26.0" prefWidth="426.0" styleClass="round-box">
+               <items>
+                  <FXCollections fx:factory="observableArrayList">
+                     <String fx:value="TRANG_MIENG" />
+                     <String fx:value="KHAI_VI" />
+                     <String fx:value="MON_CHIEN_GION" />
+                     <String fx:value="MON_XAO" />
+                     <String fx:value="MON_HAI_SAN" />
+                     <String fx:value="MON_TRUYEN_THONG" />
+                     <String fx:value="NUOC_GIAI_KHAT" />
+                  </FXCollections>
+               </items>
+            </ComboBox>
             <Label layoutX="22.0" layoutY="116.0" prefHeight="18.0" prefWidth="114.0" text="Trạng thái" />
             <ComboBox fx:id="trangThaiMon" layoutX="101.0" layoutY="112.0" prefHeight="26.0" prefWidth="426.0" styleClass="round-box">
                <items>
                   <FXCollections fx:factory="observableArrayList">
-                     <String fx:value="ĐANG LÀM" />
-                     <String fx:value="NGHỈ PHÉP" />
+                     <String fx:value="CO_SAN" />
+                     <String fx:value="TAM_HET" />
+                     <String fx:value="TAM_NGUNG" />
                   </FXCollections>
                </items>
             </ComboBox>

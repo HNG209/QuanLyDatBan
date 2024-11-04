@@ -72,9 +72,9 @@ public class ThucDonController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
+        System.out.println();
         monAnDAO = new MonAnDAO();
-
+        System.out.println(monAnDAO.getAllMonAn());
         btnThemMon.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
@@ -108,11 +108,18 @@ public class ThucDonController implements Initializable {
             }
         });
 
-        monAnDAO.readAll();
+         btnThemMon.setOnAction(new EventHandler<ActionEvent>() {
+             @Override
+             public void handle(ActionEvent event) {
+                 layDuLieu();
+             }
+         });
+
+        monAnDAO.getAllMonAn();
         flowPane.prefHeightProperty().bind(scrollPane.heightProperty());
         flowPane.prefWidthProperty().bind(scrollPane.widthProperty());
 
-        for (MonAn i : monAnDAO.getListMonAn()){
+        for (MonAn i : monAnDAO.getAllMonAn()){
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/uicomponents/CardMonAn_TrangThucDon.fxml"));
             try {
                 AnchorPane pane = loader.load();
@@ -125,7 +132,7 @@ public class ThucDonController implements Initializable {
                 throw new RuntimeException(e);
             }
         }
-        monAnDAO.getListMonAn();
+        //monAnDAO.getListMonAn();
 //        scrollPane.vvalueProperty().addListener((obs, oldValue, newValue) -> {
 //            if(newValue.doubleValue() == 1.0){
 //                for (int i = 0; i < 20; i++){
@@ -142,37 +149,37 @@ public class ThucDonController implements Initializable {
 //        });
     }
 
-    private String generateLoaiMonAn(String prefix) {
-        Long maxId = getMaLoaiFromDatabase(prefix);
-        Long newIdNumber = (maxId == null) ? 1 : maxId + 1; // Increment ID by 1
-        return prefix + String.format("%02d", newIdNumber); // Combine prefix with formatted number
-    }
-
-    public Long getMaLoaiFromDatabase(String prefix) {
-        Session session = HibernateUtils.getFactory().openSession();
-        Long maLoai = null;
-
-        try {
-            String query = "SELECT loaiMonAn FROM MonAn WHERE loaiMonAn.maLoaiMonAn LIKE :prefix";
-            List<String> loaiMonAns = session.createQuery(query, String.class)
-                    .setParameter("prefix", prefix + "%")
-                    .getResultList();
-
-            maLoai = loaiMonAns.stream()
-                    .filter(ma -> ma.matches(prefix + "\\d{2}")) // Ensure it matches the format with the prefix
-                    .map(ma -> Long.parseLong(ma.substring(prefix.length()))) // Extract and parse the numeric part
-                    .max(Long::compare)
-                    .orElse(0L);
-
-        } catch (Exception e) {
-            e.printStackTrace(); // Replace with logger if needed
-        } finally {
-            if (session != null) {
-                session.close(); // Ensure the session is closed properly
-            }
-        }
-        return maLoai;
-    }
+//    private String generateLoaiMonAn(String prefix) {
+//        Long maxId = getMaLoaiFromDatabase(prefix);
+//        Long newIdNumber = (maxId == null) ? 1 : maxId + 1; // Increment ID by 1
+//        return prefix + String.format("%02d", newIdNumber); // Combine prefix with formatted number
+//    }
+//
+//    public Long getMaLoaiFromDatabase(String prefix) {
+//        Session session = HibernateUtils.getFactory().openSession();
+//        Long maLoai = null;
+//
+//        try {
+//            String query = "SELECT loaiMonAn FROM MonAn WHERE loaiMonAn.maLoaiMonAn LIKE :prefix";
+//            List<String> loaiMonAns = session.createQuery(query, String.class)
+//                    .setParameter("prefix", prefix + "%")
+//                    .getResultList();
+//
+//            maLoai = loaiMonAns.stream()
+//                    .filter(ma -> ma.matches(prefix + "\\d{2}")) // Ensure it matches the format with the prefix
+//                    .map(ma -> Long.parseLong(ma.substring(prefix.length()))) // Extract and parse the numeric part
+//                    .max(Long::compare)
+//                    .orElse(0L);
+//
+//        } catch (Exception e) {
+//            e.printStackTrace(); // Replace with logger if needed
+//        } finally {
+//            if (session != null) {
+//                session.close(); // Ensure the session is closed properly
+//            }
+//        }
+//        return maLoai;
+//    }
 
     private String generateMaMonAn() {
         Long maxId = getMaMonFromDatabase2();
@@ -215,7 +222,8 @@ public class ThucDonController implements Initializable {
     // Nut lay du lieu
 
     public void layDuLieu() {
-        LoaiMonAn loaiMon1 = new LoaiMonAn(); // Initialize loaiMon1
+        LoaiMonAn loaiMon1 = new LoaiMonAn();
+        MonAnDAO madao = new MonAnDAO();// Initialize loaiMon1
         TrangThaiMonAn trangThaiMonAn = null;
         double gia = Double.parseDouble(giatxt.getText()); // Ensure this does not throw an exception
 
@@ -224,22 +232,22 @@ public class ThucDonController implements Initializable {
 
         // Set the tenLoaiMonAn based on the selected value
         switch (loaiMonAnValue) {
-            case "Mon Chien Gion":
+            case "MON_CHIEN_GION":
                 loaiMon1.setTenLoaiMonAn(LoaiMonEnum.MON_CHIEN_GION);
                 break;
-            case "Trang Mieng":
+            case "TRANG_MIENG":
                 loaiMon1.setTenLoaiMonAn(LoaiMonEnum.TRANG_MIENG);
                 break;
-            case "Khai Vi":
+            case "KHAI_VI":
                 loaiMon1.setTenLoaiMonAn(LoaiMonEnum.KHAI_VI);
                 break;
-            case "Nuoc Giai Khat":
+            case "NUOC_GIAI_KHAT":
                 loaiMon1.setTenLoaiMonAn(LoaiMonEnum.NUOC_GIAI_KHAT);
                 break;
-            case "Mon Xao":
+            case "MON_XAO":
                 loaiMon1.setTenLoaiMonAn(LoaiMonEnum.MON_XAO);
                 break;
-            case "Mon Hai San":
+            case "MON_HAI_SAN":
                 loaiMon1.setTenLoaiMonAn(LoaiMonEnum.MON_HAI_SAN);
                 break;
             default:
@@ -266,14 +274,8 @@ public class ThucDonController implements Initializable {
         // Create the MonAn object
         MonAn monAn = new MonAn(generateMaMonAn(), loaiMon1, tenMonAn.getText(), gia, donViTinh.getText(), duongDanAnh, trangThaiMonAn);
 
-        System.out.println(generateMaMonAn());
+        madao.themMonAn(monAn);
 
-        // Uncomment and use MonAnDAO when ready
-        // MonAnDAO mad = new MonAnDAO();
-        // mad.themMonAn(monAn);
     }
-
-
-
 }
 
