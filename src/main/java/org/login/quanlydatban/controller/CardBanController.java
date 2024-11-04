@@ -15,6 +15,7 @@ import org.login.quanlydatban.entity.Ban;
 import org.login.quanlydatban.entity.HoaDon;
 import org.login.quanlydatban.entity.NhanVien;
 import org.login.quanlydatban.entity.enums.TrangThaiBan;
+import org.login.quanlydatban.entity.enums.TrangThaiHoaDon;
 
 import java.io.IOException;
 import java.net.URL;
@@ -59,7 +60,7 @@ public class CardBanController implements Initializable {
                 List<HoaDon> list = hoaDonDAO.getHoaDonFromBan(ban);
 
                 if(!list.isEmpty()){
-                    HoaDon hoaDon = list.get(0);
+                    HoaDon hoaDon = list.get(list.size() - 1);
                     controller.setHoaDon(hoaDon);
                 }
 

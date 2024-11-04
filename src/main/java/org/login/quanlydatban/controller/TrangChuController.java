@@ -13,6 +13,9 @@ public class TrangChuController {
     @FXML
     private Label tenNhanVien;
 
+    @FXML
+    private Label chucVu;
+
     public static TaiKhoan taiKhoan;
 
     @FXML
@@ -22,8 +25,14 @@ public class TrangChuController {
     public void setTaiKhoan(TaiKhoan taiKhoan){
         this.taiKhoan = taiKhoan;
         if(taiKhoan != null){
-            if(taiKhoan.getNhanVien() != null)
+            if(taiKhoan.getNhanVien() != null){
                 tenNhanVien.setText(taiKhoan.getNhanVien().getTenNhanVien());
+                switch (taiKhoan.getNhanVien().getChucVuNhanVien()){
+                    case NHAN_VIEN -> chucVu.setText("Nhân viên");
+                    default -> chucVu.setText("Quản lý");
+                }
+            }
+
         }
     }
 

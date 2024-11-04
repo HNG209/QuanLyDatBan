@@ -23,7 +23,7 @@ public class ChiTietHoaDon implements Serializable {
 
     @ManyToOne
     @MapsId("maHoaDon")
-    @JoinColumn(name = "maHoaDon", referencedColumnName = "maHoaDon")
+    @JoinColumn(name = "maHoaDon", referencedColumnName = "maHoaDon", nullable = false)
     private HoaDon hoaDon;
 
     public CTHDCompositeKey getMaChiTietHoaDon() {

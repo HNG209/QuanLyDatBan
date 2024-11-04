@@ -25,8 +25,8 @@ public class HoaDon implements Serializable {
     @JoinColumn(name = "maBan")
     private Ban ban;
 
-    @OneToMany
-    @JoinColumn(name = "maHoaDon")
+    @OneToMany(mappedBy = "hoaDon", cascade = CascadeType.MERGE)
+//    @JoinColumn(name = "maHoaDon")
     private List<ChiTietHoaDon> chiTietHoaDon;
     @ManyToOne
     @JoinColumn(name = "maKhachHang")

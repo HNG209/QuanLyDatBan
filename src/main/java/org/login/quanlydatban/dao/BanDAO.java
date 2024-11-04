@@ -58,18 +58,16 @@ public class BanDAO {
         return this.listBan;
     }
 
-    public Ban updateBan(Ban ban, TrangThaiBan trangThaiBan) {
+    public Ban updateBan(Ban ban) {
         Session session = HibernateUtils.getFactory().openSession();
         session.getTransaction().begin();
 
-        Ban currentBan = session.get(Ban.class, ban.getMaBan());
-        currentBan.setTrangThaiBan(trangThaiBan);
-        session.save(currentBan);
+        session.update(ban);
 
         session.getTransaction().commit();
         session.close();
 
-        return currentBan;
+        return ban;
     }
 
     public List<Ban> getListBan() {

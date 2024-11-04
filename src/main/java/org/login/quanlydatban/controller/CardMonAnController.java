@@ -34,6 +34,7 @@ public class CardMonAnController implements Initializable {
     @FXML
     public void them(){
         if(controller != null) {
+            System.out.println(controller.getHoaDon());
             Object[] row = new Object[]{monAn.getMaMonAn(), monAn.getTenMonAn(), monAn.getDonGia(), 1, monAn.getDonViTinh(),""};
             controller.themDuLieuVaoBangMonAn(row);
             controller.themChiTietHoaDon(monAn);

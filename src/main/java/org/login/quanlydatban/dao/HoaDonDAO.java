@@ -2,6 +2,7 @@ package org.login.quanlydatban.dao;
 
 import org.hibernate.Session;
 import org.login.quanlydatban.entity.*;
+import org.login.quanlydatban.entity.enums.TrangThaiHoaDon;
 import org.login.quanlydatban.hibernate.HibernateUtils;
 
 import javax.persistence.Query;
@@ -321,6 +322,18 @@ public class HoaDonDAO {
         return hoaDon;
     }
 
+    public HoaDon updateHoaDon(HoaDon hoaDon) {
+        Session session = HibernateUtils.getFactory().openSession();
+        session.getTransaction().begin();
+
+        session.update(hoaDon);
+
+        session.getTransaction().commit();
+        session.close();
+
+        return hoaDon;
+    }
+
     public List<HoaDon> getHoaDonFromBan(Ban ban) {
         Session session = HibernateUtils.getFactory().openSession();
         session.getTransaction().begin();
@@ -332,8 +345,9 @@ public class HoaDonDAO {
         Join<HoaDon, Ban> joinBan = hoaDonRoot.join("ban");
 
         Predicate predicate = builder.equal(joinBan.get("maBan"), ban.getMaBan());
+        Predicate predicate1 = builder.equal(hoaDonRoot.get("trangThaiHoaDon"), TrangThaiHoaDon.CHUA_THANH_TOAN);
 
-        query.select(hoaDonRoot).where(predicate);
+        query.select(hoaDonRoot).where(builder.and(predicate, predicate1));
 
         List<HoaDon> list = session.createQuery(query).getResultList();
 

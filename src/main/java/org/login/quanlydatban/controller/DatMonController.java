@@ -176,11 +176,13 @@ public class DatMonController implements Initializable {
     @FXML
     void giuBan(ActionEvent event) {
         if(xacNhan("Xác nhận giữ bàn, bạn có thể huỷ ngay nếu muốn")){
-            this.ban = banDAO.updateBan(ban, TrangThaiBan.DANG_PHUC_VU);
+            this.ban.setTrangThaiBan(TrangThaiBan.DANG_PHUC_VU);
+            this.ban = banDAO.updateBan(ban);
             this.trangThaiBanText.setText(ban.getTrangThaiBan().toString());
             this.btnHuy.setVisible(true);
             this.btnGiuBan.setVisible(false);
 
+            //lap hoa don voi trang thai chua thanh toan khi giu ban
             HoaDon hoaDon = new HoaDon();
             hoaDon.setNhanVien(nhanVien);
             hoaDon.setBan(ban);
@@ -196,7 +198,8 @@ public class DatMonController implements Initializable {
     @FXML
     void huyBan(ActionEvent event) {
         if(orderTable.getItems().size() == 0){
-            this.ban = banDAO.updateBan(ban, TrangThaiBan.BAN_TRONG);
+            ban.setTrangThaiBan(TrangThaiBan.BAN_TRONG);
+            this.ban = banDAO.updateBan(ban);
             this.trangThaiBanText.setText(ban.getTrangThaiBan().toString());
             this.btnHuy.setVisible(false);
             this.btnGiuBan.setVisible(true);
@@ -206,7 +209,21 @@ public class DatMonController implements Initializable {
 
     @FXML
     void thanhToan(ActionEvent event) {
+        if(xacNhan("Xác nhận thanh toán?")){
+            orderTable.getItems().clear();
+            this.hoaDon.setTrangThaiHoaDon(TrangThaiHoaDon.DA_THANH_TOAN);
 
+            ban.setTrangThaiBan(TrangThaiBan.BAN_TRONG);
+            trangThaiBanText.setText(TrangThaiBan.BAN_TRONG.toString());
+            Session session = HibernateUtils.getFactory().openSession();
+            session.getTransaction().begin();
+
+            hoaDonDAO.updateHoaDon(hoaDon);
+            banDAO.updateBan(ban);
+
+            session.getTransaction().commit();
+            session.close();
+        }
     }
 
     @FXML
@@ -274,5 +291,9 @@ public class DatMonController implements Initializable {
         alert.setHeaderText(text);
 
         alert.showAndWait();
+    }
+
+    public HoaDon getHoaDon() {
+        return this.hoaDon;
     }
 }

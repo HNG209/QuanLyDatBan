@@ -33,7 +33,6 @@
                   </Pane>
                   <Pane prefHeight="45.0" prefWidth="190.0" AnchorPane.rightAnchor="10.0">
                      <children>
-                        <Label fx:id="tenNhanVien" alignment="BASELINE_RIGHT" layoutX="-52.0" layoutY="18.0" prefHeight="17.0" prefWidth="147.0" text="Chưa có nhân viên đăng ký" />
                         <ImageView fitHeight="40.0" fitWidth="40.0" layoutX="105.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../icons/user.png" />
@@ -44,6 +43,8 @@
                               <Image url="@../icons/cogwheel.png" />
                            </image>
                         </ImageView>
+                        <Label fx:id="tenNhanVien" alignment="BASELINE_RIGHT" layoutX="-51.0" layoutY="11.0" prefHeight="17.0" prefWidth="147.0" text="Chưa có nhân viên đăng ký" />
+                        <Label fx:id="chucVu" alignment="CENTER_RIGHT" layoutX="14.0" layoutY="26.0" prefHeight="17.0" prefWidth="81.0" text="Chức vụ" />
                      </children>
                   </Pane>
                </children>
