@@ -244,20 +244,20 @@ public class ThongKeController {
     }
 
     private void capNhatDuLieuChoBieuDoCot(String maNV) {
-        String tieuChi = tieuChiThongKeBieuDoCot.getSelectionModel().getSelectedItem();
-        int nam = Integer.parseInt(namThongKeBieuDoCot.getSelectionModel().getSelectedItem());
-        if ("Theo tháng".equals(tieuChi)) {
-            capNhatDuLieuDoanhThuTheoThangHoacQuy(maNV, nam, "Tháng");
-            capNhatDuLieuHoaDonTheoThangHoacQuy(maNV, nam, "Tháng");
-        } else if ("Theo quý".equals(tieuChi)) {
-            capNhatDuLieuDoanhThuTheoThangHoacQuy(maNV, nam, "Quý");
-            capNhatDuLieuHoaDonTheoThangHoacQuy(maNV, nam, "Quý");
-        } else if ("Theo năm".equals(tieuChi)) {
-            capNhatDuLieuDoanhThuTheoNam(maNV);
-            capNhatDuLieuHoaDonTheoNam(maNV);
-        }
-        bieuDoCotHoaDon.setAnimated(false);
-        bieuDoCotDoanhThu.setAnimated(false);
+//        String tieuChi = tieuChiThongKeBieuDoCot.getSelectionModel().getSelectedItem();
+//        int nam = Integer.parseInt(namThongKeBieuDoCot.getSelectionModel().getSelectedItem());
+//        if ("Theo tháng".equals(tieuChi)) {
+//            capNhatDuLieuDoanhThuTheoThangHoacQuy(maNV, nam, "Tháng");
+//            capNhatDuLieuHoaDonTheoThangHoacQuy(maNV, nam, "Tháng");
+//        } else if ("Theo quý".equals(tieuChi)) {
+//            capNhatDuLieuDoanhThuTheoThangHoacQuy(maNV, nam, "Quý");
+//            capNhatDuLieuHoaDonTheoThangHoacQuy(maNV, nam, "Quý");
+//        } else if ("Theo năm".equals(tieuChi)) {
+//            capNhatDuLieuDoanhThuTheoNam(maNV);
+//            capNhatDuLieuHoaDonTheoNam(maNV);
+//        }
+//        bieuDoCotHoaDon.setAnimated(false);
+//        bieuDoCotDoanhThu.setAnimated(false);
     }
 
     private void capNhatDuLieuThongKeMonAnVaLoaiMonAn() {
