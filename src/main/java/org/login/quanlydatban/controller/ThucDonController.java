@@ -60,9 +60,9 @@ public class ThucDonController implements Initializable {
     private TextField donViTinh;
 
     @FXML
-    private ComboBox<String> loaiMonAn;
+    private ComboBox<String> cbloaiMonAn;
     @FXML
-    private ComboBox<String> trangThaiMon;
+    private ComboBox<String> cbtrangThaiMon;
 
     @FXML
     private ImageView anhMon;
@@ -214,63 +214,58 @@ public class ThucDonController implements Initializable {
 
     // Nut lay du lieu
 
-    public void layDuLieu() {
-        LoaiMonAn loaiMon1 = new LoaiMonAn(); // Initialize loaiMon1
+    public void layDuLieu(){
+        LoaiMonAn loaiMon1 = null;
         TrangThaiMonAn trangThaiMonAn = null;
-        double gia = Double.parseDouble(giatxt.getText()); // Ensure this does not throw an exception
+        double gia = Double.parseDouble(giatxt.getText());
 
-        // Assuming loaiMonAn is a ComboBox or similar component that provides a selected value
-        String loaiMonAnValue = loaiMonAn.getValue(); // Get the selected value as a String
+        LoaiMonAn loai = new LoaiMonAn();
 
-        // Set the tenLoaiMonAn based on the selected value
-        switch (loaiMonAnValue) {
-            case "Mon Chien Gion":
-                loaiMon1.setTenLoaiMonAn(LoaiMonEnum.MON_CHIEN_GION);
-                break;
-            case "Trang Mieng":
-                loaiMon1.setTenLoaiMonAn(LoaiMonEnum.TRANG_MIENG);
-                break;
-            case "Khai Vi":
-                loaiMon1.setTenLoaiMonAn(LoaiMonEnum.KHAI_VI);
-                break;
-            case "Nuoc Giai Khat":
-                loaiMon1.setTenLoaiMonAn(LoaiMonEnum.NUOC_GIAI_KHAT);
-                break;
-            case "Mon Xao":
-                loaiMon1.setTenLoaiMonAn(LoaiMonEnum.MON_XAO);
-                break;
-            case "Mon Hai San":
-                loaiMon1.setTenLoaiMonAn(LoaiMonEnum.MON_HAI_SAN);
-                break;
-            default:
-                loaiMon1.setTenLoaiMonAn(LoaiMonEnum.MON_TRUYEN_THONG);
-                break;
+        if(cbloaiMonAn.getValue().equals("Mon Chien Gion")){
+            loaiMon1.setTenLoaiMonAn(LoaiMonEnum.MON_CHIEN_GION);
+        }
+        else if(cbloaiMonAn.getValue().equals("Mon Trang Mieng"))
+        {
+            loaiMon1.setTenLoaiMonAn(LoaiMonEnum.TRANG_MIENG);
+        }
+        else if(cbloaiMonAn.equals("Khai Vi"))
+        {
+            loaiMon1.setTenLoaiMonAn(LoaiMonEnum.KHAI_VI);
+        }
+        else if(cbloaiMonAn.equals("Nuoc Giai Khat"))
+        {
+            loaiMon1.setTenLoaiMonAn(LoaiMonEnum.NUOC_GIAI_KHAT);
+        }
+        else if(cbloaiMonAn.equals("Mon Xao"))
+        {
+            loaiMon1.setTenLoaiMonAn(LoaiMonEnum.MON_XAO);
+        }
+        else if(cbloaiMonAn.equals("Mon Hai San"))
+        {
+            loaiMon1.setTenLoaiMonAn(LoaiMonEnum.MON_HAI_SAN);
+        }
+        else{
+            loaiMon1.setTenLoaiMonAn(LoaiMonEnum.MON_TRUYEN_THONG);
         }
 
-        // Assuming trangThaiMon is a field that gets the status value from the UI
-        String trangThaiValue = trangThaiMon.getValue(); // Get the selected value as a String
-
-        // Set the trangThaiMonAn based on the selected status
-        switch (trangThaiValue) {
-            case "CO SAN":
-                trangThaiMonAn = TrangThaiMonAn.CO_SAN;
-                break;
-            case "TAM HET":
-                trangThaiMonAn = TrangThaiMonAn.TAM_HET;
-                break;
-            default:
-                trangThaiMonAn = TrangThaiMonAn.NGUNG_BAN;
-                break;
+        if(cbtrangThaiMon.equals("CO SAN")){
+            trangThaiMonAn = TrangThaiMonAn.CO_SAN;
+        }
+        else if(cbtrangThaiMon.equals("TAM HET"))
+        {
+            trangThaiMonAn = TrangThaiMonAn.TAM_HET;
+        }
+        else {
+            trangThaiMonAn = TrangThaiMonAn.NGUNG_BAN;
         }
 
-        // Create the MonAn object
-        MonAn monAn = new MonAn(generateMaMonAn(), loaiMon1, tenMonAn.getText(), gia, donViTinh.getText(), duongDanAnh, trangThaiMonAn);
+        MonAn monAn = new MonAn(generateMaMonAn(), loaiMon1, tenMonAn.getText().toString(), gia,  donViTinh.getText().toString(), duongDanAnh,
+                trangThaiMonAn);
 
         System.out.println(generateMaMonAn());
 
-        // Uncomment and use MonAnDAO when ready
-        // MonAnDAO mad = new MonAnDAO();
-        // mad.themMonAn(monAn);
+//        MonAnDAO mad = new MonAnDAO();
+//        mad.themMonAn(monAn);
     }
 
 
