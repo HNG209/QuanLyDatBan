@@ -55,7 +55,7 @@ public class TrangHienNhanVien implements Initializable {
     private ComboBox<String> chucVu; // cbx chuc vu
     @FXML
     private DatePicker ngaySinh;
-
+    private URL resourceUrl = getClass().getResource("/org/login/quanlydatban/Image/");
     private String duongdan;
 
     private TrangQuanLyNhanVien trangQuanLyNhanVien;
