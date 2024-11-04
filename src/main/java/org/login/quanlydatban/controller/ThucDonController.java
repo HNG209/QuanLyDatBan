@@ -43,6 +43,8 @@ public class ThucDonController implements Initializable {
 
     private String maMonAn;
 
+    private String maLoai;
+
     private String duongDanAnh;
 
     @FXML
@@ -51,8 +53,8 @@ public class ThucDonController implements Initializable {
     @FXML
     private TextField giatxt;
 
-    @FXML
-    private TextField moTa;
+//    @FXML
+//    private TextField moTa;
 
     @FXML
     private TextField donViTinh;
@@ -65,72 +67,46 @@ public class ThucDonController implements Initializable {
     @FXML
     private ImageView anhMon;
 
-    private String generateMaMonAn() {
-        Long maxId = getMaxIdFromDatabase();
-        Long newIdNumber = (maxId == null) ? 1 : maxId + 1; // Tăng mã lên 1
-        return String.format("%04d", newIdNumber); // Định dạng mã
-    }
-
-    public Long getMaxIdFromDatabase() {
-        Session session = HibernateUtils.getFactory().openSession();
-        Transaction transaction = null;
-        Long maxId = null;
-
-        try {
-            transaction = session.beginTransaction();
-
-            String query = "SELECT maMonAn FROM MonAn";
-            List<String> maMonAns = session.createQuery(query, String.class)
-                    .getResultList();
-
-            maxId = maMonAns.stream()
-                    .filter(ma -> ma.matches("\\d{4}")) // Ensure only 4-digit numbers are processed
-                    .map(Long::parseLong)
-                    .max(Long::compare)
-                    .orElse(0L);
-
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction != null) transaction.rollback();
-            e.printStackTrace(); // Consider using a logger for better error handling
-        } finally {
-            if (session != null) {
-                session.close(); // Ensure the session is closed properly
-            }
-        }
-        return maxId;
-    }
+    @FXML
+    private Button btnThemMon;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
         monAnDAO = new MonAnDAO();
 
-         taiAnh.setOnAction(new EventHandler<ActionEvent>() {
-             @Override
-             public void handle(ActionEvent actionEvent) {
-                 System.out.println("Nhan nut tai anh");
-                 FileChooser fileChooser = new FileChooser();
+        btnThemMon.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                layDuLieu();
+            }
+        });
 
-                 fileChooser.setInitialDirectory(new File("../QuanLyDatBan/src/main/resources/org/login/quanlydatban/Image"));
-                 fileChooser.setTitle("Mở file");
+        taiAnh.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                System.out.println("Nhan nut tai anh");
+                FileChooser fileChooser = new FileChooser();
 
-                 // Thiết lập bộ lọc file nếu cần
-                 FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif");
-                 fileChooser.getExtensionFilters().add(extFilter);
+                fileChooser.setInitialDirectory(new File("../QuanLyDatBan/src/main/resources/org/login/quanlydatban/Image"));
+                fileChooser.setTitle("Mở file");
 
-                 File file = fileChooser.showOpenDialog(null);
-                 System.out.println("Nhấn nút tải ảnh");
+                // Thiết lập bộ lọc file nếu cần
+                FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif");
+                fileChooser.getExtensionFilters().add(extFilter);
 
-                 if (file != null) {
-                     duongDanAnh = file.getAbsolutePath();
-                     duongDanAnh = file.getAbsolutePath(); // Cập nhật đường dẫn
-                     // Cập nhật ImageView với ảnh mới
-                     Image image = new Image(file.toURI().toString());
-                     anhMon.setImage(image);
-                 }
-             }
-         });
+                File file = fileChooser.showOpenDialog(null);
+                System.out.println("Nhấn nút tải ảnh");
+
+                if (file != null) {
+                    duongDanAnh = file.getAbsolutePath();
+                    duongDanAnh = file.getAbsolutePath(); // Cập nhật đường dẫn
+                    // Cập nhật ImageView với ảnh mới
+                    Image image = new Image(file.toURI().toString());
+                    anhMon.setImage(image);
+                }
+            }
+        });
 
         monAnDAO.readAll();
         flowPane.prefHeightProperty().bind(scrollPane.heightProperty());
@@ -166,55 +142,148 @@ public class ThucDonController implements Initializable {
 //        });
     }
 
+    private String generateLoaiMonAn(String prefix) {
+        Long maxId = getMaLoaiFromDatabase(prefix);
+        Long newIdNumber = (maxId == null) ? 1 : maxId + 1; // Increment ID by 1
+        return prefix + String.format("%02d", newIdNumber); // Combine prefix with formatted number
+    }
+
+    public Long getMaLoaiFromDatabase(String prefix) {
+        Session session = HibernateUtils.getFactory().openSession();
+        Long maLoai = null;
+
+        try {
+            String query = "SELECT loaiMonAn FROM MonAn WHERE loaiMonAn.maLoaiMonAn LIKE :prefix";
+            List<String> loaiMonAns = session.createQuery(query, String.class)
+                    .setParameter("prefix", prefix + "%")
+                    .getResultList();
+
+            maLoai = loaiMonAns.stream()
+                    .filter(ma -> ma.matches(prefix + "\\d{2}")) // Ensure it matches the format with the prefix
+                    .map(ma -> Long.parseLong(ma.substring(prefix.length()))) // Extract and parse the numeric part
+                    .max(Long::compare)
+                    .orElse(0L);
+
+        } catch (Exception e) {
+            e.printStackTrace(); // Replace with logger if needed
+        } finally {
+            if (session != null) {
+                session.close(); // Ensure the session is closed properly
+            }
+        }
+        return maLoai;
+    }
+
+    private String generateMaMonAn() {
+        Long maxId = getMaMonFromDatabase2();
+        Long newIdNumber = (maxId == null) ? 1 : maxId + 1; // Tăng mã lên 1
+        return String.format("%04d", newIdNumber); // Định dạng mã
+    }
+
+    public Long getMaMonFromDatabase2() {
+        Session session = HibernateUtils.getFactory().openSession();
+        Transaction transaction = null;
+        Long maMon = null;
+
+        try {
+            transaction = session.beginTransaction();
+
+            String query = "SELECT maMonAn FROM MonAn";
+            List<String> maMonAns = session.createQuery(query, String.class)
+                    .getResultList();
+
+            maMon = maMonAns.stream()
+                    .filter(ma -> ma.matches("\\d{4}")) // Ensure only 4-digit numbers are processed
+                    .map(Long::parseLong)
+                    .max(Long::compare)
+                    .orElse(0L);
+
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) transaction.rollback();
+            e.printStackTrace(); // Consider using a logger for better error handling
+        } finally {
+            if (session != null) {
+                session.close(); // Ensure the session is closed properly
+            }
+        }
+        return maMon;
+    }
+
+
+
     // Nut lay du lieu
 
-    public void layDuLieu(){
-        LoaiMonAn loaiMon1 = null;
+    public void layDuLieu() {
+        LoaiMonAn loaiMon1 = new LoaiMonAn(); // Initialize loaiMon1
         TrangThaiMonAn trangThaiMonAn = null;
-        double gia = Double.parseDouble(giatxt.getText());
-        if(loaiMonAn.getValue().equals("MÓN CHIÊN GIÒN")){
-            loaiMon1.setTenLoaiMonAn(LoaiMonEnum.MON_CHIEN_GION);
-        }
-        else if(loaiMonAn.getValue().equals("MÓN TRÁNG MIỆNG"))
-        {
-            loaiMon1.setTenLoaiMonAn(LoaiMonEnum.TRANG_MIENG);
-        }
-        else if(loaiMonAn.equals("KHAI VỊ"))
-        {
-            loaiMon1.setTenLoaiMonAn(LoaiMonEnum.KHAI_VI);
-        }
-        else if(loaiMonAn.equals("NƯỚC GIẢI KHÁT"))
-        {
-            loaiMon1.setTenLoaiMonAn(LoaiMonEnum.NUOC_GIAI_KHAT);
-        }
-        else if(loaiMonAn.equals("MÓN XÀO"))
-        {
-            loaiMon1.setTenLoaiMonAn(LoaiMonEnum.MON_XAO);
-        }
-        else if(loaiMonAn.equals("MÓN HẢI SẢN"))
-        {
-            loaiMon1.setTenLoaiMonAn(LoaiMonEnum.MON_HAI_SAN);
-        }
-        else{
-            loaiMon1.setTenLoaiMonAn(LoaiMonEnum.MON_TRUYEN_THONG);
+
+        // Ensure to handle possible exceptions
+        double gia = 0.0;
+        try {
+            gia = Double.parseDouble(giatxt.getText().trim()); // Trim whitespace
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid price input: " + giatxt.getText());
+            return; // Exit if the price input is invalid
         }
 
-        if(trangThaiMon.equals("CO_SAN")){
-            trangThaiMonAn = TrangThaiMonAn.CO_SAN;
-        }
-        else if(trangThaiMon.equals("TAM_HET"))
-        {
-            trangThaiMonAn = TrangThaiMonAn.TAM_HET;
-        }
-        else {
-            trangThaiMonAn = TrangThaiMonAn.NGUNG_BAN;
+        // Assuming loaiMonAn is a ComboBox or similar component
+        String loaiMonAnValue = loaiMonAn.getValue(); // Get the selected value as a String
+        // Remove extra spaces and check for case insensitivity
+        loaiMonAnValue = loaiMonAnValue.trim();
+
+        // Set the tenLoaiMonAn based on the selected value
+        switch (loaiMonAnValue) {
+            case "Mon Trang Mieng":
+                loaiMon1.setTenLoaiMonAn(LoaiMonEnum.TRANG_MIENG);
+                break;
+            case "Mon Chien Gion":
+                loaiMon1.setTenLoaiMonAn(LoaiMonEnum.MON_CHIEN_GION);
+                break;
+            case "Khai Vi":
+                loaiMon1.setTenLoaiMonAn(LoaiMonEnum.KHAI_VI);
+                break;
+            case "Nuoc Giai Khat":
+                loaiMon1.setTenLoaiMonAn(LoaiMonEnum.NUOC_GIAI_KHAT);
+                break;
+            case "Mon Xao":
+                loaiMon1.setTenLoaiMonAn(LoaiMonEnum.MON_XAO);
+                break;
+            case "Mon Hai San":
+                loaiMon1.setTenLoaiMonAn(LoaiMonEnum.MON_HAI_SAN);
+                break;
+            default:
+                loaiMon1.setTenLoaiMonAn(LoaiMonEnum.MON_TRUYEN_THONG);
+                break;
         }
 
-        MonAn monAn = new MonAn(maMonAn, loaiMon1, tenMonAn.getText().toString(), gia,  donViTinh.getText().toString(), duongDanAnh,
-                trangThaiMonAn);
-        MonAnDAO mad = new MonAnDAO();
-        mad.themMonAn(monAn);
+        // Assuming trangThaiMon is a field that gets the status value from the UI
+        String trangThaiValue = trangThaiMon.getValue(); // Get the selected value as a String
+        trangThaiValue = trangThaiValue.trim(); // Remove any extra spaces
+
+        // Set the trangThaiMonAn based on the selected status
+        switch (trangThaiValue) {
+            case "CO SAN":
+                trangThaiMonAn = TrangThaiMonAn.CO_SAN;
+                break;
+            case "TAM HET":
+                trangThaiMonAn = TrangThaiMonAn.TAM_HET;
+                break;
+            default:
+                trangThaiMonAn = TrangThaiMonAn.NGUNG_BAN;
+                break;
+        }
+
+        // Create the MonAn object
+        MonAn monAn = new MonAn(generateMaMonAn(), loaiMon1, tenMonAn.getText(), gia, donViTinh.getText(), duongDanAnh, trangThaiMonAn);
+
+        System.out.println("Generated MonAn Code: " + generateMaMonAn());
+
+        // Uncomment and use MonAnDAO when ready
+        // MonAnDAO mad = new MonAnDAO();
+        // mad.themMonAn(monAn);
     }
+
 
 
 
