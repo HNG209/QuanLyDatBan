@@ -63,7 +63,7 @@ public class TrangHienNhanVien implements Initializable {
     private String getMaNhanVien;
     private  NhanVien nv;
     private   NhanVienDAO nvdao;
-
+    private URL resourceUrl = getClass().getResource("/org/login/quanlydatban/Image/");
     public void SetTrangQuanLyNhanVien(TrangQuanLyNhanVien trangQuanLyNhanVien) {
         this.trangQuanLyNhanVien = trangQuanLyNhanVien;
     }
@@ -83,7 +83,7 @@ public class TrangHienNhanVien implements Initializable {
             public void handle(ActionEvent event) {
                 System.out.println("Nhan nut tai anh");
                 FileChooser fileChooser = new FileChooser();
-                URL resourceUrl = getClass().getResource("/org/login/quanlydatban/Image/");
+
 
                 File initialDirectory = null;
                 try {
@@ -277,7 +277,7 @@ public class TrangHienNhanVien implements Initializable {
     public void loaddulieulenform(NhanVien nhanVien){
         String imageUrl = nhanVien.getHinhAnh();
         // Tạo đối tượng Image từ URL
-        Image image = new Image("file:" + imageUrl);
+        Image image = new Image(resourceUrl + imageUrl);
         // Tạo ImageView và đặt hình ảnh vào
         image1.setImage(image);
         maNhanVien.setText(nhanVien.getMaNhanVien());
