@@ -146,4 +146,22 @@ public class HoaDon implements Serializable {
     public double getPhuThu() {
         return phuThu;
     }
+
+    public List<ChiTietHoaDon> getChiTietHoaDon() {
+        return chiTietHoaDon;
+    }
+
+    @Override
+    public String toString() {
+        return "HoaDon{" +
+                "maHoaDon='" + maHoaDon + '\'' +
+                ", ngayLap=" + ngayLap +
+                ", ban=" + ban +
+//                ", chiTietHoaDon=" + chiTietHoaDon +
+                ", khachHang=" + khachHang +
+                ", nhanVien=" + nhanVien +
+                ", trangThaiHoaDon=" + trangThaiHoaDon +
+                ", phuThu=" + phuThu +
+                '}';
+    }
 }

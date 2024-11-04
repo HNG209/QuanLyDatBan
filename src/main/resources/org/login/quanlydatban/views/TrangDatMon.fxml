@@ -82,7 +82,7 @@
                </children>
             </GridPane>
             <Button fx:id="btnHuy" layoutX="33.0" layoutY="222.0" mnemonicParsing="false" onAction="#huyBan" prefHeight="26.0" prefWidth="482.0" styleClass="sunset-orange" text="Huỷ" AnchorPane.bottomAnchor="52.0" />
-            <Button layoutX="33.0" layoutY="261.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="482.0" styleClass="sage-green" text="Xác nhận thanh toán" AnchorPane.bottomAnchor="13.0" />
+            <Button layoutX="33.0" layoutY="261.0" mnemonicParsing="false" onAction="#thanhToan" prefHeight="26.0" prefWidth="482.0" styleClass="sage-green" text="Xác nhận thanh toán" AnchorPane.bottomAnchor="13.0" />
             <Button fx:id="btnGiuBan" layoutX="33.0" layoutY="209.0" mnemonicParsing="false" onAction="#giuBan" prefHeight="26.0" prefWidth="482.0" styleClass="sunset-orange" text="Giữ bàn" AnchorPane.bottomAnchor="52.0" />
          </children>
       </AnchorPane>

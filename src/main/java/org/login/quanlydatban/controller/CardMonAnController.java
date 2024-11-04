@@ -1,10 +1,16 @@
 package org.login.quanlydatban.controller;
 
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import org.login.quanlydatban.dao.ChiTietHoaDonDAO;
+import org.login.quanlydatban.entity.ChiTietHoaDon;
 import org.login.quanlydatban.entity.MonAn;
 
-public class CardMonAnController {
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public class CardMonAnController implements Initializable {
 
     @FXML
     private Label giaTien;
@@ -14,6 +20,8 @@ public class CardMonAnController {
     private MonAn monAn;
 
     private DatMonController controller;
+
+    private ChiTietHoaDonDAO chiTietHoaDonDAO;
 
     public DatMonController getController() {
         return controller;
@@ -26,9 +34,9 @@ public class CardMonAnController {
     @FXML
     public void them(){
         if(controller != null) {
-
             Object[] row = new Object[]{monAn.getMaMonAn(), monAn.getTenMonAn(), monAn.getDonGia(), 1, monAn.getDonViTinh(),""};
             controller.themDuLieuVaoBangMonAn(row);
+            controller.themChiTietHoaDon(monAn);
         }
     }
 
@@ -37,5 +45,10 @@ public class CardMonAnController {
         this.controller = controller;
         tenMon.setText(monAn.getTenMonAn());
         giaTien.setText(String.valueOf(monAn.getDonGia()));
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        chiTietHoaDonDAO = new ChiTietHoaDonDAO();
     }
 }

@@ -4,6 +4,7 @@ import org.hibernate.Session;
 import org.login.quanlydatban.entity.*;
 import org.login.quanlydatban.hibernate.HibernateUtils;
 
+import javax.persistence.Query;
 import javax.persistence.criteria.*;
 import java.sql.*;
 import java.time.LocalDate;
@@ -308,5 +309,38 @@ public class HoaDonDAO {
 
     }
 
+    public HoaDon lapHoaDon(HoaDon hoaDon) {
+        Session session = HibernateUtils.getFactory().openSession();
+        session.getTransaction().begin();
+
+        session.save(hoaDon);
+
+        session.getTransaction().commit();
+        session.close();
+
+        return hoaDon;
+    }
+
+    public List<HoaDon> getHoaDonFromBan(Ban ban) {
+        Session session = HibernateUtils.getFactory().openSession();
+        session.getTransaction().begin();
+
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<HoaDon> query = builder.createQuery(HoaDon.class);
+        Root<HoaDon> hoaDonRoot = query.from(HoaDon.class);
+
+        Join<HoaDon, Ban> joinBan = hoaDonRoot.join("ban");
+
+        Predicate predicate = builder.equal(joinBan.get("maBan"), ban.getMaBan());
+
+        query.select(hoaDonRoot).where(predicate);
+
+        List<HoaDon> list = session.createQuery(query).getResultList();
+
+        session.getTransaction().commit();
+        session.close();
+
+        return list;
+    }
 
 }

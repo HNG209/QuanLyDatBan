@@ -10,11 +10,15 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import org.login.quanlydatban.dao.HoaDonDAO;
 import org.login.quanlydatban.entity.Ban;
+import org.login.quanlydatban.entity.HoaDon;
+import org.login.quanlydatban.entity.NhanVien;
 import org.login.quanlydatban.entity.enums.TrangThaiBan;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
@@ -37,6 +41,9 @@ public class CardBanController implements Initializable {
     @FXML
     private Label trangThai;
     private Ban ban;
+
+    private HoaDonDAO hoaDonDAO;
+    private NhanVien nhanVien;
     @FXML
     void chonBan(ActionEvent event) throws IOException {
         if(ban.getTrangThaiBan() != TrangThaiBan.TAM_NGUNG_PHUC_VU){
@@ -47,6 +54,14 @@ public class CardBanController implements Initializable {
                 DatMonController controller = loader.getController();
 
                 controller.setBan(ban);
+                controller.setNhanVien(nhanVien);
+
+                List<HoaDon> list = hoaDonDAO.getHoaDonFromBan(ban);
+
+                if(!list.isEmpty()){
+                    HoaDon hoaDon = list.get(0);
+                    controller.setHoaDon(hoaDon);
+                }
 
                 pane.setCenter(anchorPane);
             }
@@ -96,6 +111,10 @@ public class CardBanController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        hoaDonDAO = new HoaDonDAO();
+    }
 
+    public void setNhanVien(NhanVien nhanVien) {
+        this.nhanVien = nhanVien;
     }
 }

@@ -15,14 +15,21 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
+import org.hibernate.Session;
 import org.login.quanlydatban.dao.BanDAO;
+import org.login.quanlydatban.dao.ChiTietHoaDonDAO;
+import org.login.quanlydatban.dao.HoaDonDAO;
 import org.login.quanlydatban.dao.MonAnDAO;
-import org.login.quanlydatban.entity.Ban;
-import org.login.quanlydatban.entity.MonAn;
+import org.login.quanlydatban.entity.*;
 import org.login.quanlydatban.entity.enums.TrangThaiBan;
+import org.login.quanlydatban.entity.enums.TrangThaiHoaDon;
+import org.login.quanlydatban.hibernate.HibernateUtils;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class DatMonController implements Initializable {
@@ -73,11 +80,20 @@ public class DatMonController implements Initializable {
     private ObservableList<Object[]> objectsObservableList;
 
     private Ban ban;
+
+    private NhanVien nhanVien;
+
+    private HoaDonDAO hoaDonDAO;
+
+    private ChiTietHoaDonDAO chiTietHoaDonDAO;
+    private HoaDon hoaDon;
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
         monAnDAO = new MonAnDAO();
         banDAO = new BanDAO();
+        hoaDonDAO = new HoaDonDAO();
+        chiTietHoaDonDAO = new ChiTietHoaDonDAO();
 
         objectsObservableList = FXCollections.observableArrayList();
 
@@ -137,24 +153,62 @@ public class DatMonController implements Initializable {
         }
     }
 
+    public void setNhanVien(NhanVien nhanVien) {
+        this.nhanVien = nhanVien;
+    }
+
     public Ban getBan() {
         return this.ban;
     }
 
+    public void setHoaDon(HoaDon hoaDon) {
+        this.hoaDon = hoaDon;
+        chiTietHoaDonDAO.getCTHDfromHD(hoaDon).forEach(
+                i -> themDuLieuVaoBangMonAn(new Object[] {i.getMonAn().getMaMonAn(),
+                        i.getMonAn().getTenMonAn(),
+                        i.getMonAn().getDonGia(),
+                        i.getSoLuong(),
+                        i.getMonAn().getDonViTinh(),
+                        " "}
+                ));
+    }
+
     @FXML
     void giuBan(ActionEvent event) {
-        this.ban = banDAO.updateBan(ban, TrangThaiBan.DANG_PHUC_VU);
-        this.trangThaiBanText.setText(ban.getTrangThaiBan().toString());
-        this.btnHuy.setVisible(true);
-        this.btnGiuBan.setVisible(false);
+        if(xacNhan("Xác nhận giữ bàn, bạn có thể huỷ ngay nếu muốn")){
+            this.ban = banDAO.updateBan(ban, TrangThaiBan.DANG_PHUC_VU);
+            this.trangThaiBanText.setText(ban.getTrangThaiBan().toString());
+            this.btnHuy.setVisible(true);
+            this.btnGiuBan.setVisible(false);
+
+            HoaDon hoaDon = new HoaDon();
+            hoaDon.setNhanVien(nhanVien);
+            hoaDon.setBan(ban);
+            hoaDon.setTrangThaiHoaDon(TrangThaiHoaDon.CHUA_THANH_TOAN);
+            hoaDon.setNgayLap(LocalDate.now());
+            hoaDon.setKhachHang(null);
+
+            this.hoaDon = hoaDonDAO.lapHoaDon(hoaDon);
+
+            thongBao("Giữ bàn thành công", Alert.AlertType.INFORMATION);
+        }
     }
     @FXML
     void huyBan(ActionEvent event) {
-        this.ban = banDAO.updateBan(ban, TrangThaiBan.BAN_TRONG);
-        this.trangThaiBanText.setText(ban.getTrangThaiBan().toString());
-        this.btnHuy.setVisible(false);
-        this.btnGiuBan.setVisible(true);
+        if(orderTable.getItems().size() == 0){
+            this.ban = banDAO.updateBan(ban, TrangThaiBan.BAN_TRONG);
+            this.trangThaiBanText.setText(ban.getTrangThaiBan().toString());
+            this.btnHuy.setVisible(false);
+            this.btnGiuBan.setVisible(true);
+        }
+        else thongBao("Không thể huỷ, hãy tiến hành thanh toán", Alert.AlertType.INFORMATION);
     }
+
+    @FXML
+    void thanhToan(ActionEvent event) {
+
+    }
+
     @FXML
     void back(MouseEvent event) throws IOException {
         if(anchorPane.getParent() instanceof BorderPane){
@@ -162,10 +216,21 @@ public class DatMonController implements Initializable {
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/TrangChonBan.fxml"));
             AnchorPane anchorPane = loader.load();
-
+            ChonBanController controller = loader.getController();
+            controller.setNhanVien(nhanVien);
             pane.setCenter(anchorPane);
         }
     }
+
+    public void themChiTietHoaDon(MonAn monAn){
+        ChiTietHoaDon chiTietHoaDon = new ChiTietHoaDon();
+        chiTietHoaDon.setHoaDon(hoaDon);
+        chiTietHoaDon.setMonAn(monAn);
+        chiTietHoaDon.setSoLuong(1);
+
+        chiTietHoaDonDAO.luuCTHD(chiTietHoaDon);
+    }
+
     public void themDuLieuVaoBangMonAn(Object[] objects){
         boolean trungMaMonAn = false;
         String maMonAnMoi = objects[0].toString();
@@ -177,10 +242,37 @@ public class DatMonController implements Initializable {
                 row[3] = soLuongMoi + soLuongHienTai; // Increment quantity
                 orderTable.refresh(); // Refresh table to show updated quantity
                 trungMaMonAn = true;
+
+//                ChiTietHoaDon chiTietHoaDon = new ChiTietHoaDon();
+//                chiTietHoaDon.setHoaDon(hoaDon);
+//                chiTietHoaDon.setMonAn(monAnDAO.getMonAnByID(maMonAnHienTai));
+//                chiTietHoaDon.setSoLuong(soLuongMoi + soLuongHienTai);
+//
+//                chiTietHoaDonDAO.luuCTHD(chiTietHoaDon);
                 break;
             }
-        }if(!trungMaMonAn) {
+        }
+        if(!trungMaMonAn) {
             orderTable.getItems().add(objects);
         }
+    }
+
+    public boolean xacNhan(String text) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Xác nhận");
+        alert.setHeaderText(text);
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK)
+            return true;
+        return false;
+    }
+
+    public void thongBao(String text, Alert.AlertType alertType) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle("Thông báo");
+        alert.setHeaderText(text);
+
+        alert.showAndWait();
     }
 }

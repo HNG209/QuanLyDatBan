@@ -64,4 +64,14 @@ public class ChiTietHoaDon implements Serializable {
             this.maChiTietHoaDon = new CTHDCompositeKey(hoaDon.getMaHoaDon(), monAn.getMaMonAn());
         }
     }
+
+    @Override
+    public String toString() {
+        return "ChiTietHoaDon{" +
+                "maChiTietHoaDon=" + maChiTietHoaDon +
+                ", soLuong=" + soLuong +
+                ", monAn=" + monAn +
+                ", hoaDon=" + hoaDon +
+                '}';
+    }
 }

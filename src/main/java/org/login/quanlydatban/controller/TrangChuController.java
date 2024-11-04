@@ -33,6 +33,9 @@ public class TrangChuController {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/TrangChonBan.fxml"));
         AnchorPane anchorPane = loader.load();
 
+        ChonBanController controller = loader.getController();
+        controller.setNhanVien(taiKhoan.getNhanVien());
+
         borderPane.setCenter(anchorPane);
 
         anchorPane.prefWidthProperty().bind(borderPane.widthProperty());
