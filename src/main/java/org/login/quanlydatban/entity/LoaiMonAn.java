@@ -12,12 +12,9 @@ public class LoaiMonAn implements Serializable {
     @Id
     private String maLoaiMonAn;
 
-    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private LoaiMonEnum tenLoaiMonAn;
 
-    @OneToMany
-    @JoinColumn(name = "maLoaiMonAn")
-    private List<MonAn> monAn;
     @Column
     private String moTaLoaiMonAn;
 

@@ -27,11 +27,31 @@ public class MonAnDAO {
 
         Query q = session.createQuery(query);
         listMonAn = q.getResultList();
-
         session.close();
 
         return listMonAn;
     }
+
+    public List<MonAn> getAllMonAn() {
+        List<MonAn> monAnList = null;
+        Session session = HibernateUtils.getFactory().openSession();
+        Transaction transaction = null;
+        try {
+            transaction = session.beginTransaction();
+            // Sử dụng HQL để lấy tất cả nhân viên
+            org.hibernate.query.Query<MonAn> query = session.createQuery("FROM MonAn", MonAn.class);
+            monAnList  = query.list(); // Nhớ lưu kết quả vào danh sách
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) transaction.rollback();
+            e.printStackTrace(); // Xử lý ngoại lệ nếu có lỗi
+        } finally {
+            session.close();
+        }
+        return monAnList ;
+    }
+
+
 
     public void themMonAn(MonAn monAn) {
         Session session = HibernateUtils.getFactory().openSession();

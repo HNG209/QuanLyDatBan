@@ -82,7 +82,7 @@ public class DatMonController implements Initializable {
 
 //        donGia.cellValueFactoryProperty(data -> new SimpleDoubleProperty())
 
-        monAnDAO.readAll();
+        monAnDAO.getAllMonAn();
         flowPane.prefHeightProperty().bind(scrollPane.heightProperty());
         flowPane.prefWidthProperty().bind(scrollPane.widthProperty());
 
