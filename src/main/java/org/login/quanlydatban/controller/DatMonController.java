@@ -1,6 +1,8 @@
 package org.login.quanlydatban.controller;
 
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -8,6 +10,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
@@ -20,7 +23,6 @@ import org.login.quanlydatban.entity.enums.TrangThaiBan;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class DatMonController implements Initializable {
@@ -45,31 +47,30 @@ public class DatMonController implements Initializable {
     @FXML
     private Button btnHuy;
     private MonAnDAO monAnDAO;
-
     private BanDAO banDAO;
 
     @FXML
-    private TableView<Objects> orderTable;
+    private TableView<Object[]> orderTable;
 
     @FXML
-    private TableColumn<Objects, Double> donGia;
+    private TableColumn<Object[], Double> donGia;
 
     @FXML
-    private TableColumn<Objects, String> dvt;
+    private TableColumn<Object[], String> dvt;
 
     @FXML
-    private TableColumn<Objects, String> ghiChu;
+    private TableColumn<Object[], String> ghiChu;
 
     @FXML
-    private TableColumn<Objects, String> maBan;
+    private TableColumn<Object[], String> maBan;
 
     @FXML
-    private TableColumn<Objects, Integer> soLuong;
+    private TableColumn<Object[], Integer> soLuong;
 
     @FXML
-    private TableColumn<Objects, String> tenMon;
+    private TableColumn<Object[], String> tenMon;
 
-    private ObservableList<Objects> objectsObservableList;
+    private ObservableList<Object[]> objectsObservableList;
 
     private Ban ban;
     @Override
@@ -80,8 +81,13 @@ public class DatMonController implements Initializable {
 
         objectsObservableList = FXCollections.observableArrayList();
 
-//        donGia.cellValueFactoryProperty(data -> new SimpleDoubleProperty())
-
+        donGia.setCellValueFactory(data -> new SimpleDoubleProperty((Double)data.getValue()[2]).asObject());
+        soLuong.setCellValueFactory(data -> new SimpleIntegerProperty((Integer) data.getValue()[3]).asObject());
+        maBan.setCellValueFactory(data -> new SimpleStringProperty((String)data.getValue()[0]));
+        tenMon.setCellValueFactory(data -> new SimpleStringProperty((String)data.getValue()[1]));
+        dvt.setCellValueFactory(data -> new SimpleStringProperty((String) data.getValue()[4]));
+        ghiChu.setCellValueFactory( data -> new SimpleStringProperty((String) data.getValue()[5]));
+        orderTable.setItems(objectsObservableList);
         monAnDAO.readAll();
         flowPane.prefHeightProperty().bind(scrollPane.heightProperty());
         flowPane.prefWidthProperty().bind(scrollPane.widthProperty());
@@ -93,7 +99,7 @@ public class DatMonController implements Initializable {
 
                 CardMonAnController controller = loader.getController();
                 controller.setMonAn(i, this);
-
+                controller.setController(this);
                 flowPane.getChildren().add(pane);
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -158,6 +164,23 @@ public class DatMonController implements Initializable {
             AnchorPane anchorPane = loader.load();
 
             pane.setCenter(anchorPane);
+        }
+    }
+    public void themDuLieuVaoBangMonAn(Object[] objects){
+        boolean trungMaMonAn = false;
+        String maMonAnMoi = objects[0].toString();
+        int soLuongMoi = Integer.parseInt(objects[3].toString());
+        for (Object[] row: orderTable.getItems()){
+            String maMonAnHienTai = row[0].toString();
+            if(maMonAnHienTai.equalsIgnoreCase(maMonAnMoi)){
+                int soLuongHienTai = (Integer) row[3];
+                row[3] = soLuongMoi + soLuongHienTai; // Increment quantity
+                orderTable.refresh(); // Refresh table to show updated quantity
+                trungMaMonAn = true;
+                break;
+            }
+        }if(!trungMaMonAn) {
+            orderTable.getItems().add(objects);
         }
     }
 }

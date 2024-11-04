@@ -19,7 +19,9 @@ import org.login.quanlydatban.entity.enums.TrangThaiNhanVien;
 import org.login.quanlydatban.hibernate.HibernateUtils;
 
 import java.io.File;
+import java.net.URISyntaxException;
 import java.net.URL;
+import java.sql.SQLOutput;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.List;
@@ -70,8 +72,20 @@ public class TrangThemNhanVien implements Initializable {
             public void handle(ActionEvent event) {
                 System.out.println("Nhan nut tai anh");
                 FileChooser fileChooser = new FileChooser();
+                URL resourceUrl = getClass().getResource("/org/login/quanlydatban/Image/");
+                File initialDirectory = null;
 
-                fileChooser.setInitialDirectory(new File("E:\\QuanLyDatBanNhom2\\QuanLyDatBan\\src\\main\\resources\\org\\login\\quanlydatban\\Image"));
+
+                try {
+                    initialDirectory = new File(resourceUrl.toURI());
+                } catch (URISyntaxException e) {
+                    System.out.println("Không tìm thấy thư mục");
+                }
+
+
+                fileChooser.setInitialDirectory(initialDirectory);
+
+                fileChooser.setInitialDirectory(initialDirectory);
                 fileChooser.setTitle("Mở file");
 
                 // Thiết lập bộ lọc file nếu cần

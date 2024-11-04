@@ -14,9 +14,22 @@ public class CardMonAnController {
     private MonAn monAn;
 
     private DatMonController controller;
+
+    public DatMonController getController() {
+        return controller;
+    }
+
+    public void setController(DatMonController controller) {
+        this.controller = controller;
+    }
+
     @FXML
     public void them(){
+        if(controller != null) {
 
+            Object[] row = new Object[]{monAn.getMaMonAn(), monAn.getTenMonAn(), monAn.getDonGia(), 1, monAn.getDonViTinh(),""};
+            controller.themDuLieuVaoBangMonAn(row);
+        }
     }
 
     public void setMonAn(MonAn monAn, DatMonController controller) {
