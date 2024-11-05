@@ -75,7 +75,8 @@ public class ThucDonController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        System.out.println();
+        cbloaiMonAn.getSelectionModel().selectFirst();
+        cbtrangThaiMon.getSelectionModel().selectFirst();
         monAnDAO = new MonAnDAO();
         System.out.println(monAnDAO.getAllMonAn());
 
@@ -159,8 +160,13 @@ public class ThucDonController implements Initializable {
         Object source = event.getSource();
         if (source == btnThemMon) {
             try {
-                themMon();
-                System.out.println("Thêm dc rồi, yay :D");
+                if (!regexGia()) {
+                    showWarn("Bạn cần nhập đúng thông tin!");
+                } else {
+                    themMon();
+                    System.out.println("Thêm dc rồi, yay :D");
+                }
+
             }
             catch (Exception e) {
                 System.out.println(e);
@@ -229,6 +235,7 @@ public class ThucDonController implements Initializable {
 //        }
 //    }
 
+    //
     public Long getMaMonFromDatabase() {
         Session session = HibernateUtils.getFactory().openSession();
         Transaction transaction = null;
@@ -260,6 +267,31 @@ public class ThucDonController implements Initializable {
     }
 
 
+
+    //REGEX
+    public boolean regexGia(){
+        String rgia = txtGia.getText();
+        try {
+            double gia = Double.parseDouble(rgia);
+            if (gia > 0) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
+    private void showWarn(String message) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Kết Quả");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
+    //CRUD
     public void themMon() {
         MonAnDAO monAnDAO = new MonAnDAO(); // DAO for MonAn
         LoaiMonDAO loaiMonDAO = new LoaiMonDAO(); // DAO for LoaiMonAn
