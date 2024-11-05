@@ -20,8 +20,8 @@ public class HibernateUtils {
         properties.put(Environment.DIALECT, "org.hibernate.dialect.MySQL8Dialect");
         properties.put(Environment.DRIVER, "com.mysql.cj.jdbc.Driver");
         properties.put(Environment.URL, "jdbc:mysql://localhost/nhahangtobo");
-        properties.put(Environment.USER, "root");
-        properties.put(Environment.PASS, "29092004");
+        properties.put(Environment.USER, System.getenv("MYSQL_USER"));
+        properties.put(Environment.PASS, System.getenv("MYSQL_PASSWORD"));
         properties.put(Environment.HBM2DDL_AUTO, "update");
         properties.put(Environment.SHOW_SQL, "true");
 

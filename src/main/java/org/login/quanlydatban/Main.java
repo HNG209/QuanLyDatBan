@@ -7,6 +7,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.login.quanlydatban.encryptionUtils.EncryptionUtils;
 import org.login.quanlydatban.entity.*;
 import org.login.quanlydatban.entity.enums.TrangThaiHoaDon;
 import org.login.quanlydatban.hibernate.HibernateUtils;
@@ -17,7 +18,7 @@ import java.util.Objects;
 
 public class Main extends Application {
     @Override
-    public void start(Stage stage) throws IOException {
+    public void start(Stage stage) throws Exception {
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/org/login/quanlydatban/views/TrangDangNhap.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
 

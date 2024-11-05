@@ -12,6 +12,7 @@
     import javafx.scene.input.KeyCode;
     import javafx.stage.Stage;
     import org.login.quanlydatban.dao.TaiKhoanDAO;
+    import org.login.quanlydatban.encryptionUtils.EncryptionUtils;
     import org.login.quanlydatban.entity.TaiKhoan;
 
     import java.io.IOException;
@@ -49,7 +50,7 @@
                 if (event.getCode() == KeyCode.ENTER) {
                     try {
                         dangNhap();
-                    } catch (IOException e) {
+                    } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
                     password.requestFocus();
@@ -61,7 +62,7 @@
                 if (event.getCode() == KeyCode.ENTER) {
                     try {
                         dangNhap();
-                    } catch (IOException e) {
+                    } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
                 }
@@ -70,20 +71,20 @@
                 if (event.getCode() == KeyCode.ENTER) {
                     try {
                         dangNhap();
-                    } catch (IOException e) {
+                    } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
                 }
             });
         }
         @FXML
-        public void dangNhap() throws IOException {
+        public void dangNhap() throws Exception {
             TaiKhoan taiKhoan = taiKhoanDAO.getTaiKhoan(username.getText());
             if(taiKhoan != null){
                 if(password.getText().equals("")) {
                     System.out.println("Vui long nhap mat khau");
                 }
-                else if(taiKhoan.getPassword().equals(password.getText())){
+                else if(EncryptionUtils.encrypt(password.getText(), System.getenv("ENCRYPTION_KEY")).equals(taiKhoan.getPassword())){
                     System.out.println("dang nhap thanh cong");
                     showTrangChu(taiKhoan);
                 }

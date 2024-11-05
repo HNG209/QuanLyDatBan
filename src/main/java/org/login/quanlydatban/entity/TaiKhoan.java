@@ -11,7 +11,7 @@ public class TaiKhoan implements Serializable {
     @Id
     @Column(nullable = false)
     private String userName;
-    private static String tenNhanVien;
+
     @Column(nullable = false)
     private String password;
 
@@ -19,11 +19,6 @@ public class TaiKhoan implements Serializable {
     private NhanVien nhanVien;
 
     public TaiKhoan() {
-    }
-
-    public TaiKhoan(String userName, String password) {
-        this.userName = userName;
-        this.password = password;
     }
 
     public String getUserName() {
