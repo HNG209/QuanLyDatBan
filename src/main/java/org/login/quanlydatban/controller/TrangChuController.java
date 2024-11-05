@@ -44,7 +44,7 @@ public class TrangChuController {
     public void quanlynhanvien() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/QuanLyNhanVien_XemDS.fxml"));
         AnchorPane anchorPane = loader.load();
-        TrangQuanLyNhanVien nv = loader.getController();
+        TrangQuanLyNhanVienController nv = loader.getController();
         //System.out.println(taiKhoan.getUserName().toString());
         nv.setNhanvien(taiKhoan.getUserName().toString());
         borderPane.setCenter(anchorPane);

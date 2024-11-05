@@ -1,4 +1,4 @@
 package org.login.quanlydatban.controller;
 
-public class TrangQuanLyTaiKhoan {
+public class TrangQuanLyTaiKhoanController {
 }

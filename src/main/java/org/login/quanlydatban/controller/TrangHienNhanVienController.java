@@ -1,6 +1,5 @@
 package org.login.quanlydatban.controller;
 
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -17,7 +16,6 @@ import org.login.quanlydatban.entity.NhanVien;
 import org.login.quanlydatban.entity.enums.ChucVu;
 import org.login.quanlydatban.entity.enums.TrangThaiNhanVien;
 import org.login.quanlydatban.hibernate.HibernateUtils;
-
 import java.io.File;
 import java.net.URL;
 import java.time.LocalDate;
@@ -25,7 +23,7 @@ import java.time.Period;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class TrangThemNhanVien implements Initializable {
+public class TrangHienNhanVienController implements Initializable {
     @FXML
     private Button btnTaiAnh;
     @FXML
@@ -55,12 +53,25 @@ public class TrangThemNhanVien implements Initializable {
     private ComboBox<String> chucVu; // cbx chuc vu
     @FXML
     private DatePicker ngaySinh;
-    private String duongdan;// duong dan cua anh
-    private TrangQuanLyNhanVien trangQuanLyNhanVien;
 
+    private String duongdan;
 
-    public void SetTrangQuanLyNhanVien(TrangQuanLyNhanVien trangQuanLyNhanVien) {
+    private TrangQuanLyNhanVienController trangQuanLyNhanVien;
+
+    private String getMaNhanVien;
+    private  NhanVien nv;
+    private   NhanVienDAO nvdao;
+
+    public void SetTrangQuanLyNhanVien(TrangQuanLyNhanVienController trangQuanLyNhanVien) {
         this.trangQuanLyNhanVien = trangQuanLyNhanVien;
+    }
+
+    public String getGetMaNhanVien() {
+        return getMaNhanVien;
+    }
+
+    public void setGetMaNhanVien(String getMaNhanVien) {
+        this.getMaNhanVien = getMaNhanVien;
     }
 
     @FXML
@@ -70,7 +81,6 @@ public class TrangThemNhanVien implements Initializable {
             public void handle(ActionEvent event) {
                 System.out.println("Nhan nut tai anh");
                 FileChooser fileChooser = new FileChooser();
-
                 fileChooser.setInitialDirectory(new File("E:\\QuanLyDatBanNhom2\\QuanLyDatBan\\src\\main\\resources\\org\\login\\quanlydatban\\Image"));
                 fileChooser.setTitle("Mở file");
 
@@ -82,7 +92,6 @@ public class TrangThemNhanVien implements Initializable {
                 System.out.println("Nhấn nút tải ảnh");
 
                 if (file != null) {
-                    duongdan = file.getAbsolutePath();
                     duongdananh = file.getAbsolutePath(); // Cập nhật đường dẫn
                     // Cập nhật ImageView với ảnh mới
                     Image image = new Image(file.toURI().toString());
@@ -91,12 +100,6 @@ public class TrangThemNhanVien implements Initializable {
 
             }
         });
-    }
-    // them nhan vien
-    public void ThemNhanVien(String tenNhanVien){
-        NhanVienDAO nvdao = new NhanVienDAO();
-        NhanVien nv = nvdao.getNhanVien(tenNhanVien);
-
     }
 
 
@@ -110,7 +113,7 @@ public class TrangThemNhanVien implements Initializable {
 
     // cccd, 11 so
     public boolean cancuoccongdancheck(TextField cccd){
-        if(!cccd.getText().matches("^[0-9]{12}$")){
+        if(!cccd.getText().matches("^[0-9]{11}$")){
             showWarn("Can cuoc cong dan khong hop le");
             return false;
         }
@@ -120,8 +123,8 @@ public class TrangThemNhanVien implements Initializable {
     // so dien thoai
     public boolean sdtcheck(TextField dienThoai){
         if(!dienThoai.getText().matches("^0[0-9]{9}$")){
-           showWarn("So dien thoai khong hop le");
-           return false;
+            showWarn("So dien thoai khong hop le");
+            return false;
         }
         return true;
     }
@@ -153,7 +156,7 @@ public class TrangThemNhanVien implements Initializable {
     }
 
 
-   // rang buoc cho tuoi
+    // rang buoc cho tuoi
     private int calculateAge(LocalDate birthDate) {
         LocalDate currentDate = LocalDate.now();
         return Period.between(birthDate, currentDate).getYears();
@@ -188,7 +191,6 @@ public class TrangThemNhanVien implements Initializable {
     }
 
 
-
     public Long getMaxIdFromDatabase(String prefix) {
         Session session = HibernateUtils.getFactory().openSession();
         Transaction transaction = null;
@@ -202,7 +204,7 @@ public class TrangThemNhanVien implements Initializable {
                     .setParameter("prefix", prefix + "%")
                     .getResultList();
 
-             maxId = maNhanViens.stream()
+            maxId = maNhanViens.stream()
                     .map(ma -> Long.parseLong(ma.substring(prefix.length())))
                     .max(Long::compare)
                     .orElse(0L);
@@ -217,7 +219,6 @@ public class TrangThemNhanVien implements Initializable {
         return maxId;
     }
 
-    // ham sua nhan vien
 
     public String getTenNhanVien() {
         return tenNhanVien;
@@ -258,109 +259,177 @@ public class TrangThemNhanVien implements Initializable {
         alert.setContentText(message);
         alert.showAndWait();
     }
+    // Load du lieu len form
+    public void loaddulieulenform(NhanVien nhanVien){
+        String imageUrl = nhanVien.getHinhAnh();
+        // Tạo đối tượng Image từ URL
+        Image image = new Image("file:" + imageUrl);
+        // Tạo ImageView và đặt hình ảnh vào
+        image1.setImage(image);
+        maNhanVien.setText(nhanVien.getMaNhanVien());
+        hoTen.setText(nhanVien.getTenNhanVien());
+        diaChi.setText(nhanVien.getDiaChi());
+        cccd.setText(nhanVien.getCccd());
+        dienThoai.setText(nhanVien.getSdt());
+        ngaySinh.setValue(nhanVien.getNgaySinh());
+        if(nhanVien.getChucVuNhanVien().equals(ChucVu.NHAN_VIEN)){
+             chucVu.setValue("Nhân viên");
+        }else{
+            chucVu.setValue("Quản Lý");
+        }
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-            maNhanVien.setEditable(false);
-            hoTen.focusedProperty().addListener((obs, oldVal, newVal) ->{
-                if(!newVal){
-                    tencheck(hoTen);
-                }
-            });
+        // gioi tinh
+        if(nhanVien.isGioiTinh() == false){
+            gioiTinh.setValue("NAM");
+        }else{
+            gioiTinh.setValue("NỮ");
+        }
+        //Trang thai nhan vien
+        if(nhanVien.getTrangThaiNhanVien().equals(TrangThaiNhanVien.DANG_LAM)){
+            trangThaiLamViec.setValue("DANG_LAM");
 
-            ngaySinh.focusedProperty().addListener((obs, oldVal, newVal) ->{
-                if(!newVal){
-                   LocalDate l = ngaySinh.getValue();
-                   if(l != null){
-                      int tuoi = calculateAge(l);
-                      if(tuoi <= 15){
-                          showAlert("Tuoi khong hop le");
-                      }
-                   }
-                }
-            });
-            cccd.focusedProperty().addListener((obs, oldVal, newVal) ->{
-                if(!newVal){
-                    cancuoccongdancheck(cccd);
-                }
-            });
-            diaChi.focusedProperty().addListener((obs,oldVal,newVal)->{
-                if(!newVal){
-                    diaChicheck(diaChi);
-                }
-            });
-
-           dienThoai.focusedProperty().addListener((obs, oldVal, newVal) ->{
-                if(!newVal){
-                    sdtcheck(dienThoai);
-                }
-           });
-
-           chucVu.setOnAction(new EventHandler<ActionEvent>() {
-               @Override
-               public void handle(ActionEvent event) {
-                   String selectedChucVu = chucVu.getValue();
-                   String maNhanVien1 = generateMaNhanVien(selectedChucVu);
-                   maNhanVien.setText(maNhanVien1);
-               }
-           });
-
-           btnLuu.setOnAction(new EventHandler<ActionEvent>() {
-               @Override
-               public void handle(ActionEvent event) {
-                   if(tencheck(hoTen) && cancuoccongdancheck(cccd) && sdtcheck(dienThoai) && diaChicheck(diaChi)){
-                       if(chucvuCheck(chucVu) && trangThaiCheck(trangThaiLamViec) && gioiTinhCheck(gioiTinh)){
-                           ThemNhanVien();
-                           trangQuanLyNhanVien.xetLaiduLieuChoBang();
-                       }
-                   }else{
-                       showWarn("Ban can nhap day du thong tin");
-                   }
-               }
-           });
-           btnHuyBo.setOnAction(new EventHandler<ActionEvent>() {
-               @Override
-               public void handle(ActionEvent event) {
-                   // Giả sử bạn có một biến stage đại diện cho cửa sổ hiện tại
-                   Stage currentStage = (Stage) btnHuyBo.getScene().getWindow();
-                   currentStage.close(); // Đóng cửa sổ
-               }
-           });
-
+        }else if(nhanVien.getTrangThaiNhanVien().equals(TrangThaiNhanVien.NGHI_PHEP)){
+            trangThaiLamViec.setValue("NGHI_PHEP");
+        }else
+            trangThaiLamViec.setValue("NGHI_VIEC");
 
 
     }
 
 
+    public void suaNhanVien(){
 
-    // ham thêm nhân viên public NhanVien(String maNhanVien, String tenNhanVien, String sdt, String cccd,
-    // String diaChi, boolean gioiTinh, LocalDate ngaySinh, String hinhAnh,
-    // TrangThaiNhanVien trangThaiNhanVien, ChucVu chucVuNhanVien) {
-    public void ThemNhanVien(){
-         Boolean gt = gioiTinh.getValue().equals("NAM") ? false : true;
-         TrangThaiNhanVien tt = null;
-         if(trangThaiLamViec.getValue().equals("ĐANG LÀM")){
-             tt = TrangThaiNhanVien.DANG_LAM;
-         }else if(trangThaiLamViec.getValue().equals("NGHỈ PHÉP")){
-             tt = TrangThaiNhanVien.NGHI_PHEP;
-         }else if(trangThaiLamViec.getValue().equals("NGHỈ VIỆC")){
+        Boolean gt = gioiTinh.getValue().equals("NAM") ? false : true;
+        TrangThaiNhanVien tt = null;
+        if(trangThaiLamViec.getValue().equals("ĐANG LÀM")){
+            tt = TrangThaiNhanVien.DANG_LAM;
+        }else if(trangThaiLamViec.getValue().equals("NGHỈ PHÉP")){
+            tt = TrangThaiNhanVien.NGHI_PHEP;
+        }else if(trangThaiLamViec.getValue().equals("NGHỈ VIỆC")){
             tt = TrangThaiNhanVien.NGHI_VIEC;
-         }
+        }
 
-         ChucVu cv = null;
+        ChucVu cv = null;
         if(chucVu.getValue().equals("Nhân viên")){
             cv = ChucVu.NHAN_VIEN;
         }else if(chucVu.getValue().equals("Quản Lý")){
             cv = ChucVu.QUAN_LY;
         }
 
-         NhanVien nv = new NhanVien(maNhanVien.getText().toString(),hoTen.getText().toString(),dienThoai.getText().toString(),cccd.getText().toString(),diaChi.getText().toString(),gt,ngaySinh.getValue(),duongdan,tt,cv);
-         NhanVienDAO nvd = new NhanVienDAO();
-         nvd.addNhanVien(nv);
+        NhanVien nv = new NhanVien(maNhanVien.getText().toString(),hoTen.getText().toString(),dienThoai.getText().toString(),cccd.getText().toString(),diaChi.getText().toString(),gt,ngaySinh.getValue(),duongdan,tt,cv);
+        NhanVienDAO nvd = new NhanVienDAO();
+        nvd.updateNhanVien(nv);
 
-         System.out.println(maNhanVien.getText().toString()+ hoTen.getText().toString()+dienThoai.getText().toString()+ cccd.getText().toString()+ diaChi.getText().toString()+ ngaySinh.getValue()+ duongdan + tt + cv);
-         System.out.println(gt+"");
+        System.out.println(maNhanVien.getText().toString()+ hoTen.getText().toString()+dienThoai.getText().toString()+ cccd.getText().toString()+ diaChi.getText().toString()+ ngaySinh.getValue()+ duongdan + tt + cv);
+        System.out.println(gt+"");
+
+    }
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+//        System.out.println(getGetMaNhanVien() +" Ban trang sau khi thuc hien");
+
+        maNhanVien.setEditable(false);
+        hoTen.focusedProperty().addListener((obs, oldVal, newVal) ->{
+            if(!newVal){
+                tencheck(hoTen);
+            }
+        });
+
+        ngaySinh.focusedProperty().addListener((obs, oldVal, newVal) ->{
+            if(!newVal){
+                LocalDate l = ngaySinh.getValue();
+                if(l != null){
+                    int tuoi = calculateAge(l);
+                    if(tuoi <= 15){
+                        showAlert("Tuoi khong hop le");
+                    }
+                }
+            }
+        });
+        cccd.focusedProperty().addListener((obs, oldVal, newVal) ->{
+            if(!newVal){
+                cancuoccongdancheck(cccd);
+            }
+        });
+        diaChi.focusedProperty().addListener((obs,oldVal,newVal)->{
+            if(!newVal){
+                diaChicheck(diaChi);
+            }
+        });
+
+        dienThoai.focusedProperty().addListener((obs, oldVal, newVal) ->{
+            if(!newVal){
+                sdtcheck(dienThoai);
+            }
+        });
+
+        chucVu.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                String selectedChucVu = chucVu.getValue();
+                String maNhanVien1 = generateMaNhanVien(selectedChucVu);
+                maNhanVien.setText(maNhanVien1);
+            }
+        });
+
+        btnLuu.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                if(tencheck(hoTen) && cancuoccongdancheck(cccd) && sdtcheck(dienThoai) && diaChicheck(diaChi)){
+                    if(chucvuCheck(chucVu) && trangThaiCheck(trangThaiLamViec) && gioiTinhCheck(gioiTinh)){
+                        chinhSuaNhanVien();
+                       // nvdao.addNhanVien(nv);
+                        trangQuanLyNhanVien.xetLaiduLieuChoBang();
+                    }
+                }else{
+                    showWarn("Ban can nhap day du thong tin");
+                }
+            }
+        });
+
+        btnHuyBo.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                // Giả sử bạn có một biến stage đại diện cho cửa sổ hiện tại
+                Stage currentStage = (Stage) btnHuyBo.getScene().getWindow();
+                currentStage.close(); // Đóng cửa sổ
+            }
+        });
+
+
+
+    }
+
+
+    // suy nghi cho fix cho ma nhan vien va quan li
+    public void chinhSuaNhanVien(){
+        nvdao = new NhanVienDAO();
+        NhanVien nv1 = nvdao.getNhanVien(getMaNhanVien);
+        duongdan = nv1.getHinhAnh();
+        Boolean gt = gioiTinh.getValue().equals("NAM") ? false : true;
+        TrangThaiNhanVien tt = null;
+        if(trangThaiLamViec.getValue().equals("ĐANG LÀM")){
+            tt = TrangThaiNhanVien.DANG_LAM;
+        }else if(trangThaiLamViec.getValue().equals("NGHỈ PHÉP")){
+            tt = TrangThaiNhanVien.NGHI_PHEP;
+        }else if(trangThaiLamViec.getValue().equals("NGHỈ VIỆC")){
+            tt = TrangThaiNhanVien.NGHI_VIEC;
+        }
+
+        ChucVu cv = null;
+        if(chucVu.getValue().equals("Nhân viên")){
+            cv = ChucVu.NHAN_VIEN;
+        }else if(chucVu.getValue().equals("Quản Lý")){
+            cv = ChucVu.QUAN_LY;
+        }
+
+        nv = new NhanVien(maNhanVien.getText().toString(),hoTen.getText().toString(),dienThoai.getText().toString(),cccd.getText().toString(),diaChi.getText().toString(),gt,ngaySinh.getValue(),duongdan.toString(),tt,cv);
+        System.out.println(nv.toString());
+        NhanVienDAO nvd = new NhanVienDAO();
+        nvd.updateNhanVien(maNhanVien.getText(),nv);
+
+        System.out.println(maNhanVien.getText().toString()+ hoTen.getText().toString()+dienThoai.getText().toString()+ cccd.getText().toString()+ diaChi.getText().toString()+ ngaySinh.getValue()+ duongdan + tt + cv);
+        System.out.println(gt+"");
     }
 
 }
-

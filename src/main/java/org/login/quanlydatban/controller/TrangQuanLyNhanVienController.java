@@ -21,7 +21,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class TrangQuanLyNhanVien implements Initializable {
+public class TrangQuanLyNhanVienController implements Initializable {
     @FXML
     private Button btnthem;
     @FXML
@@ -81,9 +81,9 @@ public class TrangQuanLyNhanVien implements Initializable {
                     // Tải giao diện từ file FXML
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/QuanLyNhanVien.fxml"));
                     Parent newWindow = loader.load();
-                    TrangThemNhanVien nv = loader.getController();
+                    TrangThemNhanVienController nv = loader.getController();
                     nv.setTenNhanVien(getNhanvien().toString());
-                    nv.SetTrangQuanLyNhanVien(TrangQuanLyNhanVien.this);
+                    nv.SetTrangQuanLyNhanVien(TrangQuanLyNhanVienController.this);
                     // Tạo một cửa sổ mới
                     Stage stage = new Stage();
                     stage.setScene(new Scene(newWindow));
@@ -209,8 +209,8 @@ public class TrangQuanLyNhanVien implements Initializable {
 
                         FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/HienvaSuaNhanVien.fxml"));
                         Parent newWindow = loader.load();
-                        TrangHienNhanVien nvfml = loader.getController();
-                        nvfml.SetTrangQuanLyNhanVien(TrangQuanLyNhanVien.this);
+                        TrangHienNhanVienController nvfml = loader.getController();
+                        nvfml.SetTrangQuanLyNhanVien(TrangQuanLyNhanVienController.this);
                         nvfml.setGetMaNhanVien(cellValue);
                         nvfml.loaddulieulenform(nvtim);
                         System.out.println(nvfml.getGetMaNhanVien()+" ma nhan vien sau khi truyen ");
