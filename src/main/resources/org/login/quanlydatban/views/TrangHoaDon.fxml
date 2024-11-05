@@ -18,9 +18,9 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="635.0" prefWidth="1280.0" styleClass="gradient1" stylesheets="@style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.login.quanlydatban.controller.HoaDonController">
+<AnchorPane prefHeight="635.0" prefWidth="1280.0" styleClass="gradient1" stylesheets="../stylesheets/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.login.quanlydatban.controller.HoaDonController">
    <children>
-      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="529.0" layoutY="14.0" prefHeight="24.0" prefWidth="201.0" stylesheets="@style.css" text="Hóa Đơn" AnchorPane.leftAnchor="529.0" AnchorPane.rightAnchor="549.6">
+      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="529.0" layoutY="14.0" prefHeight="24.0" prefWidth="201.0" stylesheets="../stylesheets/style.css" text="Hóa Đơn" AnchorPane.leftAnchor="529.0" AnchorPane.rightAnchor="549.6">
          <font>
             <Font name="Arial" size="26.0" />
          </font></Label>
@@ -30,21 +30,21 @@
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="287.0" prefWidth="901.0" styleClass="bg1">
                      <children>
-                        <TableView layoutX="7.0" layoutY="7.0" prefHeight="229.0" prefWidth="901.0" style="-fx-border-color: green;" AnchorPane.bottomAnchor="8.200000000000017" AnchorPane.leftAnchor="7.0" AnchorPane.rightAnchor="7.999999999999886" AnchorPane.topAnchor="7.200000000000017">
+                        <TableView fx:id="tableHoaDon" layoutX="7.0" layoutY="7.0" prefHeight="229.0" prefWidth="901.0" style="-fx-border-color: green;" AnchorPane.bottomAnchor="8.200000000000017" AnchorPane.leftAnchor="7.0" AnchorPane.rightAnchor="7.999999999999886" AnchorPane.topAnchor="7.200000000000017">
                           <columns>
                               <TableColumn prefWidth="32.000003814697266">
                                  <graphic>
                                     <CheckBox mnemonicParsing="false" />
                                  </graphic>
                               </TableColumn>
-                              <TableColumn prefWidth="96.0000228881836" text="Mã hóa đơn" />
-                              <TableColumn prefWidth="150.00001525878906" text="Ngày lập hóa đơn" />
-                              <TableColumn prefWidth="126.66665649414062" text="Tên khách hàng" />
-                              <TableColumn prefWidth="100.00003051757812" text="Trạng thái" />
-                              <TableColumn prefWidth="107.3333740234375" text="Khu vực/ Bàn" />
-                              <TableColumn prefWidth="98.6666259765625" text="Nhân viên" />
-                              <TableColumn prefWidth="104.66668701171875" text="Tổng tiền" />
-                              <TableColumn prefWidth="78.0" text="Phụ thu" />
+                              <TableColumn fx:id="colMaHoaDon" prefWidth="96.0000228881836" text="Mã hóa đơn" />
+                              <TableColumn fx:id="colNgayLap" prefWidth="150.00001525878906" text="Ngày lập hóa đơn" />
+                              <TableColumn fx:id="colMaKhachHang" prefWidth="126.66665649414062" text="Tên khách hàng" />
+                              <TableColumn fx:id="colTrangThai" prefWidth="100.00003051757812" text="Trạng thái" />
+                              <TableColumn fx:id="colMaBan" prefWidth="107.3333740234375" text="Khu vực/ Bàn" />
+                              <TableColumn fx:id="colMaNhanVien" prefWidth="98.6666259765625" text="Nhân viên" />
+                              <TableColumn fx:id="colTongTien" prefWidth="104.66668701171875" text="Tổng tiền" />
+                              <TableColumn fx:id="colPhuThu" prefWidth="78.0" text="Phụ thu" />
                           </columns>
                         </TableView>
                      </children>
@@ -155,7 +155,7 @@
             <TableColumn prefWidth="104.0" text="Số lượng" />
          </columns>
       </TableView>
-      <AnchorPane layoutX="6.400000095367432" layoutY="132.0" style="-fx-border-color: black;" styleClass="round-box" stylesheets="@../stylesheets/style.css" AnchorPane.leftAnchor="6.6666666666667425" AnchorPane.rightAnchor="15.0">
+      <AnchorPane layoutX="6.400000095367432" layoutY="132.0" style="-fx-border-color: black;" stylesheets="@../stylesheets/style.css" AnchorPane.leftAnchor="6.6666666666667425" AnchorPane.rightAnchor="15.0">
          <children>
             <Label layoutX="53.599998474121094" layoutY="92.0" text="Tên khách hàng:" />
             <Label layoutX="53.599998474121094" layoutY="52.0" text="Mã khách hàng:" />
@@ -174,6 +174,10 @@
             <TextField layoutX="942.0" layoutY="128.0" prefHeight="26.0" prefWidth="242.0" AnchorPane.rightAnchor="73.99999999999977" />
             <ComboBox layoutX="942.0" layoutY="167.0" prefHeight="26.0" prefWidth="242.0" AnchorPane.rightAnchor="73.99999999999977" />
          </children>
+         <styleClass>
+            <String fx:value="round-box" />
+            <String fx:value="gradient2" />
+         </styleClass>
       </AnchorPane>
    </children>
 </AnchorPane>
