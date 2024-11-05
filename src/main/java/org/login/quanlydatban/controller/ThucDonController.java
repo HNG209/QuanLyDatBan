@@ -65,11 +65,12 @@ public class ThucDonController implements Initializable {
     @FXML
     private Button btnXoaRong;
 
+    @FXML
+    private Button btnRefresh;
+
+    private MonAn monAn;
+
     private MonAnDAO monAnDAO;
-
-    private String maMonAn;
-
-    private String maLoai;
 
     private String duongDanAnh;
 
@@ -132,7 +133,7 @@ public class ThucDonController implements Initializable {
 
                 CardMonAnThucDonController controller = loader.getController();
                 controller.setMonAnThucDon(i, this);
-
+                controller.setController(this);
                 flowPane.getChildren().add(pane);
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -164,6 +165,7 @@ public class ThucDonController implements Initializable {
                     showWarn("Bạn cần nhập đúng thông tin!");
                 } else {
                     themMon();
+                    refreshControl(event);
                     System.out.println("Thêm dc rồi, yay :D");
                 }
 
@@ -177,6 +179,8 @@ public class ThucDonController implements Initializable {
 
     @FXML
     void xoaRongControl(ActionEvent event) {
+        Image imageXoaRong = new Image(getClass().getResource("/org/login/quanlydatban/icons/restaurant.png").toExternalForm());
+
         Object source = event.getSource();
         if (source == btnXoaRong) {
             txtTenMonAn.requestFocus();
@@ -185,8 +189,35 @@ public class ThucDonController implements Initializable {
             cbtrangThaiMon.getSelectionModel().selectFirst();
             txtDonViTinh.setText("");
             txtGia.setText("");
-            anhMon.setImage(null);
+            anhMon.setImage(imageXoaRong);
             txfMoTa.setText("");
+        }
+    }
+
+    @FXML
+    void refreshControl(ActionEvent event) {
+        Object source = event.getSource();
+        if (source == btnRefresh || source == btnThemMon) {
+            flowPane.getChildren().clear(); // Clear existing items
+
+            List<MonAn> monAnList = monAnDAO.getAllMonAn(); // Retrieve the latest data from the database
+
+            for (MonAn monAn : monAnList) {
+                try {
+                    // Load the card UI for each item
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/uicomponents/CardMonAn_TrangThucDon.fxml"));
+                    AnchorPane pane = loader.load();
+
+                    // Set up the card controller with the MonAn data
+                    CardMonAnThucDonController controller = loader.getController();
+                    controller.setMonAnThucDon(monAn, this);
+
+                    // Add the card to the flowPane
+                    flowPane.getChildren().add(pane);
+                } catch (IOException e) {
+                    e.printStackTrace(); // Log the error
+                }
+            }
         }
     }
 //    private String generateLoaiMonAn(String prefix) {
@@ -361,6 +392,14 @@ public class ThucDonController implements Initializable {
         monAnDAO.themMonAn(monAn);
     }
 
+    public void setMonAn(MonAn monAn) {
+        this.monAn = monAn;
 
+        txtTenMonAn.setText(monAn.getTenMonAn());
+        //cbloaiMonAn.setSelectionModel(monAn.getLoaiMonAn());
+        cbtrangThaiMon.getItems();
+        txtDonViTinh.setText(monAn.getDonViTinh());
+        txtGia.setText(String.valueOf(monAn.getDonGia()));
+    }
 }
 

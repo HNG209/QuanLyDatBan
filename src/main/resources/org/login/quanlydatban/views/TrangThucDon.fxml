@@ -172,5 +172,14 @@
             </Button>
          </children>
       </GridPane>
+      <Button fx:id="btnRefresh" layoutX="713.0" layoutY="17.0" mnemonicParsing="false" onAction="#refreshControl" prefHeight="28.0" prefWidth="60.0" style="-fx-border-color: #F3B664; -fx-background-color: white;" styleClass="round-box">
+         <graphic>
+            <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../icons/refresh.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
    </children>
 </AnchorPane>
