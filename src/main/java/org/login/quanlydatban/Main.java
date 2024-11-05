@@ -6,12 +6,11 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.hibernate.Session;
-<<<<<<< HEAD
-=======
+
 import org.hibernate.SessionFactory;
 import org.login.quanlydatban.entity.*;
 import org.login.quanlydatban.entity.enums.TrangThaiHoaDon;
->>>>>>> 1cd7a75671cb3bf0f39ce522c536858a829da67e
+
 import org.login.quanlydatban.hibernate.HibernateUtils;
 
 import java.io.IOException;
