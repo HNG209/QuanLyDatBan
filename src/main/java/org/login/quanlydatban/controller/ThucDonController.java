@@ -13,6 +13,7 @@ import javafx.scene.layout.FlowPane;
 import javafx.stage.FileChooser;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.login.quanlydatban.dao.LoaiMonDAO;
 import org.login.quanlydatban.dao.MonAnDAO;
 import org.login.quanlydatban.entity.LoaiMonAn;
 import org.login.quanlydatban.entity.MonAn;
@@ -39,22 +40,14 @@ public class ThucDonController implements Initializable {
     @FXML
     private TableView<?> orderTable;
 
-    private MonAnDAO monAnDAO;
-
-    private String maMonAn;
-
-    private String maLoai;
-
-    private String duongDanAnh;
-
     @FXML
     private TextField txtTenMonAn;
 
     @FXML
     private TextField txtGia;
 
-//    @FXML
-//    private TextField txfMoTa;
+    @FXML
+    private TextArea txfMoTa;
 
     @FXML
     private TextField txtDonViTinh;
@@ -73,17 +66,19 @@ public class ThucDonController implements Initializable {
     @FXML
     private Button btnXoaRong;
 
+    private MonAnDAO monAnDAO;
+
+    private String maMonAn;
+
+    private String maLoai;
+
+    private String duongDanAnh;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         System.out.println();
         monAnDAO = new MonAnDAO();
         System.out.println(monAnDAO.getAllMonAn());
-        btnThemMon.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                layDuLieu();
-            }
-        });
 
         taiAnh.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -111,26 +106,20 @@ public class ThucDonController implements Initializable {
             }
         });
 
-         btnThemMon.setOnAction(new EventHandler<ActionEvent>() {
-             @Override
-             public void handle(ActionEvent event) {
-                 layDuLieu();
-             }
-         });
 
-        btnXoaRong.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                txtTenMonAn.requestFocus();
-                txtTenMonAn.setText("");
-                cbloaiMonAn.getSelectionModel().selectFirst();
-                cbtrangThaiMon.getSelectionModel().selectFirst();
-                txtDonViTinh.setText("");
-                txtGia.setText("");
-                anhMon.setImage(null);
-                //txfMoTa.setText("");
-            }
-        });
+//        btnXoaRong.setOnAction(new EventHandler<ActionEvent>() {
+//            @Override
+//            public void handle(ActionEvent event) {
+//                txtTenMonAn.requestFocus();
+//                txtTenMonAn.setText("");
+//                cbloaiMonAn.getSelectionModel().selectFirst();
+//                cbtrangThaiMon.getSelectionModel().selectFirst();
+//                txtDonViTinh.setText("");
+//                txtGia.setText("");
+//                anhMon.setImage(null);
+//                txfMoTa.setText("");
+//            }
+//        });
 
         monAnDAO.getAllMonAn();
         flowPane.prefHeightProperty().bind(scrollPane.heightProperty());
@@ -166,6 +155,35 @@ public class ThucDonController implements Initializable {
 //        });
     }
 
+    @FXML
+    void themControl(ActionEvent event) {
+        Object source = event.getSource();
+        if (source == btnThemMon) {
+            try {
+                themMon();
+                System.out.println("Thêm dc rồi, yay :D");
+            }
+            catch (Exception e) {
+                System.out.println(e);
+            }
+
+        }
+    }
+
+    @FXML
+    void xoaRongControl(ActionEvent event) {
+        Object source = event.getSource();
+        if (source == btnXoaRong) {
+            txtTenMonAn.requestFocus();
+            txtTenMonAn.setText("");
+            cbloaiMonAn.getSelectionModel().selectFirst();
+            cbtrangThaiMon.getSelectionModel().selectFirst();
+            txtDonViTinh.setText("");
+            txtGia.setText("");
+            anhMon.setImage(null);
+            txfMoTa.setText("");
+        }
+    }
 //    private String generateLoaiMonAn(String prefix) {
 //        Long maxId = getMaLoaiFromDatabase(prefix);
 //        Long newIdNumber = (maxId == null) ? 1 : maxId + 1; // Increment ID by 1
@@ -199,12 +217,20 @@ public class ThucDonController implements Initializable {
 //    }
 
     private String generateMaMonAn() {
-        Long maxId = getMaMonFromDatabase2();
+        Long maxId = getMaMonFromDatabase();
         Long newIdNumber = (maxId == null) ? 1 : maxId + 1; // Tăng mã lên 1
         return String.format("%04d", newIdNumber); // Định dạng mã
     }
 
-    public Long getMaMonFromDatabase2() {
+//    private void generateMaMonAn1() {
+//        int countRecord = 10;
+//        for(int i = 0; i < 10; i++) {
+//            String ma = "MA" +  String.format("%04d", i);
+//            System.out.println();
+//        }
+//    }
+
+    public Long getMaMonFromDatabase() {
         Session session = HibernateUtils.getFactory().openSession();
         Transaction transaction = null;
         Long maMon = null;
@@ -235,50 +261,44 @@ public class ThucDonController implements Initializable {
     }
 
 
+    public void themMon() {
+        MonAnDAO monAnDAO = new MonAnDAO(); // DAO for MonAn
+        LoaiMonDAO loaiMonDAO = new LoaiMonDAO(); // DAO for LoaiMonAn
 
-    // Nut lay du lieu
+        // Determine LoaiMonAn based on selected ComboBox value
+        String loaiMonAnValue = cbloaiMonAn.getValue(); // Value from ComboBox
+        LoaiMonAn loaiMon1 = null;
 
-    public void layDuLieu() {
-        LoaiMonAn loaiMon1 = new LoaiMonAn();
-        MonAnDAO madao = new MonAnDAO();// Initialize loaiMon1
-
-        String loaiMonAnValue = cbloaiMonAn.getValue();
-
-        TrangThaiMonAn trangThaiMonAn = null;
-
-        double gia = Double.parseDouble(txtGia.getText());
-
-        LoaiMonAn loai = new LoaiMonAn();
-
-        // Set the tenLoaiMonAn based on the selected value
+        // Fetch LoaiMonAn by id based on the selection
         switch (loaiMonAnValue) {
-            case "MON_CHIEN_GION":
-                loaiMon1.setTenLoaiMonAn(LoaiMonEnum.MON_CHIEN_GION);
-                break;
             case "TRANG_MIENG":
-                loaiMon1.setTenLoaiMonAn(LoaiMonEnum.TRANG_MIENG);
-                break;
-            case "KHAI_VI":
-                loaiMon1.setTenLoaiMonAn(LoaiMonEnum.KHAI_VI);
-                break;
-            case "NUOC_GIAI_KHAT":
-                loaiMon1.setTenLoaiMonAn(LoaiMonEnum.NUOC_GIAI_KHAT);
-                break;
-            case "MON_XAO":
-                loaiMon1.setTenLoaiMonAn(LoaiMonEnum.MON_XAO);
+                loaiMon1 = loaiMonDAO.getMaLoaiMon("7");
                 break;
             case "MON_HAI_SAN":
-                loaiMon1.setTenLoaiMonAn(LoaiMonEnum.MON_HAI_SAN);
+                loaiMon1 = loaiMonDAO.getMaLoaiMon("6");
+                break;
+            case "MON_TRUYEN_THONG":
+                loaiMon1 = loaiMonDAO.getMaLoaiMon("5");
+                break;
+            case "NUOC_GIAI_KHAT":
+                loaiMon1 = loaiMonDAO.getMaLoaiMon("4");
+                break;
+            case "KHAI_VI":
+                loaiMon1 = loaiMonDAO.getMaLoaiMon("3");
+                break;
+            case "MON_XAO":
+                loaiMon1 = loaiMonDAO.getMaLoaiMon("2");
                 break;
             default:
-                loaiMon1.setTenLoaiMonAn(LoaiMonEnum.MON_TRUYEN_THONG);
+                loaiMon1 = loaiMonDAO.getMaLoaiMon("1");
                 break;
         }
 
-        // Assuming trangThaiMon is a field that gets the status value from the UI
-        String trangThaiValue = cbtrangThaiMon.getValue(); // Get the selected value as a String
+        // Determine TrangThaiMonAn based on ComboBox value
+        TrangThaiMonAn trangThaiMonAn = null;
+        String trangThaiValue = cbtrangThaiMon.getValue(); // Value from ComboBox
 
-        // Set the trangThaiMonAn based on the selected status
+        // Set the appropriate TrangThaiMonAn enum value
         switch (trangThaiValue) {
             case "CO SAN":
                 trangThaiMonAn = TrangThaiMonAn.CO_SAN;
@@ -291,15 +311,25 @@ public class ThucDonController implements Initializable {
                 break;
         }
 
-        // Create the MonAn object
-        MonAn monAn = new MonAn(generateMaMonAn(), loaiMon1, txtTenMonAn.getText(), gia, txtDonViTinh.getText(), duongDanAnh, trangThaiMonAn);
+        // Get other input values from UI components
+        String moTa = txfMoTa.getText();
+        double gia = Double.parseDouble(txtGia.getText());
+        String tenMonAn = txtTenMonAn.getText();
+        String donViTinh = txtDonViTinh.getText();
 
-        madao.themMonAn(monAn);
+        // Generate ID for the new MonAn
+        String maMonAn = generateMaMonAn();
 
-        // Uncomment and use MonAnDAO when ready
-        // MonAnDAO mad = new MonAnDAO();
-        // mad.themMonAn(monAn);
+        // Assuming duongDanAnh is a field that holds the path of the selected image
+        String duongDanAnh = "path_to_image"; // replace with actual image path
+
+        // Create the new MonAn object
+        MonAn monAn = new MonAn(maMonAn, loaiMon1, tenMonAn, gia, donViTinh, duongDanAnh, trangThaiMonAn);
+
+        // Save MonAn to the database
+        monAnDAO.themMonAn(monAn);
     }
+
 
 }
 

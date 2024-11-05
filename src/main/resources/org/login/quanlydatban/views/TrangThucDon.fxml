@@ -32,16 +32,24 @@
                </image>
             </ImageView>
             <Button fx:id="taiAnh" layoutX="103.0" layoutY="369.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="118.0" styleClass="round-box" text="Tải ảnh" />
-            <TextField fx:id="txtGia" layoutX="101.0" layoutY="199.0" prefHeight="26.0" prefWidth="426.0" styleClass="round-box" />
+            <TextField fx:id="txtGia" layoutX="101.0" layoutY="199.0" prefHeight="26.0" prefWidth="426.0">
+               <styleClass>
+                  <String fx:value="round-box" />
+                  <String fx:value="underlined-style" />
+               </styleClass></TextField>
             <Label layoutX="22.0" layoutY="203.0" prefHeight="18.0" prefWidth="87.0" text="Giá" />
-            <TextField fx:id="txtDonViTinh" layoutX="101.0" layoutY="156.0" prefHeight="26.0" prefWidth="426.0" styleClass="round-box" />
+            <TextField fx:id="txtDonViTinh" layoutX="101.0" layoutY="156.0" prefHeight="26.0" prefWidth="426.0">
+               <styleClass>
+                  <String fx:value="round-box" />
+                  <String fx:value="underlined-style" />
+               </styleClass></TextField>
             <Label layoutX="22.0" layoutY="160.0" prefHeight="18.0" prefWidth="87.0" text="Đơn vị tính" />
             <Label layoutX="21.0" layoutY="69.0" prefHeight="18.0" prefWidth="75.0" text="Loại món ăn" />
             <ComboBox fx:id="cbloaiMonAn" layoutX="101.0" layoutY="65.0" prefHeight="26.0" prefWidth="426.0" styleClass="round-box">
                <items>
                   <FXCollections fx:factory="observableArrayList">
                      <String fx:value="TRANG_MIENG" />
-                     <String fx:value="KHAI VI" />
+                     <String fx:value="KHAI_VI" />
                      <String fx:value="MON_CHIEN_GION" />
                      <String fx:value="MON_XAO" />
                      <String fx:value="MON_HAI_SAN" />
@@ -60,7 +68,11 @@
                   </FXCollections>
                </items>
             </ComboBox>
-            <TextField fx:id="txtTenMonAn" layoutX="101.0" layoutY="20.0" prefHeight="26.0" prefWidth="426.0" styleClass="round-box" AnchorPane.rightAnchor="23.0" />
+            <TextField fx:id="txtTenMonAn" layoutX="101.0" layoutY="20.0" prefHeight="26.0" prefWidth="426.0" AnchorPane.rightAnchor="23.0">
+               <styleClass>
+                  <String fx:value="round-box" />
+                  <String fx:value="underlined-style" />
+               </styleClass></TextField>
          </children>
       </AnchorPane>
       <ScrollPane fx:id="scrollPane" layoutX="19.2" layoutY="51.2" prefHeight="566.0" prefWidth="686.0" AnchorPane.bottomAnchor="18.0" AnchorPane.leftAnchor="19.0" AnchorPane.rightAnchor="575.0" AnchorPane.topAnchor="51.0">
@@ -98,7 +110,7 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Button fx:id="btnThemMon" mnemonicParsing="false" prefHeight="70.0" prefWidth="117.0" stylesheets="@style.css" text="Thêm" textFill="#0b0b0b">
+            <Button fx:id="btnThemMon" mnemonicParsing="false" onAction="#themControl" prefHeight="70.0" prefWidth="117.0" stylesheets="@style.css" text="Thêm" textFill="#0b0b0b">
                <styleClass>
                   <String fx:value="round-box" />
                   <String fx:value="sage-green" />
@@ -146,7 +158,7 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Button fx:id="btnXoaRong" mnemonicParsing="false" prefHeight="69.0" prefWidth="130.0" styleClass="round-box" text="Làm sạch" textFill="#0b0b0b" GridPane.columnIndex="3">
+            <Button fx:id="btnXoaRong" mnemonicParsing="false" onAction="#xoaRongControl" prefHeight="69.0" prefWidth="130.0" styleClass="round-box" text="Làm sạch" textFill="#0b0b0b" GridPane.columnIndex="3">
                <font>
                   <Font size="16.0" />
                </font>

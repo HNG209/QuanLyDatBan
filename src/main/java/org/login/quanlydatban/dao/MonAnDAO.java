@@ -38,7 +38,7 @@ public class MonAnDAO {
         Transaction transaction = null;
         try {
             transaction = session.beginTransaction();
-            // Sử dụng HQL để lấy tất cả nhân viên
+            // Sử dụng HQL để lấy tất cả mon an
             org.hibernate.query.Query<MonAn> query = session.createQuery("FROM MonAn", MonAn.class);
             monAnList  = query.list(); // Nhớ lưu kết quả vào danh sách
             transaction.commit();
