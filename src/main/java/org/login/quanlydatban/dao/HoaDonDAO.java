@@ -1,6 +1,8 @@
 package org.login.quanlydatban.dao;
 
 import org.hibernate.Session;
+import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 import org.login.quanlydatban.entity.*;
 import org.login.quanlydatban.hibernate.HibernateUtils;
 
@@ -306,7 +308,37 @@ public class HoaDonDAO {
         session.close();
         return result;
 
+
     }
+  //  public List<HoaDon> getAllHoaDon() {
+//
+//        List<HoaDon> listHoaDon = null;
+//        Transaction transaction = null;
+//        Session session = HibernateUtils.getFactory().openSession();
+//        try (session) {
+//
+//            transaction = session.beginTransaction();
+//            listHoaDon = session.createQuery("FROM HoaDon", HoaDon.class).getResultList();
+//
+//
+//            transaction.commit();
+//        } catch (Exception e) {
+//            if (transaction != null) {
+//                transaction.rollback();
+//            }
+//            e.printStackTrace();
+//        }finally {
+//            session.close();
+//        }
+//
+//
+//       return listHoaDon;
+    //}
+
+
+
+
+
 
 
 }
