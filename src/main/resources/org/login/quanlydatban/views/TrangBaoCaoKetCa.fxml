@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="644.0" prefWidth="893.0" styleClass="gradient1" stylesheets="@../stylesheets/style.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.login.quanlydatban.controller.KetCaController">
+   <children>
+      <Label alignment="CENTER" layoutX="155.0" layoutY="63.0" prefHeight="38.0" prefWidth="758.0" text="Báo cáo kết ca" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <font>
+            <Font name="System Bold" size="36.0" />
+         </font>
+      </Label>
+      <AnchorPane layoutX="442.4" layoutY="51.2" prefHeight="530.0" prefWidth="890.0" AnchorPane.bottomAnchor="64.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="50.0">
+         <children>
+            <AnchorPane layoutX="59.2" layoutY="58.4" prefHeight="442.0" prefWidth="454.0" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="46.0">
+               <children>
+                  <Label layoutX="19.0" layoutY="25.0" prefHeight="40.0" prefWidth="145.0" text="Tên nhân viên:" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="33.0" layoutY="55.0" prefHeight="40.0" prefWidth="116.0" text="Tiền đầu ca:" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="100.0">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="18.0" layoutY="100.0" prefHeight="40.0" prefWidth="154.0" text="Tổng số hóa đơn:" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="145.0">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="1.0" layoutY="145.0" prefHeight="40.0" prefWidth="179.0" text="Tổng doanh thu:" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="190.0">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="40.0" layoutY="190.0" prefHeight="40.0" prefWidth="158.0" text="Tiền cuối ca:" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="235.0">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="tongSoHoaDon" disable="true" layoutX="181.0" layoutY="101.0" prefHeight="40.0" prefWidth="250.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="145.0">
+                     <styleClass>
+                        <String fx:value="bg1" />
+                        <String fx:value="round-box" />
+                     </styleClass>
+                  </Label>
+                  <Label fx:id="tongDoanhThu" disable="true" layoutX="55.0" layoutY="128.0" prefHeight="40.0" prefWidth="250.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="190.0">
+                     <styleClass>
+                        <String fx:value="bg1" />
+                        <String fx:value="round-box" />
+                     </styleClass>
+                  </Label>
+                  <Label fx:id="tenNhanVien" disable="true" layoutX="159.0" layoutY="9.0" prefHeight="40.0" prefWidth="250.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+                     <styleClass>
+                        <String fx:value="bg1" />
+                        <String fx:value="round-box" />
+                     </styleClass>
+                  </Label>
+                  <Label fx:id="tienCuoiCa" disable="true" layoutX="87.0" layoutY="195.0" prefHeight="40.0" prefWidth="250.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="235.0">
+                     <styleClass>
+                        <String fx:value="bg1" />
+                        <String fx:value="round-box" />
+                     </styleClass>
+                  </Label>
+                  <Label layoutX="38.0" layoutY="47.0" prefHeight="40.0" prefWidth="145.0" text="Giờ hiện tại:" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="55.0">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="thoiGianHienTai" disable="true" layoutX="60.0" layoutY="290.0" prefHeight="40.0" prefWidth="250.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="55.0">
+                     <styleClass>
+                        <String fx:value="bg1" />
+                        <String fx:value="round-box" />
+                     </styleClass>
+                  </Label>
+                  <HBox alignment="TOP_RIGHT" layoutX="233.0" layoutY="67.0" prefHeight="40.0" prefWidth="311.0" spacing="10.0" AnchorPane.rightAnchor="7.0" AnchorPane.topAnchor="100.0">
+                     <children>
+                        <TextField prefHeight="40.0" prefWidth="192.0" styleClass="underlined-style" />
+                        <Button mnemonicParsing="false" prefHeight="40.0" prefWidth="80.0" styleClass="sage-green" text="000">
+                           <font>
+                              <Font name="System Bold" size="18.0" />
+                           </font>
+                        </Button>
+                     </children>
+                  </HBox>
+                  <Label layoutX="-21.0" layoutY="312.0" prefHeight="40.0" prefWidth="174.0" text="Công thức tính:" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="320.0">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="29.0" layoutY="340.0" prefHeight="40.0" prefWidth="415.0" text="+  Tiền cuối ca = Tiền đầu ca + Tổng doanh thu" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="350.0">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="37.0" layoutY="385.0" prefHeight="40.0" prefWidth="404.0" text="+  Chênh lệch = Tổng mệnh giá - Tiền cuối ca" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="380.0">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                  </Label>
+               </children>
+            </AnchorPane>
+            <AnchorPane layoutX="544.0" layoutY="35.2" prefHeight="470.0" prefWidth="303.0" AnchorPane.leftAnchor="532.0" AnchorPane.rightAnchor="24.0" AnchorPane.topAnchor="23.0">
+               <children>
+                  <Label layoutX="33.0" layoutY="55.0" prefHeight="40.0" prefWidth="154.0" text="Mệnh giá 1.000đ:" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="18.0" layoutY="100.0" prefHeight="40.0" prefWidth="154.0" text="Mệnh giá 2.000đ:" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="50.0">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="1.0" layoutY="145.0" prefHeight="40.0" prefWidth="158.0" text="Mệnh giá 5.000đ:" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="90.0">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="40.0" layoutY="190.0" prefHeight="40.0" prefWidth="158.0" text="Mệnh giá 10.000đ:" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="130.0">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="menhGia1K" layoutX="190.0" layoutY="63.0" prefHeight="40.0" prefWidth="346.0" styleClass="underlined-style" AnchorPane.leftAnchor="189.6" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="5.0" />
+                  <Label layoutX="22.0" layoutY="240.0" prefHeight="40.0" prefWidth="158.0" text="Mệnh giá 20.000đ:" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="170.0">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="37.0" layoutY="290.0" prefHeight="40.0" prefWidth="158.0" text="Mệnh giá 50.000đ:" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="210.0">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="31.0" layoutY="380.0" prefHeight="40.0" prefWidth="184.0" text="Mệnh giá 200.000đ:" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="290.0">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="47.0" layoutY="340.0" prefHeight="40.0" prefWidth="189.0" text="Mệnh giá 100.000đ:" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="250.0">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="40.0" layoutY="430.0" prefHeight="40.0" prefWidth="174.0" text="Mệnh giá 500.000đ:" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="330.0">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="menhGia2K" layoutX="201.0" layoutY="66.0" prefHeight="40.0" prefWidth="346.0" styleClass="underlined-style" AnchorPane.leftAnchor="189.6" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="45.0" />
+                  <TextField fx:id="menhGia5K" layoutX="211.0" layoutY="76.0" prefHeight="40.0" prefWidth="346.0" styleClass="underlined-style" AnchorPane.leftAnchor="189.6" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="85.0" />
+                  <TextField fx:id="menhGia10K" layoutX="352.0" layoutY="165.0" prefHeight="40.0" prefWidth="346.0" styleClass="underlined-style" AnchorPane.leftAnchor="189.6" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="125.0" />
+                  <TextField fx:id="menhGia20K" layoutX="275.0" layoutY="190.0" prefHeight="40.0" prefWidth="346.0" styleClass="underlined-style" AnchorPane.leftAnchor="189.6" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="165.0" />
+                  <TextField fx:id="menhGia50K" layoutX="304.0" layoutY="206.0" prefHeight="40.0" prefWidth="346.0" styleClass="underlined-style" AnchorPane.leftAnchor="189.6" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="205.0" />
+                  <TextField fx:id="menhGia100K" layoutX="218.0" layoutY="266.0" prefHeight="40.0" prefWidth="346.0" styleClass="underlined-style" AnchorPane.leftAnchor="189.6" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="245.0" />
+                  <TextField fx:id="menhGia200K" layoutX="146.0" layoutY="298.0" prefHeight="40.0" prefWidth="346.0" styleClass="underlined-style" AnchorPane.leftAnchor="189.6" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="285.0" />
+                  <TextField fx:id="menhGia500K" layoutX="192.0" layoutY="389.0" prefHeight="40.0" prefWidth="346.0" styleClass="underlined-style" AnchorPane.leftAnchor="189.6" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="325.0" />
+                  <Label layoutX="50.0" layoutY="440.0" prefHeight="40.0" prefWidth="142.0" text="Tổng mệnh giá:" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.399999999999977" AnchorPane.topAnchor="380.0">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="tongMenhGia" disable="true" layoutX="88.0" layoutY="351.0" prefHeight="40.0" prefWidth="151.0" AnchorPane.leftAnchor="149.80000000000013" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="380.0">
+                     <styleClass>
+                        <String fx:value="round-box" />
+                        <String fx:value="bg1" />
+                     </styleClass>
+                  </Label>
+                  <Label layoutX="56.0" layoutY="450.0" prefHeight="40.0" prefWidth="142.0" text="Chênh lệch: " AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.399999999999977" AnchorPane.topAnchor="425.0">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="chenhLech" disable="true" layoutX="168.0" layoutY="420.0" prefHeight="40.0" prefWidth="151.0" AnchorPane.leftAnchor="149.80000000000013" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="425.0">
+                     <styleClass>
+                        <String fx:value="round-box" />
+                        <String fx:value="bg1" />
+                     </styleClass>
+                  </Label>
+               </children>
+            </AnchorPane>
+         </children>
+         <styleClass>
+            <String fx:value="rounded-pane" />
+            <String fx:value="bg1" />
+         </styleClass>
+      </AnchorPane>
+      <HBox fx:id="tienCuoica" alignment="CENTER" layoutX="3.0" layoutY="560.0" prefHeight="57.0" prefWidth="809.0" spacing="20.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+         <children>
+            <Button fx:id="huyKetCa" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="50.0" prefWidth="180.0" styleClass="light-coral" text="Hủy kết ca">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Button>
+            <Button fx:id="nutKetCa" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="50.0" prefWidth="180.0" styleClass="sage-green" text="Kết ca và xuất báo cáo">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Button>
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>
