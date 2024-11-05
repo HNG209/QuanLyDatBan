@@ -310,30 +310,23 @@ public class HoaDonDAO {
 
 
     }
-  //  public List<HoaDon> getAllHoaDon() {
-//
-//        List<HoaDon> listHoaDon = null;
-//        Transaction transaction = null;
-//        Session session = HibernateUtils.getFactory().openSession();
-//        try (session) {
-//
-//            transaction = session.beginTransaction();
-//            listHoaDon = session.createQuery("FROM HoaDon", HoaDon.class).getResultList();
-//
-//
-//            transaction.commit();
-//        } catch (Exception e) {
-//            if (transaction != null) {
-//                transaction.rollback();
-//            }
-//            e.printStackTrace();
-//        }finally {
-//            session.close();
-//        }
-//
-//
-//       return listHoaDon;
-    //}
+    public List<HoaDon> getAllHoaDon() {
+
+        List<HoaDon> listHoaDon = null;
+        Session session = HibernateUtils.getFactory().openSession();
+        try (session) {
+            session.getTransaction().begin();
+            listHoaDon = session.createQuery("FROM HoaDon", HoaDon.class).getResultList();
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }finally {
+            session.close();
+        }
+
+
+       return listHoaDon;
+    }
 
 
 

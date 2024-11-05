@@ -42,7 +42,9 @@ public class HoaDonController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         xemHoaDonDAO = new HoaDonDAO();
-        //List<HoaDon> hoaDonList = xemHoaDonDAO.getAllHoaDon();
+        List<HoaDon> hoaDonList = xemHoaDonDAO.getAllHoaDon();
+
+        hoaDonList.forEach(System.out::println);
 
        try {
             colMaHoaDon.setCellValueFactory(new PropertyValueFactory<>("maHoaDon"));
@@ -54,8 +56,9 @@ public class HoaDonController implements Initializable {
             colTongTien.setCellValueFactory(new PropertyValueFactory<>("tongTien"));
             colPhuThu.setCellValueFactory(new PropertyValueFactory<>("phuThu"));
 
-           // ObservableList<HoaDon> observableList = FXCollections.observableArrayList(hoaDonList);
-           // tableHoaDon.setItems(observableList);
+            ObservableList<HoaDon> observableList = FXCollections.observableArrayList(hoaDonList);
+            tableHoaDon.setItems(observableList);
+
         } catch (Exception e) {
             e.printStackTrace();
        }
