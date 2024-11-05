@@ -227,33 +227,5 @@ public class TrangQuanLyNhanVienController implements Initializable {
            }
 
    });
-
-//         tableNhanVien.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue)->{
-//                     int selectedIndex = 0;
-//                     if(newValue != null)
-//                        selectedIndex = tableNhanVien.getSelectionModel().getSelectedIndex(); // Lấy chỉ số của dòng được chọn
-//                        NhanVien rowData = tableNhanVien.getItems().get(selectedIndex); // Lấy mảng chuỗi từ chỉ số hàng
-//                        String cellValueID = rowData.getMaNhanVien(); // Lấy giá trị từ cột
-//                        NhanVien nv = listNhanVien.stream().filter(e -> e.getMaNhanVien().equals(cellValueID)).findFirst().orElse(null);
-//                        // Tải giao diện từ file FXML
-//                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/HienvaSuaNhanVien.fxml"));
-//                        Parent newWindow = null;
-//                        try {
-//                         newWindow = loader.load();
-//                        } catch (IOException e) {
-//                         throw new RuntimeException(e);
-//                        }
-//                        TrangHienNhanVien nvfml = loader.getController();
-//                        System.out.println(cellValueID);
-//
-//                        nvfml.SetTrangQuanLyNhanVien(TrangQuanLyNhanVien.this, nv);
-//
-//                        Stage stage = new Stage();
-//                        stage.setScene(new Scene(newWindow));
-//                        stage.setTitle("Quản Lý Nhân Viên");
-//                        stage.show();
-//
-//
-//        });
     }
 }

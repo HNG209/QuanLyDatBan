@@ -77,7 +77,7 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Button mnemonicParsing="false" prefHeight="70.0" prefWidth="117.0" stylesheets="@style.css" text="Thêm" textFill="#0b0b0b">
+            <Button mnemonicParsing="false" prefHeight="70.0" prefWidth="117.0" stylesheets="../stylesheets/style.css" text="Thêm" textFill="#0b0b0b">
                <styleClass>
                   <String fx:value="round-box" />
                   <String fx:value="sage-green" />
