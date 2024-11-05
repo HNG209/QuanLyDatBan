@@ -126,7 +126,7 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Button mnemonicParsing="false" prefHeight="70.0" prefWidth="118.0" text="Xóa món" textFill="#0b0b0b" GridPane.columnIndex="1">
+            <Button fx:id="btnXoaMon" mnemonicParsing="false" onAction="#xoaControl" prefHeight="70.0" prefWidth="118.0" text="Xóa món" textFill="#0b0b0b" GridPane.columnIndex="1">
                <font>
                   <Font size="16.0" />
                </font>
@@ -142,7 +142,7 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Button mnemonicParsing="false" prefHeight="70.0" prefWidth="131.0" text="Chỉnh sửa" textFill="#0b0b0b" GridPane.columnIndex="2">
+            <Button fx:id="btnCapNhat" mnemonicParsing="false" onAction="#capNhatControl" prefHeight="70.0" prefWidth="131.0" text="Chỉnh sửa" textFill="#0b0b0b" GridPane.columnIndex="2">
                <styleClass>
                   <String fx:value="round-box" />
                   <String fx:value="pale-lemon" />

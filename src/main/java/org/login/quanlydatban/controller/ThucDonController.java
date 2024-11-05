@@ -63,10 +63,18 @@ public class ThucDonController implements Initializable {
     private Button btnThemMon;
 
     @FXML
+    private Button btnXoaMon;
+
+    @FXML
+    private Button btnCapNhat;
+
+
+    @FXML
     private Button btnXoaRong;
 
     @FXML
     private Button btnRefresh;
+
 
     private MonAn monAn;
 
@@ -178,11 +186,85 @@ public class ThucDonController implements Initializable {
     }
 
     @FXML
+    void xoaControl(ActionEvent event) {
+        Object source = event.getSource();
+        if (source == btnXoaMon) {
+            try{
+                if (monAn == null) {
+                    showWarn("Bạn cần chọn một món để xóa!");
+                }
+                else {
+                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                    alert.setTitle("XÁC NHẬN XÓA");
+                    alert.setHeaderText("Bạn có chắc chắn muốn xóa món này?");
+
+                    ButtonType result = alert.showAndWait().orElse(ButtonType.CANCEL);
+                    if (result == ButtonType.OK) {
+                        monAnDAO.xoaMonAn(monAn.getMaMonAn());
+                        showWarn("Đã xóa thành công!");
+                        refreshControl(event);
+                        xoaRongControl(event);
+                    }
+                    else {
+                        System.out.println("Delete cancel");
+                    }
+
+                }
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+
+        }
+    }
+
+    @FXML
+    void capNhatControl(ActionEvent event) {
+        MonAn monMoi = new MonAn();
+        LoaiMonDAO loaiMonDAO = new LoaiMonDAO();
+        Object source = event.getSource();
+        if (source == btnCapNhat) {
+            try{
+                if (monAn == null) {
+                    showWarn("Bạn cần chọn một món để cập nhật!");
+                }
+                else {
+                    String tenMonMoi = txtTenMonAn.getText();
+                    String donViMoi = txtDonViTinh.getText();
+                    double giaMoi = Double.parseDouble(txtGia.getText());
+                    TrangThaiMonAn trangThaiMoi = comboTTValue();
+                    LoaiMonAn loaiMonMoi = comboLoaiMonValue();
+
+                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                    alert.setTitle("XÁC NHẬN CẬP NHẬT");
+                    alert.setHeaderText("Bạn có chắc chắn muốn cập nhật món này?");
+
+                    ButtonType result = alert.showAndWait().orElse(ButtonType.CANCEL);
+
+                    if (result == ButtonType.OK) {
+                        monMoi = new MonAn(monAn.getMaMonAn(), loaiMonMoi, tenMonMoi, giaMoi, donViMoi, duongDanAnh, trangThaiMoi);
+                        monAnDAO.capNhatMonAn(monAn.getMaMonAn(), monMoi);
+                        showWarn("Đã cập nhật thành công!");
+                        refreshControl(event);
+
+                    }
+                    else {
+                        System.out.println("Update cancel");
+                    }
+
+                }
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+
+        }
+    }
+
+    @FXML
     void xoaRongControl(ActionEvent event) {
         Image imageXoaRong = new Image(getClass().getResource("/org/login/quanlydatban/icons/restaurant.png").toExternalForm());
 
         Object source = event.getSource();
-        if (source == btnXoaRong) {
+        if (source == btnXoaRong || source == btnXoaMon) {
             txtTenMonAn.requestFocus();
             txtTenMonAn.setText("");
             cbloaiMonAn.getSelectionModel().selectFirst();
@@ -197,7 +279,7 @@ public class ThucDonController implements Initializable {
     @FXML
     void refreshControl(ActionEvent event) {
         Object source = event.getSource();
-        if (source == btnRefresh || source == btnThemMon) {
+        if (source == btnRefresh || source == btnThemMon || source == btnXoaMon) {
             flowPane.getChildren().clear(); // Clear existing items
 
             List<MonAn> monAnList = monAnDAO.getAllMonAn(); // Retrieve the latest data from the database
@@ -325,8 +407,32 @@ public class ThucDonController implements Initializable {
     //CRUD
     public void themMon() {
         MonAnDAO monAnDAO = new MonAnDAO(); // DAO for MonAn
-        LoaiMonDAO loaiMonDAO = new LoaiMonDAO(); // DAO for LoaiMonAn
 
+        LoaiMonAn loaiMon = comboLoaiMonValue();
+
+        TrangThaiMonAn ttMonAn = comboTTValue();
+
+        // Get other input values from UI components
+        String moTa = txfMoTa.getText();
+        double gia = Double.parseDouble(txtGia.getText());
+        String tenMonAn = txtTenMonAn.getText();
+        String donViTinh = txtDonViTinh.getText();
+
+        // Generate ID for the new MonAn
+        String maMonAn = generateMaMonAn();
+
+        // Assuming duongDanAnh is a field that holds the path of the selected image
+        String duongDanAnh = "path_to_image"; // replace with actual image path
+
+        // Create the new MonAn object
+        MonAn monAn = new MonAn(maMonAn, loaiMon, tenMonAn, gia, donViTinh, duongDanAnh, ttMonAn);
+
+        // Save MonAn to the database
+        monAnDAO.themMonAn(monAn);
+    }
+
+    public LoaiMonAn comboLoaiMonValue () {
+        LoaiMonDAO loaiMonDAO = new LoaiMonDAO(); // DAO for LoaiMonAn
         // Determine LoaiMonAn based on selected ComboBox value
         String loaiMonAnValue = cbloaiMonAn.getValue(); // Value from ComboBox
         LoaiMonAn loaiMon1 = null;
@@ -355,7 +461,10 @@ public class ThucDonController implements Initializable {
                 loaiMon1 = loaiMonDAO.getMaLoaiMon("1");
                 break;
         }
+        return loaiMon1;
+    }
 
+    public TrangThaiMonAn comboTTValue () {
         // Determine TrangThaiMonAn based on ComboBox value
         TrangThaiMonAn trangThaiMonAn = null;
         String trangThaiValue = cbtrangThaiMon.getValue(); // Value from ComboBox
@@ -372,34 +481,46 @@ public class ThucDonController implements Initializable {
                 trangThaiMonAn = TrangThaiMonAn.NGUNG_BAN;
                 break;
         }
-
-        // Get other input values from UI components
-        String moTa = txfMoTa.getText();
-        double gia = Double.parseDouble(txtGia.getText());
-        String tenMonAn = txtTenMonAn.getText();
-        String donViTinh = txtDonViTinh.getText();
-
-        // Generate ID for the new MonAn
-        String maMonAn = generateMaMonAn();
-
-        // Assuming duongDanAnh is a field that holds the path of the selected image
-        String duongDanAnh = "path_to_image"; // replace with actual image path
-
-        // Create the new MonAn object
-        MonAn monAn = new MonAn(maMonAn, loaiMon1, tenMonAn, gia, donViTinh, duongDanAnh, trangThaiMonAn);
-
-        // Save MonAn to the database
-        monAnDAO.themMonAn(monAn);
+        return trangThaiMonAn;
     }
 
     public void setMonAn(MonAn monAn) {
         this.monAn = monAn;
-
+        String ma = monAn.getMaMonAn();
         txtTenMonAn.setText(monAn.getTenMonAn());
-        //cbloaiMonAn.setSelectionModel(monAn.getLoaiMonAn());
-        cbtrangThaiMon.getItems();
+
+        LoaiMonAn lma = monAn.getLoaiMonAn();
+        String loaiValue = null;
+
+        switch (lma.getMaLoaiMonAn()) {
+            case "7":
+                loaiValue = "TRANG_MIENG";
+                break;
+            case "6":
+                loaiValue = "MON_HAI_SAN";
+                break;
+            case "5":
+                loaiValue = "MON_TRUYEN_THONG";
+                break;
+            case "4":
+                loaiValue = "NUOC_GIAI_KHAT";
+                break;
+            case "3":
+                loaiValue = "KHAI_VI";
+                break;
+            case "2":
+                loaiValue = "MON_XAO";
+                break;
+            default:
+                loaiValue = "MON_CHIEN_GION";
+                break;
+        }
+
+        cbloaiMonAn.setValue(loaiValue);
+        cbtrangThaiMon.setValue(String.valueOf(monAn.getTrangThaiMonAn()));
         txtDonViTinh.setText(monAn.getDonViTinh());
         txtGia.setText(String.valueOf(monAn.getDonGia()));
     }
+
 }
 
