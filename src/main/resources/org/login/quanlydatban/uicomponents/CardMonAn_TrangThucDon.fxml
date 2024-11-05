@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="240.0" prefWidth="150.0" stylesheets="@../stylesheets/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.login.quanlydatban.controller.CardMonAnController">
+<AnchorPane prefHeight="240.0" prefWidth="150.0" stylesheets="@../stylesheets/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.login.quanlydatban.controller.CardMonAnThucDonController">
    <children>
       <ImageView fitHeight="120.0" fitWidth="168.0" layoutX="15.0" layoutY="9.0" pickOnBounds="true" preserveRatio="true">
          <image>
@@ -26,7 +26,7 @@
          </font>
       </Label>
       <Button layoutX="15.0" layoutY="170.0" mnemonicParsing="false" prefHeight="20.0" prefWidth="120.0" styleClass="sunset-orange" text="Chi tiết" />
-      <Button layoutX="15.0" layoutY="201.0" mnemonicParsing="false" onAction="#them" prefHeight="20.0" prefWidth="120.0" styleClass="sage-green" text="Chọn" />
+      <Button fx:id="btnChonMon" layoutX="15.0" layoutY="201.0" mnemonicParsing="false" prefHeight="20.0" prefWidth="120.0" styleClass="sage-green" text="Chọn" />
    </children>
    <styleClass>
       <String fx:value="rounded-pane" />

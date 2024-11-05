@@ -4,7 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import org.login.quanlydatban.entity.MonAn;
 
-public class CardMonAnController {
+public class CardMonAnThucDonController {
 
     @FXML
     private Label giaTien;
@@ -21,11 +21,10 @@ public class CardMonAnController {
 
     }
 
-    public void setMonAn(MonAn monAn, DatMonController controller) {
+    public void setMonAnThucDon(MonAn monAn, ThucDonController controller) {
         this.monAn = monAn;
-        this.controller = controller;
+        this.controllerThucDon = controller;
         tenMon.setText(monAn.getTenMonAn());
         giaTien.setText(String.valueOf(monAn.getDonGia()));
     }
-
 }

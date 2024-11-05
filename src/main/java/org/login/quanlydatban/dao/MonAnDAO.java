@@ -74,6 +74,29 @@ public class MonAnDAO {
     }
 
 
+    public void xoaMonAn(String maMonAn) {
+        Session session = HibernateUtils.getFactory().openSession();
+        Transaction transaction = null;
+
+        try {
+            transaction = session.beginTransaction();
+            MonAn monAn = session.createQuery("FROM MonAn WHERE maMonAn = :maMonAn", MonAn.class)
+                    .setParameter("maMonAn", maMonAn)
+                    .uniqueResult();
+
+            if (monAn != null) {
+                session.delete(monAn); // Delete the object
+                transaction.commit();
+            }
+        } catch (Exception e) {
+            if (transaction != null) transaction.rollback();
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+    }
+
+
 
     public void capNhatMonAn(MonAn monAn) {
         Session session = HibernateUtils.getFactory().openSession();

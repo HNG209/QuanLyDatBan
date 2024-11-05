@@ -17,7 +17,6 @@ import org.login.quanlydatban.dao.LoaiMonDAO;
 import org.login.quanlydatban.dao.MonAnDAO;
 import org.login.quanlydatban.entity.LoaiMonAn;
 import org.login.quanlydatban.entity.MonAn;
-import org.login.quanlydatban.entity.enums.LoaiMonEnum;
 import org.login.quanlydatban.entity.enums.TrangThaiMonAn;
 import org.login.quanlydatban.hibernate.HibernateUtils;
 
@@ -130,7 +129,7 @@ public class ThucDonController implements Initializable {
             try {
                 AnchorPane pane = loader.load();
 
-                CardMonAnController controller = loader.getController();
+                CardMonAnThucDonController controller = loader.getController();
                 controller.setMonAnThucDon(i, this);
 
                 flowPane.getChildren().add(pane);
