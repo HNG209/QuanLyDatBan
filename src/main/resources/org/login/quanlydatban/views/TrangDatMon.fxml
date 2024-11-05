@@ -50,7 +50,7 @@
                   </Label>
                   <TextField fx:id="trangThaiBanText" editable="false" prefHeight="26.0" prefWidth="363.0" styleClass="underlined-style" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                   <TextField fx:id="banID" editable="false" layoutX="169.0" layoutY="148.0" prefHeight="26.0" prefWidth="363.0" styleClass="underlined-style" GridPane.columnIndex="1" />
-                  <TextField editable="false" layoutX="169.0" layoutY="148.0" prefHeight="26.0" prefWidth="363.0" styleClass="underlined-style" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <TextField fx:id="tongTienTxt" editable="false" layoutX="169.0" layoutY="148.0" prefHeight="26.0" prefWidth="363.0" styleClass="underlined-style" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                   <TextField layoutX="108.0" layoutY="88.0" prefHeight="26.0" prefWidth="363.0" styleClass="underlined-style" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                   <TextField layoutX="108.0" layoutY="123.0" prefHeight="26.0" prefWidth="363.0" styleClass="underlined-style" GridPane.columnIndex="1" GridPane.rowIndex="5" />
                   <Label alignment="CENTER" layoutX="10.0" layoutY="13.0" prefHeight="30.0" prefWidth="101.0" text="Trạng thái bàn:" GridPane.rowIndex="1">

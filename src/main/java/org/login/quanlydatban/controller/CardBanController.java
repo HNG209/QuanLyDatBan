@@ -62,6 +62,7 @@ public class CardBanController implements Initializable {
                 if(!list.isEmpty()){
                     HoaDon hoaDon = list.get(list.size() - 1);
                     controller.setHoaDon(hoaDon);
+                    controller.capNhatTongTien();
                 }
 
                 pane.setCenter(anchorPane);

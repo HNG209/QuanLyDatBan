@@ -58,6 +58,10 @@ public class ChiTietHoaDon implements Serializable {
         this.hoaDon = hoaDon;
     }
 
+    public double tinhTongCTHD() {
+        return monAn.getDonGia() * soLuong;
+    }
+
     @PrePersist
     private void generateCompositeKey() {
         if (monAn != null && hoaDon != null && this.maChiTietHoaDon == null) {

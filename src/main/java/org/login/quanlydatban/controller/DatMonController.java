@@ -23,6 +23,7 @@ import org.login.quanlydatban.dao.MonAnDAO;
 import org.login.quanlydatban.entity.*;
 import org.login.quanlydatban.entity.enums.TrangThaiBan;
 import org.login.quanlydatban.entity.enums.TrangThaiHoaDon;
+import org.login.quanlydatban.entity.keygenerator.CTHDCompositeKey;
 import org.login.quanlydatban.hibernate.HibernateUtils;
 
 import java.io.IOException;
@@ -47,6 +48,9 @@ public class DatMonController implements Initializable {
 
     @FXML
     private TextField trangThaiBanText;
+
+    @FXML
+    private TextField tongTienTxt;
 
     @FXML
     private Button btnGiuBan;
@@ -138,6 +142,10 @@ public class DatMonController implements Initializable {
 //        });
     }
 
+    public void capNhatTongTien() {
+        tongTienTxt.setText(String.valueOf(hoaDon.tinhTongTien()));
+    }
+
     public void setBan(Ban ban) {
         this.ban = ban;
         this.banID.setText(ban.getMaBan());
@@ -164,7 +172,7 @@ public class DatMonController implements Initializable {
     public void setHoaDon(HoaDon hoaDon) {
         this.hoaDon = hoaDon;
         chiTietHoaDonDAO.getCTHDfromHD(hoaDon).forEach(
-                i -> themDuLieuVaoBangMonAn(new Object[] {i.getMonAn().getMaMonAn(),
+                i -> loadBang(new Object[] {i.getMonAn().getMaMonAn(),
                         i.getMonAn().getTenMonAn(),
                         i.getMonAn().getDonGia(),
                         i.getSoLuong(),
@@ -215,14 +223,12 @@ public class DatMonController implements Initializable {
 
             ban.setTrangThaiBan(TrangThaiBan.BAN_TRONG);
             trangThaiBanText.setText(TrangThaiBan.BAN_TRONG.toString());
-            Session session = HibernateUtils.getFactory().openSession();
-            session.getTransaction().begin();
 
             hoaDonDAO.updateHoaDon(hoaDon);
             banDAO.updateBan(ban);
 
-            session.getTransaction().commit();
-            session.close();
+            this.btnHuy.setVisible(false);
+            this.btnGiuBan.setVisible(true);
         }
     }
 
@@ -239,8 +245,9 @@ public class DatMonController implements Initializable {
         }
     }
 
-    public void themChiTietHoaDon(MonAn monAn){
+    public void themChiTietHoaDon(MonAn monAn){//tao 1 lan
         ChiTietHoaDon chiTietHoaDon = new ChiTietHoaDon();
+
         chiTietHoaDon.setHoaDon(hoaDon);
         chiTietHoaDon.setMonAn(monAn);
         chiTietHoaDon.setSoLuong(1);
@@ -248,7 +255,7 @@ public class DatMonController implements Initializable {
         chiTietHoaDonDAO.luuCTHD(chiTietHoaDon);
     }
 
-    public void themDuLieuVaoBangMonAn(Object[] objects){
+    public void themDuLieuVaoBangMonAn(Object[] objects, MonAn monAn){
         boolean trungMaMonAn = false;
         String maMonAnMoi = objects[0].toString();
         int soLuongMoi = Integer.parseInt(objects[3].toString());
@@ -260,18 +267,20 @@ public class DatMonController implements Initializable {
                 orderTable.refresh(); // Refresh table to show updated quantity
                 trungMaMonAn = true;
 
-//                ChiTietHoaDon chiTietHoaDon = new ChiTietHoaDon();
-//                chiTietHoaDon.setHoaDon(hoaDon);
-//                chiTietHoaDon.setMonAn(monAnDAO.getMonAnByID(maMonAnHienTai));
-//                chiTietHoaDon.setSoLuong(soLuongMoi + soLuongHienTai);
-//
-//                chiTietHoaDonDAO.luuCTHD(chiTietHoaDon);
+                CTHDCompositeKey key = new CTHDCompositeKey(hoaDon.getMaHoaDon(), maMonAnHienTai);
+
+                chiTietHoaDonDAO.capNhatSoLuong(key, soLuongMoi + soLuongHienTai);
                 break;
             }
         }
         if(!trungMaMonAn) {
             orderTable.getItems().add(objects);
+            themChiTietHoaDon(monAn);
         }
+    }
+
+    public void loadBang(Object[] objects) {
+        orderTable.getItems().add(objects);
     }
 
     public boolean xacNhan(String text) {

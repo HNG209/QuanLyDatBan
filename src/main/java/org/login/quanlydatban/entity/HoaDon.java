@@ -1,6 +1,7 @@
 package org.login.quanlydatban.entity;
 
 import org.hibernate.Session;
+import org.login.quanlydatban.dao.ChiTietHoaDonDAO;
 import org.login.quanlydatban.entity.enums.TrangThaiHoaDon;
 import org.login.quanlydatban.entity.keygenerator.DailyCounter;
 import org.login.quanlydatban.hibernate.HibernateUtils;
@@ -25,8 +26,7 @@ public class HoaDon implements Serializable {
     @JoinColumn(name = "maBan")
     private Ban ban;
 
-    @OneToMany(mappedBy = "hoaDon", cascade = CascadeType.MERGE)
-//    @JoinColumn(name = "maHoaDon")
+    @OneToMany(mappedBy = "hoaDon", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<ChiTietHoaDon> chiTietHoaDon;
     @ManyToOne
     @JoinColumn(name = "maKhachHang")
@@ -42,11 +42,18 @@ public class HoaDon implements Serializable {
     @Column
     private double phuThu;
 
+    @Transient
+    private double tongTien;
+
+    @Transient
+    private ChiTietHoaDonDAO chiTietHoaDonDAO;
     @PrePersist
+    @PreUpdate
     public void generateId() {
         if (this.maHoaDon == null) {
             this.maHoaDon = generateCustomId();
         }
+        tongTien = tinhTongTien();
     }
 
     private String generateCustomId() {
@@ -151,6 +158,10 @@ public class HoaDon implements Serializable {
         return chiTietHoaDon;
     }
 
+    public double tinhTongTien() {
+        chiTietHoaDonDAO = new ChiTietHoaDonDAO();
+        return chiTietHoaDonDAO.fetchChiTietHoaDonNative(maHoaDon).stream().mapToDouble(ChiTietHoaDon::tinhTongCTHD).sum();
+    }
     @Override
     public String toString() {
         return "HoaDon{" +

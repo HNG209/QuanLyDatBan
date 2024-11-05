@@ -314,7 +314,7 @@ public class HoaDonDAO {
         Session session = HibernateUtils.getFactory().openSession();
         session.getTransaction().begin();
 
-        session.save(hoaDon);
+        session.persist(hoaDon);
 
         session.getTransaction().commit();
         session.close();
@@ -322,6 +322,15 @@ public class HoaDonDAO {
         return hoaDon;
     }
 
+    public HoaDon getHoaDon(String maHD) {
+        Session session = HibernateUtils.getFactory().openSession();
+
+        HoaDon hoaDon = session.get(HoaDon.class, maHD);
+
+        session.close();
+
+        return hoaDon;
+    }
     public HoaDon updateHoaDon(HoaDon hoaDon) {
         Session session = HibernateUtils.getFactory().openSession();
         session.getTransaction().begin();
