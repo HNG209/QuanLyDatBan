@@ -44,7 +44,6 @@ public class HoaDonController implements Initializable {
         xemHoaDonDAO = new HoaDonDAO();
         List<HoaDon> hoaDonList = xemHoaDonDAO.getAllHoaDon();
 
-        hoaDonList.forEach(System.out::println);
 
        try {
             colMaHoaDon.setCellValueFactory(new PropertyValueFactory<>("maHoaDon"));
