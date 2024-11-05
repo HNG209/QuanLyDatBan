@@ -323,9 +323,11 @@ public class HoaDonDAO {
         }finally {
             session.close();
         }
+        if(listHoaDon == null){
+            System.out.println("Không có hóa đơn nào");
+        }
 
-
-       return listHoaDon;
+        return listHoaDon;
     }
 
 
