@@ -1,8 +1,14 @@
 package org.login.quanlydatban.dao;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import org.hibernate.Session;
 import org.login.quanlydatban.entity.TaiKhoan;
 import org.login.quanlydatban.hibernate.HibernateUtils;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 public class TaiKhoanDAO {
     private TaiKhoan taiKhoan;
@@ -19,4 +25,8 @@ public class TaiKhoanDAO {
         session.close();
         return taiKhoan;
     }
+
+
+    // lay ra bang danh sach tai khoan load len trang QuanLyTaiKhoan
+
 }

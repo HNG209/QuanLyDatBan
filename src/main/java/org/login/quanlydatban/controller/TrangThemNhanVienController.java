@@ -13,20 +13,26 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.login.quanlydatban.dao.NhanVienDAO;
 import org.login.quanlydatban.entity.NhanVien;
+import org.login.quanlydatban.entity.TaiKhoan;
 import org.login.quanlydatban.entity.enums.ChucVu;
 import org.login.quanlydatban.entity.enums.TrangThaiNhanVien;
 import org.login.quanlydatban.hibernate.HibernateUtils;
 
+import javax.crypto.Cipher;
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
 import java.io.File;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.Base64;
 import java.util.List;
 import java.util.ResourceBundle;
 
 public class TrangThemNhanVienController implements Initializable {
     @FXML
     private Button btnTaiAnh;
+    private static final String ALGORITHM = "AES";
     @FXML
     private ImageView image1;
     private String duongdananh;
@@ -309,7 +315,11 @@ public class TrangThemNhanVienController implements Initializable {
                public void handle(ActionEvent event) {
                    if(tencheck(hoTen) && cancuoccongdancheck(cccd) && sdtcheck(dienThoai) && diaChicheck(diaChi)){
                        if(chucvuCheck(chucVu) && trangThaiCheck(trangThaiLamViec) && gioiTinhCheck(gioiTinh)){
-                           ThemNhanVien();
+                           try {
+                               ThemNhanVien();
+                           } catch (Exception e) {
+                               throw new RuntimeException(e);
+                           }
                            trangQuanLyNhanVien.xetLaiduLieuChoBang();
                        }
                    }else{
@@ -330,12 +340,31 @@ public class TrangThemNhanVienController implements Initializable {
 
     }
 
+    public  String encrypt(String data, SecretKey secretKey) throws Exception {
+        Cipher cipher = Cipher.getInstance(ALGORITHM);
+        cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+        byte[] encryptedData = cipher.doFinal(data.getBytes());
+        return Base64.getEncoder().encodeToString(encryptedData);
+    }
 
+    public  SecretKey generateKey() throws Exception {
+        KeyGenerator keyGen = KeyGenerator.getInstance(ALGORITHM);
+        keyGen.init(128); // You can choose 192 or 256 bits
+        return keyGen.generateKey();
+    }
+
+    public String decrypt(String encryptedData, SecretKey secretKey) throws Exception {
+        Cipher cipher = Cipher.getInstance(ALGORITHM);
+        cipher.init(Cipher.DECRYPT_MODE, secretKey);
+        byte[] decodedData = Base64.getDecoder().decode(encryptedData);
+        byte[] originalData = cipher.doFinal(decodedData);
+        return new String(originalData);
+    }
 
     // ham thêm nhân viên public NhanVien(String maNhanVien, String tenNhanVien, String sdt, String cccd,
     // String diaChi, boolean gioiTinh, LocalDate ngaySinh, String hinhAnh,
     // TrangThaiNhanVien trangThaiNhanVien, ChucVu chucVuNhanVien) {
-    public void ThemNhanVien(){
+    public void ThemNhanVien() throws Exception {
          Boolean gt = gioiTinh.getValue().equals("NAM") ? false : true;
          TrangThaiNhanVien tt = null;
          if(trangThaiLamViec.getValue().equals("ĐANG LÀM")){
@@ -356,9 +385,24 @@ public class TrangThemNhanVienController implements Initializable {
          NhanVien nv = new NhanVien(maNhanVien.getText().toString(),hoTen.getText().toString(),dienThoai.getText().toString(),cccd.getText().toString(),diaChi.getText().toString(),gt,ngaySinh.getValue(),duongdan,tt,cv);
          NhanVienDAO nvd = new NhanVienDAO();
          nvd.addNhanVien(nv);
+         String tenTaiKhoan = hoTen.getText().toString().replaceAll("\\s+","");
+         String matKhau = "11111111";
+//         SecretKey secretKey = this.generateKey();
+//
+//        // Mã hóa dữ liệu
+//        String encryptedData = encrypt(matKhau, secretKey);
+//        System.out.println("Encrypted Data: " + encryptedData);
+//
+//        // Lưu dữ liệu đã mã hóa vào cơ sở dữ liệu
+//
+//        // Bạn cũng có thể giải mã nếu cần
+//        String decryptedData = decrypt(encryptedData, secretKey);
+//        System.out.println("Decrypted Data: " + decryptedData);
 
-         System.out.println(maNhanVien.getText().toString()+ hoTen.getText().toString()+dienThoai.getText().toString()+ cccd.getText().toString()+ diaChi.getText().toString()+ ngaySinh.getValue()+ duongdan + tt + cv);
-         System.out.println(gt+"");
+        TaiKhoan takKhoan = new TaiKhoan(tenTaiKhoan,matKhau);
+
+        System.out.println(maNhanVien.getText().toString()+ hoTen.getText().toString()+dienThoai.getText().toString()+ cccd.getText().toString()+ diaChi.getText().toString()+ ngaySinh.getValue()+ duongdan + tt + cv);
+        System.out.println(gt+"");
     }
 
 }

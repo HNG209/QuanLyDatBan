@@ -134,6 +134,27 @@ public class NhanVienDAO {
         }
     }
 
+    public List<NhanVien> getNhanVienWithTaiKhoan() {
+        Session session = HibernateUtils.getFactory().openSession();
+        Transaction transaction = null;
+        List<NhanVien> nhanViens = null;
 
+        try {
+            transaction = session.beginTransaction();
+            String hql = "FROM NhanVien nv LEFT JOIN FETCH nv.TaiKhoan"; // Sử dụng LEFT JOIN FETCH để lấy cả thông tin tài khoản
+            Query<NhanVien> query = session.createQuery(hql, NhanVien.class);
+            nhanViens = query.getResultList();
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+
+        return nhanViens; // Trả về danh sách nhân viên cùng với tài khoản
+    }
 
 }
