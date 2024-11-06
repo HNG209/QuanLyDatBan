@@ -12,6 +12,7 @@ import javafx.stage.Stage;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.login.quanlydatban.dao.NhanVienDAO;
+import org.login.quanlydatban.dao.TaiKhoanDAO;
 import org.login.quanlydatban.entity.NhanVien;
 import org.login.quanlydatban.entity.TaiKhoan;
 import org.login.quanlydatban.entity.enums.ChucVu;
@@ -60,6 +61,7 @@ public class TrangThemNhanVienController implements Initializable {
     private ComboBox<String> chucVu; // cbx chuc vu
     @FXML
     private DatePicker ngaySinh;
+    private TaiKhoanDAO taiKhoanDAO;
     private String duongdan;// duong dan cua anh
     private TrangQuanLyNhanVienController trangQuanLyNhanVien;
 
@@ -366,6 +368,7 @@ public class TrangThemNhanVienController implements Initializable {
     // TrangThaiNhanVien trangThaiNhanVien, ChucVu chucVuNhanVien) {
     public void ThemNhanVien() throws Exception {
          Boolean gt = gioiTinh.getValue().equals("NAM") ? false : true;
+         taiKhoanDAO = new TaiKhoanDAO();
          TrangThaiNhanVien tt = null;
          if(trangThaiLamViec.getValue().equals("ĐANG LÀM")){
              tt = TrangThaiNhanVien.DANG_LAM;
@@ -399,8 +402,8 @@ public class TrangThemNhanVienController implements Initializable {
 //        String decryptedData = decrypt(encryptedData, secretKey);
 //        System.out.println("Decrypted Data: " + decryptedData);
 
-        TaiKhoan takKhoan = new TaiKhoan(tenTaiKhoan,matKhau);
-
+        TaiKhoan takKhoan = new TaiKhoan(tenTaiKhoan,matKhau, nvd.getNhanVien(nv.getMaNhanVien().toString()));
+        taiKhoanDAO.
         System.out.println(maNhanVien.getText().toString()+ hoTen.getText().toString()+dienThoai.getText().toString()+ cccd.getText().toString()+ diaChi.getText().toString()+ ngaySinh.getValue()+ duongdan + tt + cv);
         System.out.println(gt+"");
     }
