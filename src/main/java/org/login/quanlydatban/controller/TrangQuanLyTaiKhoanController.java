@@ -2,7 +2,6 @@ package org.login.quanlydatban.controller;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -39,8 +38,6 @@ public class TrangQuanLyTaiKhoanController implements Initializable {
 
     private   String showImageUrl = getClass().getResource("/org/login/quanlydatban/icons/show.png").toString();
     private   String hideImageUrl = getClass().getResource("/org/login/quanlydatban/icons/hide.png").toString();
-    @FXML
-    private TextField matKhau;
     @FXML
     private TableColumn<NhanVien, String> tableMaNhanVien; // 0 Cột ID
     @FXML
@@ -90,15 +87,12 @@ public class TrangQuanLyTaiKhoanController implements Initializable {
                String currentImageUrl = btnHinhAnh.getImage().getUrl();
                 // an ma muon hien
                 if (currentImageUrl.equals(hideImageUrl)) {
-                    matKhau.setText(matKhauHien);
+
                     btnHinhAnh.setImage(new Image(showImageUrl));
                     btnHinhAnh.toFront();
                 } else {
                     StringBuilder BuiString = new StringBuilder();
-                    for (int i = 0; i < matKhau.getText().length(); i++) {
-                        BuiString.append('.');
-                    }
-                    matKhau.setText(BuiString.toString());
+
                     btnHinhAnh.setImage(new Image(hideImageUrl));
                     btnHinhAnh.toFront();
                 }
@@ -121,17 +115,7 @@ public class TrangQuanLyTaiKhoanController implements Initializable {
                             tenNhanVienn.setText(nvtim.getTenNhanVien());
                             maNhanVien.setText(nvtim.getMaNhanVien());
                             tenTaiKhoan.setText(taiKhoanDAO.getTaiKhoanNhanVien(cellValue).getUserName().toString());
-                            StringBuilder BuiString = new StringBuilder();
-                            for (int i = 0; i < taiKhoanDAO.getTaiKhoanNhanVien(cellValue).getPassword().toString().length(); i++) {
-                                BuiString.append('.');
-                            }
-                            String currentImageUrl = btnHinhAnh.getImage().getUrl();
-                            if(currentImageUrl.equals(hideImageUrl)){
-                                matKhau.setText(BuiString.toString());
-                               // matKhauHien = taiKhoanDAO.getTaiKhoanNhanVien(cellValue).getPassword().toString();
-                            }else{
-                                matKhau.setText(taiKhoanDAO.getTaiKhoanNhanVien(cellValue).getPassword().toString());
-                            }
+
                             Image image = new Image("file:"+ nvtim.getHinhAnh());
                             hinhAnh.setImage(image);
 
