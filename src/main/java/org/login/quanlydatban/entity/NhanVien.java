@@ -15,6 +15,8 @@ public class NhanVien implements Serializable {
     @Id
     private String maNhanVien;
 
+    @OneToOne(mappedBy = "nhanVien", fetch = FetchType.EAGER)
+    private TaiKhoan taiKhoan; // Mối quan hệ với TaiKhoan
     @Column(nullable = false)
     private String tenNhanVien;
 
@@ -43,14 +45,30 @@ public class NhanVien implements Serializable {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private ChucVu chucVuNhanVien;
-
+    private String tenTaiKhoan;
     public NhanVien(){
 
     }
+
+    public String getTenTaiKhoan() {
+        return tenTaiKhoan;
+    }
+
+    public void setTenTaiKhoan(String tenTaiKhoan) {
+        this.tenTaiKhoan = tenTaiKhoan;
+    }
+
     public ChucVu getChucVuNhanVien() {
         return chucVuNhanVien;
     }
 
+    public TaiKhoan getTaiKhoan() {
+        return taiKhoan;
+    }
+
+    public void setTaiKhoan(TaiKhoan taiKhoan) {
+        this.taiKhoan = taiKhoan;
+    }
 
     public NhanVien(String maNhanVien, String tenNhanVien, String sdt, String cccd, String diaChi, boolean gioiTinh, LocalDate ngaySinh, String hinhAnh, TrangThaiNhanVien trangThaiNhanVien, ChucVu chucVuNhanVien) {
         this.maNhanVien = maNhanVien;

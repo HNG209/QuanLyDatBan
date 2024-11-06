@@ -73,9 +73,9 @@
          </children>
       </Pane>
       <TextField fx:id="matKhau" layoutX="34.0" layoutY="477.0" prefHeight="42.0" prefWidth="344.0" />
-      <ImageView fitHeight="28.0" fitWidth="38.0" layoutX="340.0" layoutY="484.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="btnHinhAnh" fitHeight="28.0" fitWidth="38.0" layoutX="340.0" layoutY="484.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../icons/show.png" />
+            <Image url="@../icons/hide.png" />
          </image>
       </ImageView>
       <ImageView fx:id="hinhAnh" fitHeight="196.0" fitWidth="165.0" layoutX="408.0" layoutY="267.0" pickOnBounds="true" preserveRatio="true">

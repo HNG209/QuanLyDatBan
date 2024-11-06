@@ -403,7 +403,8 @@ public class TrangThemNhanVienController implements Initializable {
 //        System.out.println("Decrypted Data: " + decryptedData);
 
         TaiKhoan takKhoan = new TaiKhoan(tenTaiKhoan,matKhau, nvd.getNhanVien(nv.getMaNhanVien().toString()));
-        taiKhoanDAO.
+        taiKhoanDAO.addNhanVien(takKhoan);
+        System.out.println(tenTaiKhoan + matKhau);
         System.out.println(maNhanVien.getText().toString()+ hoTen.getText().toString()+dienThoai.getText().toString()+ cccd.getText().toString()+ diaChi.getText().toString()+ ngaySinh.getValue()+ duongdan + tt + cv);
         System.out.println(gt+"");
     }

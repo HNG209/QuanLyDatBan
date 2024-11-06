@@ -8,6 +8,7 @@ import org.login.quanlydatban.entity.NhanVien;
 import org.login.quanlydatban.entity.TaiKhoan;
 import org.login.quanlydatban.hibernate.HibernateUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class NhanVienDAO {
@@ -137,13 +138,21 @@ public class NhanVienDAO {
     public List<NhanVien> getNhanVienWithTaiKhoan() {
         Session session = HibernateUtils.getFactory().openSession();
         Transaction transaction = null;
-        List<NhanVien> nhanViens = null;
+        List<NhanVien> nhanViens = new ArrayList<>();
 
         try {
             transaction = session.beginTransaction();
-            String hql = "FROM NhanVien nv LEFT JOIN FETCH nv.TaiKhoan"; // Sử dụng LEFT JOIN FETCH để lấy cả thông tin tài khoản
-            Query<NhanVien> query = session.createQuery(hql, NhanVien.class);
-            nhanViens = query.getResultList();
+            String hql = "SELECT nv, tk FROM NhanVien nv JOIN nv.taiKhoan tk";
+            Query<Object[]> query = session.createQuery(hql, Object[].class);
+
+            List<Object[]> results = query.getResultList();
+            for (Object[] result : results) {
+                NhanVien nv = (NhanVien) result[0];
+                TaiKhoan tk = (TaiKhoan) result[1];
+                nv.setTenTaiKhoan(tk.getUserName());
+                nv.setTaiKhoan(tk); // Giả sử bạn có phương thức setTaiKhoan trong NhanVien
+                nhanViens.add(nv);
+            }
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {
@@ -153,8 +162,6 @@ public class NhanVienDAO {
         } finally {
             session.close();
         }
-
         return nhanViens; // Trả về danh sách nhân viên cùng với tài khoản
     }
-
 }

@@ -11,11 +11,13 @@ public class TaiKhoan implements Serializable {
     @Id
     @Column(nullable = false)
     private String userName;
-    private static String tenNhanVien;
+
+
     @Column(nullable = false)
     private String password;
 
     @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "nhanVien_maNhanVien", referencedColumnName = "maNhanVien") // Khóa ngoại liên kết đến NhanVien
     private NhanVien nhanVien;
 
     public TaiKhoan() {
