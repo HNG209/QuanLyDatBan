@@ -21,7 +21,11 @@ public class TaiKhoan implements Serializable {
     public TaiKhoan() {
     }
 
-
+    public TaiKhoan(String userName, String password, String maNhanVien) {
+        this.userName = userName;
+        this.password = password;
+        this.nhanVien = nhanVien;
+    }
 
     public TaiKhoan(String userName, String password) {
         this.userName = userName;
