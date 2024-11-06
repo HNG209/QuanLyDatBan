@@ -16,12 +16,12 @@
 
 <AnchorPane prefHeight="635.0" prefWidth="1280.0" styleClass="gradient2" stylesheets="@../stylesheets/style.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.login.quanlydatban.controller.TrangQuanLyTaiKhoanController">
    <children>
-      <TextField layoutX="28.0" layoutY="32.0" prefHeight="42.0" prefWidth="258.0" promptText="Nhap tu khoa tim kiem.." styleClass="round-box" />
-      <Pane layoutX="588.0" layoutY="175.2" prefHeight="450.0" prefWidth="678.0" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="17.0" AnchorPane.topAnchor="175.0">
+      <TextField fx:id="tim" layoutX="28.0" layoutY="32.0" prefHeight="42.0" prefWidth="258.0" promptText="Nhap tu khoa tim kiem.." styleClass="round-box" />
+      <Pane layoutX="588.0" layoutY="175.2" prefHeight="450.0" prefWidth="678.0" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="17.0" AnchorPane.topAnchor="150.0">
          <children>
-            <ScrollPane fx:id="scrollPane" prefHeight="457.0" prefWidth="682.0">
+            <ScrollPane fx:id="scrollPane" prefHeight="481.0" prefWidth="682.0">
                <content>
-                  <TableView fx:id="tableTaiKhoan" prefHeight="466.0" prefWidth="670.0">
+                  <TableView fx:id="tableTaiKhoan" prefHeight="483.0" prefWidth="666.0">
                     <columns>
                       <TableColumn fx:id="tableMaNhanVien" prefWidth="194.4000182747841" text="Mã nhân viên" />
                         <TableColumn fx:id="tableTenNhanVien" prefWidth="270.4001159667969" text="Tên nhân viên" />
@@ -37,41 +37,48 @@
             <Image url="@../icons/find.png" />
          </image>
       </ImageView>
-      <Pane layoutX="5.0" layoutY="175.0" prefHeight="463.0" prefWidth="577.0" style="-fx-background-color: white;" styleClass="round-box-card" AnchorPane.bottomAnchor="4.2000000000000455" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="695.0" AnchorPane.topAnchor="175.0">
+      <Pane layoutX="5.0" layoutY="174.4" prefHeight="457.0" prefWidth="580.0" style="-fx-background-color: white;" styleClass="round-box-card" AnchorPane.bottomAnchor="4.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="695.0" AnchorPane.topAnchor="150.0">
          <children>
-            <Button fx:id="btnHuy" layoutX="232.0" layoutY="396.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="148.0" text="Hủy">
+            <Button fx:id="btnHuy" layoutX="233.0" layoutY="410.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="148.0" text="Hủy">
                <font>
                   <Font size="18.0" />
                </font>
             </Button>
-            <Button fx:id="btnLuu" layoutX="22.0" layoutY="396.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="158.0" styleClass="sage-green" text="Lưu">
+            <Button fx:id="btnLuu" layoutX="22.0" layoutY="410.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="158.0" styleClass="sage-green" text="Lưu">
                <font>
                   <Font size="18.0" />
                </font>
             </Button>
-            <Label layoutX="27.0" layoutY="256.0" prefHeight="42.0" prefWidth="148.0" text="Mật khẩu:">
+            <Label layoutX="27.0" layoutY="229.0" prefHeight="42.0" prefWidth="148.0" text="Mật khẩu:">
                <font>
                   <Font size="18.0" />
                </font>
             </Label>
-            <TextField fx:id="tenTaiKhoan" layoutX="27.0" layoutY="214.0" prefHeight="42.0" prefWidth="350.0" />
-            <Label layoutX="27.0" layoutY="172.0" prefHeight="42.0" prefWidth="157.0" text="Tên tài khoản:">
+            <TextField fx:id="tenTaiKhoan" layoutX="27.0" layoutY="187.0" prefHeight="42.0" prefWidth="350.0" />
+            <Label layoutX="27.0" layoutY="145.0" prefHeight="42.0" prefWidth="157.0" text="Tên tài khoản:">
                <font>
                   <Font size="18.0" />
                </font>
             </Label>
-            <Label layoutX="27.0" layoutY="95.0" text="Tên nhân viên:">
+            <Label layoutX="26.0" layoutY="76.0" text="Tên nhân viên:">
                <font>
                   <Font size="18.0" />
                </font>
             </Label>
-            <TextField fx:id="tenNhanVienn" layoutX="27.0" layoutY="123.0" prefHeight="42.0" prefWidth="350.0" />
+            <TextField fx:id="tenNhanVienn" layoutX="27.0" layoutY="103.0" prefHeight="42.0" prefWidth="350.0" />
             <Label layoutX="26.0" layoutY="7.0" text="Mã nhân  viên:">
                <font>
                   <Font size="18.0" />
                </font>
             </Label>
-            <PasswordField fx:id="password" layoutX="31.0" layoutY="307.0" prefHeight="42.0" prefWidth="350.0" />
+            <PasswordField fx:id="password" layoutX="27.0" layoutY="264.0" prefHeight="42.0" prefWidth="350.0" />
+            <TextField fx:id="maNhanVien" layoutX="27.0" layoutY="34.0" prefHeight="42.0" prefWidth="350.0" />
+            <Label layoutX="27.0" layoutY="314.0" prefHeight="21.0" prefWidth="148.0" text="Nhập lại mật khẩu">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <TextField fx:id="nhapLaiMatKhau" layoutX="27.0" layoutY="347.0" prefHeight="42.0" prefWidth="350.0" />
          </children>
       </Pane>
       <ImageView fx:id="hinhAnh" fitHeight="196.0" fitWidth="165.0" layoutX="408.0" layoutY="267.0" pickOnBounds="true" preserveRatio="true">
@@ -84,7 +91,6 @@
             <Font size="18.0" />
          </font>
       </Label>
-      <TextField fx:id="maNhanVien" layoutX="28.0" layoutY="218.0" prefHeight="42.0" prefWidth="350.0" />
       <Label layoutX="445.0" layoutY="14.0" prefHeight="65.0" prefWidth="377.0" text="        Quản lý tài khoản nhân viên">
          <font>
             <Font size="24.0" />
@@ -94,7 +100,7 @@
             <String fx:value="sage-green" />
          </styleClass>
       </Label>
-      <Label layoutX="803.0" layoutY="119.0" prefHeight="27.0" prefWidth="258.0" text="Danh sách tài khoản">
+      <Label layoutX="803.0" layoutY="94.0" prefHeight="27.0" prefWidth="258.0" text="Danh sách tài khoản">
          <font>
             <Font size="18.0" />
          </font>

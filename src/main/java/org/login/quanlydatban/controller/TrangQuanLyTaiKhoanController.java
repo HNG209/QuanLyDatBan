@@ -2,13 +2,11 @@ package org.login.quanlydatban.controller;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -34,7 +32,10 @@ public class TrangQuanLyTaiKhoanController implements Initializable {
     private TextField tenNhanVienn;
     @FXML
     private TextField tenTaiKhoan;
-
+    @FXML
+    private PasswordField password;
+    @FXML
+    private TextField tim;
 
     private   String showImageUrl = getClass().getResource("/org/login/quanlydatban/icons/show.png").toString();
     private   String hideImageUrl = getClass().getResource("/org/login/quanlydatban/icons/hide.png").toString();
@@ -50,9 +51,10 @@ public class TrangQuanLyTaiKhoanController implements Initializable {
     private Button btnHuy;
     private NhanVienDAO nhanVienDAO;
     private String matKhauHien;
-
     @FXML
-    private  ImageView btnHinhAnh;
+    private TextField nhapLaiMatKhau;
+
+
 
 
     public String getTenNhanVien() {
@@ -65,8 +67,9 @@ public class TrangQuanLyTaiKhoanController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        nhanVienDAO = new NhanVienDAO();
         try {
-            nhanVienDAO = new NhanVienDAO();
+
             List<NhanVien> listNhanVien = nhanVienDAO.getNhanVienWithTaiKhoan();
             tableMaNhanVien.setCellValueFactory(new PropertyValueFactory<>("maNhanVien"));
             tableTenNhanVien.setCellValueFactory(new PropertyValueFactory<>("tenNhanVien"));
@@ -79,26 +82,19 @@ public class TrangQuanLyTaiKhoanController implements Initializable {
             e.printStackTrace(); // In ra thông tin lỗi
         }
 
+        List<NhanVien> listNhanVien = nhanVienDAO.getNhanVienWithTaiKhoan();
+        FilteredList<NhanVien> filteredList = new FilteredList<>(FXCollections.observableArrayList(listNhanVien), b -> true);
 
-       // chuyen doi hinh anh
-        btnHinhAnh.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-               String currentImageUrl = btnHinhAnh.getImage().getUrl();
-                // an ma muon hien
-                if (currentImageUrl.equals(hideImageUrl)) {
-
-                    btnHinhAnh.setImage(new Image(showImageUrl));
-                    btnHinhAnh.toFront();
-                } else {
-                    StringBuilder BuiString = new StringBuilder();
-
-                    btnHinhAnh.setImage(new Image(hideImageUrl));
-                    btnHinhAnh.toFront();
+        tim.textProperty().addListener((observable, oldValue, newValue) -> {
+            filteredList.setPredicate(employee -> {
+                // Nếu không có từ khóa tìm kiếm, hiển thị tất cả
+                if (newValue == null || newValue.trim().isEmpty()) {
+                    return true;
                 }
-                // dang hien nhung muon an
-            }
+                return employee.getMaNhanVien().contains(newValue) || employee.getTenNhanVien().contains(newValue);
+            });
         });
+        tableTaiKhoan.setItems(filteredList);
 
         tableTaiKhoan.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
@@ -115,7 +111,8 @@ public class TrangQuanLyTaiKhoanController implements Initializable {
                             tenNhanVienn.setText(nvtim.getTenNhanVien());
                             maNhanVien.setText(nvtim.getMaNhanVien());
                             tenTaiKhoan.setText(taiKhoanDAO.getTaiKhoanNhanVien(cellValue).getUserName().toString());
-
+                            password.setText(taiKhoanDAO.getTaiKhoanNhanVien(cellValue).getPassword().toString());
+                            nhapLaiMatKhau.setText(taiKhoanDAO.getTaiKhoanNhanVien(cellValue).getPassword().toString());
                             Image image = new Image("file:"+ nvtim.getHinhAnh());
                             hinhAnh.setImage(image);
 
