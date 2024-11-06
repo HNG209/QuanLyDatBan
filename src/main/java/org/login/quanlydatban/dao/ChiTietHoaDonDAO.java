@@ -37,6 +37,20 @@ public class ChiTietHoaDonDAO {
         return chiTietHoaDonList;
     }
 
+    public void deleteChiTietHoaDon(String maHoaDon, String maMonAn){
+        Session session = HibernateUtils.getFactory().openSession();
+        session.getTransaction().begin();
+
+        String sql = "DELETE FROM ChiTietHoaDon WHERE maHoaDon = :maHoaDon AND maMonAn = :maMonAn";
+        session.createNativeQuery(sql).
+                setParameter("maHoaDon", maHoaDon).
+                setParameter("maMonAn", maMonAn).
+                executeUpdate();
+
+        session.getTransaction().commit();
+        session.close();
+    }
+
 
     public void capNhatSoLuong(CTHDCompositeKey key, int soLuong) {
         Session session = HibernateUtils.getFactory().openSession();
