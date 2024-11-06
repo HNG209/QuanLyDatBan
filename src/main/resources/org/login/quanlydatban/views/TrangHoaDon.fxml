@@ -7,8 +7,6 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Tab?>
-<?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
@@ -27,107 +25,28 @@
          <font>
             <Font name="Arial" size="26.0" />
          </font></Label>
-      <TabPane layoutX="6.0" layoutY="345.0" prefHeight="275.0" prefWidth="918.0" style="-fx-border-color: #808080;" styleClass="small-round-box" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="14.800000000000011" AnchorPane.leftAnchor="6.0" AnchorPane.rightAnchor="355.19999999999993" AnchorPane.topAnchor="344.59999999999997">
-        <tabs>
-          <Tab text="Tất cả">
-            <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="287.0" prefWidth="901.0" styleClass="bg1">
-                     <children>
-                        <TableView fx:id="tableHoaDon" layoutX="7.0" layoutY="7.0" prefHeight="229.0" prefWidth="901.0" style="-fx-border-color: green;" AnchorPane.bottomAnchor="8.200000000000017" AnchorPane.leftAnchor="7.0" AnchorPane.rightAnchor="7.999999999999886" AnchorPane.topAnchor="7.200000000000017">
-                          <columns>
-                              <TableColumn prefWidth="32.000003814697266">
-                                 <graphic>
-                                    <CheckBox mnemonicParsing="false" />
-                                 </graphic>
-                              </TableColumn>
-                              <TableColumn fx:id="colMaHoaDon" prefWidth="96.0000228881836" text="Mã hóa đơn" />
-                              <TableColumn fx:id="colNgayLap" prefWidth="150.00001525878906" text="Ngày lập hóa đơn" />
-                              <TableColumn fx:id="colMaKhachHang" prefWidth="126.66665649414062" text="Tên khách hàng" />
-                              <TableColumn fx:id="colTrangThai" prefWidth="100.00003051757812" text="Trạng thái" />
-                              <TableColumn fx:id="colMaBan" prefWidth="107.3333740234375" text="Khu vực/ Bàn" />
-                              <TableColumn fx:id="colMaNhanVien" prefWidth="98.6666259765625" text="Nhân viên" />
-                              <TableColumn fx:id="colTongTien" prefWidth="104.66668701171875" text="Tổng tiền" />
-                              <TableColumn fx:id="colPhuThu" prefWidth="78.0" text="Phụ thu" />
-                          </columns>
-                        </TableView>
-                     </children>
-                  </AnchorPane>
-            </content>
-          </Tab>
-            <Tab text="Đã thanh toán">
-               <content>
-                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="307.0" prefWidth="773.0" styleClass="bg1">
-                     <children>
-                        <TableView layoutX="7.0" layoutY="7.0" prefHeight="229.0" prefWidth="901.0" style="-fx-border-color: green;" AnchorPane.bottomAnchor="8.0" AnchorPane.leftAnchor="7.2" AnchorPane.rightAnchor="7.999999999999886" AnchorPane.topAnchor="7.2">
-                           <columns>
-                              <TableColumn prefWidth="32.000003814697266">
-                                 <graphic>
-                                    <CheckBox mnemonicParsing="false" />
-                                 </graphic>
-                              </TableColumn>
-                              <TableColumn prefWidth="96.0000228881836" text="Mã hóa đơn" />
-                              <TableColumn prefWidth="150.00001525878906" text="Ngày lập hóa đơn" />
-                              <TableColumn prefWidth="126.66665649414062" text="Tên khách hàng" />
-                              <TableColumn prefWidth="100.00003051757812" text="Trạng thái" />
-                              <TableColumn prefWidth="107.3333740234375" text="Khu vực/ Bàn" />
-                              <TableColumn prefWidth="98.6666259765625" text="Nhân viên" />
-                              <TableColumn prefWidth="104.66668701171875" text="Tổng tiền" />
-                              <TableColumn prefWidth="78.0" text="Phụ thu" />
-                           </columns>
-                        </TableView>
-                     </children>
-                  </AnchorPane>
-               </content>
-            </Tab>
-            <Tab text="Chưa thanh toán">
-               <content>
-                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="307.0" prefWidth="773.0" styleClass="bg1">
-                     <children>
-                        <TableView layoutX="7.0" layoutY="7.0" prefHeight="229.0" prefWidth="901.0" style="-fx-border-color: green;" AnchorPane.bottomAnchor="8.200000000000017" AnchorPane.leftAnchor="7.0" AnchorPane.rightAnchor="7.999999999999886" AnchorPane.topAnchor="7.200000000000017">
-                           <columns>
-                              <TableColumn prefWidth="32.000003814697266">
-                                 <graphic>
-                                    <CheckBox mnemonicParsing="false" />
-                                 </graphic>
-                              </TableColumn>
-                              <TableColumn prefWidth="96.0000228881836" text="Mã hóa đơn" />
-                              <TableColumn prefWidth="150.00001525878906" text="Ngày lập hóa đơn" />
-                              <TableColumn prefWidth="126.66665649414062" text="Tên khách hàng" />
-                              <TableColumn prefWidth="100.00003051757812" text="Trạng thái" />
-                              <TableColumn prefWidth="107.3333740234375" text="Khu vực/ Bàn" />
-                              <TableColumn prefWidth="98.6666259765625" text="Nhân viên" />
-                              <TableColumn prefWidth="104.66668701171875" text="Tổng tiền" />
-                              <TableColumn prefWidth="78.0" text="Phụ thu" />
-                           </columns>
-                        </TableView>
-                     </children>
-                  </AnchorPane>
-               </content>
-            </Tab>
-        </tabs>
-      </TabPane>
-      <HBox alignment="CENTER" layoutX="171.0" layoutY="65.0" prefHeight="49.0" prefWidth="918.0" spacing="15.0" style="-fx-border-color: #808080; -fx-background-color: #D3D3D3;" AnchorPane.leftAnchor="170.66666666666674" AnchorPane.rightAnchor="191.0">
+      <HBox alignment="CENTER" layoutX="171.33333333333334" layoutY="65.0" prefHeight="49.0" prefWidth="917.0" spacing="15.0" style="-fx-border-color: #808080; -fx-background-color: #D3D3D3;" AnchorPane.leftAnchor="171.0" AnchorPane.rightAnchor="192.0">
          <children>
             <ImageView fitHeight="33.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../icons/recipt.png" />
                </image>
             </ImageView>
-            <TextField prefHeight="35.0" prefWidth="205.0" promptText="Mã hóa đơn" styleClass="round-box" />
+            <TextField fx:id="tfMaHoaDon" prefHeight="35.0" prefWidth="205.0" promptText="Mã hóa đơn" styleClass="round-box" />
             <ImageView fitHeight="33.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../icons/name.png" />
                </image>
             </ImageView>
-            <TextField prefHeight="36.0" prefWidth="193.0" promptText="Tên khách hàng" styleClass="round-box" />
+            <TextField fx:id="tfTenKhachHang" prefHeight="36.0" prefWidth="193.0" promptText="Mã khách hàng" styleClass="round-box" />
             <ImageView fitHeight="33.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../icons/status.png" />
                </image>
             </ImageView>
-            <ComboBox prefHeight="35.0" prefWidth="158.0" promptText="---Trạng thái---" style="-fx-background-color: #FFFFFF;" styleClass="round-box" />
-            <DatePicker prefHeight="35.0" prefWidth="114.0" promptText="Ngày lập" />
-            <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="92.0" styleClass="round-box">
+            <ComboBox fx:id="cbTrangThai" prefHeight="35.0" prefWidth="158.0" promptText="---Trạng thái---" style="-fx-background-color: #FFFFFF;" styleClass="round-box" />
+            <DatePicker fx:id="dpNgayLap" prefHeight="35.0" prefWidth="114.0" promptText="Ngày lập" />
+            <Button fx:id="btnTimKiem" mnemonicParsing="false" onAction="#onTimKiemClicked" prefHeight="35.0" prefWidth="92.0" styleClass="round-box">
                <graphic>
                   <ImageView fitHeight="18.0" fitWidth="53.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -135,6 +54,15 @@
                      </image>
                   </ImageView>
                </graphic></Button>
+            <Button fx:id="BtnReset" mnemonicParsing="false" onAction="#onResetClicked">
+               <graphic>
+                  <ImageView fitHeight="27.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../icons/circle-of-two-clockwise-arrows-rotation.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
          </children>
          <opaqueInsets>
             <Insets />
@@ -147,60 +75,105 @@
             <Insets left="10.0" right="10.0" />
          </padding>
       </HBox>
-      <TableView layoutX="934.0" layoutY="345.0" prefHeight="275.0" prefWidth="331.0" style="-fx-border-color: green;" styleClass="small-round-box" AnchorPane.bottomAnchor="14.333333333333371" AnchorPane.rightAnchor="14.666666666666686" AnchorPane.topAnchor="345.0">
+      <TableView fx:id="tableCTHD" layoutX="934.0" layoutY="322.0" prefHeight="304.0" prefWidth="331.0" style="-fx-border-color: green;" styleClass="small-round-box" AnchorPane.bottomAnchor="9.0" AnchorPane.leftAnchor="932.6666666666667" AnchorPane.rightAnchor="16.0" AnchorPane.topAnchor="322.0">
          <columns>
             <TableColumn prefWidth="47.333251953125">
                <graphic>
                   <CheckBox mnemonicParsing="false" />
                </graphic>
             </TableColumn>
-            <TableColumn prefWidth="171.3333740234375" text="Tên món ăn" />
-            <TableColumn prefWidth="104.0" text="Số lượng" />
+            <TableColumn fx:id="colTenMonAn" prefWidth="122.66668701171875" text="Tên món ăn" />
+            <TableColumn fx:id="colSoLuong" prefWidth="85.333251953125" text="Số lượng" />
+            <TableColumn fx:id="colGhiChu" prefWidth="75.0" text="Ghi chú" />
          </columns>
       </TableView>
-      <AnchorPane layoutX="6.400000095367432" layoutY="132.0" style="-fx-border-color: black;" stylesheets="@../stylesheets/style.css" AnchorPane.leftAnchor="6.6666666666667425" AnchorPane.rightAnchor="15.0">
+      <AnchorPane layoutX="8.0" layoutY="132.0" prefHeight="181.0" prefWidth="1257.0" style="-fx-border-color: black;" stylesheets="@../stylesheets/style.css" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="15.0">
          <children>
-            <GridPane hgap="90.0" layoutX="4.0" layoutY="-3.0" prefHeight="187.0" prefWidth="1579.0" AnchorPane.leftAnchor="4.0" AnchorPane.rightAnchor="1.3333333333332575">
-              <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                  <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-              </columnConstraints>
-              <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-              </rowConstraints>
+            <HBox layoutY="10.0" prefHeight="163.0" prefWidth="609.0" AnchorPane.bottomAnchor="6.666666666666657" AnchorPane.topAnchor="10.0">
                <children>
-                  <Label text="Thông tin khách hàng:" />
-                  <Label text="Mã khách hàng:" GridPane.rowIndex="1" />
-                  <Label text="Tên khách hàng:" GridPane.rowIndex="2" />
-                  <Label text="Số điện thoại:" GridPane.rowIndex="3" />
-                  <TextField alignment="TOP_RIGHT" prefHeight="26.0" prefWidth="242.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                  <TextField prefHeight="26.0" prefWidth="242.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                  <TextField prefHeight="26.0" prefWidth="242.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                  <Label text="Thông tin nhân viên:" GridPane.columnIndex="3" />
-                  <Label text="Mã nhân viên" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-                  <Label text="Tên nhân viên" GridPane.columnIndex="3" GridPane.rowIndex="2" />
-                  <Label text="Số điện thoại:" GridPane.columnIndex="3" GridPane.rowIndex="3" />
-                  <Label text="Trạng thái" GridPane.columnIndex="3" GridPane.rowIndex="4" />
-                  <TextField prefWidth="242.0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                  <TextField prefHeight="26.0" prefWidth="242.0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-                  <TextField prefHeight="26.0" prefWidth="242.0" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-                  <ComboBox prefWidth="150.0" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+                  <ImageView fitHeight="179.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS">
+                     <image>
+                        <Image url="@../icons/people.png" />
+                     </image>
+                  </ImageView>
+                  <GridPane prefHeight="187.0" prefWidth="348.0" HBox.hgrow="ALWAYS">
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="122.66668701171875" minWidth="10.0" prefWidth="73.33333333333334" />
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <Label text="Thông tin khách hàng:" />
+                        <Label text="Mã khách hàng:" GridPane.rowIndex="1" />
+                        <Label text="Tên khách hàng:" GridPane.rowIndex="2" />
+                        <Label text="Số điện thoại:" GridPane.rowIndex="3" />
+                        <TextField fx:id="textMaKH" alignment="TOP_RIGHT" prefHeight="26.0" prefWidth="242.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <TextField fx:id="textTenKH" prefHeight="25.0" prefWidth="397.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <TextField fx:id="textsdtKH" prefHeight="26.0" prefWidth="242.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                     </children>
+                  </GridPane>
                </children>
-               <padding>
-                  <Insets left="10.0" right="10.0" />
-               </padding>
-            </GridPane>
+            </HBox>
+            <HBox layoutX="639.0" layoutY="10.0" prefHeight="163.0" prefWidth="609.0" AnchorPane.bottomAnchor="8.0" AnchorPane.topAnchor="11.333333333333334">
+               <children>
+                  <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS">
+                     <image>
+                        <Image url="@../icons/employee.png" />
+                     </image>
+                  </ImageView>
+                  <GridPane prefHeight="187.0" prefWidth="348.0" HBox.hgrow="ALWAYS">
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="122.66668701171875" minWidth="10.0" prefWidth="73.33333333333334" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                     <children>
+                        <TextField fx:id="textMaNV" alignment="TOP_RIGHT" prefHeight="26.0" prefWidth="242.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <TextField fx:id="textTenNV" prefHeight="25.0" prefWidth="397.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <TextField fx:id="textsdtNV" prefHeight="26.0" prefWidth="242.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                        <Label text="Thông tin nhân viên:" />
+                        <Label text="Trạng thái" GridPane.rowIndex="4" />
+                        <Label text="Mã nhân viên" GridPane.rowIndex="1" />
+                        <Label text="Tên nhân viên" GridPane.rowIndex="2" />
+                        <Label text="Số điện thoại:" GridPane.rowIndex="3" />
+                        <ComboBox fx:id="cbTrangThaiNV" prefHeight="25.0" prefWidth="343.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                     </children>
+                  </GridPane>
+               </children>
+            </HBox>
          </children>
          <styleClass>
             <String fx:value="round-box" />
             <String fx:value="gradient2" />
          </styleClass>
       </AnchorPane>
+      <TableView fx:id="tabTatCa" layoutY="323.3333333333333" prefHeight="304.0" prefWidth="917.0" style="-fx-border-color: green;" AnchorPane.bottomAnchor="8.0" AnchorPane.leftAnchor="7.0" AnchorPane.rightAnchor="356.0" AnchorPane.topAnchor="323.0">
+        <columns>
+            <TableColumn prefWidth="32.000003814697266">
+               <graphic>
+                  <CheckBox mnemonicParsing="false" />
+               </graphic>
+            </TableColumn>
+            <TableColumn fx:id="colMaHoaDon" prefWidth="96.0000228881836" text="Mã hóa đơn" />
+            <TableColumn fx:id="colNgayLap" prefWidth="150.00001525878906" text="Ngày lập hóa đơn" />
+            <TableColumn fx:id="colMaKhachHang" prefWidth="126.66665649414062" text="Tên khách hàng" />
+            <TableColumn fx:id="colTrangThai" prefWidth="100.00003051757812" text="Trạng thái" />
+            <TableColumn fx:id="colMaBan" prefWidth="107.3333740234375" text="Khu vực/ Bàn" />
+            <TableColumn fx:id="colMaNhanVien" prefWidth="98.6666259765625" text="Nhân viên" />
+            <TableColumn fx:id="colTongTien" prefWidth="104.66668701171875" text="Tổng tiền" />
+            <TableColumn fx:id="colPhuThu" prefWidth="78.0" text="Phụ thu" />
+        </columns>
+      </TableView>
    </children>
 </AnchorPane>

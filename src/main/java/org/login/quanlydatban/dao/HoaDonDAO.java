@@ -6,6 +6,10 @@ import org.hibernate.query.Query;
 import org.login.quanlydatban.entity.*;
 import org.login.quanlydatban.hibernate.HibernateUtils;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
 import java.sql.*;
 import java.time.LocalDate;
@@ -311,8 +315,9 @@ public class HoaDonDAO {
 
     }
     public List<HoaDon> getAllHoaDon() {
+        List<HoaDon> listHoaDon = new ArrayList<>(); // Khởi tạo
 
-        List<HoaDon> listHoaDon = null;
+       // List<HoaDon> listHoaDon = null;
         Session session = HibernateUtils.getFactory().openSession();
         try (session) {
             session.getTransaction().begin();
@@ -329,6 +334,7 @@ public class HoaDonDAO {
 
         return listHoaDon;
     }
+
 
 
 

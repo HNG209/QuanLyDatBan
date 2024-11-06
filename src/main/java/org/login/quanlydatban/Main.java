@@ -39,7 +39,8 @@ public class Main extends Application {
 //        hoaDon.setPhuThu(10_000.0);
 //        hoaDon.setNgayLap(LocalDate.now());
 //
-//        ChiTietHoaDon chiTietHoaDon = new ChiTietHoaDon();
+//        ChiTietHoaDon ch
+//        iTietHoaDon = new ChiTietHoaDon();
 //
 //        session.save(hoaDon);
 //        chiTietHoaDon.setHoaDon(hoaDon);
