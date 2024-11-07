@@ -43,8 +43,7 @@ public class HoaDonController implements Initializable {
     private ComboBox<String> cbTrangThai;
     @FXML
     private DatePicker dpNgayLap;
-    @FXML
-    private TableView<HoaDon> tableView;
+
 
 
     @FXML
@@ -68,8 +67,7 @@ public class HoaDonController implements Initializable {
     private TableView<HoaDon> tabTatCa;
 
 
-    @FXML
-    private TableView<ChiTietHoaDon> tableChiTietHoaDon;
+
     @FXML
     private TableColumn<ChiTietHoaDon, String> colTenMonAn;
     @FXML
@@ -210,7 +208,7 @@ public class HoaDonController implements Initializable {
         textsdtNV.clear();
         textTrangThaiNV.clear();
 
-        tableChiTietHoaDon.setItems(null);
+        tableCTHD.getItems().clear();
         //Cập nhật lại bảng với tất cả các hóa đơn
         HoaDonDAO hoaDonDAO = new HoaDonDAO();
         List<HoaDon> danhSachGoc = hoaDonDAO.getAllHoaDon();
