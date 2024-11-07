@@ -167,7 +167,7 @@
             </TableColumn>
             <TableColumn fx:id="colMaHoaDon" prefWidth="96.0000228881836" text="Mã hóa đơn" />
             <TableColumn fx:id="colNgayLap" prefWidth="150.00001525878906" text="Ngày lập hóa đơn" />
-            <TableColumn fx:id="colMaKhachHang" prefWidth="126.66665649414062" text="Tên khách hàng" />
+            <TableColumn fx:id="colMaKhachHang" prefWidth="126.66665649414062" text="Mã khách hàng" />
             <TableColumn fx:id="colTrangThai" prefWidth="100.00003051757812" text="Trạng thái" />
             <TableColumn fx:id="colMaBan" prefWidth="107.3333740234375" text="Khu vực/ Bàn" />
             <TableColumn fx:id="colMaNhanVien" prefWidth="98.6666259765625" text="Nhân viên" />
