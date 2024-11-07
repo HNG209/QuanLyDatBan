@@ -44,7 +44,7 @@
                   <Image url="@../icons/status.png" />
                </image>
             </ImageView>
-            <ComboBox fx:id="cbTrangThai" prefHeight="35.0" prefWidth="158.0" promptText="---Trạng thái---" style="-fx-background-color: #FFFFFF;" styleClass="round-box" />
+            <ComboBox fx:id="cbTrangThai" prefHeight="35.0" prefWidth="158.0" promptText="Trạng thái" style="-fx-background-color: #FFFFFF;" styleClass="round-box" />
             <DatePicker fx:id="dpNgayLap" prefHeight="35.0" prefWidth="114.0" promptText="Ngày lập" />
             <Button fx:id="btnTimKiem" mnemonicParsing="false" onAction="#onTimKiemClicked" prefHeight="35.0" prefWidth="92.0" styleClass="round-box">
                <graphic>
@@ -112,8 +112,8 @@
                         <Label text="Mã khách hàng:" GridPane.rowIndex="1" />
                         <Label text="Tên khách hàng:" GridPane.rowIndex="2" />
                         <Label text="Số điện thoại:" GridPane.rowIndex="3" />
-                        <TextField fx:id="textMaKH" alignment="TOP_RIGHT" prefHeight="26.0" prefWidth="242.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        <TextField fx:id="textTenKH" prefHeight="25.0" prefWidth="397.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <TextField fx:id="textMaKH" editable="false" prefHeight="26.0" prefWidth="242.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <TextField fx:id="textTenKH" editable="false" prefHeight="25.0" prefWidth="397.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                         <TextField fx:id="textsdtKH" prefHeight="26.0" prefWidth="242.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                      </children>
                   </GridPane>
@@ -139,15 +139,15 @@
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                      </rowConstraints>
                      <children>
-                        <TextField fx:id="textMaNV" alignment="TOP_RIGHT" prefHeight="26.0" prefWidth="242.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        <TextField fx:id="textTenNV" prefHeight="25.0" prefWidth="397.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                        <TextField fx:id="textsdtNV" prefHeight="26.0" prefWidth="242.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                        <TextField fx:id="textMaNV" editable="false" prefHeight="26.0" prefWidth="242.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <TextField fx:id="textTenNV" editable="false" prefHeight="25.0" prefWidth="397.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <TextField fx:id="textsdtNV" editable="false" prefHeight="26.0" prefWidth="242.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                         <Label text="Thông tin nhân viên:" />
                         <Label text="Trạng thái" GridPane.rowIndex="4" />
                         <Label text="Mã nhân viên" GridPane.rowIndex="1" />
                         <Label text="Tên nhân viên" GridPane.rowIndex="2" />
                         <Label text="Số điện thoại:" GridPane.rowIndex="3" />
-                        <ComboBox fx:id="cbTrangThaiNV" prefHeight="25.0" prefWidth="343.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                        <TextField fx:id="textTrangThaiNV" editable="false" prefHeight="26.0" prefWidth="242.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                      </children>
                   </GridPane>
                </children>
