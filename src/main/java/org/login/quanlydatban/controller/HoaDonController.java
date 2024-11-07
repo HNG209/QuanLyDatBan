@@ -3,22 +3,15 @@ package org.login.quanlydatban.controller;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.MouseEvent;
-import javafx.stage.Stage;
 import org.login.quanlydatban.dao.ChiTietHoaDonDAO;
 import org.login.quanlydatban.dao.HoaDonDAO;
-import org.login.quanlydatban.dao.NhanVienDAO;
 import org.login.quanlydatban.entity.*;
+import org.login.quanlydatban.entity.enums.TrangThaiHoaDon;
 
-import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.List;
@@ -40,7 +33,7 @@ public class HoaDonController implements Initializable {
     @FXML
     private TextField textsdtNV;
     @FXML
-    private ComboBox<String> cbTrangThaiNV;
+    private TextField textTrangThaiNV;
 
     @FXML
     private TextField tfMaHoaDon;
@@ -130,21 +123,23 @@ public class HoaDonController implements Initializable {
 
                     List<ChiTietHoaDon> chiTietList = chiTietHoaDonDAO.getChiTietHoaDonByMaHoaDon(maHoaDon);
 
-                    // Chuyển danh sách chi tiết hóa đơn thành ObservableList và đặt vào TableView
+
                     ObservableList<ChiTietHoaDon> observableList1 = FXCollections.observableArrayList(chiTietList);
                     tableCTHD.setItems(observableList1);
 
                     HoaDon hoaDon = tabTatCa.getSelectionModel().getSelectedItem();
                     if (hoaDon != null) {
-                        // Lấy thông tin nhân viên và khách hàng
+
                         NhanVien nhanVien = hoaDon.getNhanVien();
                         KhachHang khachHang = hoaDon.getKhachHang();
 
-                        // Hiển thị thông tin vào các TextField hoặc Label
                         if (nhanVien != null) {
                             textMaNV.setText(nhanVien.getMaNhanVien());
+
                             textTenNV.setText(nhanVien.getTenNhanVien());
                             textsdtNV.setText(nhanVien.getSdt());
+
+                            textTrangThaiNV.setText(nhanVien.getTrangThaiNhanVien().toString());
                         }
 
                         if (khachHang != null) {
@@ -159,11 +154,13 @@ public class HoaDonController implements Initializable {
             e.printStackTrace();
        }
         ObservableList<String> trangThaiList = FXCollections.observableArrayList(
+                "Trạng thái",
                 "Đã thanh toán",
                 "Chưa thanh toán"
         );
 
         // Đặt danh sách vào ComboBox
+        cbTrangThai.getSelectionModel().select("Trạng thái");
         cbTrangThai.setItems(trangThaiList);
 
 
@@ -177,7 +174,6 @@ public class HoaDonController implements Initializable {
 
         LocalDate ngayLap = dpNgayLap.getValue();
 
-        // Danh sách hóa đơn gốc (từ cơ sở dữ liệu hoặc danh sách ban đầu)
         HoaDonDAO = new HoaDonDAO();
         List<HoaDon> danhSachGoc = HoaDonDAO.getAllHoaDon();
 
@@ -186,7 +182,12 @@ public class HoaDonController implements Initializable {
         List<HoaDon> ketQuaLoc = danhSachGoc.stream()
                 .filter(hoaDon -> maHoaDon.isEmpty() || hoaDon.getMaHoaDon().contains(maHoaDon))
                 .filter(hoaDon -> tenKhachHang.isEmpty() || hoaDon.getKhachHang().getTenKhachHang().contains(tenKhachHang))
-                .filter(hoaDon -> trangThai == null || hoaDon.getTrangThaiHoaDon().equals(trangThai))
+                .filter(hoaDon -> {
+                    TrangThaiHoaDon trangThaiEnum = convertStringToEnum(trangThai);
+                    TrangThaiHoaDon trangThaiHoaDonEnum = hoaDon.getTrangThaiHoaDon();
+                    return trangThaiEnum == null
+                            || trangThaiEnum == trangThaiHoaDonEnum;
+                })
                 .filter(hoaDon -> ngayLap == null || hoaDon.getNgayLap().equals(ngayLap))
                 .collect(Collectors.toList());
 
@@ -197,8 +198,8 @@ public class HoaDonController implements Initializable {
         // 1. Xóa hết thông tin trong các TextField
         tfMaHoaDon.clear();
         tfTenKhachHang.clear();
-        cbTrangThai.getSelectionModel().clearSelection();  // Nếu bạn muốn reset ComboBox trạng thái
-        dpNgayLap.setValue(null);  // Nếu bạn có DatePicker cho ngày
+        cbTrangThai.getSelectionModel().select("Trạng thái");
+        dpNgayLap.setValue(null);
 
         textTenNV.clear();
         textsdtKH.clear();
@@ -207,16 +208,25 @@ public class HoaDonController implements Initializable {
         textMaKH.clear();
         textMaNV.clear();
         textsdtNV.clear();
+        textTrangThaiNV.clear();
 
         tableChiTietHoaDon.setItems(null);
-        // 2. Cập nhật lại bảng với tất cả các hóa đơn (không lọc)
+        //Cập nhật lại bảng với tất cả các hóa đơn
         HoaDonDAO hoaDonDAO = new HoaDonDAO();
         List<HoaDon> danhSachGoc = hoaDonDAO.getAllHoaDon();
 
-        // Chuyển danh sách hóa đơn thành ObservableList và gán vào bảng
         ObservableList<HoaDon> observableList = FXCollections.observableArrayList(danhSachGoc);
         tabTatCa.setItems(observableList);
     }
+    private TrangThaiHoaDon convertStringToEnum(String trangThai) {
+        if ("Đã thanh toán".equalsIgnoreCase(trangThai)) {
+            return TrangThaiHoaDon.DA_THANH_TOAN;
+        } else if ("Chưa thanh toán".equalsIgnoreCase(trangThai)) {
+            return TrangThaiHoaDon.CHUA_THANH_TOAN;
+        }
+        return null;
+    }
+
 
 
 
