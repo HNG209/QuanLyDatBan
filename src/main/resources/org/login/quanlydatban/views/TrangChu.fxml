@@ -108,10 +108,7 @@
                   <Menu mnemonicParsing="false" text="Thống kê">
                      <items>
                         <MenuItem mnemonicParsing="false" onAction="#thongKe" text="Thống kê" />
-<<<<<<< HEAD
-=======
                         <MenuItem mnemonicParsing="false" onAction="#ketCa" text="Kết ca" />
->>>>>>> 1d83ceec691b2c26bf3155860f8435a2b6ef8d3b
                      </items>
                      <graphic>
                         <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
