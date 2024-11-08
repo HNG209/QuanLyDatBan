@@ -9,12 +9,15 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.text.TextAlignment;
 import org.hibernate.Session;
 import org.login.quanlydatban.dao.BanDAO;
 import org.login.quanlydatban.dao.ChiTietHoaDonDAO;
@@ -25,6 +28,7 @@ import org.login.quanlydatban.entity.enums.TrangThaiBan;
 import org.login.quanlydatban.entity.enums.TrangThaiHoaDon;
 import org.login.quanlydatban.entity.keygenerator.CTHDCompositeKey;
 import org.login.quanlydatban.hibernate.HibernateUtils;
+import org.login.quanlydatban.notification.Notification;
 
 import java.io.IOException;
 import java.net.URL;
@@ -70,7 +74,7 @@ public class DatMonController implements Initializable {
     private TableColumn<Object[], String> dvt;
 
     @FXML
-    private TableColumn<Object[], String> ghiChu;
+    private TableColumn<Object[], Void> ghiChu;
 
     @FXML
     private TableColumn<Object[], String> maBan;
@@ -80,6 +84,15 @@ public class DatMonController implements Initializable {
 
     @FXML
     private TableColumn<Object[], String> tenMon;
+
+    @FXML
+    private TableColumn<Object[], Void> huyMon;
+
+    @FXML
+    private TableColumn<Object[], Void> giam;
+
+    @FXML
+    private TableColumn<Object[], Void> tang;
 
     private ObservableList<Object[]> objectsObservableList;
 
@@ -103,10 +116,187 @@ public class DatMonController implements Initializable {
 
         donGia.setCellValueFactory(data -> new SimpleDoubleProperty((Double)data.getValue()[2]).asObject());
         soLuong.setCellValueFactory(data -> new SimpleIntegerProperty((Integer) data.getValue()[3]).asObject());
+        soLuong.setCellFactory(column -> new TableCell<Object[], Integer>() {
+            @Override
+            protected void updateItem(Integer item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                    setGraphic(null);
+                } else {
+                    setText(item.toString());
+                    setTextAlignment(TextAlignment.CENTER); // Center the text horizontally
+                    setAlignment(Pos.CENTER);               // Center the text vertically
+                }
+            }
+        });
+
         maBan.setCellValueFactory(data -> new SimpleStringProperty((String)data.getValue()[0]));
         tenMon.setCellValueFactory(data -> new SimpleStringProperty((String)data.getValue()[1]));
         dvt.setCellValueFactory(data -> new SimpleStringProperty((String) data.getValue()[4]));
-        ghiChu.setCellValueFactory( data -> new SimpleStringProperty((String) data.getValue()[5]));
+
+        dvt.setCellFactory(column -> new TableCell<Object[], String>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                    setGraphic(null);
+                } else {
+                    setText(item);
+                    setTextAlignment(TextAlignment.CENTER); // Center the text horizontally
+                    setAlignment(Pos.CENTER);               // Center the text vertically
+                }
+            }
+        });
+
+        ghiChu.setCellFactory(col -> new TableCell<>() {
+            private final Button button = new Button("...");
+            private final StackPane pane = new StackPane();
+
+            {
+                button.setMaxWidth(Double.MAX_VALUE);  // Allow the button to expand horizontally
+                button.setMaxHeight(Double.MAX_VALUE); // Allow the button to expand vertically
+
+                button.setOnAction(event -> {
+//                    Object[] objects = getTableView().getItems().get(getIndex());
+//                    chiTietHoaDonDAO.deleteChiTietHoaDon(hoaDon.getMaHoaDon(), String.valueOf(objects[0]));
+//                    getTableView().getItems().remove(getIndex());
+//                    capNhatTongTien();
+
+                });
+
+                pane.getChildren().add(button);
+                pane.setStyle("-fx-alignment: center;"); // Center the button within the StackPane
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(pane);
+                    button.prefWidthProperty().bind(pane.widthProperty());  // Bind button width to pane
+                    button.prefHeightProperty().bind(pane.heightProperty()); // Bind button height to pane
+                }
+            }
+        });
+        huyMon.setCellFactory(col -> new TableCell<>() {
+            private final Button button = new Button("x");
+            private final StackPane pane = new StackPane();
+
+            {
+                button.setMaxWidth(Double.MAX_VALUE);  // Allow the button to expand horizontally
+                button.setMaxHeight(Double.MAX_VALUE); // Allow the button to expand vertically
+
+                button.setOnAction(event -> {
+                    Object[] objects = getTableView().getItems().get(getIndex());
+                    chiTietHoaDonDAO.deleteChiTietHoaDon(hoaDon.getMaHoaDon(), String.valueOf(objects[0]));
+                    getTableView().getItems().remove(getIndex());
+                    capNhatTongTien();
+
+                });
+
+                button.setStyle("-fx-background-color: #F3B664");
+                pane.getChildren().add(button);
+                pane.setStyle("-fx-alignment: center;"); // Center the button within the StackPane
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(pane);
+                    button.prefWidthProperty().bind(pane.widthProperty());  // Bind button width to pane
+                    button.prefHeightProperty().bind(pane.heightProperty()); // Bind button height to pane
+                }
+            }
+        });
+        tang.setCellFactory(col -> new TableCell<>() {
+            private final Button button = new Button("+");
+            private final StackPane pane = new StackPane();
+
+            {
+                button.setMaxWidth(Double.MAX_VALUE);  // Allow the button to expand horizontally
+                button.setMaxHeight(Double.MAX_VALUE); // Allow the button to expand vertically
+
+                button.setOnAction(event -> {
+                    Object[] objects = getTableView().getItems().get(getIndex());
+                    int sl = Integer.parseInt(String.valueOf(objects[3])) + 1;
+
+                    CTHDCompositeKey key = new CTHDCompositeKey(hoaDon.getMaHoaDon(), String.valueOf(objects[0]));
+
+                    chiTietHoaDonDAO.capNhatSoLuong(key, sl);
+
+                    objects[3] = sl;
+                    orderTable.refresh();
+
+                    capNhatTongTien();
+
+                });
+
+                button.setStyle("-fx-background-color: #9FBB73");
+                pane.getChildren().add(button);
+                pane.setStyle("-fx-alignment: center;"); // Center the button within the StackPane
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(pane);
+                    button.prefWidthProperty().bind(pane.widthProperty());  // Bind button width to pane
+                    button.prefHeightProperty().bind(pane.heightProperty()); // Bind button height to pane
+                }
+            }
+        });
+        giam.setCellFactory(col -> new TableCell<>() {
+            private final Button button = new Button("-");
+            private final StackPane pane = new StackPane();
+
+            {
+                button.setMaxWidth(Double.MAX_VALUE);  // Allow the button to expand horizontally
+                button.setMaxHeight(Double.MAX_VALUE); // Allow the button to expand vertically
+
+                button.setOnAction(event -> {
+                    Object[] objects = getTableView().getItems().get(getIndex());
+                    int sl = Integer.parseInt(String.valueOf(objects[3]));
+                    if(Integer.parseInt(String.valueOf(objects[3])) - 1 != 0)
+                        sl = Integer.parseInt(String.valueOf(objects[3])) - 1;
+
+                    CTHDCompositeKey key = new CTHDCompositeKey(hoaDon.getMaHoaDon(), String.valueOf(objects[0]));
+
+                    chiTietHoaDonDAO.capNhatSoLuong(key, sl);
+
+                    objects[3] = sl;
+                    orderTable.refresh();
+
+                    capNhatTongTien();
+                });
+
+                button.setStyle("-fx-background-color: #F3B664");
+                pane.getChildren().add(button);
+                pane.setStyle("-fx-alignment: center;"); // Center the button within the StackPane
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(pane);
+                    button.prefWidthProperty().bind(pane.widthProperty());  // Bind button width to pane
+                    button.prefHeightProperty().bind(pane.heightProperty()); // Bind button height to pane
+                }
+            }
+        });
+
         orderTable.setItems(objectsObservableList);
         monAnDAO.readAll();
         flowPane.prefHeightProperty().bind(scrollPane.heightProperty());
@@ -161,6 +351,9 @@ public class DatMonController implements Initializable {
         }
     }
 
+    public boolean daLapHoaDon() {
+        return hoaDon != null;
+    }
     public void setNhanVien(NhanVien nhanVien) {
         this.nhanVien = nhanVien;
     }
@@ -183,7 +376,7 @@ public class DatMonController implements Initializable {
 
     @FXML
     void giuBan(ActionEvent event) {
-        if(xacNhan("Xác nhận giữ bàn, bạn có thể huỷ ngay nếu muốn")){
+        if(Notification.xacNhan("Xác nhận giữ bàn, bạn có thể huỷ ngay nếu muốn")){
             this.ban.setTrangThaiBan(TrangThaiBan.DANG_PHUC_VU);
             this.ban = banDAO.updateBan(ban);
             this.trangThaiBanText.setText(ban.getTrangThaiBan().toString());
@@ -200,7 +393,7 @@ public class DatMonController implements Initializable {
 
             this.hoaDon = hoaDonDAO.lapHoaDon(hoaDon);
 
-            thongBao("Giữ bàn thành công", Alert.AlertType.INFORMATION);
+            Notification.thongBao("Giữ bàn thành công", Alert.AlertType.INFORMATION);
         }
     }
     @FXML
@@ -212,12 +405,12 @@ public class DatMonController implements Initializable {
             this.btnHuy.setVisible(false);
             this.btnGiuBan.setVisible(true);
         }
-        else thongBao("Không thể huỷ, hãy tiến hành thanh toán", Alert.AlertType.INFORMATION);
+        else Notification.thongBao("Không thể huỷ, hãy tiến hành thanh toán", Alert.AlertType.INFORMATION);
     }
 
     @FXML
     void thanhToan(ActionEvent event) {
-        if(xacNhan("Xác nhận thanh toán?")){
+        if(Notification.xacNhan("Xác nhận thanh toán?")){
             orderTable.getItems().clear();
             this.hoaDon.setTrangThaiHoaDon(TrangThaiHoaDon.DA_THANH_TOAN);
 
@@ -226,6 +419,8 @@ public class DatMonController implements Initializable {
 
             hoaDonDAO.updateHoaDon(hoaDon);
             banDAO.updateBan(ban);
+
+            hoaDon = null;
 
             this.btnHuy.setVisible(false);
             this.btnGiuBan.setVisible(true);
@@ -283,24 +478,7 @@ public class DatMonController implements Initializable {
         orderTable.getItems().add(objects);
     }
 
-    public boolean xacNhan(String text) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Xác nhận");
-        alert.setHeaderText(text);
 
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.isPresent() && result.get() == ButtonType.OK)
-            return true;
-        return false;
-    }
-
-    public void thongBao(String text, Alert.AlertType alertType) {
-        Alert alert = new Alert(alertType);
-        alert.setTitle("Thông báo");
-        alert.setHeaderText(text);
-
-        alert.showAndWait();
-    }
 
     public HoaDon getHoaDon() {
         return this.hoaDon;

@@ -45,6 +45,14 @@ public class CTHDCompositeKey implements Serializable {
     }
 
     @Override
+    public String toString() {
+        return "CTHDCompositeKey{" +
+                "maHoaDon='" + maHoaDon + '\'' +
+                ", maMonAn='" + maMonAn + '\'' +
+                '}';
+    }
+
+    @Override
     public int hashCode() {
         return Objects.hash(maHoaDon, maMonAn);
     }
