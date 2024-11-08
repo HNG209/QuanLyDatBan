@@ -1,7 +1,5 @@
 package org.login.quanlydatban.entity;
 
-import org.login.quanlydatban.entity.enums.LoaiMonEnum;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;

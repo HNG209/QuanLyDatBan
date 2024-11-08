@@ -22,29 +22,50 @@
    <children>
       <AnchorPane layoutX="715.2000122070312" layoutY="51.20000076293945" prefHeight="565.0" prefWidth="550.0" style="-fx-background-color: white;" styleClass="round-box" stylesheets="@../stylesheets/style.css" AnchorPane.bottomAnchor="19.0" AnchorPane.rightAnchor="17.0" AnchorPane.topAnchor="51.0">
          <children>
-            <Label layoutX="20.0" layoutY="24.0" prefHeight="18.0" prefWidth="75.0" text="Tên món ăn" />
-            <Label layoutX="22.0" layoutY="406.0" prefHeight="18.0" prefWidth="75.0" text="Mô tả" />
+            <Label layoutX="14.0" layoutY="23.0" prefHeight="18.0" prefWidth="75.0" text="Tên món ăn">
+               <font>
+                  <Font size="14.0" />
+               </font></Label>
+            <Label layoutX="14.0" layoutY="408.0" prefHeight="18.0" prefWidth="75.0" text="Mô tả">
+               <font>
+                  <Font size="14.0" />
+               </font></Label>
             <TextArea fx:id="txfMoTa" layoutX="101.0" layoutY="406.0" prefHeight="62.0" prefWidth="426.0" styleClass="round-box" AnchorPane.bottomAnchor="95.79999999999993" AnchorPane.rightAnchor="23.0" AnchorPane.topAnchor="406.0" />
-            <Label layoutX="22.0" layoutY="257.0" prefHeight="18.0" prefWidth="87.0" text="Hình ảnh" />
+            <Label layoutX="14.0" layoutY="259.0" prefHeight="18.0" prefWidth="87.0" text="Hình ảnh">
+               <font>
+                  <Font size="14.0" />
+               </font></Label>
             <ImageView fx:id="anhMon" fitHeight="118.0" fitWidth="118.0" layoutX="103.0" layoutY="247.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../icons/restaurant.png" />
                </image>
             </ImageView>
-            <Button fx:id="taiAnh" layoutX="103.0" layoutY="369.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="118.0" styleClass="round-box" text="Tải ảnh" />
+            <Button fx:id="taiAnh" layoutX="103.0" layoutY="369.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="118.0" styleClass="round-box" text="Tải ảnh">
+               <font>
+                  <Font size="15.0" />
+               </font></Button>
             <TextField fx:id="txtGia" layoutX="101.0" layoutY="199.0" prefHeight="26.0" prefWidth="426.0">
                <styleClass>
                   <String fx:value="round-box" />
                   <String fx:value="underlined-style" />
                </styleClass></TextField>
-            <Label layoutX="22.0" layoutY="203.0" prefHeight="18.0" prefWidth="87.0" text="Giá" />
+            <Label layoutX="14.0" layoutY="205.0" prefHeight="18.0" prefWidth="87.0" text="Giá">
+               <font>
+                  <Font size="14.0" />
+               </font></Label>
             <TextField fx:id="txtDonViTinh" layoutX="101.0" layoutY="156.0" prefHeight="26.0" prefWidth="426.0">
                <styleClass>
                   <String fx:value="round-box" />
                   <String fx:value="underlined-style" />
                </styleClass></TextField>
-            <Label layoutX="22.0" layoutY="160.0" prefHeight="18.0" prefWidth="87.0" text="Đơn vị tính" />
-            <Label layoutX="21.0" layoutY="69.0" prefHeight="18.0" prefWidth="75.0" text="Loại món ăn" />
+            <Label layoutX="14.0" layoutY="162.0" prefHeight="18.0" prefWidth="87.0" text="Đơn vị tính">
+               <font>
+                  <Font size="14.0" />
+               </font></Label>
+            <Label layoutX="14.0" layoutY="68.0" prefHeight="20.0" prefWidth="87.0" text="Loại món ăn">
+               <font>
+                  <Font size="14.0" />
+               </font></Label>
             <ComboBox fx:id="cbloaiMonAn" editable="true" layoutX="101.0" layoutY="65.0" prefHeight="26.0" prefWidth="426.0" styleClass="round-box">
 <!--               <items>-->
 <!--                  <FXCollections fx:factory="observableArrayList">-->
@@ -58,13 +79,16 @@
 <!--                  </FXCollections>-->
 <!--               </items>-->
             </ComboBox>
-            <Label layoutX="22.0" layoutY="116.0" prefHeight="18.0" prefWidth="114.0" text="Trạng thái" />
+            <Label layoutX="14.0" layoutY="116.0" prefHeight="18.0" prefWidth="114.0" text="Trạng thái">
+               <font>
+                  <Font size="14.0" />
+               </font></Label>
             <ComboBox fx:id="cbtrangThaiMon" layoutX="101.0" layoutY="112.0" prefHeight="26.0" prefWidth="426.0" styleClass="round-box">
                <items>
                   <FXCollections fx:factory="observableArrayList">
-                     <String fx:value="CO SAN" />
-                     <String fx:value="TAM HET" />
-                     <String fx:value="NGUNG BAN" />
+                     <String fx:value="Có sẵn" />
+                     <String fx:value="Tạm hết" />
+                     <String fx:value="Ngưng bán" />
                   </FXCollections>
                </items>
             </ComboBox>
@@ -83,8 +107,8 @@
                </padding></FlowPane>
          </content>
       </ScrollPane>
-      <TextField layoutX="364.8" layoutY="17.0" prefHeight="26.0" prefWidth="273.0" promptText="Tìm kiếm..." style="-fx-border-color: #F3B664;" styleClass="round-box" AnchorPane.leftAnchor="365.0" AnchorPane.rightAnchor="642.0" />
-      <Button layoutX="653.6" layoutY="17.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="60.0" style="-fx-border-color: #F3B664; -fx-background-color: white;" styleClass="round-box" AnchorPane.rightAnchor="576.0">
+      <TextField fx:id="txtTimKiem" layoutX="364.8" layoutY="17.0" prefHeight="26.0" prefWidth="273.0" promptText="Tìm kiếm..." style="-fx-border-color: #F3B664;" styleClass="round-box" AnchorPane.leftAnchor="365.0" AnchorPane.rightAnchor="642.0" />
+      <Button fx:id="btnTimKiem" layoutX="653.6" layoutY="17.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="60.0" style="-fx-border-color: #F3B664; -fx-background-color: white;" styleClass="round-box" AnchorPane.rightAnchor="576.0">
          <graphic>
             <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -93,7 +117,15 @@
             </ImageView>
          </graphic>
       </Button>
-      <ComboBox layoutX="48.8" layoutY="17.0" prefHeight="26.0" prefWidth="309.0" promptText="Chọn danh mục tìm kiếm" style="-fx-background-color: white; -fx-border-color: #F3B664;" styleClass="round-box" AnchorPane.leftAnchor="49.0" />
+      <ComboBox fx:id="cbChiMuc" layoutX="48.8" layoutY="17.0" prefHeight="26.0" prefWidth="309.0" promptText="Chọn danh mục tìm kiếm" style="-fx-background-color: white; -fx-border-color: #F3B664;" styleClass="round-box" AnchorPane.leftAnchor="49.0">
+         <items>
+            <FXCollections fx:factory="observableArrayList">
+               <String fx:value="Tìm theo tên món" />
+               <String fx:value="Tìm theo loại món" />
+               <String fx:value="Sắp xếp giá tiền" />
+            </FXCollections>
+         </items>
+      </ComboBox>
       <ImageView fitHeight="29.0" fitWidth="29.0" layoutX="19.0" layoutY="16.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="19.0">
          <image>
             <Image url="@../icons/filter.png" />
@@ -172,7 +204,7 @@
             </Button>
          </children>
       </GridPane>
-      <Button fx:id="btnRefresh" layoutX="713.0" layoutY="17.0" mnemonicParsing="false" onAction="#refreshControl" prefHeight="28.0" prefWidth="60.0" style="-fx-border-color: #F3B664; -fx-background-color: white;" styleClass="round-box">
+      <Button fx:id="btnRefresh" layoutX="713.0" layoutY="17.0" mnemonicParsing="false" onAction="#refreshControl" prefHeight="20.0" prefWidth="60.0" style="-fx-border-color: #F3B664; -fx-background-color: white;" styleClass="round-box" AnchorPane.rightAnchor="507.0">
          <graphic>
             <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                <image>
