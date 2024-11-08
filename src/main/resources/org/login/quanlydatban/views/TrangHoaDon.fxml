@@ -3,7 +3,6 @@
 <?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
@@ -75,16 +74,11 @@
             <Insets left="10.0" right="10.0" />
          </padding>
       </HBox>
-      <TableView fx:id="tableCTHD" layoutX="934.0" layoutY="322.0" prefHeight="304.0" prefWidth="331.0" style="-fx-border-color: green;" styleClass="small-round-box" AnchorPane.bottomAnchor="9.0" AnchorPane.leftAnchor="932.6666666666667" AnchorPane.rightAnchor="16.0" AnchorPane.topAnchor="322.0">
+      <TableView fx:id="tableCTHD" layoutX="934.0" layoutY="322.0" prefHeight="304.0" prefWidth="331.0" style="-fx-border-color: green;" styleClass="small-round-box" AnchorPane.bottomAnchor="9.0" AnchorPane.rightAnchor="16.0" AnchorPane.topAnchor="322.0">
          <columns>
-            <TableColumn prefWidth="47.333251953125">
-               <graphic>
-                  <CheckBox mnemonicParsing="false" />
-               </graphic>
-            </TableColumn>
             <TableColumn fx:id="colTenMonAn" prefWidth="122.66668701171875" text="Tên món ăn" />
             <TableColumn fx:id="colSoLuong" prefWidth="85.333251953125" text="Số lượng" />
-            <TableColumn fx:id="colGhiChu" prefWidth="75.0" text="Ghi chú" />
+            <TableColumn fx:id="colGhiChu" prefWidth="120.66663106282556" text="Ghi chú" />
          </columns>
       </TableView>
       <AnchorPane layoutX="8.0" layoutY="132.0" prefHeight="181.0" prefWidth="1257.0" style="-fx-border-color: black;" stylesheets="@../stylesheets/style.css" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="15.0">
@@ -119,7 +113,7 @@
                   </GridPane>
                </children>
             </HBox>
-            <HBox layoutX="639.0" layoutY="10.0" prefHeight="163.0" prefWidth="609.0" AnchorPane.bottomAnchor="8.0" AnchorPane.topAnchor="11.333333333333334">
+            <HBox layoutX="639.0" layoutY="10.0" prefHeight="163.0" prefWidth="609.0" AnchorPane.bottomAnchor="8.0" AnchorPane.rightAnchor="8.333333333333371" AnchorPane.topAnchor="11.333333333333334">
                <children>
                   <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS">
                      <image>
@@ -160,11 +154,6 @@
       </AnchorPane>
       <TableView fx:id="tabTatCa" layoutY="323.3333333333333" prefHeight="304.0" prefWidth="917.0" style="-fx-border-color: green;" AnchorPane.bottomAnchor="8.0" AnchorPane.leftAnchor="7.0" AnchorPane.rightAnchor="356.0" AnchorPane.topAnchor="323.0">
         <columns>
-            <TableColumn prefWidth="32.000003814697266">
-               <graphic>
-                  <CheckBox mnemonicParsing="false" />
-               </graphic>
-            </TableColumn>
             <TableColumn fx:id="colMaHoaDon" prefWidth="96.0000228881836" text="Mã hóa đơn" />
             <TableColumn fx:id="colNgayLap" prefWidth="150.00001525878906" text="Ngày lập hóa đơn" />
             <TableColumn fx:id="colMaKhachHang" prefWidth="126.66665649414062" text="Mã khách hàng" />
