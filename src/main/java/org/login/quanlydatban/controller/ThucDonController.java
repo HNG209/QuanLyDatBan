@@ -385,6 +385,38 @@ public class ThucDonController implements Initializable {
         return maLoaiMon;
     }
 
+//    private String generateLoaiMonAn(String prefix) {
+//        Long maxId = getMaLoaiFromDatabase(prefix);
+//        Long newIdNumber = (maxId == null) ? 1 : maxId + 1; // Increment ID by 1
+//        return prefix + String.format("%02d", newIdNumber); // Combine prefix with formatted number
+//    }
+//
+//    public Long getMaLoaiFromDatabase(String prefix) {
+//        Session session = HibernateUtils.getFactory().openSession();
+//        Long maLoai = null;
+//
+//        try {
+//            String query = "SELECT loaiMonAn FROM MonAn WHERE loaiMonAn.maLoaiMonAn LIKE :prefix";
+//            List<String> loaiMonAns = session.createQuery(query, String.class)
+//                    .setParameter("prefix", prefix + "%")
+//                    .getResultList();
+//
+//            maLoai = loaiMonAns.stream()
+//                    .filter(ma -> ma.matches(prefix + "\\d{2}")) // Ensure it matches the format with the prefix
+//                    .map(ma -> Long.parseLong(ma.substring(prefix.length()))) // Extract and parse the numeric part
+//                    .max(Long::compare)
+//                    .orElse(0L);
+//
+//        } catch (Exception e) {
+//            e.printStackTrace(); // Replace with logger if needed
+//        } finally {
+//            if (session != null) {
+//                session.close(); // Ensure the session is closed properly
+//            }
+//        }
+//        return maLoai;
+//    }
+
     private String generateMaMonAn() {
         Long maxId = getMaMonFromDatabase();
         Long newIdNumber = (maxId == null) ? 1 : maxId + 1; // Tăng mã lên 1
