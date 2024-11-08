@@ -13,11 +13,9 @@ import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.*;
 import javafx.scene.text.TextAlignment;
+import javafx.stage.Popup;
 import org.hibernate.Session;
 import org.login.quanlydatban.dao.BanDAO;
 import org.login.quanlydatban.dao.ChiTietHoaDonDAO;
@@ -158,12 +156,49 @@ public class DatMonController implements Initializable {
                 button.setMaxWidth(Double.MAX_VALUE);  // Allow the button to expand horizontally
                 button.setMaxHeight(Double.MAX_VALUE); // Allow the button to expand vertically
 
-                button.setOnAction(event -> {
-//                    Object[] objects = getTableView().getItems().get(getIndex());
-//                    chiTietHoaDonDAO.deleteChiTietHoaDon(hoaDon.getMaHoaDon(), String.valueOf(objects[0]));
-//                    getTableView().getItems().remove(getIndex());
-//                    capNhatTongTien();
+                Popup popup = new Popup();
+                Pane widgetPane = new VBox(10); // Using VBox to organize the layout
+                widgetPane.setStyle("-fx-background-color: lightgrey; -fx-padding: 10px; -fx-border-color: grey; -fx-border-width: 1px;");
 
+                // Add a TextArea to the widget pane
+                TextArea textArea = new TextArea();
+                textArea.setPromptText("Enter your text here...");
+                textArea.setPrefSize(200, 100); // Set preferred size for the TextArea
+
+                // Add other components to the widget pane if needed
+                Button widgetButton = new Button("Submit");
+
+                // Add TextArea and Button to the widget-like Pane
+                widgetPane.getChildren().addAll(textArea, widgetButton);
+
+                popup.getContent().add(widgetPane);
+                popup.setAutoHide(true); // Automatically hide when clicking outside
+
+                widgetButton.setOnAction(event -> {
+                    Object[] objects = getTableView().getItems().get(getIndex());
+                    if(!textArea.getText().equals("")){
+                        String note = textArea.getText();
+
+                        ChiTietHoaDon chiTietHoaDon = new ChiTietHoaDon();
+                        CTHDCompositeKey key = new CTHDCompositeKey(hoaDon.getMaHoaDon(), String.valueOf(objects[0]));
+
+                        chiTietHoaDon.setMaChiTietHoaDon(key);
+                        chiTietHoaDon.setGhiChu(note);
+
+                        chiTietHoaDonDAO.capNhatCTHD(chiTietHoaDon);
+
+                        popup.hide();
+                    }
+                });
+
+                button.setOnAction(event -> {
+                    if (!popup.isShowing()) {
+                        // Position the popup near the button
+                        popup.show(button, button.getScene().getWindow().getX() + button.getLayoutX(),
+                                button.getScene().getWindow().getY() + button.getLayoutY() + button.getHeight());
+                    } else {
+                        popup.hide();
+                    }
                 });
 
                 pane.getChildren().add(button);

@@ -16,6 +16,9 @@ public class ChiTietHoaDon implements Serializable {
     @Column(nullable = false)
     private int soLuong = 0;
 
+    @Column
+    private String ghiChu;
+
     @ManyToOne
     @MapsId("maMonAn")
     @JoinColumn(name = "maMonAn", referencedColumnName = "maMonAn")
@@ -40,6 +43,14 @@ public class ChiTietHoaDon implements Serializable {
 
     public HoaDon getHoaDon() {
         return hoaDon;
+    }
+
+    public String getGhiChu() {
+        return ghiChu;
+    }
+
+    public void setGhiChu(String ghiChu) {
+        this.ghiChu = ghiChu;
     }
 
     public void setMaChiTietHoaDon(CTHDCompositeKey maChiTietHoaDon) {
