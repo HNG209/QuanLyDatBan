@@ -16,6 +16,26 @@ public class MonAnDAO {
     private MonAn monAn;
     private List<MonAn> listMonAn;
 
+    public MonAn getOneMonAn(String maMon) {
+        Session session = HibernateUtils.getFactory().openSession();
+        Transaction transaction = null;
+        MonAn monAn = new MonAn();
+        try {
+            transaction = session.beginTransaction();
+            monAn = session.createQuery("FROM MonAn WHERE maMonAn = :maMonAn", MonAn.class)
+                    .setParameter("maMonAn", maMon)
+                    .uniqueResult();
+
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) transaction.rollback();
+            e.printStackTrace(); // Xử lý ngoại lệ nếu có lỗi
+        } finally {
+            session.close();
+        }
+        return monAn;
+    }
+
     public List<MonAn> readAll() {
         Session session = HibernateUtils.getFactory().openSession();
 
@@ -118,18 +138,16 @@ public class MonAnDAO {
         }
     }
 
-    public void capNhatMonAn(String maMonAn, MonAn monAnMoi) {
+    public void capNhatMonAn(MonAn monCu, MonAn monAnMoi) {
         Session session = HibernateUtils.getFactory().openSession();
         Transaction transaction = null;
 
         try {
             transaction = session.beginTransaction();
 
-//            MonAn MonAnCu = session.createQuery("FROM MonAn WHERE maMonAn = :maNhanVien", NhanVien.class)
-//                    .setParameter("maNhanVien", maNhanVien)
-//                    .uniqueResult();
+            monAnMoi.setHinhAnh("haha");
+            session.update(monAnMoi);
 
-            session.update(monAn);
             transaction.commit();
 
         } catch (Exception e) {

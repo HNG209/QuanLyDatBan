@@ -242,7 +242,7 @@ public class ThucDonController implements Initializable {
 
                     if (result == ButtonType.OK) {
                         monMoi = new MonAn(monAn.getMaMonAn(), loaiMonMoi, tenMonMoi, giaMoi, donViMoi, duongDanAnh, trangThaiMoi);
-                        monAnDAO.capNhatMonAn(monAn.getMaMonAn(), monMoi);
+                        monAnDAO.capNhatMonAn(monAn, monMoi);
                         showWarn("Đã cập nhật thành công!");
                         refreshControl(event);
 
