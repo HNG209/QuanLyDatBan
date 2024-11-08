@@ -1,11 +1,12 @@
 package org.login.quanlydatban.dao;
 
 import org.hibernate.Session;
+import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 import org.login.quanlydatban.entity.*;
 import org.login.quanlydatban.entity.enums.TrangThaiHoaDon;
 import org.login.quanlydatban.hibernate.HibernateUtils;
 
-import javax.persistence.Query;
 import javax.persistence.criteria.*;
 import java.sql.*;
 import java.time.LocalDate;
@@ -308,6 +309,27 @@ public class HoaDonDAO {
         session.close();
         return result;
 
+
+    }
+    public List<HoaDon> getAllHoaDon() {
+        List<HoaDon> listHoaDon = new ArrayList<>(); // Khởi tạo
+
+       // List<HoaDon> listHoaDon = null;
+        Session session = HibernateUtils.getFactory().openSession();
+        try (session) {
+            session.getTransaction().begin();
+            listHoaDon = session.createQuery("FROM HoaDon", HoaDon.class).getResultList();
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }finally {
+            session.close();
+        }
+        if(listHoaDon == null){
+            System.out.println("Không có hóa đơn nào");
+        }
+
+        return listHoaDon;
     }
 
     public HoaDon lapHoaDon(HoaDon hoaDon) {
@@ -365,5 +387,11 @@ public class HoaDonDAO {
 
         return list;
     }
+
+
+
+
+
+
 
 }
