@@ -38,7 +38,7 @@
                               <Image url="@../icons/user.png" />
                            </image>
                         </ImageView>
-                        <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="154.0" layoutY="11.0" pickOnBounds="true" preserveRatio="true" styleClass="image-hover-effect">
+                        <ImageView fx:id="setting" fitHeight="30.0" fitWidth="30.0" layoutX="154.0" layoutY="11.0" pickOnBounds="true" preserveRatio="true" styleClass="image-hover-effect">
                            <image>
                               <Image url="@../icons/cogwheel.png" />
                            </image>
