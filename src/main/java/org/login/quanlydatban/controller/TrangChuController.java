@@ -16,6 +16,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.login.quanlydatban.entity.TaiKhoan;
+import org.login.quanlydatban.entity.enums.ChucVu;
 
 import java.io.IOException;
 import java.net.URL;
@@ -37,6 +38,7 @@ public class TrangChuController implements Initializable {
     @FXML
     private ImageView setting;
 
+    private Stage ketCaStage;
     public void setTaiKhoan(TaiKhoan taiKhoan){
         this.taiKhoan = taiKhoan;
         if(taiKhoan != null){
@@ -81,16 +83,56 @@ public class TrangChuController implements Initializable {
     }
     @FXML
     public void thongKe() throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/TrangThongKe.fxml"));
+        String phanQuyen = taiKhoan.getNhanVien().getChucVuNhanVien().toString();
+        String duongDan;
+        Object controller;
+        if (phanQuyen.equalsIgnoreCase(ChucVu.NHAN_VIEN.toString())) {
+            duongDan = "/org/login/quanlydatban/views/TrangThongKeNhanVien.fxml";
+            controller = new ThongKeNhanVienController();
+        } else {
+            duongDan = "/org/login/quanlydatban/views/TrangThongKeQuanLy.fxml";
+            controller = new ThongKeQuanLyController();
+        }
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(duongDan));
         AnchorPane anchorPane = loader.load();
-        ThongKeController thongKeController = loader.getController();
-        thongKeController.setTaiKhoan(this.taiKhoan);
+
+        if (controller instanceof ThongKeNhanVienController) {
+            ThongKeNhanVienController thongKeController = (ThongKeNhanVienController) controller;
+            thongKeController.setTaiKhoan(this.taiKhoan);
+        } else {
+            ThongKeQuanLyController thongKeController = (ThongKeQuanLyController) controller;
+            thongKeController.setTaiKhoan(this.taiKhoan);
+        }
+
         borderPane.setCenter(anchorPane);
 
         anchorPane.prefWidthProperty().bind(borderPane.widthProperty());
         anchorPane.prefHeightProperty().bind(borderPane.heightProperty());
     }
 
+    @FXML
+    public void ketCa() throws IOException {
+
+        if (ketCaStage == null || !ketCaStage.isShowing()) {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/TrangBaoCaoKetCa.fxml"));
+            AnchorPane anchorPane = loader.load();
+            KetCaController ketCa = loader.getController();
+            ketCa.setTaiKhoan(taiKhoan);
+
+            Scene scene = new Scene(anchorPane);
+            ketCaStage = new Stage();
+            ketCaStage.setScene(scene);
+            ketCaStage.setTitle("Báo Cáo Kết Ca");
+            ketCaStage.setOnCloseRequest(e -> ketCaStage = null);
+            ketCaStage.setResizable(false);
+            ketCaStage.show();
+        } else {
+            ketCaStage.toFront();
+        }
+    }
+
+    @FXML
     public void thucDon() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/TrangThucDon.fxml"));
         AnchorPane anchorPane = loader.load();
