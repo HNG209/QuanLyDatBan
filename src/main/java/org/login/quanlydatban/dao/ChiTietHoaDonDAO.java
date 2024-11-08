@@ -91,6 +91,17 @@ public class ChiTietHoaDonDAO {
         return chiTietHoaDon;
     }
 
+    public ChiTietHoaDon getCTHD(CTHDCompositeKey key) {
+        Session session = HibernateUtils.getFactory().openSession();
+        session.getTransaction().begin();
+
+        ChiTietHoaDon chiTietHoaDon = session.get(ChiTietHoaDon.class, key);
+
+        session.getTransaction().commit();
+        session.close();
+        return chiTietHoaDon;
+    }
+
     public List<ChiTietHoaDon> getCTHDfromHD(HoaDon hoaDon) {
         List<ChiTietHoaDon> list = new ArrayList<>();
 
