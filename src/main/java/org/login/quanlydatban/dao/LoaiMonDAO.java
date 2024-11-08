@@ -16,14 +16,36 @@ public class LoaiMonDAO {
     private LoaiMonAn loaiMonAn;
     private List<LoaiMonAn> listLoai;
 
-    public List<LoaiMonAn> getListLoai() {
-        List<LoaiMonAn> listLoai;
-        try (Session session = HibernateUtils.getFactory().openSession()) {
-            CriteriaBuilder builder = session.getCriteriaBuilder();
-            CriteriaQuery<LoaiMonAn> query = builder.createQuery(LoaiMonAn.class);
-            query.from(LoaiMonAn.class);
+    public void themLoaiMonAn(LoaiMonAn loaiMonAn) {
+        Session session = HibernateUtils.getFactory().openSession();
+        Transaction transaction = null;
 
-            listLoai = session.createQuery(query).getResultList();
+        try {
+            transaction = session.beginTransaction();
+
+            session.save(loaiMonAn);
+            transaction.commit();
+
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+    }
+
+    public List<LoaiMonAn> getListLoai() {
+        List<LoaiMonAn> listLoai = null;
+        Session session = HibernateUtils.getFactory().openSession();
+        Transaction transaction = null;
+        try  {
+            transaction = session.beginTransaction();
+            // Sử dụng HQL để lấy tất cả mon an
+            org.hibernate.query.Query<LoaiMonAn> query = session.createQuery("FROM LoaiMonAn", LoaiMonAn.class);
+            listLoai  = query.list(); // Nhớ lưu kết quả vào danh sách
+            transaction.commit();
         } catch (Exception e) {
             e.printStackTrace(); // Handle exception if needed
             listLoai = null;
@@ -45,4 +67,15 @@ public class LoaiMonDAO {
         return loaiMonAn;
     }
 
+
+    public LoaiMonAn getLoaiMonByName(String tenLoai) {
+        Session session = HibernateUtils.getFactory().openSession();
+        try {
+            return session.createQuery("from LoaiMonAn where tenLoaiMonAn = :tenLoai", LoaiMonAn.class)
+                    .setParameter("tenLoai", tenLoai)
+                    .uniqueResult();
+        } finally {
+            session.close();
+        }
+    }
 }

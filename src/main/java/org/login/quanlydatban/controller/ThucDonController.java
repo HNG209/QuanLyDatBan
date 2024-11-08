@@ -80,6 +80,8 @@ public class ThucDonController implements Initializable {
 
     private MonAnDAO monAnDAO;
 
+    private LoaiMonDAO loaiMonDAO;
+
     private String duongDanAnh;
 
     @Override
@@ -87,7 +89,20 @@ public class ThucDonController implements Initializable {
         cbloaiMonAn.getSelectionModel().selectFirst();
         cbtrangThaiMon.getSelectionModel().selectFirst();
         monAnDAO = new MonAnDAO();
+        loaiMonDAO = new LoaiMonDAO();
         System.out.println(monAnDAO.getAllMonAn());
+
+        List<MonAn> monAnList = monAnDAO.getAllMonAn();
+        if (monAnList == null) {
+            showWarn("Danh sach mon an bi trong");
+        }
+
+        List<LoaiMonAn> loaiMonAnList = loaiMonDAO.getListLoai();
+        if (loaiMonAnList == null) {
+            showWarn("Danh sach loai mon an bi trong");
+        }
+
+        loadLoaiMonAnComboBox();
 
         taiAnh.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -115,6 +130,18 @@ public class ThucDonController implements Initializable {
             }
         });
 
+        cbloaiMonAn.getEditor().setOnAction(actionEvent -> {
+            String newValue = cbloaiMonAn.getEditor().getText();
+
+            // Check if the ComboBox already has this value
+            if (!cbloaiMonAn.getItems().contains(newValue) && !newValue.isEmpty()) {
+                // Add the new value to the ComboBox items
+                cbloaiMonAn.getItems().add(newValue);
+            }
+
+            // Clear the editor text and set the new value as selected
+            cbloaiMonAn.setValue(newValue);
+        });
 
 //        btnXoaRong.setOnAction(new EventHandler<ActionEvent>() {
 //            @Override
@@ -232,7 +259,15 @@ public class ThucDonController implements Initializable {
                     String donViMoi = txtDonViTinh.getText();
                     double giaMoi = Double.parseDouble(txtGia.getText());
                     TrangThaiMonAn trangThaiMoi = comboTTValue();
-                    LoaiMonAn loaiMonMoi = comboLoaiMonValue();
+                    String loaiMonMoiName = cbloaiMonAn.getValue();
+
+                    LoaiMonAn loaiMonMoi = loaiMonDAO.getLoaiMonByName(loaiMonMoiName);
+
+                    // If LoaiMonAn doesn't exist, add it
+                    if (loaiMonMoi == null) {
+                        themLoaiMon(); // This will add the new LoaiMonAn
+                        loaiMonMoi = loaiMonDAO.getLoaiMonByName(loaiMonMoiName); // Retrieve the newly added LoaiMonAn
+                    }
 
                     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                     alert.setTitle("XÁC NHẬN CẬP NHẬT");
@@ -302,37 +337,38 @@ public class ThucDonController implements Initializable {
             }
         }
     }
-//    private String generateLoaiMonAn(String prefix) {
-//        Long maxId = getMaLoaiFromDatabase(prefix);
-//        Long newIdNumber = (maxId == null) ? 1 : maxId + 1; // Increment ID by 1
-//        return prefix + String.format("%02d", newIdNumber); // Combine prefix with formatted number
-//    }
-//
-//    public Long getMaLoaiFromDatabase(String prefix) {
-//        Session session = HibernateUtils.getFactory().openSession();
-//        Long maLoai = null;
-//
-//        try {
-//            String query = "SELECT loaiMonAn FROM MonAn WHERE loaiMonAn.maLoaiMonAn LIKE :prefix";
-//            List<String> loaiMonAns = session.createQuery(query, String.class)
-//                    .setParameter("prefix", prefix + "%")
-//                    .getResultList();
-//
-//            maLoai = loaiMonAns.stream()
-//                    .filter(ma -> ma.matches(prefix + "\\d{2}")) // Ensure it matches the format with the prefix
-//                    .map(ma -> Long.parseLong(ma.substring(prefix.length()))) // Extract and parse the numeric part
-//                    .max(Long::compare)
-//                    .orElse(0L);
-//
-//        } catch (Exception e) {
-//            e.printStackTrace(); // Replace with logger if needed
-//        } finally {
-//            if (session != null) {
-//                session.close(); // Ensure the session is closed properly
-//            }
-//        }
-//        return maLoai;
-//    }
+
+    private String generateLoaiMonAn(String prefix) {
+        Long maxId = getMaLoaiFromDatabase(prefix);
+        Long newIdNumber = (maxId == null) ? 1 : maxId + 1; // Increment ID by 1
+        return prefix + String.format("%02d", newIdNumber); // Combine prefix with formatted number
+    }
+
+    public Long getMaLoaiFromDatabase(String prefix) {
+        Session session = HibernateUtils.getFactory().openSession();
+        Long maLoai = null;
+
+        try {
+            String query = "SELECT loaiMonAn FROM MonAn WHERE loaiMonAn.maLoaiMonAn LIKE :prefix";
+            List<String> loaiMonAns = session.createQuery(query, String.class)
+                    .setParameter("prefix", prefix + "%")
+                    .getResultList();
+
+            maLoai = loaiMonAns.stream()
+                    .filter(ma -> ma.matches(prefix + "\\d{2}")) // Ensure it matches the format with the prefix
+                    .map(ma -> Long.parseLong(ma.substring(prefix.length()))) // Extract and parse the numeric part
+                    .max(Long::compare)
+                    .orElse(0L);
+
+        } catch (Exception e) {
+            e.printStackTrace(); // Replace with logger if needed
+        } finally {
+            if (session != null) {
+                session.close(); // Ensure the session is closed properly
+            }
+        }
+        return maLoai;
+    }
 
     private String generateMaMonAn() {
         Long maxId = getMaMonFromDatabase();
@@ -404,16 +440,36 @@ public class ThucDonController implements Initializable {
         alert.showAndWait();
     }
 
+    private void loadLoaiMonAnComboBox() {
+        cbloaiMonAn.getItems().clear();  // Clear current items to avoid duplicates
+        List<LoaiMonAn> loaiMonAnList = loaiMonDAO.getListLoai();
+
+        if (loaiMonAnList != null) {
+            for (LoaiMonAn loaiMonAn : loaiMonAnList) {
+                cbloaiMonAn.getItems().add(loaiMonAn.getTenLoaiMonAn());
+            }
+        } else {
+            showWarn("Danh sách LoaiMonAn rỗng.");
+        }
+    }
+
     //CRUD
     public void themMon() {
         MonAnDAO monAnDAO = new MonAnDAO(); // DAO for MonAn
 
-        LoaiMonAn loaiMon = comboLoaiMonValue();
+        String selectedLoaiMon = cbloaiMonAn.getValue(); // Get the selected or entered value
+        LoaiMonAn loaiMon = loaiMonDAO.getLoaiMonByName(selectedLoaiMon);
+
+        // If it doesn't exist, add it
+        if (loaiMon == null) {
+            themLoaiMon(); // Adds the new LoaiMonAn
+            loaiMon = loaiMonDAO.getLoaiMonByName(selectedLoaiMon); // Retrieve the newly added LoaiMonAn
+        }
 
         TrangThaiMonAn ttMonAn = comboTTValue();
 
         // Get other input values from UI components
-        String moTa = txfMoTa.getText();
+
         double gia = Double.parseDouble(txtGia.getText());
         String tenMonAn = txtTenMonAn.getText();
         String donViTinh = txtDonViTinh.getText();
@@ -431,40 +487,28 @@ public class ThucDonController implements Initializable {
         monAnDAO.themMonAn(monAn);
     }
 
-    public LoaiMonAn comboLoaiMonValue () {
-        LoaiMonDAO loaiMonDAO = new LoaiMonDAO(); // DAO for LoaiMonAn
-        // Determine LoaiMonAn based on selected ComboBox value
-        String loaiMonAnValue = cbloaiMonAn.getValue(); // Value from ComboBox
-        LoaiMonAn loaiMon1 = null;
+    public void themLoaiMon () {
+        LoaiMonDAO loaiMonDAO = new LoaiMonDAO();
+        String maLoai = generateLoaiMonAn("LM");
+        String tenLoai = cbloaiMonAn.getValue();
+        String moTa = txfMoTa.getText();
 
-        // Fetch LoaiMonAn by id based on the selection
-        switch (loaiMonAnValue) {
-            case "TRANG_MIENG":
-                loaiMon1 = loaiMonDAO.getMaLoaiMon("7");
-                break;
-            case "MON_HAI_SAN":
-                loaiMon1 = loaiMonDAO.getMaLoaiMon("6");
-                break;
-            case "MON_TRUYEN_THONG":
-                loaiMon1 = loaiMonDAO.getMaLoaiMon("5");
-                break;
-            case "NUOC_GIAI_KHAT":
-                loaiMon1 = loaiMonDAO.getMaLoaiMon("4");
-                break;
-            case "KHAI_VI":
-                loaiMon1 = loaiMonDAO.getMaLoaiMon("3");
-                break;
-            case "MON_XAO":
-                loaiMon1 = loaiMonDAO.getMaLoaiMon("2");
-                break;
-            default:
-                loaiMon1 = loaiMonDAO.getMaLoaiMon("1");
-                break;
-        }
-        return loaiMon1;
+        LoaiMonAn loaiMonAn = new LoaiMonAn(maLoai, tenLoai, moTa);
+        loaiMonDAO.themLoaiMonAn(loaiMonAn);
     }
 
-    public TrangThaiMonAn comboTTValue () {
+//    public LoaiMonAn comboLoaiMonValue () {
+//        LoaiMonDAO loaiMonDAO = new LoaiMonDAO(); // DAO for LoaiMonAn
+//        // Determine LoaiMonAn based on selected ComboBox value
+//        String loaiMonAnValue = cbloaiMonAn.getValue(); // Value from ComboBox
+//        LoaiMonAn loaiMon1 = null;
+//
+//        // Fetch LoaiMonAn by id based on the selection
+//        return LoaiMon1;
+//    }
+
+
+    public TrangThaiMonAn comboTTValue() {
         // Determine TrangThaiMonAn based on ComboBox value
         TrangThaiMonAn trangThaiMonAn = null;
         String trangThaiValue = cbtrangThaiMon.getValue(); // Value from ComboBox
@@ -489,34 +533,14 @@ public class ThucDonController implements Initializable {
         String ma = monAn.getMaMonAn();
         txtTenMonAn.setText(monAn.getTenMonAn());
 
-        LoaiMonAn lma = monAn.getLoaiMonAn();
-        String loaiValue = null;
-
-        switch (lma.getMaLoaiMonAn()) {
-            case "7":
-                loaiValue = "TRANG_MIENG";
-                break;
-            case "6":
-                loaiValue = "MON_HAI_SAN";
-                break;
-            case "5":
-                loaiValue = "MON_TRUYEN_THONG";
-                break;
-            case "4":
-                loaiValue = "NUOC_GIAI_KHAT";
-                break;
-            case "3":
-                loaiValue = "KHAI_VI";
-                break;
-            case "2":
-                loaiValue = "MON_XAO";
-                break;
-            default:
-                loaiValue = "MON_CHIEN_GION";
-                break;
+        // Setting the corresponding LoaiMonAn name in ComboBox
+        LoaiMonAn loaiMon = monAn.getLoaiMonAn();
+        if (loaiMon != null) {
+            cbloaiMonAn.setValue(loaiMon.getTenLoaiMonAn());
+        } else {
+            cbloaiMonAn.getSelectionModel().clearSelection();
         }
 
-        cbloaiMonAn.setValue(loaiValue);
         cbtrangThaiMon.setValue(String.valueOf(monAn.getTrangThaiMonAn()));
         txtDonViTinh.setText(monAn.getDonViTinh());
         txtGia.setText(String.valueOf(monAn.getDonGia()));

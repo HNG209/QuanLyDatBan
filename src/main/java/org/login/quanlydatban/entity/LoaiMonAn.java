@@ -12,8 +12,8 @@ public class LoaiMonAn implements Serializable {
     @Id
     private String maLoaiMonAn;
 
-    @Enumerated(EnumType.STRING)
-    private LoaiMonEnum tenLoaiMonAn;
+    @Column
+    private String tenLoaiMonAn;
 
     @Column
     private String moTaLoaiMonAn;
@@ -22,21 +22,17 @@ public class LoaiMonAn implements Serializable {
     public LoaiMonAn() {
     }
 
-    public LoaiMonAn(String maLoaiMonAn) {
-        this.maLoaiMonAn = maLoaiMonAn;
-    }
-
-    public LoaiMonAn(String maLoaiMonAn, LoaiMonEnum tenLoaiMonAn, String moTaLoaiMonAn) {
-        this.maLoaiMonAn = maLoaiMonAn;
-        this.tenLoaiMonAn = tenLoaiMonAn;
-        this.moTaLoaiMonAn = moTaLoaiMonAn;
+    public LoaiMonAn(String maLoai, String tenLoai, String moTa) {
+        this.maLoaiMonAn = maLoai;
+        this.tenLoaiMonAn = tenLoai;
+        this.moTaLoaiMonAn = moTa;
     }
 
     public String getMaLoaiMonAn() {
         return maLoaiMonAn;
     }
 
-    public LoaiMonEnum getTenLoaiMonAn() {
+    public String getTenLoaiMonAn() {
         return tenLoaiMonAn;
     }
 
@@ -48,7 +44,7 @@ public class LoaiMonAn implements Serializable {
         this.maLoaiMonAn = maLoaiMonAn;
     }
 
-    public void setTenLoaiMonAn(LoaiMonEnum tenLoaiMonAn) {
+    public void setTenLoaiMonAn(String tenLoaiMonAn) {
         this.tenLoaiMonAn = tenLoaiMonAn;
     }
 
