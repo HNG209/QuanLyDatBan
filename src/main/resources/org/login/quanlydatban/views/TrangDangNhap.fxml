@@ -29,7 +29,7 @@
                </children></Pane>
             <Pane prefHeight="400.0" prefWidth="372.0" styleClass="gradient2">
                <children>
-                  <Pane layoutX="38.0" layoutY="119.0" prefHeight="212.0" prefWidth="246.0" style="-fx-background-color: white;" styleClass="round-box" />
+                  <Pane layoutX="38.0" layoutY="127.0" prefHeight="212.0" prefWidth="246.0" style="-fx-background-color: white;" styleClass="round-box" />
                   <TextField fx:id="username" layoutX="53.0" layoutY="144.0" onKeyPressed="#nhanEnterDeDangNhap" prefHeight="25.0" prefWidth="215.0" />
                   <Label layoutX="53.0" layoutY="127.0" prefHeight="17.0" prefWidth="95.0" text="Tên đăng nhập:" />
                   <Label layoutX="53.0" layoutY="173.0" prefHeight="17.0" prefWidth="87.0" text="Mật khẩu:" />
