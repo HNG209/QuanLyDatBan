@@ -49,24 +49,36 @@
                         <String fx:value="bg1" />
                         <String fx:value="round-box" />
                      </styleClass>
+                     <font>
+                        <Font size="18.0" />
+                     </font>
                   </Label>
                   <Label fx:id="tongDoanhThu" disable="true" layoutX="55.0" layoutY="128.0" prefHeight="40.0" prefWidth="250.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="190.0">
                      <styleClass>
                         <String fx:value="bg1" />
                         <String fx:value="round-box" />
                      </styleClass>
+                     <font>
+                        <Font size="18.0" />
+                     </font>
                   </Label>
                   <Label fx:id="tenNhanVien" disable="true" layoutX="159.0" layoutY="9.0" prefHeight="40.0" prefWidth="250.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
                      <styleClass>
                         <String fx:value="bg1" />
                         <String fx:value="round-box" />
                      </styleClass>
+                     <font>
+                        <Font size="18.0" />
+                     </font>
                   </Label>
                   <Label fx:id="tienCuoiCa" disable="true" layoutX="87.0" layoutY="195.0" prefHeight="40.0" prefWidth="250.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="235.0">
                      <styleClass>
                         <String fx:value="bg1" />
                         <String fx:value="round-box" />
                      </styleClass>
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
                   </Label>
                   <Label layoutX="38.0" layoutY="47.0" prefHeight="40.0" prefWidth="145.0" text="Giờ hiện tại:" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="55.0">
                      <font>
@@ -78,11 +90,17 @@
                         <String fx:value="bg1" />
                         <String fx:value="round-box" />
                      </styleClass>
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
                   </Label>
                   <HBox alignment="TOP_RIGHT" layoutX="233.0" layoutY="67.0" prefHeight="40.0" prefWidth="311.0" spacing="10.0" AnchorPane.rightAnchor="7.0" AnchorPane.topAnchor="100.0">
                      <children>
-                        <TextField prefHeight="40.0" prefWidth="192.0" styleClass="underlined-style" />
-                        <Button mnemonicParsing="false" prefHeight="40.0" prefWidth="80.0" styleClass="sage-green" text="000">
+                        <TextField fx:id="tienVaoCa" alignment="BOTTOM_LEFT" onAction="#loadTienCuoiCaVaChenhLech" prefHeight="40.0" prefWidth="192.0" styleClass="underlined-style">
+                           <font>
+                              <Font name="System Bold" size="18.0" />
+                           </font></TextField>
+                        <Button fx:id="themSo" mnemonicParsing="false" onAction="#capNhatTienVaoCa" prefHeight="40.0" prefWidth="80.0" styleClass="sage-green" text="000">
                            <font>
                               <Font name="System Bold" size="18.0" />
                            </font>
@@ -128,7 +146,10 @@
                         <Font name="System Bold" size="18.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="menhGia1K" layoutX="190.0" layoutY="63.0" prefHeight="40.0" prefWidth="346.0" styleClass="underlined-style" AnchorPane.leftAnchor="189.6" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="5.0" />
+                  <TextField fx:id="menhGia1K" alignment="BOTTOM_CENTER" layoutX="190.0" layoutY="63.0" onAction="#tinhTongMenhGia" prefHeight="40.0" prefWidth="346.0" styleClass="underlined-style" AnchorPane.leftAnchor="189.6" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="5.0">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font></TextField>
                   <Label layoutX="22.0" layoutY="240.0" prefHeight="40.0" prefWidth="158.0" text="Mệnh giá 20.000đ:" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="170.0">
                      <font>
                         <Font name="System Bold" size="18.0" />
@@ -154,14 +175,38 @@
                         <Font name="System Bold" size="18.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="menhGia2K" layoutX="201.0" layoutY="66.0" prefHeight="40.0" prefWidth="346.0" styleClass="underlined-style" AnchorPane.leftAnchor="189.6" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="45.0" />
-                  <TextField fx:id="menhGia5K" layoutX="211.0" layoutY="76.0" prefHeight="40.0" prefWidth="346.0" styleClass="underlined-style" AnchorPane.leftAnchor="189.6" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="85.0" />
-                  <TextField fx:id="menhGia10K" layoutX="352.0" layoutY="165.0" prefHeight="40.0" prefWidth="346.0" styleClass="underlined-style" AnchorPane.leftAnchor="189.6" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="125.0" />
-                  <TextField fx:id="menhGia20K" layoutX="275.0" layoutY="190.0" prefHeight="40.0" prefWidth="346.0" styleClass="underlined-style" AnchorPane.leftAnchor="189.6" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="165.0" />
-                  <TextField fx:id="menhGia50K" layoutX="304.0" layoutY="206.0" prefHeight="40.0" prefWidth="346.0" styleClass="underlined-style" AnchorPane.leftAnchor="189.6" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="205.0" />
-                  <TextField fx:id="menhGia100K" layoutX="218.0" layoutY="266.0" prefHeight="40.0" prefWidth="346.0" styleClass="underlined-style" AnchorPane.leftAnchor="189.6" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="245.0" />
-                  <TextField fx:id="menhGia200K" layoutX="146.0" layoutY="298.0" prefHeight="40.0" prefWidth="346.0" styleClass="underlined-style" AnchorPane.leftAnchor="189.6" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="285.0" />
-                  <TextField fx:id="menhGia500K" layoutX="192.0" layoutY="389.0" prefHeight="40.0" prefWidth="346.0" styleClass="underlined-style" AnchorPane.leftAnchor="189.6" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="325.0" />
+                  <TextField fx:id="menhGia2K" alignment="BOTTOM_CENTER" layoutX="201.0" layoutY="66.0" onAction="#tinhTongMenhGia" prefHeight="40.0" prefWidth="346.0" styleClass="underlined-style" AnchorPane.leftAnchor="189.6" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="45.0">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font></TextField>
+                  <TextField fx:id="menhGia5K" alignment="BOTTOM_CENTER" layoutX="211.0" layoutY="76.0" onAction="#tinhTongMenhGia" prefHeight="40.0" prefWidth="346.0" styleClass="underlined-style" AnchorPane.leftAnchor="189.6" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="85.0">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font></TextField>
+                  <TextField fx:id="menhGia10K" alignment="BOTTOM_CENTER" layoutX="352.0" layoutY="165.0" onAction="#tinhTongMenhGia" prefHeight="40.0" prefWidth="346.0" styleClass="underlined-style" AnchorPane.leftAnchor="189.6" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="125.0">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font></TextField>
+                  <TextField fx:id="menhGia20K" alignment="BOTTOM_CENTER" layoutX="275.0" layoutY="190.0" onAction="#tinhTongMenhGia" prefHeight="40.0" prefWidth="346.0" styleClass="underlined-style" AnchorPane.leftAnchor="189.6" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="165.0">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font></TextField>
+                  <TextField fx:id="menhGia50K" alignment="BOTTOM_CENTER" layoutX="304.0" layoutY="206.0" onAction="#tinhTongMenhGia" prefHeight="40.0" prefWidth="346.0" styleClass="underlined-style" AnchorPane.leftAnchor="189.6" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="205.0">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font></TextField>
+                  <TextField fx:id="menhGia100K" alignment="BOTTOM_CENTER" layoutX="218.0" layoutY="266.0" onAction="#tinhTongMenhGia" prefHeight="40.0" prefWidth="346.0" styleClass="underlined-style" AnchorPane.leftAnchor="189.6" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="245.0">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font></TextField>
+                  <TextField fx:id="menhGia200K" alignment="BOTTOM_CENTER" layoutX="146.0" layoutY="298.0" onAction="#tinhTongMenhGia" prefHeight="40.0" prefWidth="346.0" styleClass="underlined-style" AnchorPane.leftAnchor="189.6" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="285.0">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font></TextField>
+                  <TextField fx:id="menhGia500K" alignment="BOTTOM_CENTER" layoutX="192.0" layoutY="389.0" prefHeight="40.0" prefWidth="346.0" styleClass="underlined-style" AnchorPane.leftAnchor="189.6" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="325.0">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font></TextField>
                   <Label layoutX="50.0" layoutY="440.0" prefHeight="40.0" prefWidth="142.0" text="Tổng mệnh giá:" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.399999999999977" AnchorPane.topAnchor="380.0">
                      <font>
                         <Font name="System Bold" size="18.0" />
@@ -172,6 +217,9 @@
                         <String fx:value="round-box" />
                         <String fx:value="bg1" />
                      </styleClass>
+                     <font>
+                        <Font size="18.0" />
+                     </font>
                   </Label>
                   <Label layoutX="56.0" layoutY="450.0" prefHeight="40.0" prefWidth="142.0" text="Chênh lệch: " AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.399999999999977" AnchorPane.topAnchor="425.0">
                      <font>
@@ -183,6 +231,9 @@
                         <String fx:value="round-box" />
                         <String fx:value="bg1" />
                      </styleClass>
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
                   </Label>
                </children>
             </AnchorPane>
@@ -194,12 +245,17 @@
       </AnchorPane>
       <HBox fx:id="tienCuoica" alignment="CENTER" layoutX="3.0" layoutY="560.0" prefHeight="57.0" prefWidth="809.0" spacing="20.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <children>
-            <Button fx:id="huyKetCa" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="50.0" prefWidth="180.0" styleClass="light-coral" text="Hủy kết ca">
+            <Button fx:id="huyKetCa" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="50.0" prefWidth="180.0" styleClass="exit-button" text="Hủy kết ca" onAction="#thoat">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
             </Button>
-            <Button fx:id="nutKetCa" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="50.0" prefWidth="180.0" styleClass="sage-green" text="Kết ca và xuất báo cáo">
+            <Button fx:id="nutKetCa" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="50.0" prefWidth="180.0" styleClass="sage-green" text="Kết ca và xuất báo cáo" onAction="#xuatBaoCaoKetCa">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Button>
+            <Button fx:id="lamMoi" contentDisplay="CENTER" layoutX="267.0" layoutY="14.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="180.0" styleClass="gradient2" text="Làm mới" onAction="#lamMoi">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>

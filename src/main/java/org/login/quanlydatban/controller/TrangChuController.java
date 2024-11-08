@@ -21,7 +21,7 @@ public class TrangChuController {
     @FXML
     private BorderPane borderPane;
 
-
+    private Stage ketCaStage;
     public void setTaiKhoan(TaiKhoan taiKhoan){
         this.taiKhoan = taiKhoan;
         if(taiKhoan != null){
@@ -87,16 +87,23 @@ public class TrangChuController {
 
     @FXML
     public void ketCa() throws IOException {
-        Stage newStage = new Stage();
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/TrangBaoCaoKetCa.fxml"));
-        AnchorPane anchorPane = loader.load();
-        KetCaController ketCa = loader.getController();
-        ketCa.setTaiKhoan(taiKhoan);
-        Scene scene = new Scene(anchorPane);
-        newStage.setScene(scene);
-        newStage.setTitle("Báo Cáo Kết Ca");
-        newStage.show();
+        if (ketCaStage == null || !ketCaStage.isShowing()) {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/TrangBaoCaoKetCa.fxml"));
+            AnchorPane anchorPane = loader.load();
+            KetCaController ketCa = loader.getController();
+            ketCa.setTaiKhoan(taiKhoan);
+
+            Scene scene = new Scene(anchorPane);
+            ketCaStage = new Stage();
+            ketCaStage.setScene(scene);
+            ketCaStage.setTitle("Báo Cáo Kết Ca");
+            ketCaStage.setOnCloseRequest(e -> ketCaStage = null);
+            ketCaStage.setResizable(false);
+            ketCaStage.show();
+        } else {
+            ketCaStage.toFront();
+        }
     }
 
     @FXML
