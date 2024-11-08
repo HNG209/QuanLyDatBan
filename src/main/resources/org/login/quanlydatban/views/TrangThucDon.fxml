@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import java.lang.String?>
+<?import javafx.collections.FXCollections?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
@@ -14,33 +15,66 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="635.0" prefWidth="1280.0" styleClass="gradient1" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.login.quanlydatban.controller.ThucDonController">
+<AnchorPane prefHeight="635.0" prefWidth="1280.0" styleClass="gradient1" stylesheets="@../stylesheets/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.login.quanlydatban.controller.ThucDonController">
    <children>
-      <Pane layoutX="715.0" layoutY="51.0" prefHeight="565.0" prefWidth="548.0" style="-fx-background-color: white;" styleClass="round-box" AnchorPane.bottomAnchor="19.0" AnchorPane.rightAnchor="17.0" AnchorPane.topAnchor="51.0">
+      <AnchorPane layoutX="715.2000122070312" layoutY="51.20000076293945" prefHeight="565.0" prefWidth="550.0" style="-fx-background-color: white;" styleClass="round-box" stylesheets="@../stylesheets/style.css" AnchorPane.bottomAnchor="19.0" AnchorPane.rightAnchor="17.0" AnchorPane.topAnchor="51.0">
          <children>
             <Label layoutX="20.0" layoutY="24.0" prefHeight="18.0" prefWidth="75.0" text="Tên món ăn" />
             <Label layoutX="22.0" layoutY="406.0" prefHeight="18.0" prefWidth="75.0" text="Mô tả" />
-            <TextArea layoutX="101.0" layoutY="406.0" prefHeight="70.0" prefWidth="426.0" styleClass="round-box" />
+            <TextArea fx:id="txfMoTa" layoutX="101.0" layoutY="406.0" prefHeight="62.0" prefWidth="426.0" styleClass="round-box" AnchorPane.bottomAnchor="95.79999999999993" AnchorPane.rightAnchor="23.0" AnchorPane.topAnchor="406.0" />
             <Label layoutX="22.0" layoutY="257.0" prefHeight="18.0" prefWidth="87.0" text="Hình ảnh" />
-            <ImageView fitHeight="118.0" fitWidth="118.0" layoutX="103.0" layoutY="247.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="anhMon" fitHeight="118.0" fitWidth="118.0" layoutX="103.0" layoutY="247.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../icons/restaurant.png" />
                </image>
             </ImageView>
-            <Button layoutX="103.0" layoutY="369.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="118.0" styleClass="round-box" text="Tải ảnh" />
-            <TextField layoutX="101.0" layoutY="199.0" prefHeight="26.0" prefWidth="426.0" styleClass="round-box" />
+            <Button fx:id="taiAnh" layoutX="103.0" layoutY="369.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="118.0" styleClass="round-box" text="Tải ảnh" />
+            <TextField fx:id="txtGia" layoutX="101.0" layoutY="199.0" prefHeight="26.0" prefWidth="426.0">
+               <styleClass>
+                  <String fx:value="round-box" />
+                  <String fx:value="underlined-style" />
+               </styleClass></TextField>
             <Label layoutX="22.0" layoutY="203.0" prefHeight="18.0" prefWidth="87.0" text="Giá" />
-            <TextField layoutX="101.0" layoutY="156.0" prefHeight="26.0" prefWidth="426.0" styleClass="round-box" />
+            <TextField fx:id="txtDonViTinh" layoutX="101.0" layoutY="156.0" prefHeight="26.0" prefWidth="426.0">
+               <styleClass>
+                  <String fx:value="round-box" />
+                  <String fx:value="underlined-style" />
+               </styleClass></TextField>
             <Label layoutX="22.0" layoutY="160.0" prefHeight="18.0" prefWidth="87.0" text="Đơn vị tính" />
             <Label layoutX="21.0" layoutY="69.0" prefHeight="18.0" prefWidth="75.0" text="Loại món ăn" />
-            <ComboBox layoutX="101.0" layoutY="66.0" prefHeight="26.0" prefWidth="426.0" styleClass="round-box" />
+            <ComboBox fx:id="cbloaiMonAn" editable="true" layoutX="101.0" layoutY="65.0" prefHeight="26.0" prefWidth="426.0" styleClass="round-box">
+<!--               <items>-->
+<!--                  <FXCollections fx:factory="observableArrayList">-->
+<!--                     <String fx:value="TRANG_MIENG" />-->
+<!--                     <String fx:value="KHAI_VI" />-->
+<!--                     <String fx:value="MON_CHIEN_GION" />-->
+<!--                     <String fx:value="MON_XAO" />-->
+<!--                     <String fx:value="MON_HAI_SAN" />-->
+<!--                     <String fx:value="MON_TRUYEN_THONG" />-->
+<!--                     <String fx:value="NUOC_GIAI_KHAT" />-->
+<!--                  </FXCollections>-->
+<!--               </items>-->
+            </ComboBox>
             <Label layoutX="22.0" layoutY="116.0" prefHeight="18.0" prefWidth="114.0" text="Trạng thái" />
-            <ComboBox layoutX="101.0" layoutY="112.0" prefHeight="26.0" prefWidth="426.0" styleClass="round-box" />
-         </children></Pane>
+            <ComboBox fx:id="cbtrangThaiMon" layoutX="101.0" layoutY="112.0" prefHeight="26.0" prefWidth="426.0" styleClass="round-box">
+               <items>
+                  <FXCollections fx:factory="observableArrayList">
+                     <String fx:value="CO SAN" />
+                     <String fx:value="TAM HET" />
+                     <String fx:value="NGUNG BAN" />
+                  </FXCollections>
+               </items>
+            </ComboBox>
+            <TextField fx:id="txtTenMonAn" layoutX="101.0" layoutY="20.0" prefHeight="26.0" prefWidth="426.0" AnchorPane.rightAnchor="23.0">
+               <styleClass>
+                  <String fx:value="round-box" />
+                  <String fx:value="underlined-style" />
+               </styleClass></TextField>
+         </children>
+      </AnchorPane>
       <ScrollPane fx:id="scrollPane" layoutX="19.2" layoutY="51.2" prefHeight="566.0" prefWidth="686.0" AnchorPane.bottomAnchor="18.0" AnchorPane.leftAnchor="19.0" AnchorPane.rightAnchor="575.0" AnchorPane.topAnchor="51.0">
          <content>
             <FlowPane fx:id="flowPane" alignment="CENTER" hgap="30.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="563.0" prefWidth="687.0" styleClass="gradient2" vgap="30.0">
@@ -65,7 +99,6 @@
             <Image url="@../icons/filter.png" />
          </image>
       </ImageView>
-      <TextField layoutX="818.0" layoutY="69.0" prefHeight="26.0" prefWidth="426.0" styleClass="round-box" AnchorPane.rightAnchor="36.0" />
       <GridPane layoutX="730.0" layoutY="529.0" prefHeight="70.0" prefWidth="510.0" AnchorPane.bottomAnchor="29.0" AnchorPane.rightAnchor="40.0">
         <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" maxWidth="167.0" minWidth="10.0" prefWidth="132.40001220703124" />
@@ -77,7 +110,7 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Button mnemonicParsing="false" prefHeight="70.0" prefWidth="117.0" stylesheets="@style.css" text="Thêm" textFill="#0b0b0b">
+            <Button fx:id="btnThemMon" mnemonicParsing="false" onAction="#themControl" prefHeight="70.0" prefWidth="117.0" stylesheets="@style.css" text="Thêm" textFill="#0b0b0b">
                <styleClass>
                   <String fx:value="round-box" />
                   <String fx:value="sage-green" />
@@ -93,7 +126,7 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Button mnemonicParsing="false" prefHeight="70.0" prefWidth="118.0" text="Xóa món" textFill="#0b0b0b" GridPane.columnIndex="1">
+            <Button fx:id="btnXoaMon" mnemonicParsing="false" onAction="#xoaControl" prefHeight="70.0" prefWidth="118.0" text="Xóa món" textFill="#0b0b0b" GridPane.columnIndex="1">
                <font>
                   <Font size="16.0" />
                </font>
@@ -109,7 +142,7 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Button mnemonicParsing="false" prefHeight="70.0" prefWidth="131.0" text="Chỉnh sửa" textFill="#0b0b0b" GridPane.columnIndex="2">
+            <Button fx:id="btnCapNhat" mnemonicParsing="false" onAction="#capNhatControl" prefHeight="70.0" prefWidth="131.0" text="Chỉnh sửa" textFill="#0b0b0b" GridPane.columnIndex="2">
                <styleClass>
                   <String fx:value="round-box" />
                   <String fx:value="pale-lemon" />
@@ -125,7 +158,7 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Button mnemonicParsing="false" prefHeight="69.0" prefWidth="130.0" styleClass="round-box" text="Làm sạch" textFill="#0b0b0b" GridPane.columnIndex="3">
+            <Button fx:id="btnXoaRong" mnemonicParsing="false" onAction="#xoaRongControl" prefHeight="69.0" prefWidth="130.0" styleClass="round-box" text="Làm sạch" textFill="#0b0b0b" GridPane.columnIndex="3">
                <font>
                   <Font size="16.0" />
                </font>
@@ -139,5 +172,14 @@
             </Button>
          </children>
       </GridPane>
+      <Button fx:id="btnRefresh" layoutX="713.0" layoutY="17.0" mnemonicParsing="false" onAction="#refreshControl" prefHeight="28.0" prefWidth="60.0" style="-fx-border-color: #F3B664; -fx-background-color: white;" styleClass="round-box">
+         <graphic>
+            <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../icons/refresh.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
    </children>
 </AnchorPane>

@@ -48,6 +48,17 @@ public class MonAn implements Serializable {
                 '}';
     }
 
+
+    public MonAn(String maMonAn, LoaiMonAn loaiMonAn, String tenMonAn, double donGia, String donViTinh, String hinhAnh, TrangThaiMonAn trangThaiMonAn) {
+        this.maMonAn = maMonAn;
+        this.loaiMonAn = loaiMonAn;
+        this.tenMonAn = tenMonAn;
+        this.donGia = donGia;
+        this.donViTinh = donViTinh;
+        this.hinhAnh = hinhAnh;
+        this.trangThaiMonAn = trangThaiMonAn;
+    }
+
     public String getMaMonAn() {
         return maMonAn;
     }
@@ -74,5 +85,33 @@ public class MonAn implements Serializable {
 
     public TrangThaiMonAn getTrangThaiMonAn() {
         return trangThaiMonAn;
+    }
+
+    public void setMaMonAn(String maMonAn) {
+        this.maMonAn = maMonAn;
+    }
+
+    public void setLoaiMonAn(LoaiMonAn loaiMonAn) {
+        this.loaiMonAn = loaiMonAn;
+    }
+
+    public void setTenMonAn(String tenMonAn) {
+        this.tenMonAn = tenMonAn;
+    }
+
+    public void setDonGia(double donGia) {
+        this.donGia = donGia;
+    }
+
+    public void setDonViTinh(String donViTinh) {
+        this.donViTinh = donViTinh;
+    }
+
+    public void setHinhAnh(String hinhAnh) {
+        this.hinhAnh = hinhAnh;
+    }
+
+    public void setTrangThaiMonAn(TrangThaiMonAn trangThaiMonAn) {
+        this.trangThaiMonAn = trangThaiMonAn;
     }
 }

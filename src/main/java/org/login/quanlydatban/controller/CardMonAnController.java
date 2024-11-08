@@ -57,4 +57,5 @@ public class CardMonAnController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         chiTietHoaDonDAO = new ChiTietHoaDonDAO();
     }
+
 }

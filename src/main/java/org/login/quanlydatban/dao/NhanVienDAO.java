@@ -83,6 +83,8 @@ public class NhanVienDAO {
         }
     }
 
+
+
     public void updateNhanVien(String maNhanVien, NhanVien nhanVienMoi) {
         Session session = HibernateUtils.getFactory().openSession();
         Transaction transaction = null;
