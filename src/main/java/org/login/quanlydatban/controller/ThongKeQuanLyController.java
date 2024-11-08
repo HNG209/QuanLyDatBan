@@ -1,23 +1,21 @@
 package org.login.quanlydatban.controller;
 
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleLongProperty;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.chart.*;
 import javafx.scene.control.*;
+import javafx.scene.control.Label;
 import org.login.quanlydatban.dao.HoaDonDAO;
 import org.login.quanlydatban.entity.TaiKhoan;
+import org.login.quanlydatban.entity.enums.TrangThaiHoaDon;
 
 import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
-public class ThongKeController {
+public class ThongKeQuanLyController {
     @FXML
     private Label doanhThuTrongNgay;
 
@@ -37,11 +35,11 @@ public class ThongKeController {
     private ComboBox<String> namThongKeBieuDoCot;
 
     @FXML
-    private ComboBox<String> namThongKeMonAn;
+    private ComboBox<String> namThongKeBieuDoTron;
     @FXML
-    private ComboBox<String> quyThongKeMonAn;
+    private ComboBox<String> quyThongKeBieuDoTron;
     @FXML
-    private ComboBox<String> thangThongKeMonAn;
+    private ComboBox<String> thangThongKeBieuDoTron;
     @FXML
     private BarChart<String, Number> bieuDoCotDoanhThu; // Thay đổi tên thành bieuDoCotDoanhThu
 
@@ -57,21 +55,7 @@ public class ThongKeController {
     @FXML
     private PieChart bieuDoTronMonAn;
     @FXML
-    private TableView<Object[]> bangXepHangMonAn;
-
-
-    @FXML
-    private TableColumn<Object[], Integer> thuTuCol;
-
-    @FXML
-    private TableColumn<Object[], String> tenMonCol;
-
-    @FXML
-    private TableColumn<Object[], Long> soLuongCol;
-
-    @FXML
-    private TableColumn<Object[], String> doanhThuCol;
-
+    private PieChart bieuDoTronTrangThaiHoaDon;
     private HoaDonDAO hoaDonDAO;
     private ObservableList<Object[]> bxh = FXCollections.observableArrayList();
     private TaiKhoan taiKhoan;
@@ -83,53 +67,31 @@ public class ThongKeController {
     @FXML
     public void initialize() {
         hoaDonDAO = new HoaDonDAO();
-        String maNV = TrangChuController.taiKhoan.getNhanVien().getMaNhanVien();
-
-        thuTuCol.setCellValueFactory(cellData -> new SimpleIntegerProperty((Integer) cellData.getValue()[0]).asObject());
-        tenMonCol.setCellValueFactory(cellData -> new SimpleStringProperty((String) cellData.getValue()[1]));
-        soLuongCol.setCellValueFactory(cellData -> new SimpleLongProperty((Long)(cellData.getValue()[2])).asObject());
-        doanhThuCol.setCellValueFactory(cellData -> new SimpleStringProperty((String) cellData.getValue()[3]));
-        bangXepHangMonAn.setItems(bxh);
-        capNhatComboBoxNamThongKe(maNV);
+        capNhatComboBoxNamThongKe();
         tieuChiThongKeBieuDoCot.getSelectionModel().select("Theo tháng");
         namThongKeBieuDoCot.getSelectionModel().select(0);
-        capNhatDuLieuDoanhThuVaHoaDon(maNV);
-        capNhatDuLieuThongKeMonAnVaLoaiMonAn();
-        capNhatDuLieuChoBieuDoCot(maNV);
-        capNhatBangXepHangMonAn();
+        capNhatDuLieuDoanhThuVaHoaDon();
+        capNhatDuLieuChoBieuDoCot();
+        capNhatDuLieuBieuDoTron();
         tieuChiThongKeBieuDoCot.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if ("Theo tháng".equals(newValue) || "Theo quý".equals(newValue)) {
                 namThongKeBieuDoCot.setVisible(true);
             } else {
                 namThongKeBieuDoCot.setVisible(false);
             }
-            capNhatDuLieuChoBieuDoCot(maNV);
+            capNhatDuLieuChoBieuDoCot();
         });
         namThongKeBieuDoCot.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            capNhatDuLieuChoBieuDoCot(maNV);
+            capNhatDuLieuChoBieuDoCot();
         });
-        namThongKeMonAn.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            capNhatDuLieuThongKeMonAnVaLoaiMonAn();
-            capNhatBangXepHangMonAn();
-        });
-        thangThongKeMonAn.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            quyThongKeMonAn.getSelectionModel().select(0);
-            capNhatDuLieuThongKeMonAnVaLoaiMonAn();
-            capNhatBangXepHangMonAn();
-        });
-        quyThongKeMonAn.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            thangThongKeMonAn.getSelectionModel().select(0);
-            capNhatDuLieuThongKeMonAnVaLoaiMonAn();
-            capNhatBangXepHangMonAn();
-        });
+
     }
 
-    private void capNhatDuLieuDoanhThuVaHoaDon(String maNV) {
-        Object[] tongDoanhThuVaHoaDon = hoaDonDAO.layDoanhThuVaSoHoaDonTheoMaNV(maNV, null);
-        Object[] tongDoanhThuVaHoaDonTheoNgay = hoaDonDAO.layDoanhThuVaSoHoaDonTheoMaNV(maNV, LocalDate.now());
-
+    private void capNhatDuLieuDoanhThuVaHoaDon() {
+        Object[] tongDoanhThuVaHoaDon = hoaDonDAO.layDoanhThuVaSoHoaDon(null, null);
+        Object[] tongDoanhThuVaHoaDonTheoNgay = hoaDonDAO.layDoanhThuVaSoHoaDon(null, LocalDate.now());
         if (tongDoanhThuVaHoaDonTheoNgay != null && tongDoanhThuVaHoaDonTheoNgay.length >= 2) {
-            doanhThuTrongNgay.setText(df.format(tongDoanhThuVaHoaDonTheoNgay[0]));
+            doanhThuTrongNgay.setText(tongDoanhThuVaHoaDonTheoNgay[0] == null ? df.format(0): df.format(tongDoanhThuVaHoaDonTheoNgay[0]));
             soHDTrongNgay.setText(String.valueOf(tongDoanhThuVaHoaDonTheoNgay[1]));
         } else {
             doanhThuTrongNgay.setText(df.format(0));
@@ -144,12 +106,12 @@ public class ThongKeController {
         }
     }
 
-    private void capNhatDuLieuDoanhThuTheoThangHoacQuy(String maNV, int nam, String donVi) {
+    private void capNhatDuLieuDoanhThuTheoThangHoacQuy(int nam, String donVi) {
         List<Object[]> doanhThuVaHoaDon;
         if ("Tháng".equals(donVi)) {
-            doanhThuVaHoaDon = hoaDonDAO.layDoanhThuVaSoHoaDonTheoThang(maNV, nam);
+            doanhThuVaHoaDon = hoaDonDAO.layDoanhThuVaSoHoaDonTheoThang(null, nam);
         } else if ("Quý".equals(donVi)) {
-            doanhThuVaHoaDon = hoaDonDAO.layDoanhThuVaSoHoaDonTheoQuy(maNV, nam);
+            doanhThuVaHoaDon = hoaDonDAO.layDoanhThuVaSoHoaDonTheoQuy(null, nam);
         } else {
             return;
         }
@@ -167,15 +129,14 @@ public class ThongKeController {
         }
         bieuDoCotDoanhThu.getData().clear();
         bieuDoCotDoanhThu.getData().add(series);
-        xDoanhThu.setAnimated(false);
     }
 
-    private void capNhatDuLieuHoaDonTheoThangHoacQuy(String maNV, int nam, String donVi) {
+    private void capNhatDuLieuHoaDonTheoThangHoacQuy(int nam, String donVi) {
         List<Object[]> doanhThuVaHoaDon;
         if ("Tháng".equals(donVi)) {
-            doanhThuVaHoaDon = hoaDonDAO.layDoanhThuVaSoHoaDonTheoThang(maNV, nam);
+            doanhThuVaHoaDon = hoaDonDAO.layDoanhThuVaSoHoaDonTheoThang(null, nam);
         } else if ("Quý".equals(donVi)) {
-            doanhThuVaHoaDon = hoaDonDAO.layDoanhThuVaSoHoaDonTheoQuy(maNV, nam);
+            doanhThuVaHoaDon = hoaDonDAO.layDoanhThuVaSoHoaDonTheoQuy(null, nam);
         } else {
             return;
         }
@@ -193,7 +154,6 @@ public class ThongKeController {
         }
         bieuDoCotHoaDon.getData().clear();
         bieuDoCotHoaDon.getData().add(series);
-        xHoaDon.setAnimated(false);
         NumberAxis yAxis = (NumberAxis) bieuDoCotHoaDon.getYAxis();
         yAxis.setTickUnit(1);
         yAxis.setMinorTickVisible(false);
@@ -214,7 +174,6 @@ public class ThongKeController {
         }
         bieuDoCotHoaDon.getData().clear();
         bieuDoCotHoaDon.getData().add(series);
-        xHoaDon.setAnimated(false);
         NumberAxis yAxis = (NumberAxis) bieuDoCotHoaDon.getYAxis();
         yAxis.setTickUnit(1);
         yAxis.setMinorTickVisible(false);
@@ -235,51 +194,70 @@ public class ThongKeController {
         }
         bieuDoCotDoanhThu.getData().clear();
         bieuDoCotDoanhThu.getData().add(series);
-        xHoaDon.setAnimated(false);
+
+
+    }
+
+    private void capNhatDuLieuChoBieuDoCot() {
+        String tieuChi = tieuChiThongKeBieuDoCot.getSelectionModel().getSelectedItem();
+        int nam = 0;
+        try {
+            nam = Integer.parseInt(namThongKeBieuDoCot.getSelectionModel().getSelectedItem());
+        }
+        catch (NumberFormatException e){
+            nam = 0;
+        }
+        if ("Theo tháng".equals(tieuChi)) {
+            capNhatDuLieuDoanhThuTheoThangHoacQuy(nam, "Tháng");
+            capNhatDuLieuHoaDonTheoThangHoacQuy(nam, "Tháng");
+        } else if ("Theo quý".equals(tieuChi)) {
+            capNhatDuLieuDoanhThuTheoThangHoacQuy(nam, "Quý");
+            capNhatDuLieuHoaDonTheoThangHoacQuy(nam, "Quý");
+        } else if ("Theo năm".equals(tieuChi)) {
+            capNhatDuLieuDoanhThuTheoNam(null);
+            capNhatDuLieuHoaDonTheoNam(null);
+        }
+        bieuDoCotHoaDon.setAnimated(false);
+        bieuDoCotDoanhThu.setAnimated(false);
         NumberAxis yAxis = (NumberAxis) bieuDoCotDoanhThu.getYAxis();
         yAxis.setLowerBound(0);
-        yAxis.setTickUnit(1);
         yAxis.setMinorTickVisible(false);
-
+        bieuDoCotHoaDon.setLegendVisible(false);
+        bieuDoCotDoanhThu.setLegendVisible(false);
+        bieuDoCotDoanhThu.setHorizontalGridLinesVisible(false);
+        bieuDoCotDoanhThu.setVerticalGridLinesVisible(false);
+        bieuDoCotHoaDon.setHorizontalGridLinesVisible(false);
+        bieuDoCotHoaDon.setVerticalGridLinesVisible(false);
     }
 
-    private void capNhatDuLieuChoBieuDoCot(String maNV) {
-//        String tieuChi = tieuChiThongKeBieuDoCot.getSelectionModel().getSelectedItem();
-//        int nam = Integer.parseInt(namThongKeBieuDoCot.getSelectionModel().getSelectedItem());
-//        if ("Theo tháng".equals(tieuChi)) {
-//            capNhatDuLieuDoanhThuTheoThangHoacQuy(maNV, nam, "Tháng");
-//            capNhatDuLieuHoaDonTheoThangHoacQuy(maNV, nam, "Tháng");
-//        } else if ("Theo quý".equals(tieuChi)) {
-//            capNhatDuLieuDoanhThuTheoThangHoacQuy(maNV, nam, "Quý");
-//            capNhatDuLieuHoaDonTheoThangHoacQuy(maNV, nam, "Quý");
-//        } else if ("Theo năm".equals(tieuChi)) {
-//            capNhatDuLieuDoanhThuTheoNam(maNV);
-//            capNhatDuLieuHoaDonTheoNam(maNV);
-//        }
-//        bieuDoCotHoaDon.setAnimated(false);
-//        bieuDoCotDoanhThu.setAnimated(false);
-    }
-
-    private void capNhatDuLieuThongKeMonAnVaLoaiMonAn() {
-        List<Object[]> dsMonAn;
-        int nam = 0, thang = 0, quy = 0;
+    @FXML
+    private void capNhatDuLieuBieuDoTron() {
+        int nam = 0, quy = 0, thang = 0;
         try {
-            nam = Integer.parseInt(namThongKeMonAn.getSelectionModel().getSelectedItem());
+            nam = Integer.parseInt(namThongKeBieuDoTron.getSelectionModel().getSelectedItem());
             try {
-                thang = Integer.parseInt(thangThongKeMonAn.getSelectionModel().getSelectedItem());
+                thang = Integer.parseInt(thangThongKeBieuDoTron.getSelectionModel().getSelectedItem());
+                quyThongKeBieuDoTron.getSelectionModel().select(0);
+                thangThongKeBieuDoTron.getSelectionModel().select(thang);
 
             } catch (NumberFormatException e) {
                 thang = 0;
             }
             try {
-
-                quy = Integer.parseInt(quyThongKeMonAn.getSelectionModel().getSelectedItem());
+                quy = Integer.parseInt(quyThongKeBieuDoTron.getSelectionModel().getSelectedItem());
+                thangThongKeBieuDoTron.getSelectionModel().select(0);
+                quyThongKeBieuDoTron.getSelectionModel().select(quy);
             } catch (NumberFormatException e) {
                 quy = 0;
             }
         } catch (NumberFormatException e) {
             nam = 0;
         }
+        capNhatDuLieuThongKeLoaiMonAn(nam, thang, quy);
+        capNhatDuLieuThongKeTrangThaiHoaDon(nam, thang, quy);
+    }
+    private void capNhatDuLieuThongKeLoaiMonAn(int nam, int thang, int quy) {
+        List<Object[]> dsMonAn;
         dsMonAn = hoaDonDAO.layDoanhThuTheoLoaiMonAn(nam, quy, thang);
         bieuDoTronMonAn.getData().clear();
         double tongDoanhThu = 0;
@@ -294,9 +272,7 @@ public class ThongKeController {
             double phanTram = (tongDoanhThu > 0) ? (doanhThu.doubleValue() / tongDoanhThu) * 100 : 0;
             PieChart.Data slice = new PieChart.Data(tenMonAn, doanhThu.doubleValue());
             bieuDoTronMonAn.getData().add(slice);
-            Label ghiChu = new Label(tenMonAn);
-            ghiChu.setStyle("-fx-font-size: 10px;");
-
+            slice.getNode().setStyle("-fx-border-color: transparent;");
             Tooltip tooltip = new Tooltip();
             slice.getNode().setOnMouseEntered(event -> {
                 tooltip.setText(tenMonAn + " (" + String.format("%.1f", phanTram) + "%)");
@@ -309,52 +285,64 @@ public class ThongKeController {
         }
         bieuDoTronMonAn.setLabelsVisible(false);
     }
+    private void capNhatDuLieuThongKeTrangThaiHoaDon(int nam, int thang, int quy) {
+        List<Object[]> dsTrangThai = hoaDonDAO.laySoHoaDonTheoTrangThaiHoaDon(null, nam, quy, thang);
+        bieuDoTronTrangThaiHoaDon.getData().clear();
 
+        int soLuongHD = 0;
+        for (Object[] trangThai : dsTrangThai) {
+            Number soHoaDon = (Number) trangThai[1];
+            soLuongHD += soHoaDon.intValue();
+        }
 
-    private void capNhatComboBoxNamThongKe(String maNV) {
-        List<Integer> dsNam = hoaDonDAO.layCacNamLapHoaDonTheoMaNV(maNV);
-        namThongKeBieuDoCot.getItems().clear();
-        namThongKeMonAn.getItems().clear();
-        namThongKeMonAn.getItems().add("Tất cả");
-        if (dsNam != null && !dsNam.isEmpty()) {
-            for (Integer nam : dsNam) {
-                namThongKeBieuDoCot.getItems().add(nam.toString());
-                namThongKeMonAn.getItems().add(nam.toString());
+        for (Object[] hoaDon : dsTrangThai) {
+            String tenTrangThai = hoaDon[0].toString();
+            Number soHoaDon = (Number) hoaDon[1];
+            double phanTram = (soLuongHD > 0) ? (soHoaDon.doubleValue() / soLuongHD) * 100 : 0;
+            String tt;
+            if(tenTrangThai.equalsIgnoreCase(TrangThaiHoaDon.DA_THANH_TOAN.toString())) {
+                tt = "Đã thanh toán";
             }
-        }
+            else if(tenTrangThai.equalsIgnoreCase(TrangThaiHoaDon.CHUA_THANH_TOAN.toString())) {
+                tt = "Chưa thanh toán";
+            } else {
+                tt = "";
+            }
+            PieChart.Data slice = new PieChart.Data(tt, soHoaDon.doubleValue());
 
+            bieuDoTronTrangThaiHoaDon.getData().add(slice);
+            slice.getNode().setStyle("-fx-border-color: transparent;");
+
+            // Tooltip hiển thị thông tin
+            Tooltip tooltip = new Tooltip();
+            slice.getNode().setOnMouseEntered(event -> {
+                tooltip.setText(tt + " (" + String.format("%.1f", phanTram) + "%)");
+                tooltip.show(slice.getNode(), event.getScreenX(), event.getScreenY() + 10);
+            });
+
+            slice.getNode().setOnMouseExited(event -> {
+                tooltip.hide();
+            });
+        }
+        bieuDoTronTrangThaiHoaDon.setLabelsVisible(false);
     }
-    private void capNhatBangXepHangMonAn() {
-        List<Object[]> bhx;
-        int nam = 0, thang = 0, quy = 0;
-        int i = 1;
-        try {
-            nam = Integer.parseInt(namThongKeMonAn.getSelectionModel().getSelectedItem());
-        } catch (NumberFormatException e) {
-            nam = 0;
+
+
+    private void capNhatComboBoxNamThongKe() {
+        List<Integer> dsNam = hoaDonDAO.layCacNamLapHoaDon(null);
+        namThongKeBieuDoCot.getItems().clear();
+        namThongKeBieuDoTron.getItems().clear();
+        namThongKeBieuDoTron.getItems().add("Tất cả");
+
+        if (dsNam != null && !dsNam.isEmpty()) {
+            dsNam.stream()
+                    .sorted()
+                    .forEach(nam -> {
+                        namThongKeBieuDoCot.getItems().add(nam.toString());
+                        namThongKeBieuDoTron.getItems().add(nam.toString());
+                    });
         }
 
-        try {
-            thang = Integer.parseInt(thangThongKeMonAn.getSelectionModel().getSelectedItem());
-        } catch (NumberFormatException e) {
-            thang = 0;
-        }
-
-        try {
-            quy = Integer.parseInt(quyThongKeMonAn.getSelectionModel().getSelectedItem());
-        } catch (NumberFormatException e) {
-            quy = 0;
-        }
-
-        // Lấy dữ liệu bảng xếp hạng từ cơ sở dữ liệu
-        bhx = hoaDonDAO.layBangXepHangMonAnTheoSoLuongBanVaDoanhThu(nam, thang, quy);
-
-        // Xóa các dữ liệu cũ trong bảng
-        bangXepHangMonAn.getItems().clear();
-        // Thêm từng dòng dữ liệu vào bảng, với thứ tự tăng dần
-        for (Object[] object : bhx) {
-            bangXepHangMonAn.getItems().add(new Object[]{i++, object[0], object[2], df.format(object[1])});
-        }
     }
 
 
