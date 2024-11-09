@@ -104,8 +104,8 @@ public class NhanVienDAO {
                     return;
                 }
 
-                // Cập nhật thông tin nhân viên
-                nhanVienCu.setMaNhanVien(nhanVienMoi.getMaNhanVien()); // Cập nhật mã nhân viên
+                nhanVienCu.setTenNhanVien(nhanVienMoi.getMaNhanVien());
+                // Cập nhật thông tin nhân viên mà không thay đổi mã nhân viên
                 nhanVienCu.setTenNhanVien(nhanVienMoi.getTenNhanVien());
                 nhanVienCu.setNgaySinh(nhanVienMoi.getNgaySinh());
                 nhanVienCu.setDiaChi(nhanVienMoi.getDiaChi());
@@ -113,25 +113,21 @@ public class NhanVienDAO {
                 nhanVienCu.setHinhAnh(nhanVienMoi.getHinhAnh());
                 nhanVienCu.setSdt(nhanVienMoi.getSdt());
                 nhanVienCu.setCccd(nhanVienMoi.getCccd());
-                nhanVienCu.setTrangThaiNhanVien(nhanVienMoi.getTrangThaiNhanVien());
+               // nhanVienCu.setTrangThaiNhanVien(nhanVienMoi.getTrangThaiNhanVien()); // Cập nhật trạng thái
                 nhanVienCu.setChucVuNhanVien(nhanVienMoi.getChucVuNhanVien());
 
                 // Cập nhật tài khoản liên kết
                 TaiKhoan tktim = taiKhoan.getTaiKhoanNhanVien(maNhanVienCu);
-                TaiKhoan taiKhoan1 = tktim;
                 if (tktim != null) {
-                    tktim.setNhanVien(nhanVienCu); // Cập nhật mã nhân viên trong tài khoản
-                    // Nếu cần, cập nhật các thuộc tính khác của tài khoản
-                    tktim.setUserName(taiKhoan1.getUserName());
-                    tktim.setPassword(taiKhoan1.getPassword());
+                    tktim.setNhanVien(nhanVienCu); // Cập nhật nhân viên liên kết
+                    tktim.setUserName(tktim.getUserName()); // Cập nhật nếu cần
+                    tktim.setPassword(tktim.getPassword()); // Cập nhật nếu cần
                 }
 
                 // Lưu cập nhật
-                session.merge(nhanVienCu); // Sử dụng merge để cập nhật nhân viên cũ
-                session.merge(tktim); // Sử dụng merge để cập nhật tài khoản
-
+                session.update(nhanVienCu); // Sử dụng update để cập nhật nhân viên cũ
                 transaction.commit(); // Cam kết giao dịch
-                System.out.println("Cập nhật thành công.");
+                System.out.println("Cập nhật thành công." + nhanVienCu.getMaNhanVien());
             } else {
                 System.out.println("Không tìm thấy nhân viên với mã: " + maNhanVienCu);
             }

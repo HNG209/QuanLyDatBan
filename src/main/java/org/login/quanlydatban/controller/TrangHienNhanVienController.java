@@ -430,7 +430,7 @@ public class TrangHienNhanVienController implements Initializable {
         }
 
         nv = new NhanVien(maNhanVien.getText().toString(),hoTen.getText().toString(),dienThoai.getText().toString(),cccd.getText().toString(),diaChi.getText().toString(),gt,ngaySinh.getValue(),duongdan.toString(),tt,cv);
-       // NhanVienDAO nvd = new NhanVienDAO();
+        // NhanVienDAO nvd = new NhanVienDAO();
         nvdao.updateNhanVien(nv1.getMaNhanVien().toString(),nv);
     }
 
