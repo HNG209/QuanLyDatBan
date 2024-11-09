@@ -23,6 +23,7 @@ import org.login.quanlydatban.hibernate.HibernateUtils;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Comparator;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -57,6 +58,9 @@ public class ThucDonController implements Initializable {
 
     @FXML
     private ComboBox<String> cbChiMuc;
+
+    @FXML
+    private ComboBox<String> cbSapXep;
 
     @FXML
     private ComboBox<String> cbloaiMonAn;
@@ -161,6 +165,19 @@ public class ThucDonController implements Initializable {
                         timKiemTheoLoai(s);
                     }
                 }
+                else if (cbChiMuc.getSelectionModel().getSelectedIndex() == 2) {
+                    if (cbSapXep.getSelectionModel().isEmpty()){
+                        showWarn("Vui lòng chọn cách sắp xếp");
+                    }
+                    else {
+                        if (cbSapXep.getSelectionModel().getSelectedIndex() == 0) {
+                            ascendingSorting();
+                        }
+                        else {
+                            descendingSorting();
+                        }
+                    }
+                }
 
             }
         });
@@ -171,6 +188,17 @@ public class ThucDonController implements Initializable {
                 cbloaiMonAn.getItems().add(newValue);
                 cbloaiMonAn.setValue(newValue); // Set the new value as selected
             }
+        });
+
+        cbChiMuc.setOnAction(actionEvent -> {
+            if (cbChiMuc.getSelectionModel().getSelectedIndex() == 2) {
+                txtTimKiem.setVisible(false);
+                cbSapXep.setVisible(true);
+            } else {
+                txtTimKiem.setVisible(true);
+                cbSapXep.setVisible(false);
+            }
+
         });
 
 //        btnXoaRong.setOnAction(new EventHandler<ActionEvent>() {
@@ -402,6 +430,58 @@ public class ThucDonController implements Initializable {
             if (flowPane.getChildren().isEmpty()) {
                 showWarn("Không tìm thấy tên loại món bạn cần tìm!");
             }
+    }
+
+    void ascendingSorting () {
+        List<MonAn> sapXepMon = monAnDAO.getAllMonAn();
+        flowPane.getChildren().clear();
+        flowPane.prefHeightProperty().bind(scrollPane.heightProperty());
+        flowPane.prefWidthProperty().bind(scrollPane.widthProperty());
+
+        sapXepMon.sort(Comparator.comparing(MonAn::getDonGia).thenComparing(MonAn::getTenMonAn))  ;
+
+        for (MonAn i : sapXepMon){
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/uicomponents/CardMonAn_TrangThucDon.fxml"));
+                try {
+                    AnchorPane pane = loader.load();
+
+                    CardMonAnThucDonController controller = loader.getController();
+                    controller.setMonAnThucDon(i, this);
+                    controller.setController(this);
+                    flowPane.getChildren().add(pane);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+        }
+        if (flowPane.getChildren().isEmpty()) {
+            showWarn("Không tìm thấy danh sách!");
+        }
+    }
+
+    void descendingSorting () {
+        List<MonAn> sapXepMon = monAnDAO.getAllMonAn();
+        flowPane.getChildren().clear();
+        flowPane.prefHeightProperty().bind(scrollPane.heightProperty());
+        flowPane.prefWidthProperty().bind(scrollPane.widthProperty());
+
+        sapXepMon.sort(Comparator.comparing(MonAn::getDonGia).reversed().thenComparing(MonAn::getTenMonAn))  ;
+
+        for (MonAn i : sapXepMon){
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/uicomponents/CardMonAn_TrangThucDon.fxml"));
+            try {
+                AnchorPane pane = loader.load();
+
+                CardMonAnThucDonController controller = loader.getController();
+                controller.setMonAnThucDon(i, this);
+                controller.setController(this);
+                flowPane.getChildren().add(pane);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        if (flowPane.getChildren().isEmpty()) {
+            showWarn("Không tìm thấy danh sách!");
+        }
     }
 
     @FXML
