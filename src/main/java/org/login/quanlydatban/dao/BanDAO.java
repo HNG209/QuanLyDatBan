@@ -2,6 +2,7 @@ package org.login.quanlydatban.dao;
 
 import org.hibernate.Session;
 import org.login.quanlydatban.entity.Ban;
+import org.login.quanlydatban.entity.ChiTietHoaDon;
 import org.login.quanlydatban.entity.enums.TrangThaiBan;
 import org.login.quanlydatban.hibernate.HibernateUtils;
 
@@ -70,6 +71,18 @@ public class BanDAO {
         return ban;
     }
 
+    public List<Ban> getListBanTrong() {
+        Session session = HibernateUtils.getFactory().openSession();
+        session.getTransaction().begin();
+
+        String sql = "SELECT * FROM Ban WHERE trangThaiBan = 'BAN_TRONG'";
+        List<Ban> list = session.createNativeQuery(sql, Ban.class).getResultList();
+
+        session.getTransaction().commit();
+        session.close();
+
+        return list;
+    }
     public List<Ban> getListBan() {
         return this.listBan;
     }
