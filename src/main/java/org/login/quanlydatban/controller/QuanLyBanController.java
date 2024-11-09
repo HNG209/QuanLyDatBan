@@ -109,6 +109,11 @@ public class QuanLyBanController implements Initializable {
         locTrangThai.getItems().setAll(TrangThaiBan.values());
         checkTamNgungPV.setDisable(true);
 
+        tableBan.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            hienThiThongTinBan();
+            textMaBan.setDisable(true);
+
+        });
     }
     private void demTongBan(List<Ban> banList) {
         int tongBan = banList.size();
@@ -151,6 +156,7 @@ public class QuanLyBanController implements Initializable {
         clearForm();
         checkTamNgungPV.setDisable(true);
         checkTamNgungPV.setSelected(false);
+        onClickReset();
     }
 
     @FXML
@@ -178,6 +184,7 @@ public class QuanLyBanController implements Initializable {
             showAlert("Vui lòng chọn bàn cần xóa!");
         }
         checkTamNgungPV.setDisable(true);
+        onClickReset();
     }
     @FXML
     private void handleSuaBan() {
@@ -187,15 +194,21 @@ public class QuanLyBanController implements Initializable {
             return;
         }
 
-        selectedBan.setMaBan(textMaBan.getText());
+
         selectedBan.setKhuVuc(textKhuVuc.getSelectionModel().getSelectedItem());
         selectedBan.setLoaiBan(textLoaiBan.getSelectionModel().getSelectedItem());
         selectedBan.setTrangThaiBan(checkTamNgungPV.isSelected() ? TrangThaiBan.TAM_NGUNG_PHUC_VU : TrangThaiBan.BAN_TRONG);
 
         banDAO.capnhatBan(selectedBan);
         tableBan.refresh();
+        List<Ban> banList = banDAO.readAll();
+        ObservableList<Ban> banObservableList = FXCollections.observableArrayList(banList);
+        tableBan.setItems(banObservableList);
         clearForm();
         checkTamNgungPV.setDisable(false);
+        onClickReset();
+        textMaBan.setDisable(false);
+
     }
     private void showAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -228,6 +241,28 @@ public class QuanLyBanController implements Initializable {
         List<Ban> banList = banDAO.readAll();
         ObservableList<Ban> banObservableList = FXCollections.observableArrayList(banList);
         tableBan.setItems(banObservableList);
+        demTongBan(banList);
+        demSoLuongTheoTrangThai(banList);
+    }
+    @FXML
+    private void hienThiThongTinBan() {
+        Ban selectedBan = tableBan.getSelectionModel().getSelectedItem();
+
+        if (selectedBan != null) {
+            // Hiển thị thông tin của bàn vào các trường tương ứng
+            textMaBan.setText(selectedBan.getMaBan());
+            textKhuVuc.getSelectionModel().select(selectedBan.getKhuVuc());
+            textLoaiBan.getSelectionModel().select(selectedBan.getLoaiBan());
+
+
+            if (selectedBan.getTrangThaiBan() == TrangThaiBan.TAM_NGUNG_PHUC_VU) {
+                checkTamNgungPV.setSelected(true);
+            } else {
+                checkTamNgungPV.setSelected(false);
+            }
+        } else {
+            clearForm();
+        }
     }
 
 

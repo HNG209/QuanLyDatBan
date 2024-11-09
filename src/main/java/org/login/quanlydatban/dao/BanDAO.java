@@ -103,31 +103,32 @@ public class BanDAO {
         try {
             transaction = session.beginTransaction();
 
+            // Lấy đối tượng `Ban` từ cơ sở dữ liệu
             Ban currentBan = session.get(Ban.class, ban.getMaBan());
             if (currentBan != null) {
-
-                currentBan.setMaBan(ban.getMaBan());
+                // Cập nhật các thuộc tính
                 currentBan.setTrangThaiBan(ban.getTrangThaiBan());
+                currentBan.setKhuVuc(ban.getKhuVuc());
+                currentBan.setLoaiBan(ban.getLoaiBan());
 
-
-
-                session.update(currentBan);
-                transaction.commit();
+                session.update(currentBan); // Lưu thay đổi vào database
+                transaction.commit();       // Commit để xác nhận cập nhật
                 System.out.println("Cập nhật bàn thành công!");
             } else {
                 System.out.println("Không tìm thấy bàn để cập nhật.");
             }
         } catch (Exception e) {
             if (transaction != null) {
-                transaction.rollback();
+                transaction.rollback(); // Rollback trong trường hợp có lỗi
             }
             e.printStackTrace();
             System.out.println("Cập nhật bàn thất bại.");
         } finally {
             session.close();
         }
-        return ban;
+        return ban; // Trả về đối tượng đã cập nhật
     }
+
     public boolean deleteBan(String maBan) {
         Session session = HibernateUtils.getFactory().openSession();
         Transaction transaction = null;
