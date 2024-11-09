@@ -12,6 +12,8 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.InputMethodEvent;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.text.TextAlignment;
@@ -63,6 +65,15 @@ public class DatMonController implements Initializable {
     private BanDAO banDAO;
 
     @FXML
+    private TextField tienKhachDua;
+
+    @FXML
+    private TextField tienTraLai;
+
+    @FXML
+    private TextField phuThu;
+
+    @FXML
     private TableView<Object[]> orderTable;
 
     @FXML
@@ -102,6 +113,9 @@ public class DatMonController implements Initializable {
 
     private ChiTietHoaDonDAO chiTietHoaDonDAO;
     private HoaDon hoaDon;
+
+    private double tkd = 0.0;
+    private double pt = 0.0;
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
@@ -166,7 +180,7 @@ public class DatMonController implements Initializable {
                 textArea.setPrefSize(200, 100); // Set preferred size for the TextArea
 
                 // Add other components to the widget pane if needed
-                Button widgetButton = new Button("Submit");
+                Button widgetButton = new Button("Cập nhật ghi chú");
 
                 // Add TextArea and Button to the widget-like Pane
                 widgetPane.getChildren().addAll(textArea, widgetButton);
@@ -175,14 +189,13 @@ public class DatMonController implements Initializable {
                 popup.setAutoHide(true); // Automatically hide when clicking outside
 
                 widgetButton.setOnAction(event -> {
-                    Object[] objects = getTableView().getItems().get(getIndex());
-                    if(!textArea.getText().equals("")){
+                    if (!textArea.getText().equals("")) {
                         String note = textArea.getText();
-
+                        Object[] objects = getTableView().getItems().get(getIndex());
                         ChiTietHoaDon chiTietHoaDon = new ChiTietHoaDon();
                         CTHDCompositeKey key = new CTHDCompositeKey(hoaDon.getMaHoaDon(), String.valueOf(objects[0]));
-
                         chiTietHoaDon.setMaChiTietHoaDon(key);
+
                         chiTietHoaDon.setGhiChu(note);
 
                         chiTietHoaDonDAO.capNhatCTHD(chiTietHoaDon);
@@ -194,6 +207,15 @@ public class DatMonController implements Initializable {
                 button.setOnAction(event -> {
                     if (!popup.isShowing()) {
                         // Position the popup near the button
+                        if (getTableView() != null) {// if there are not a row in table
+                            Object[] objects = getTableView().getItems().get(getIndex());
+                            CTHDCompositeKey key = new CTHDCompositeKey(hoaDon.getMaHoaDon(), String.valueOf(objects[0]));
+
+                            ChiTietHoaDon chiTietHoaDon = chiTietHoaDonDAO.getCTHD(key);
+
+                            textArea.setText(chiTietHoaDon.getGhiChu());
+                            textArea.positionCaret(textArea.getLength());
+                        }
                         popup.show(button, button.getScene().getWindow().getX() + button.getLayoutX(),
                                 button.getScene().getWindow().getY() + button.getLayoutY() + button.getHeight());
                     } else {
@@ -204,6 +226,7 @@ public class DatMonController implements Initializable {
                 pane.getChildren().add(button);
                 pane.setStyle("-fx-alignment: center;"); // Center the button within the StackPane
             }
+
 
             @Override
             protected void updateItem(Void item, boolean empty) {
@@ -439,26 +462,46 @@ public class DatMonController implements Initializable {
             this.trangThaiBanText.setText(ban.getTrangThaiBan().toString());
             this.btnHuy.setVisible(false);
             this.btnGiuBan.setVisible(true);
+
+            if(hoaDon != null) {
+                hoaDonDAO.xoaHoaDon(hoaDon);
+                hoaDon = null;
+            }
         }
         else Notification.thongBao("Không thể huỷ, hãy tiến hành thanh toán", Alert.AlertType.INFORMATION);
     }
 
     @FXML
     void thanhToan(ActionEvent event) {
-        if(Notification.xacNhan("Xác nhận thanh toán?")){
-            orderTable.getItems().clear();
-            this.hoaDon.setTrangThaiHoaDon(TrangThaiHoaDon.DA_THANH_TOAN);
+        if(hoaDon != null){
+            if (tkd != 0.0){
+                if(pt != 0.0){
+                    if(Notification.xacNhan("Xác nhận thanh toán?")){
+                        orderTable.getItems().clear();
+                        this.hoaDon.setTrangThaiHoaDon(TrangThaiHoaDon.DA_THANH_TOAN);
 
-            ban.setTrangThaiBan(TrangThaiBan.BAN_TRONG);
-            trangThaiBanText.setText(TrangThaiBan.BAN_TRONG.toString());
+                        ban.setTrangThaiBan(TrangThaiBan.BAN_TRONG);
+                        trangThaiBanText.setText(TrangThaiBan.BAN_TRONG.toString());
+                        tongTienTxt.setText("0.0");
+                        tienKhachDua.setText("0.0");
+                        phuThu.setText("0.0");
+                        tienTraLai.setText("");
 
-            hoaDonDAO.updateHoaDon(hoaDon);
-            banDAO.updateBan(ban);
+                        hoaDonDAO.updateHoaDon(hoaDon);
+                        banDAO.updateBan(ban);
 
-            hoaDon = null;
+                        hoaDon = null;
 
-            this.btnHuy.setVisible(false);
-            this.btnGiuBan.setVisible(true);
+                        this.btnHuy.setVisible(false);
+                        this.btnGiuBan.setVisible(true);
+                    }
+                }
+                else Notification.thongBao("Vui lòng nhập phụ thu trước khi thanh toán", Alert.AlertType.INFORMATION);
+            }
+            else Notification.thongBao("Vui lòng nhập tiền khách đưa trước khi thanh toán", Alert.AlertType.INFORMATION);
+        }
+        else {
+            Notification.thongBao("Vui lòng giữ bàn", Alert.AlertType.INFORMATION);
         }
     }
 
@@ -513,7 +556,39 @@ public class DatMonController implements Initializable {
         orderTable.getItems().add(objects);
     }
 
+    @FXML
+    void tinhTienTraLai(KeyEvent event) {
+        if(hoaDon != null){
+            if(event.getSource().equals(tienKhachDua)){
+                System.out.println(0);
+                if (tienKhachDua.getText().matches("\\d+"))
+                    tkd = Double.parseDouble(tienKhachDua.getText());
+                else {
+                    Notification.thongBao("Chỉ được nhập số", Alert.AlertType.INFORMATION);
+                    tienKhachDua.setText(tienKhachDua.getText().substring(0, tienKhachDua.getLength() - 1));
+                    tienKhachDua.positionCaret(tienKhachDua.getText().length());
+                }
+            }
+            else {
+                if (phuThu.getText().matches("\\d+"))
+                    pt = Double.parseDouble(phuThu.getText());
+                else {
+                    System.out.println(phuThu.getText());
+                    Notification.thongBao("Chỉ được nhập số", Alert.AlertType.INFORMATION);
+                    phuThu.setText(phuThu.getText().substring(0, phuThu.getLength() - 1));
+                    phuThu.positionCaret(phuThu.getText().length());
+                }
+            }
+            System.out.println(tkd);
+            System.out.println(hoaDon.getTongTien() + pt);
 
+            if (tkd >= (hoaDon.getTongTien() + pt)){
+                tienTraLai.setText(String.valueOf(tkd - (hoaDon.getTongTien() + pt)));
+            }
+            else tienTraLai.setText("Tiền khách đưa phải lớn hơn hoặc bằng tổng tiền");
+        }
+        else Notification.thongBao("Hãy lập hoá đơn trước khi nhập", Alert.AlertType.INFORMATION);
+    }
 
     public HoaDon getHoaDon() {
         return this.hoaDon;
