@@ -180,7 +180,6 @@ public class TrangChuController implements Initializable {
 
         // Add MenuItems to the ContextMenu
         MenuItem item1 = new MenuItem("Tài khoản");
-        MenuItem item2 = new MenuItem("Option 2");
         SeparatorMenuItem separatorMenuItem = new SeparatorMenuItem();
         MenuItem item3 = new MenuItem("Đăng xuất");
         item3.setOnAction(event -> {
@@ -193,7 +192,7 @@ public class TrangChuController implements Initializable {
             }
         });
 
-        contextMenu.getItems().addAll(item1, item2, separatorMenuItem, item3);
+        contextMenu.getItems().addAll(item1, separatorMenuItem, item3);
 
 
         setting.setOnMouseClicked(event -> {

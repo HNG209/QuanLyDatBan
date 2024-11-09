@@ -160,8 +160,14 @@ public class HoaDon implements Serializable {
 
     public double tinhTongTien() {
         chiTietHoaDonDAO = new ChiTietHoaDonDAO();
-        return chiTietHoaDonDAO.fetchChiTietHoaDonNative(maHoaDon).stream().mapToDouble(ChiTietHoaDon::tinhTongCTHD).sum();
+        tongTien = chiTietHoaDonDAO.fetchChiTietHoaDonNative(maHoaDon).stream().mapToDouble(ChiTietHoaDon::tinhTongCTHD).sum();
+        return tongTien;
     }
+
+    public double getTongTien() {
+        return tongTien;
+    }
+
     @Override
     public String toString() {
         return "HoaDon{" +

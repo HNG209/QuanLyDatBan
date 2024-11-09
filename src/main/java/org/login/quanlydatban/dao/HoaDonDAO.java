@@ -433,9 +433,18 @@ public class HoaDonDAO {
         return result;
     }
 
+    public void xoaHoaDon(HoaDon hoaDon) {
+        Session session = HibernateUtils.getFactory().openSession();
+        session.getTransaction().begin();
 
+        String sql = "DELETE FROM HoaDon WHERE maHoaDon = :maHoaDon";
+        session.createNativeQuery(sql).
+                setParameter("maHoaDon", hoaDon.getMaHoaDon()).
+                executeUpdate();
 
-
+        session.getTransaction().commit();
+        session.close();
+    }
 
 
 
