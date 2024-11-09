@@ -80,6 +80,9 @@
             <TableColumn fx:id="colSoLuong" prefWidth="85.333251953125" text="Số lượng" />
             <TableColumn fx:id="colGhiChu" prefWidth="120.66663106282556" text="Ghi chú" />
          </columns>
+         <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+         </columnResizePolicy>
       </TableView>
       <AnchorPane layoutX="8.0" layoutY="132.0" prefHeight="181.0" prefWidth="1257.0" style="-fx-border-color: black;" stylesheets="@../stylesheets/style.css" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="15.0">
          <children>
@@ -163,6 +166,9 @@
             <TableColumn fx:id="colTongTien" prefWidth="104.66668701171875" text="Tổng tiền" />
             <TableColumn fx:id="colPhuThu" prefWidth="78.0" text="Phụ thu" />
         </columns>
+         <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+         </columnResizePolicy>
       </TableView>
    </children>
 </AnchorPane>
