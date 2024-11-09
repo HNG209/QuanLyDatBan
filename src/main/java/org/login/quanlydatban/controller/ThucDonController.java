@@ -366,7 +366,7 @@ public class ThucDonController implements Initializable {
 
         Object source = event.getSource();
         if (source == btnXoaRong || source == btnXoaMon) {
-            setMonAn(new MonAn());
+            monAn.setMaMonAn(null);
             txtTenMonAn.requestFocus();
             txtTenMonAn.setText("");
             cbloaiMonAn.getSelectionModel().clearSelection();
