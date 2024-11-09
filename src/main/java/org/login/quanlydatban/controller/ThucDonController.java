@@ -366,7 +366,7 @@ public class ThucDonController implements Initializable {
 
         Object source = event.getSource();
         if (source == btnXoaRong || source == btnXoaMon) {
-            monAn.setMaMonAn(null);
+            setMonAn(null);
             txtTenMonAn.requestFocus();
             txtTenMonAn.setText("");
             cbloaiMonAn.getSelectionModel().clearSelection();
@@ -742,20 +742,23 @@ public class ThucDonController implements Initializable {
 
     public void setMonAn(MonAn monAn) {
         this.monAn = monAn;
-        String ma = monAn.getMaMonAn();
-        txtTenMonAn.setText(monAn.getTenMonAn());
 
-        // Setting the corresponding LoaiMonAn name in ComboBox
-        LoaiMonAn loaiMon = monAn.getLoaiMonAn();
-        if (loaiMon != null) {
-            cbloaiMonAn.setValue(loaiMon.getTenLoaiMonAn());
-        } else {
-            cbloaiMonAn.getSelectionModel().clearSelection();
+        if (monAn != null) {
+            txtTenMonAn.setText(monAn.getTenMonAn());
+
+            // Setting the corresponding LoaiMonAn name in ComboBox
+            LoaiMonAn loaiMon = monAn.getLoaiMonAn();
+            if (loaiMon != null) {
+                cbloaiMonAn.setValue(loaiMon.getTenLoaiMonAn());
+            } else {
+                cbloaiMonAn.getSelectionModel().clearSelection();
+            }
+            cbtrangThaiMon.setValue(String.valueOf(monAn.getTrangThaiMonAn()));
+            txtDonViTinh.setText(monAn.getDonViTinh());
+            txtGia.setText(String.valueOf(monAn.getDonGia()));
+            txfMoTa.setText(loaiMon.getMoTaLoaiMonAn());
         }
-        cbtrangThaiMon.setValue(String.valueOf(monAn.getTrangThaiMonAn()));
-        txtDonViTinh.setText(monAn.getDonViTinh());
-        txtGia.setText(String.valueOf(monAn.getDonGia()));
-        txfMoTa.setText(loaiMon.getMoTaLoaiMonAn());
+
     }
 
 }
