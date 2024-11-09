@@ -73,14 +73,27 @@ public class TrangChuController implements Initializable {
     public void quanlynhanvien() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/QuanLyNhanVien_XemDS.fxml"));
         AnchorPane anchorPane = loader.load();
-        TrangQuanLyNhanVien nv = loader.getController();
-        //System.out.println(taiKhoan.getUserName().toString());
+        TrangQuanLyNhanVienController nv = loader.getController();
         nv.setNhanvien(taiKhoan.getUserName().toString());
         borderPane.setCenter(anchorPane);
         anchorPane.prefWidthProperty().bind(borderPane.widthProperty());
         anchorPane.prefHeightProperty().bind(borderPane.heightProperty());
 
     }
+
+    @FXML
+    public void quanlytaikhoan() throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/TrangTaiKhoan.fxml"));
+        AnchorPane anchorPane = loader.load();
+        TrangQuanLyTaiKhoanController nv = loader.getController();
+        nv.setTenNhanVien(taiKhoan.getUserName().toString());
+        borderPane.setCenter(anchorPane);
+        anchorPane.prefWidthProperty().bind(borderPane.widthProperty());
+        anchorPane.prefHeightProperty().bind(borderPane.heightProperty());
+
+    }
+
+
     @FXML
     public void thongKe() throws IOException {
         String phanQuyen = taiKhoan.getNhanVien().getChucVuNhanVien().toString();

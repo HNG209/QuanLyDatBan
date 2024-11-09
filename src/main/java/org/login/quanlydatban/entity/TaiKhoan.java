@@ -16,9 +16,21 @@ public class TaiKhoan implements Serializable {
     private String password;
 
     @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "nhanVien_maNhanVien", referencedColumnName = "maNhanVien") // Khóa ngoại liên kết đến NhanVien
     private NhanVien nhanVien;
 
     public TaiKhoan() {
+    }
+
+    public TaiKhoan(String userName, String password, NhanVien nhanVien) {
+        this.userName = userName;
+        this.password = password;
+        this.nhanVien = nhanVien;
+    }
+
+    public TaiKhoan(String userName, String password) {
+        this.userName = userName;
+        this.password = password;
     }
 
     public String getUserName() {

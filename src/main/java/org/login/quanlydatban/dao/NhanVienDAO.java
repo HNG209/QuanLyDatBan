@@ -8,10 +8,12 @@ import org.login.quanlydatban.entity.NhanVien;
 import org.login.quanlydatban.entity.TaiKhoan;
 import org.login.quanlydatban.hibernate.HibernateUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class NhanVienDAO {
     private NhanVien nhanVien;
+    private TaiKhoanDAO taiKhoan;
     public List<NhanVien> getAllTaiKhoan() {
         List<NhanVien> taiKhoanList = null;
         Session session = HibernateUtils.getFactory().openSession();
@@ -83,36 +85,55 @@ public class NhanVienDAO {
         }
     }
 
-
-
-    public void updateNhanVien(String maNhanVien, NhanVien nhanVienMoi) {
+    public void updateNhanVien(String maNhanVienCu, NhanVien nhanVienMoi) {
         Session session = HibernateUtils.getFactory().openSession();
         Transaction transaction = null;
+        taiKhoan = new TaiKhoanDAO();
 
         try {
             transaction = session.beginTransaction(); // Bắt đầu giao dịch
 
-            // Tìm nhân viên theo mã
+            // Tìm nhân viên theo mã cũ
             NhanVien nhanVienCu = session.createQuery("FROM NhanVien WHERE maNhanVien = :maNhanVien", NhanVien.class)
-                    .setParameter("maNhanVien", maNhanVien)
+                    .setParameter("maNhanVien", maNhanVienCu)
                     .uniqueResult();
 
             if (nhanVienCu != null) {
-                nhanVienCu.setMaNhanVien(nhanVienMoi.getMaNhanVien());
-                // Cập nhật thông tin nhân viên cũ từ nhân viên mới
+                if (nhanVienMoi == null) {
+                    System.out.println("Thông tin nhân viên mới không hợp lệ.");
+                    return;
+                }
+
+                // Cập nhật thông tin nhân viên
+                nhanVienCu.setMaNhanVien(nhanVienMoi.getMaNhanVien()); // Cập nhật mã nhân viên
                 nhanVienCu.setTenNhanVien(nhanVienMoi.getTenNhanVien());
                 nhanVienCu.setNgaySinh(nhanVienMoi.getNgaySinh());
                 nhanVienCu.setDiaChi(nhanVienMoi.getDiaChi());
                 nhanVienCu.setGioiTinh(nhanVienMoi.isGioiTinh());
-               // nhanVienCu.setHinhAnh(nhanVienMoi.getHinhAnh());
+                nhanVienCu.setHinhAnh(nhanVienMoi.getHinhAnh());
                 nhanVienCu.setSdt(nhanVienMoi.getSdt());
                 nhanVienCu.setCccd(nhanVienMoi.getCccd());
-//              nhanVienCu.setTrangThaiNhanVien(nhanVienMoi.getTrangThaiNhanVien());
-//              nhanVienCu.setChucVuNhanVien(nhanVienMoi.getChucVuNhanVien());
-                session.update(nhanVienCu); // Cập nhật nhân viên vào cơ sở dữ liệu
+                nhanVienCu.setTrangThaiNhanVien(nhanVienMoi.getTrangThaiNhanVien());
+                nhanVienCu.setChucVuNhanVien(nhanVienMoi.getChucVuNhanVien());
+
+                // Cập nhật tài khoản liên kết
+                TaiKhoan tktim = taiKhoan.getTaiKhoanNhanVien(maNhanVienCu);
+                TaiKhoan taiKhoan1 = tktim;
+                if (tktim != null) {
+                    tktim.setNhanVien(nhanVienCu); // Cập nhật mã nhân viên trong tài khoản
+                    // Nếu cần, cập nhật các thuộc tính khác của tài khoản
+                    tktim.setUserName(taiKhoan1.getUserName());
+                    tktim.setPassword(taiKhoan1.getPassword());
+                }
+
+                // Lưu cập nhật
+                session.merge(nhanVienCu); // Sử dụng merge để cập nhật nhân viên cũ
+                session.merge(tktim); // Sử dụng merge để cập nhật tài khoản
+
                 transaction.commit(); // Cam kết giao dịch
+                System.out.println("Cập nhật thành công.");
             } else {
-                System.out.println("Không tìm thấy nhân viên với mã: " + maNhanVien);
+                System.out.println("Không tìm thấy nhân viên với mã: " + maNhanVienCu);
             }
         } catch (Exception e) {
             if (transaction != null) {
@@ -123,8 +144,33 @@ public class NhanVienDAO {
             session.close(); // Đảm bảo đóng session
         }
     }
+    public List<NhanVien> getNhanVienWithTaiKhoan() {
+        Session session = HibernateUtils.getFactory().openSession();
+        Transaction transaction = null;
+        List<NhanVien> nhanViens = new ArrayList<>();
 
+        try {
+            transaction = session.beginTransaction();
+            String hql = "SELECT nv, tk FROM NhanVien nv JOIN nv.taiKhoan tk";
+            Query<Object[]> query = session.createQuery(hql, Object[].class);
 
-
-
+            List<Object[]> results = query.getResultList();
+            for (Object[] result : results) {
+                NhanVien nv = (NhanVien) result[0];
+                TaiKhoan tk = (TaiKhoan) result[1];
+                nv.setTenTaiKhoan(tk.getUserName());
+                nv.setTaiKhoan(tk); // Giả sử bạn có phương thức setTaiKhoan trong NhanVien
+                nhanViens.add(nv);
+            }
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+        return nhanViens; // Trả về danh sách nhân viên cùng với tài khoản
+    }
 }

@@ -21,7 +21,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class TrangQuanLyNhanVien implements Initializable {
+public class TrangQuanLyNhanVienController implements Initializable {
     @FXML
     private Button btnthem;
     @FXML
@@ -81,9 +81,9 @@ public class TrangQuanLyNhanVien implements Initializable {
                     // Tải giao diện từ file FXML
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/QuanLyNhanVien.fxml"));
                     Parent newWindow = loader.load();
-                    TrangThemNhanVien nv = loader.getController();
+                    TrangThemNhanVienController nv = loader.getController();
                     nv.setTenNhanVien(getNhanvien().toString());
-                    nv.SetTrangQuanLyNhanVien(TrangQuanLyNhanVien.this);
+                    nv.SetTrangQuanLyNhanVien(TrangQuanLyNhanVienController.this);
                     // Tạo một cửa sổ mới
                     Stage stage = new Stage();
                     stage.setScene(new Scene(newWindow));
@@ -201,16 +201,10 @@ public class TrangQuanLyNhanVien implements Initializable {
                         String cellValue = tableNhanVien.getItems().get(rowIndex).getMaNhanVien();
                         NhanVienDAO nvdao = new  NhanVienDAO();
                         NhanVien nvtim = nvdao.getNhanVien(cellValue);
-                        if(nvtim != null){
-                            System.out.println(nvtim.getTenNhanVien());
-                            System.out.println("ma nahn vien"+ cellValue);
-                            System.out.println("nhan vien da lick co ten la "+ nvtim.getMaNhanVien());
-                        }
-
                         FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/HienvaSuaNhanVien.fxml"));
                         Parent newWindow = loader.load();
-                        TrangHienNhanVien nvfml = loader.getController();
-                        nvfml.SetTrangQuanLyNhanVien(TrangQuanLyNhanVien.this);
+                        TrangHienNhanVienController nvfml = loader.getController();
+                        nvfml.SetTrangQuanLyNhanVien(TrangQuanLyNhanVienController.this);
                         nvfml.setGetMaNhanVien(cellValue);
                         nvfml.loaddulieulenform(nvtim);
                         System.out.println(nvfml.getGetMaNhanVien()+" ma nhan vien sau khi truyen ");
@@ -227,33 +221,5 @@ public class TrangQuanLyNhanVien implements Initializable {
            }
 
    });
-
-//         tableNhanVien.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue)->{
-//                     int selectedIndex = 0;
-//                     if(newValue != null)
-//                        selectedIndex = tableNhanVien.getSelectionModel().getSelectedIndex(); // Lấy chỉ số của dòng được chọn
-//                        NhanVien rowData = tableNhanVien.getItems().get(selectedIndex); // Lấy mảng chuỗi từ chỉ số hàng
-//                        String cellValueID = rowData.getMaNhanVien(); // Lấy giá trị từ cột
-//                        NhanVien nv = listNhanVien.stream().filter(e -> e.getMaNhanVien().equals(cellValueID)).findFirst().orElse(null);
-//                        // Tải giao diện từ file FXML
-//                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/HienvaSuaNhanVien.fxml"));
-//                        Parent newWindow = null;
-//                        try {
-//                         newWindow = loader.load();
-//                        } catch (IOException e) {
-//                         throw new RuntimeException(e);
-//                        }
-//                        TrangHienNhanVien nvfml = loader.getController();
-//                        System.out.println(cellValueID);
-//
-//                        nvfml.SetTrangQuanLyNhanVien(TrangQuanLyNhanVien.this, nv);
-//
-//                        Stage stage = new Stage();
-//                        stage.setScene(new Scene(newWindow));
-//                        stage.setTitle("Quản Lý Nhân Viên");
-//                        stage.show();
-//
-//
-//        });
     }
 }

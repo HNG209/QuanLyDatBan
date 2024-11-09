@@ -96,7 +96,7 @@
                   <Menu mnemonicParsing="false" text="Nhân viên">
                     <items>
                       <MenuItem mnemonicParsing="false" onAction="#quanlynhanvien" text="Quản lý nhân viên" />
-                        <MenuItem mnemonicParsing="false" text="Quản lý tài khoản" />
+                        <MenuItem mnemonicParsing="false" onAction="#quanlytaikhoan" text="Quản lý tài khoản" />
                     </items>
                      <graphic>
                         <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">

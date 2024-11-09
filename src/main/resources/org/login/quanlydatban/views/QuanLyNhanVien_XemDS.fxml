@@ -1,82 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.String?>
-<?import javafx.collections.FXCollections?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="600.0" prefWidth="1280.0" styleClass="gradient3" stylesheets="@../stylesheets/style.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.login.quanlydatban.controller.TrangQuanLyNhanVien">
+<AnchorPane prefHeight="600.0" prefWidth="1280.0" styleClass="gradient3" stylesheets="@../stylesheets/style.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.login.quanlydatban.controller.TrangQuanLyNhanVienController">
    <children>
-      <TableView fx:id="tableNhanVien" layoutY="188.8" prefHeight="411.0" prefWidth="1288.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="189.0">
+      <TableView fx:id="tableNhanVien" layoutX="14.0" layoutY="175.2" prefHeight="411.0" prefWidth="1259.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="175.0">
         <columns>
-          <TableColumn id="nhanvienIDtb" fx:id="nhanVienID" prefWidth="143.99999117851257" text="ID Nhân Viên" />
-          <TableColumn fx:id="tenNhanVien" prefWidth="289.6000213623047" text="Tên Nhân Viên" />
-            <TableColumn fx:id="soDienThoai" prefWidth="227.20001220703125" text="Số điện thoại" />
-            <TableColumn fx:id="gioiTinh" prefWidth="137.60003662109375" text="Giới tính" />
-            <TableColumn fx:id="trangThai" prefWidth="160.0001220703125" text="Trạng thái" />
-            <TableColumn fx:id="diaChi" prefWidth="143.199951171875" text="Địa chỉ" />
+          <TableColumn id="nhanvienIDtb" fx:id="nhanVienID" prefWidth="182.40003049373627" text="ID Nhân Viên" />
+          <TableColumn fx:id="tenNhanVien" prefWidth="243.19998168945312" text="Tên Nhân Viên" />
+            <TableColumn fx:id="soDienThoai" prefWidth="195.99996948242188" text="Số điện thoại" />
+            <TableColumn fx:id="gioiTinh" prefWidth="214.39996337890625" text="Giới tính" />
+            <TableColumn fx:id="trangThai" prefWidth="193.60009765625" text="Trạng thái" />
+            <TableColumn fx:id="diaChi" prefWidth="258.39990234375" text="Địa chỉ" />
         </columns>
       </TableView>
-      <Label alignment="CENTER" layoutY="140.0" prefHeight="38.0" prefWidth="1288.0" text="Danh sách nhân viên" textAlignment="CENTER">
+      <Label alignment="CENTER" layoutY="110.0" prefHeight="38.0" prefWidth="1288.0" text="Danh sách nhân viên" textAlignment="CENTER" AnchorPane.bottomAnchor="452.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <font>
-            <Font name="Times New Roman" size="18.0" />
+            <Font name="Times New Roman" size="24.0" />
          </font>
       </Label>
-      <TextField fx:id="searchID" layoutX="14.0" layoutY="51.0" prefHeight="47.0" prefWidth="395.0" promptText="nhập để tìm kiếm" style="-fx-background-color: #FFFFFF;" styleClass="round-box" />
-      <ComboBox id="cbxsapxep" fx:id="cbxloc" layoutX="887.0" layoutY="25.0" prefHeight="74.0" prefWidth="158.0" promptText="Sắp xếp theo" style="-fx-background-color: #8FA679;" styleClass="round-box" stylesheets="@../stylesheets/style.css">
-         <items>
-            <FXCollections fx:factory="observableArrayList">
-               <String fx:value="Theo ID" />
-               <String fx:value="Theo họ và tên" />
-               <String fx:value="Theo địa chỉ" />
-               <String fx:value="Theo cccd" />
-               <String fx:value="Theo chức vụ" />
-            </FXCollections>
-         </items>
-      </ComboBox>
-      <RadioButton layoutX="1049.0" layoutY="39.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="67.0" text="Tăng" />
-      <Button fx:id="btnloc" layoutX="1112.0" layoutY="26.0" mnemonicParsing="false" prefHeight="74.0" prefWidth="130.0" style="-fx-background-color: #8FA679;" styleClass="round-box" stylesheets="@../stylesheets/style.css" text="Lọc">
-         <font>
-            <Font size="18.0" />
-         </font></Button>
-      <Button fx:id="btnthem" layoutX="486.0" layoutY="27.0" lineSpacing="1.0" mnemonicParsing="false" onAction="#themNhanVien" prefHeight="73.0" prefWidth="158.0" style="-fx-background-color: #8FA679;" styleClass="round-box" stylesheets="@../stylesheets/style.css" text="    Thêm mới">
+      <TextField fx:id="searchID" layoutX="14.0" layoutY="23.0" prefHeight="47.0" prefWidth="395.0" promptText="nhập để tìm kiếm" style="-fx-background-color: #FFFFFF;" styleClass="round-box" />
+      <Button fx:id="btnthem" layoutX="938.4" layoutY="26.4" lineSpacing="1.0" mnemonicParsing="false" onAction="#themNhanVien" prefHeight="74.0" prefWidth="150.0" style="-fx-background-color: #8FA679;" styleClass="round-box" stylesheets="@../stylesheets/style.css" text="    Thêm mới" AnchorPane.leftAnchor="938.0" AnchorPane.topAnchor="26.0">
          <font>
             <Font size="18.0" />
          </font>
       </Button>
-      <ImageView fitHeight="30.0" fitWidth="31.0" layoutX="495.0" layoutY="47.0">
+      <ImageView fitHeight="30.0" fitWidth="31.0" layoutX="948.0" layoutY="46.0" AnchorPane.bottomAnchor="523.6" AnchorPane.topAnchor="46.0">
          <image>
             <Image url="@../icons/plus.png" />
          </image>
       </ImageView>
-      <Button fx:id="btnxuatFile" layoutX="658.0" layoutY="29.0" lineSpacing="1.0" mnemonicParsing="false" prefHeight="74.0" prefWidth="149.0" style="-fx-background-color: #8FA679;" styleClass="round-box" text="      Xuất file">
+      <Button fx:id="btnxuatFile" layoutX="1115.0" layoutY="26.0" lineSpacing="1.0" mnemonicParsing="false" prefHeight="74.0" prefWidth="149.0" style="-fx-background-color: #8FA679;" styleClass="round-box" text="      Xuất file" AnchorPane.leftAnchor="1115.0" AnchorPane.topAnchor="26.0">
          <font>
             <Font size="18.0" />
          </font></Button>
-      <ImageView fitHeight="30.0" fitWidth="31.0" layoutX="677.0" layoutY="46.0">
+      <ImageView fitHeight="30.0" fitWidth="31.0" layoutX="1131.0" layoutY="46.0" AnchorPane.bottomAnchor="524.4" AnchorPane.topAnchor="46.0">
          <image>
             <Image url="@../icons/share.png" />
          </image>
       </ImageView>
-      <Pane layoutX="819.0" layoutY="26.0" prefHeight="74.0" prefWidth="74.0" style="-fx-background-color: #8FA679;" styleClass="round-box" stylesheets="@../stylesheets/style.css">
-         <children>
-            <ImageView fitHeight="30.0" fitWidth="25.0" layoutX="25.0" layoutY="22.0">
-               <image>
-                  <Image url="@../icons/sort.png" />
-               </image>
-            </ImageView>
-         </children>
-      </Pane>
-      <RadioButton layoutX="1049.0" layoutY="64.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="74.0" text="Giảm" />
    </children>
 </AnchorPane>

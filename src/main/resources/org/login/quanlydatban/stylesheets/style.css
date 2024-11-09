@@ -42,6 +42,12 @@
     -fx-border-radius: 10;
 }
 
+
+.round-box-card{
+    -fx-background-radius: 30;
+    -fx-border-radius: 30;
+}
+
 .small-round-box {
     -fx-background-radius: 5;
     -fx-border-radius: 5;
