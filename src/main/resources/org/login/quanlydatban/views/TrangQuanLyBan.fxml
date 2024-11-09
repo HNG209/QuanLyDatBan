@@ -22,11 +22,7 @@
 
 <AnchorPane prefHeight="635.0" prefWidth="1280.0" styleClass="gradient1" stylesheets="../stylesheets/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.login.quanlydatban.controller.QuanLyBanController">
    <children>
-      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="529.0" layoutY="14.0" prefHeight="24.0" prefWidth="201.0" stylesheets="../stylesheets/style.css" text="Quản Lý Bàn" AnchorPane.leftAnchor="529.0" AnchorPane.rightAnchor="549.6">
-         <font>
-            <Font name="Arial" size="26.0" />
-         </font></Label>
-      <TableView fx:id="tableBan" layoutX="246.0" layoutY="112.0" prefHeight="474.0" prefWidth="587.0" style="-fx-border-color: green;" AnchorPane.bottomAnchor="49.0" AnchorPane.leftAnchor="246.0" AnchorPane.rightAnchor="447.0" AnchorPane.topAnchor="112.0">
+      <TableView fx:id="tableBan" layoutX="246.0" layoutY="76.0" prefHeight="546.0" prefWidth="587.0" style="-fx-border-color: green;" styleClass="small-round-box" stylesheets="@../stylesheets/style.css" AnchorPane.bottomAnchor="13.0" AnchorPane.leftAnchor="246.0" AnchorPane.rightAnchor="447.0" AnchorPane.topAnchor="76.0">
         <columns>
             <TableColumn fx:id="colSTT" prefWidth="81.99996948242188" text="STT" />
             <TableColumn fx:id="colMaBan" prefWidth="92.0" text="Mã bàn" />
@@ -35,9 +31,9 @@
             <TableColumn fx:id="colTrangThai" prefWidth="182.66668701171875" text="Trạng thái bàn" />
         </columns>
       </TableView>
-      <VBox layoutX="27.0" layoutY="61.333333333333336" prefHeight="526.0" prefWidth="201.0" style="-fx-border-color: green; -fx-spacing: 10; -fx-background-color: #DCDCDC; -fx-padding: 10;" AnchorPane.bottomAnchor="48.0" AnchorPane.leftAnchor="27.0" AnchorPane.topAnchor="61.0">
+      <VBox layoutX="27.0" layoutY="24.0" prefHeight="598.0" prefWidth="201.0" style="-fx-border-color: green; -fx-spacing: 10; -fx-background-color: #DCDCDC; -fx-padding: 10;" styleClass="small-round-box" stylesheets="@../stylesheets/style.css" AnchorPane.bottomAnchor="13.0" AnchorPane.leftAnchor="27.0" AnchorPane.topAnchor="24.0">
          <children>
-            <Pane prefHeight="38.0" prefWidth="179.0">
+            <Pane prefHeight="38.0" prefWidth="179.0" styleClass="small-round-box" stylesheets="@../stylesheets/style.css">
                <children>
                   <Label layoutX="31.0" layoutY="11.0" text="Tất cả:" />
                   <TextField fx:id="textALL" editable="false" layoutX="80.0" layoutY="6.0" prefHeight="28.0" prefWidth="30.0" style="-fx-border-color: white;" styleClass="small-round-box" stylesheets="@../stylesheets/style.css" />
@@ -130,24 +126,24 @@
             <Insets />
          </opaqueInsets>
       </VBox>
-      <Pane layoutX="846.0" layoutY="60.0" prefHeight="526.0" prefWidth="417.0" style="-fx-background-color: white; -fx-border-color: grey;" styleClass="round-box" AnchorPane.bottomAnchor="49.0" AnchorPane.rightAnchor="18.0" AnchorPane.topAnchor="60.0">
+      <Pane layoutX="848.0" layoutY="24.0" prefHeight="598.0" prefWidth="417.0" style="-fx-background-color: white; -fx-border-color: grey;" styleClass="round-box" AnchorPane.bottomAnchor="13.0" AnchorPane.rightAnchor="16.0" AnchorPane.topAnchor="24.0">
          <children>
             <Label layoutX="115.0" layoutY="7.0" prefHeight="36.0" prefWidth="219.0" text="THÔNG TIN BÀN">
                <font>
                   <Font size="25.0" />
                </font>
             </Label>
-            <Label layoutX="22.0" layoutY="183.0" prefHeight="18.0" prefWidth="87.0" text="Loại bàn" />
-            <Label layoutX="22.0" layoutY="129.0" prefHeight="18.0" prefWidth="87.0" text="Khu vực" />
+            <Label layoutX="13.0" layoutY="183.0" prefHeight="18.0" prefWidth="87.0" text="Loại bàn" />
+            <Label layoutX="13.0" layoutY="130.0" prefHeight="18.0" prefWidth="87.0" text="Khu vực" />
             <CheckBox fx:id="checkTamNgungPV" layoutX="224.0" layoutY="236.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="179.0" text="Tạm ngưng phục vụ">
                <font>
                   <Font size="15.0" />
                </font>
             </CheckBox>
-            <GridPane hgap="20.0" layoutX="22.0" layoutY="374.0" prefHeight="95.0" prefWidth="383.0" vgap="25.0">
+            <GridPane hgap="20.0" layoutX="13.0" layoutY="299.0" prefHeight="95.0" prefWidth="392.0" vgap="25.0">
               <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="203.99991861979166" minWidth="10.0" prefWidth="189.3333740234375" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="185.99991861979163" minWidth="10.0" prefWidth="183.33329264322913" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="203.99991861979166" minWidth="10.0" prefWidth="185.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="185.99991861979163" minWidth="10.0" prefWidth="178.33333333333337" />
               </columnConstraints>
               <rowConstraints>
                 <RowConstraints maxHeight="45.0" minHeight="10.0" prefHeight="45.0" vgrow="SOMETIMES" />
@@ -202,14 +198,14 @@
                </children>
             </GridPane>
             <TextField fx:id="textMaBan" layoutX="101.0" layoutY="72.0" prefHeight="26.0" prefWidth="303.0" styleClass="round-box" />
-            <Label layoutX="22.0" layoutY="76.0" prefHeight="18.0" prefWidth="87.0" text="Mã bàn" />
+            <Label layoutX="13.0" layoutY="76.0" prefHeight="18.0" prefWidth="87.0" text="Mã bàn" />
             <ComboBox fx:id="textLoaiBan" layoutX="101.0" layoutY="179.0" prefHeight="25.0" prefWidth="303.0" />
             <ComboBox fx:id="textKhuVuc" layoutX="100.0" layoutY="126.0" prefHeight="25.0" prefWidth="303.0" />
             <ImageView fitHeight="45.0" fitWidth="49.0" layoutX="22.0" layoutY="244.0" pickOnBounds="true" preserveRatio="true" />
             <ImageView fitHeight="45.0" fitWidth="49.0" layoutX="32.0" layoutY="254.0" pickOnBounds="true" preserveRatio="true" />
          </children>
       </Pane>
-      <GridPane hgap="10.0" layoutX="245.0" layoutY="45.0" prefHeight="69.0" prefWidth="587.0" vgap="10.0" AnchorPane.rightAnchor="447.66666666666663" AnchorPane.topAnchor="45.0">
+      <GridPane hgap="10.0" layoutX="245.0" layoutY="10.0" prefHeight="69.0" prefWidth="595.0" vgap="10.0" AnchorPane.rightAnchor="440.0" AnchorPane.topAnchor="10.0">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="125.33334350585938" minWidth="10.0" prefWidth="111.33334350585938" />
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="145.33336385091144" minWidth="10.0" prefWidth="144.66673787434894" />
