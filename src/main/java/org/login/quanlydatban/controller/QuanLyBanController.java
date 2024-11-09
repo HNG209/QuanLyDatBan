@@ -58,8 +58,6 @@ public class QuanLyBanController implements Initializable {
     private ComboBox<LoaiBan> locLoaiBan;
     @FXML
     private ComboBox<TrangThaiBan> locTrangThai;
-    @FXML
-    private Button btnLoc;
 
     @FXML
     private TableColumn<Ban, String> colMaBan;

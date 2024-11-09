@@ -26,9 +26,9 @@
         <columns>
             <TableColumn fx:id="colSTT" prefWidth="81.99996948242188" text="STT" />
             <TableColumn fx:id="colMaBan" prefWidth="92.0" text="Mã bàn" />
-            <TableColumn fx:id="colKhuVuc" prefWidth="73.33331298828125" text="Khu vực" />
-            <TableColumn fx:id="colLoaiBan" prefWidth="155.33334350585938" text="Loại bàn" />
-            <TableColumn fx:id="colTrangThai" prefWidth="182.66668701171875" text="Trạng thái bàn" />
+            <TableColumn fx:id="colKhuVuc" prefWidth="126.40008544921875" text="Khu vực" />
+            <TableColumn fx:id="colLoaiBan" prefWidth="140.79998779296875" text="Loại bàn" />
+            <TableColumn fx:id="colTrangThai" prefWidth="142.39999389648438" text="Trạng thái bàn" />
         </columns>
          <columnResizePolicy>
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -129,21 +129,21 @@
             <Insets />
          </opaqueInsets>
       </VBox>
-      <Pane layoutX="848.0" layoutY="24.0" prefHeight="598.0" prefWidth="417.0" style="-fx-background-color: white; -fx-border-color: grey;" styleClass="round-box" AnchorPane.bottomAnchor="13.0" AnchorPane.rightAnchor="16.0" AnchorPane.topAnchor="24.0">
+      <AnchorPane layoutX="846.4000244140625" layoutY="24.0" prefHeight="598.0" prefWidth="426.0" style="-fx-background-color: white; -fx-border-color: black;" styleClass="round-box" AnchorPane.bottomAnchor="13.0" AnchorPane.rightAnchor="8.0" AnchorPane.topAnchor="24.0">
          <children>
             <Label layoutX="115.0" layoutY="7.0" prefHeight="36.0" prefWidth="219.0" text="THÔNG TIN BÀN">
                <font>
                   <Font size="25.0" />
                </font>
             </Label>
-            <Label layoutX="13.0" layoutY="183.0" prefHeight="18.0" prefWidth="87.0" text="Loại bàn" />
-            <Label layoutX="13.0" layoutY="130.0" prefHeight="18.0" prefWidth="87.0" text="Khu vực" />
+            <Label layoutX="28.0" layoutY="183.0" prefHeight="18.0" prefWidth="87.0" text="Loại bàn" />
+            <Label layoutX="28.0" layoutY="130.0" prefHeight="18.0" prefWidth="87.0" text="Khu vực" />
             <CheckBox fx:id="checkTamNgungPV" layoutX="224.0" layoutY="236.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="179.0" text="Tạm ngưng phục vụ">
                <font>
                   <Font size="15.0" />
                </font>
             </CheckBox>
-            <GridPane hgap="20.0" layoutX="13.0" layoutY="299.0" prefHeight="95.0" prefWidth="392.0" vgap="25.0">
+            <GridPane hgap="20.0" layoutX="28.0" layoutY="474.0" prefHeight="94.0" prefWidth="374.0" vgap="25.0" AnchorPane.bottomAnchor="29.0">
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="203.99991861979166" minWidth="10.0" prefWidth="185.0" />
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="185.99991861979163" minWidth="10.0" prefWidth="178.33333333333337" />
@@ -153,7 +153,7 @@
                   <RowConstraints maxHeight="41.33331298828125" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Button fx:id="btnThem" mnemonicParsing="false" onAction="#handleThemBan" prefHeight="53.0" prefWidth="187.0" text="Thêm bàn">
+                  <Button fx:id="btnThem" mnemonicParsing="false" onAction="#handleThemBan" prefHeight="60.0" prefWidth="194.0" text="Thêm bàn">
                      <graphic>
                         <ImageView fitHeight="40.0" fitWidth="34.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -163,7 +163,8 @@
                      </graphic>
                      <font>
                         <Font size="20.0" />
-                     </font></Button>
+                     </font>
+                  </Button>
                   <Button fx:id="btnXoa" mnemonicParsing="false" onAction="#handleXoaBan" prefHeight="73.0" prefWidth="183.0" text="Xóa bàn" GridPane.columnIndex="1">
                      <graphic>
                         <ImageView fitHeight="40.0" fitWidth="34.0" pickOnBounds="true" preserveRatio="true">
@@ -186,7 +187,8 @@
                      </graphic>
                      <font>
                         <Font size="20.0" />
-                     </font></Button>
+                     </font>
+                  </Button>
                   <Button fx:id="BtnClear" mnemonicParsing="false" onAction="#handleClear" prefHeight="40.0" prefWidth="215.0" text="Làm sạch" GridPane.columnIndex="1" GridPane.rowIndex="1">
                      <graphic>
                         <ImageView fitHeight="40.0" fitWidth="34.0" pickOnBounds="true" preserveRatio="true">
@@ -197,40 +199,30 @@
                      </graphic>
                      <font>
                         <Font size="20.0" />
-                     </font></Button>
+                     </font>
+                  </Button>
                </children>
             </GridPane>
             <TextField fx:id="textMaBan" layoutX="101.0" layoutY="72.0" prefHeight="26.0" prefWidth="303.0" styleClass="round-box" />
-            <Label layoutX="13.0" layoutY="76.0" prefHeight="18.0" prefWidth="87.0" text="Mã bàn" />
+            <Label layoutX="28.0" layoutY="76.0" prefHeight="18.0" prefWidth="87.0" text="Mã bàn" />
             <ComboBox fx:id="textLoaiBan" layoutX="101.0" layoutY="179.0" prefHeight="25.0" prefWidth="303.0" />
             <ComboBox fx:id="textKhuVuc" layoutX="100.0" layoutY="126.0" prefHeight="25.0" prefWidth="303.0" />
             <ImageView fitHeight="45.0" fitWidth="49.0" layoutX="22.0" layoutY="244.0" pickOnBounds="true" preserveRatio="true" />
             <ImageView fitHeight="45.0" fitWidth="49.0" layoutX="32.0" layoutY="254.0" pickOnBounds="true" preserveRatio="true" />
          </children>
-      </Pane>
-      <ComboBox fx:id="locKhuVuc" layoutX="246.0" layoutY="24.0" prefHeight="41.0" prefWidth="115.0" promptText="Khu vực" AnchorPane.leftAnchor="246.0" AnchorPane.topAnchor="24.0" />
-      <ComboBox fx:id="locLoaiBan" layoutX="369.0" layoutY="24.0" prefHeight="41.0" prefWidth="148.0" promptText="Loại bàn" AnchorPane.leftAnchor="369.0" AnchorPane.topAnchor="24.0" />
-      <ComboBox fx:id="locTrangThai" layoutX="524.0" layoutY="24.0" prefHeight="41.0" prefWidth="186.0" promptText="Trạng thái" AnchorPane.leftAnchor="524.0" AnchorPane.rightAnchor="569.6" AnchorPane.topAnchor="24.0" />
-      <Button fx:id="btnLoc" layoutX="722.4000244140625" layoutY="24.799999237060547" mnemonicParsing="false" onAction="#locBan" prefHeight="40.0" prefWidth="34.0" AnchorPane.rightAnchor="507.9999755859375" AnchorPane.topAnchor="24.799999237060547">
-         <font>
-            <Font size="14.0" />
-         </font>
-         <graphic>
-            <ImageView fitHeight="31.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../icons/find.png" />
-               </image>
-            </ImageView>
-         </graphic>
-      </Button>
-      <Button fx:id="btnReset" layoutX="785.0" layoutY="25.0" mnemonicParsing="false" onAction="#onClickReset" prefHeight="40.0" prefWidth="41.0" AnchorPane.rightAnchor="447.0" AnchorPane.topAnchor="25.0">
-         <graphic>
-            <ImageView fitHeight="32.0" fitWidth="37.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../icons/circle-of-two-clockwise-arrows-rotation.png" />
-               </image>
-            </ImageView>
-         </graphic>
-      </Button>
+      </AnchorPane>
+      <ComboBox fx:id="locKhuVuc" layoutX="247.2" layoutY="24.0" prefHeight="17.0" prefWidth="115.0" promptText="Khu vực" AnchorPane.leftAnchor="247.0" AnchorPane.topAnchor="24.0" />
+      <ComboBox fx:id="locLoaiBan" layoutX="369.0" layoutY="24.0" prefHeight="18.0" prefWidth="148.0" promptText="Loại bàn" AnchorPane.leftAnchor="369.0" AnchorPane.topAnchor="24.0" />
+      <ComboBox fx:id="locTrangThai" layoutX="524.0" layoutY="24.0" prefHeight="26.0" prefWidth="228.0" promptText="Trạng thái" AnchorPane.leftAnchor="524.0" AnchorPane.rightAnchor="528.0" AnchorPane.topAnchor="24.0" />
+      <ImageView fitHeight="31.0" fitWidth="30.0" layoutX="761.0" layoutY="22.0" onMouseClicked="#locBan" pickOnBounds="true" preserveRatio="true" styleClass="image-hover-effect" AnchorPane.rightAnchor="489.0">
+         <image>
+            <Image url="@../icons/find.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="803.0" layoutY="22.0" onMouseClicked="#onClickReset" pickOnBounds="true" preserveRatio="true" styleClass="image-hover-effect" AnchorPane.rightAnchor="447.0">
+         <image>
+            <Image url="@../icons/circle-of-two-clockwise-arrows-rotation.png" />
+         </image>
+      </ImageView>
    </children>
 </AnchorPane>
