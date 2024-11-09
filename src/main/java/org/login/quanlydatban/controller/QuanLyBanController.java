@@ -299,6 +299,8 @@ public class QuanLyBanController implements Initializable {
         }
     }
     private String generateMaBan(KhuVuc khuVuc, String yy) {
+        List<Ban> banList = banDAO.readAll();
+
         // Khởi tạo số thứ tự nếu khu vực chưa có mã bàn nào
         khuVucCounter.putIfAbsent(khuVuc, 1);
 
@@ -306,14 +308,20 @@ public class QuanLyBanController implements Initializable {
         String x = khuVuc.toString().substring(0, 1).toUpperCase();
 
 
-        // Định dạng số thứ tự thành 3 chữ số ZZZ
-        String zzz = String.format("%03d", khuVucCounter.get(khuVuc));
+        String zzz;
+        while (true) {
+            zzz = String.format("%03d", khuVucCounter.get(khuVuc));
+            String newMaBan = x + yy + zzz;
 
-        // Tăng số thứ tự cho khu vực
-        khuVucCounter.put(khuVuc, khuVucCounter.get(khuVuc) + 1);
+            if (banList.stream().noneMatch(ban -> ban.getMaBan().equals(newMaBan))) {
+                khuVucCounter.put(khuVuc, khuVucCounter.get(khuVuc) + 1);
+                return newMaBan;
+            }
 
-        // Trả về mã bàn theo cấu trúc XYYZZZ
-        return x + yy + zzz;
+            khuVucCounter.put(khuVuc, khuVucCounter.get(khuVuc) + 1);
+        }
+
+
     }
 
 
