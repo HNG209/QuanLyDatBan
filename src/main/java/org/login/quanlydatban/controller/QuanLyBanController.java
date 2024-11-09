@@ -16,7 +16,9 @@ import org.login.quanlydatban.entity.enums.TrangThaiBan;
 
 import java.net.URL;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 
@@ -78,6 +80,9 @@ public class QuanLyBanController implements Initializable {
 
 
     private BanDAO banDAO;
+    private Map<KhuVuc, Integer> khuVucCounter = new HashMap<>();
+    private boolean isEditing = false;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
@@ -108,12 +113,19 @@ public class QuanLyBanController implements Initializable {
         locLoaiBan.getItems().setAll(LoaiBan.values());
         locTrangThai.getItems().setAll(TrangThaiBan.values());
         checkTamNgungPV.setDisable(true);
+        textMaBan.setDisable(true);
 
         tableBan.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             hienThiThongTinBan();
-            textMaBan.setDisable(true);
 
         });
+        textKhuVuc.getSelectionModel().selectedItemProperty().addListener((obs, oldKhuVuc, newKhuVuc) -> {
+            updateMaBan();
+        });
+        textLoaiBan.getSelectionModel().selectedItemProperty().addListener((obs, oldLoaiBan, newLoaiBan) -> {
+            updateMaBan();
+        });
+
     }
     private void demTongBan(List<Ban> banList) {
         int tongBan = banList.size();
@@ -157,6 +169,7 @@ public class QuanLyBanController implements Initializable {
         checkTamNgungPV.setDisable(true);
         checkTamNgungPV.setSelected(false);
         onClickReset();
+        isEditing = false;
     }
 
     @FXML
@@ -171,6 +184,7 @@ public class QuanLyBanController implements Initializable {
         checkTamNgungPV.setSelected(false);
         tableBan.getSelectionModel().clearSelection();
         checkTamNgungPV.setDisable(true);
+        isEditing = false;
     }
     @FXML
     private void handleXoaBan() {
@@ -207,7 +221,6 @@ public class QuanLyBanController implements Initializable {
         clearForm();
         checkTamNgungPV.setDisable(false);
         onClickReset();
-        textMaBan.setDisable(false);
 
     }
     private void showAlert(String message) {
@@ -250,10 +263,13 @@ public class QuanLyBanController implements Initializable {
 
         if (selectedBan != null) {
             // Hiển thị thông tin của bàn vào các trường tương ứng
+            isEditing = true;
+
             textMaBan.setText(selectedBan.getMaBan());
             textKhuVuc.getSelectionModel().select(selectedBan.getKhuVuc());
             textLoaiBan.getSelectionModel().select(selectedBan.getLoaiBan());
 
+            checkTamNgungPV.setDisable(false);
 
             if (selectedBan.getTrangThaiBan() == TrangThaiBan.TAM_NGUNG_PHUC_VU) {
                 checkTamNgungPV.setSelected(true);
@@ -261,8 +277,43 @@ public class QuanLyBanController implements Initializable {
                 checkTamNgungPV.setSelected(false);
             }
         } else {
+            isEditing = false;
             clearForm();
         }
+    }
+    private void updateMaBan() {
+        if (isEditing) return;
+        KhuVuc selectedKhuVuc = textKhuVuc.getSelectionModel().getSelectedItem();
+        LoaiBan selectedLoaiBan = textLoaiBan.getSelectionModel().getSelectedItem();
+        String sucChua = null;
+        if(selectedLoaiBan == LoaiBan.BAN_2_NGUOI) sucChua = "02";
+        if(selectedLoaiBan == LoaiBan.BAN_5_NGUOI) sucChua = "05";
+        if(selectedLoaiBan == LoaiBan.BAN_10_NGUOI) sucChua = "10";
+        // Kiểm tra nếu đã chọn đủ khu vực và loại bàn
+        if (selectedKhuVuc != null && sucChua != null) {
+
+
+            String maBan = generateMaBan(selectedKhuVuc, sucChua);
+            textMaBan.setText(maBan);
+
+        }
+    }
+    private String generateMaBan(KhuVuc khuVuc, String yy) {
+        // Khởi tạo số thứ tự nếu khu vực chưa có mã bàn nào
+        khuVucCounter.putIfAbsent(khuVuc, 1);
+
+        // Lấy ký tự đầu của khu vực làm mã X
+        String x = khuVuc.toString().substring(0, 1).toUpperCase();
+
+
+        // Định dạng số thứ tự thành 3 chữ số ZZZ
+        String zzz = String.format("%03d", khuVucCounter.get(khuVuc));
+
+        // Tăng số thứ tự cho khu vực
+        khuVucCounter.put(khuVuc, khuVucCounter.get(khuVuc) + 1);
+
+        // Trả về mã bàn theo cấu trúc XYYZZZ
+        return x + yy + zzz;
     }
 
 
