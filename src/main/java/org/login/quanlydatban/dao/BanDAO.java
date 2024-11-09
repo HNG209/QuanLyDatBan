@@ -1,6 +1,7 @@
 package org.login.quanlydatban.dao;
 
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.login.quanlydatban.entity.Ban;
 import org.login.quanlydatban.entity.enums.TrangThaiBan;
 import org.login.quanlydatban.hibernate.HibernateUtils;
@@ -74,5 +75,87 @@ public class BanDAO {
 
     public List<Ban> getListBan() {
         return this.listBan;
+    }
+    public Ban themBan(Ban ban) {
+        Session session = HibernateUtils.getFactory().openSession();
+        Transaction transaction = null;
+        try {
+            transaction = session.beginTransaction();
+            session.save(ban);
+            transaction.commit();
+            System.out.println("Thêm bàn mới thành công!");
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+            System.out.println("Thêm bàn thất bại.");
+        } finally {
+            session.close();
+        }
+        return ban;
+    }
+
+
+    public Ban capnhatBan(Ban ban) {
+        Session session = HibernateUtils.getFactory().openSession();
+        Transaction transaction = null;
+        try {
+            transaction = session.beginTransaction();
+
+            Ban currentBan = session.get(Ban.class, ban.getMaBan());
+            if (currentBan != null) {
+
+                currentBan.setMaBan(ban.getMaBan());
+                currentBan.setTrangThaiBan(ban.getTrangThaiBan());
+
+
+
+                session.update(currentBan);
+                transaction.commit();
+                System.out.println("Cập nhật bàn thành công!");
+            } else {
+                System.out.println("Không tìm thấy bàn để cập nhật.");
+            }
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+            System.out.println("Cập nhật bàn thất bại.");
+        } finally {
+            session.close();
+        }
+        return ban;
+    }
+    public boolean deleteBan(String maBan) {
+        Session session = HibernateUtils.getFactory().openSession();
+        Transaction transaction = null;
+        boolean isDeleted = false;
+
+        try {
+            transaction = session.beginTransaction();
+
+
+            Ban ban = session.get(Ban.class, maBan);
+            if (ban != null) {
+                session.delete(ban);
+                transaction.commit();
+                System.out.println("Xóa bàn thành công!");
+                isDeleted = true;
+            } else {
+                System.out.println("Không tìm thấy bàn để xóa.");
+            }
+
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+            System.out.println("Xóa bàn thất bại.");
+        } finally {
+            session.close();
+        }
+        return isDeleted;
     }
 }

@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="635.0" prefWidth="1280.0" styleClass="gradient1" stylesheets="../stylesheets/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.login.quanlydatban.controller.QuanLyBanController">
+   <children>
+      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="529.0" layoutY="14.0" prefHeight="24.0" prefWidth="201.0" stylesheets="../stylesheets/style.css" text="Quản Lý Bàn" AnchorPane.leftAnchor="529.0" AnchorPane.rightAnchor="549.6">
+         <font>
+            <Font name="Arial" size="26.0" />
+         </font></Label>
+      <TableView fx:id="tableBan" layoutX="246.0" layoutY="112.0" prefHeight="474.0" prefWidth="587.0" style="-fx-border-color: green;" AnchorPane.bottomAnchor="49.0" AnchorPane.leftAnchor="246.0" AnchorPane.rightAnchor="447.0" AnchorPane.topAnchor="112.0">
+        <columns>
+            <TableColumn fx:id="colSTT" prefWidth="81.99996948242188" text="STT" />
+            <TableColumn fx:id="colMaBan" prefWidth="92.0" text="Mã bàn" />
+            <TableColumn fx:id="colKhuVuc" prefWidth="73.33331298828125" text="Khu vực" />
+            <TableColumn fx:id="colLoaiBan" prefWidth="155.33334350585938" text="Loại bàn" />
+            <TableColumn fx:id="colTrangThai" prefWidth="182.66668701171875" text="Trạng thái bàn" />
+        </columns>
+      </TableView>
+      <VBox layoutX="27.0" layoutY="61.333333333333336" prefHeight="526.0" prefWidth="201.0" style="-fx-border-color: green; -fx-spacing: 10; -fx-background-color: #DCDCDC; -fx-padding: 10;" AnchorPane.bottomAnchor="48.0" AnchorPane.leftAnchor="27.0" AnchorPane.topAnchor="61.0">
+         <children>
+            <Pane prefHeight="38.0" prefWidth="179.0">
+               <children>
+                  <Label layoutX="31.0" layoutY="11.0" text="Tất cả:" />
+                  <TextField fx:id="textALL" editable="false" layoutX="80.0" layoutY="6.0" prefHeight="28.0" prefWidth="30.0" style="-fx-border-color: white;" styleClass="small-round-box" stylesheets="@../stylesheets/style.css" />
+                  <Label layoutX="117.0" layoutY="11.0" text="Bàn" />
+               </children>
+            </Pane>
+            <Separator prefWidth="200.0" style="-fx-border-color: green;" />
+            <Pane prefHeight="53.0" prefWidth="97.0" style="-fx-background-color: white;">
+               <children>
+                  <ImageView fitHeight="36.0" fitWidth="43.0" layoutX="14.0" layoutY="9.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../icons/bantrong.png" />
+                     </image>
+                  </ImageView>
+                  <Label layoutX="77.0" layoutY="6.0" text="BÀN TRỐNG" />
+                  <HBox alignment="CENTER" layoutX="89.0" layoutY="19.0" prefHeight="40.0" prefWidth="43.0">
+                     <children>
+                        <Label fx:id="textSLBanTrong" text="0" />
+                        <Label text="/" />
+                        <Label fx:id="textTatCa1" text="25" textFill="#e00c0c" />
+                     </children>
+                  </HBox>
+               </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </Pane>
+            <Pane prefHeight="53.0" prefWidth="97.0" style="-fx-background-color: white;">
+               <children>
+                  <ImageView fitHeight="36.0" fitWidth="43.0" layoutX="14.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../icons/bandangphucvu.png" />
+                     </image>
+                  </ImageView>
+                  <Label layoutX="68.0" layoutY="11.0" text="ĐANG PHỤC VỤ" />
+                  <HBox alignment="CENTER" layoutX="90.0" layoutY="19.0" prefHeight="40.0" prefWidth="43.0">
+                     <children>
+                        <Label fx:id="textSLDangPhucVu" text="0" />
+                        <Label text="/" />
+                        <Label fx:id="textTatCa2" text="25" textFill="#e00c0c" />
+                     </children>
+                  </HBox>
+               </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </Pane>
+            <Pane prefHeight="53.0" prefWidth="97.0" style="-fx-background-color: white;">
+               <children>
+                  <ImageView fitHeight="36.0" fitWidth="43.0" layoutX="14.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../icons/bandattruoc.png" />
+                     </image>
+                  </ImageView>
+                  <Label layoutX="90.0" layoutY="11.0" text="ĐÃ ĐẶT" />
+                  <HBox alignment="CENTER" layoutX="89.0" layoutY="19.0" prefHeight="40.0" prefWidth="43.0">
+                     <children>
+                        <Label fx:id="textSLDaDat" text="0" />
+                        <Label text="/" />
+                        <Label fx:id="textTatCa3" text="25" textFill="#e00c0c" />
+                     </children>
+                  </HBox>
+               </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </Pane>
+            <Pane prefHeight="53.0" prefWidth="97.0" style="-fx-background-color: white;">
+               <children>
+                  <ImageView fitHeight="36.0" fitWidth="43.0" layoutX="14.0" layoutY="9.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../icons/banhong.png" />
+                     </image>
+                  </ImageView>
+                  <Label layoutX="53.0" layoutY="10.0" text="TẠM NGỪNG PHỤC VỤ" />
+                  <HBox alignment="CENTER" layoutX="89.0" layoutY="19.0" prefHeight="40.0" prefWidth="43.0">
+                     <children>
+                        <Label fx:id="textSLTamNgung" text="0" />
+                        <Label text="/" />
+                        <Label fx:id="textTatCa4" text="25" textFill="#e00c0c" />
+                     </children>
+                  </HBox>
+               </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </Pane>
+         </children>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+      </VBox>
+      <Pane layoutX="846.0" layoutY="60.0" prefHeight="526.0" prefWidth="417.0" style="-fx-background-color: white; -fx-border-color: grey;" styleClass="round-box" AnchorPane.bottomAnchor="49.0" AnchorPane.rightAnchor="18.0" AnchorPane.topAnchor="60.0">
+         <children>
+            <Label layoutX="115.0" layoutY="7.0" prefHeight="36.0" prefWidth="219.0" text="THÔNG TIN BÀN">
+               <font>
+                  <Font size="25.0" />
+               </font>
+            </Label>
+            <Label layoutX="22.0" layoutY="183.0" prefHeight="18.0" prefWidth="87.0" text="Loại bàn" />
+            <Label layoutX="22.0" layoutY="129.0" prefHeight="18.0" prefWidth="87.0" text="Khu vực" />
+            <CheckBox fx:id="checkTamNgungPV" layoutX="224.0" layoutY="236.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="179.0" text="Tạm ngưng phục vụ">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </CheckBox>
+            <GridPane hgap="20.0" layoutX="22.0" layoutY="374.0" prefHeight="95.0" prefWidth="383.0" vgap="25.0">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="203.99991861979166" minWidth="10.0" prefWidth="189.3333740234375" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="185.99991861979163" minWidth="10.0" prefWidth="183.33329264322913" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints maxHeight="45.0" minHeight="10.0" prefHeight="45.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="41.33331298828125" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <Button fx:id="btnThem" mnemonicParsing="false" onAction="#handleThemBan" prefHeight="53.0" prefWidth="187.0" text="Thêm bàn">
+                     <graphic>
+                        <ImageView fitHeight="40.0" fitWidth="34.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../icons/add%20(1).png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <font>
+                        <Font size="20.0" />
+                     </font></Button>
+                  <Button fx:id="btnXoa" mnemonicParsing="false" onAction="#handleXoaBan" prefHeight="73.0" prefWidth="183.0" text="Xóa bàn" GridPane.columnIndex="1">
+                     <graphic>
+                        <ImageView fitHeight="40.0" fitWidth="34.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../icons/delete.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="BtnChinhSua" mnemonicParsing="false" onAction="#handleSuaBan" prefHeight="19.0" prefWidth="188.0" text="Chỉnh sửa " GridPane.rowIndex="1">
+                     <graphic>
+                        <ImageView fitHeight="40.0" fitWidth="34.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../icons/edit.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <font>
+                        <Font size="20.0" />
+                     </font></Button>
+                  <Button fx:id="BtnClear" mnemonicParsing="false" onAction="#handleClear" prefHeight="40.0" prefWidth="215.0" text="Làm sạch" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                     <graphic>
+                        <ImageView fitHeight="40.0" fitWidth="34.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../icons/eraser.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <font>
+                        <Font size="20.0" />
+                     </font></Button>
+               </children>
+            </GridPane>
+            <TextField fx:id="textMaBan" layoutX="101.0" layoutY="72.0" prefHeight="26.0" prefWidth="303.0" styleClass="round-box" />
+            <Label layoutX="22.0" layoutY="76.0" prefHeight="18.0" prefWidth="87.0" text="Mã bàn" />
+            <ComboBox fx:id="textLoaiBan" layoutX="101.0" layoutY="179.0" prefHeight="25.0" prefWidth="303.0" />
+            <ComboBox fx:id="textKhuVuc" layoutX="100.0" layoutY="126.0" prefHeight="25.0" prefWidth="303.0" />
+            <ImageView fitHeight="45.0" fitWidth="49.0" layoutX="22.0" layoutY="244.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fitHeight="45.0" fitWidth="49.0" layoutX="32.0" layoutY="254.0" pickOnBounds="true" preserveRatio="true" />
+         </children>
+      </Pane>
+      <GridPane hgap="10.0" layoutX="245.0" layoutY="45.0" prefHeight="69.0" prefWidth="587.0" vgap="10.0" AnchorPane.rightAnchor="447.66666666666663" AnchorPane.topAnchor="45.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="125.33334350585938" minWidth="10.0" prefWidth="111.33334350585938" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="145.33336385091144" minWidth="10.0" prefWidth="144.66673787434894" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="239.33331298828125" minWidth="10.0" prefWidth="185.9999287923177" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="169.33333333333337" minWidth="10.0" prefWidth="47.66668701171875" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="86.66668701171875" minWidth="0.0" prefWidth="58.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <ComboBox fx:id="locKhuVuc" prefHeight="41.0" prefWidth="139.0" promptText="Khu vực" />
+            <ComboBox fx:id="locLoaiBan" prefHeight="41.0" prefWidth="145.0" promptText="Loại bàn" GridPane.columnIndex="1" />
+            <ComboBox fx:id="locTrangThai" prefHeight="41.0" prefWidth="186.0" promptText="Trạng thái" GridPane.columnIndex="2" />
+            <Button fx:id="btnLoc" mnemonicParsing="false" onAction="#locBan" prefHeight="40.0" prefWidth="34.0" GridPane.columnIndex="3">
+               <font>
+                  <Font size="14.0" />
+               </font>
+               <graphic>
+                  <ImageView fitHeight="31.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../icons/find.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button fx:id="btnReset" mnemonicParsing="false" onAction="#onClickReset" prefHeight="40.0" prefWidth="41.0" GridPane.columnIndex="4">
+               <graphic>
+                  <ImageView fitHeight="32.0" fitWidth="37.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../icons/circle-of-two-clockwise-arrows-rotation.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+         </children>
+      </GridPane>
+   </children>
+</AnchorPane>
