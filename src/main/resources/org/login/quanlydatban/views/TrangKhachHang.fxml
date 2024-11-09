@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="635.0" prefWidth="1280.0" styleClass="gradient1" stylesheets="../stylesheets/style.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.login.quanlydatban.controller.KhachHangController">
+    <children>
+        <Label alignment="CENTER" contentDisplay="CENTER" layoutX="0.8" layoutY="14.0" prefHeight="31.0" prefWidth="1280.0" stylesheets="../stylesheets/style.css" text="Quản lý khách hàng" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="-1.0">
+            <font>
+                <Font name="Arial" size="26.0" />
+            </font></Label>
+        <HBox alignment="CENTER" layoutX="171.33333333333334" layoutY="65.0" prefHeight="49.0" prefWidth="917.0" spacing="15.0" style="-fx-border-color: #808080; -fx-background-color: #D3D3D3;" AnchorPane.leftAnchor="171.0" AnchorPane.rightAnchor="192.0">
+            <children>
+                <ImageView fitHeight="33.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../icons/recipt.png" />
+                    </image>
+                </ImageView>
+                <TextField fx:id="tfMaHoaDon" prefHeight="35.0" prefWidth="205.0" promptText="Mã hóa đơn" styleClass="round-box" />
+                <ImageView fitHeight="33.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../icons/name.png" />
+                    </image>
+                </ImageView>
+                <TextField fx:id="tfTenKhachHang" prefHeight="36.0" prefWidth="193.0" promptText="Mã khách hàng" styleClass="round-box" />
+                <ImageView fitHeight="33.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../icons/status.png" />
+                    </image>
+                </ImageView>
+                <ComboBox fx:id="cbTrangThai" prefHeight="35.0" prefWidth="158.0" promptText="Trạng thái" style="-fx-background-color: #FFFFFF;" styleClass="round-box" />
+                <DatePicker fx:id="dpNgayLap" prefHeight="35.0" prefWidth="114.0" promptText="Ngày lập" />
+                <Button fx:id="btnTimKiem" mnemonicParsing="false" prefHeight="35.0" prefWidth="92.0" styleClass="round-box">
+                    <graphic>
+                        <ImageView fitHeight="18.0" fitWidth="53.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@../icons/find.png" />
+                            </image>
+                        </ImageView>
+                    </graphic></Button>
+                <Button fx:id="BtnReset" mnemonicParsing="false">
+                    <graphic>
+                        <ImageView fitHeight="27.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@../icons/circle-of-two-clockwise-arrows-rotation.png" />
+                            </image>
+                        </ImageView>
+                    </graphic>
+                </Button>
+            </children>
+            <opaqueInsets>
+                <Insets />
+            </opaqueInsets>
+            <styleClass>
+                <String fx:value="bg1" />
+                <String fx:value="small-round-box" />
+            </styleClass>
+            <padding>
+                <Insets left="10.0" right="10.0" />
+            </padding>
+        </HBox>
+        <AnchorPane layoutX="752.8" layoutY="151.2" prefHeight="320.0" prefWidth="638.0" style="-fx-border-color: black;" stylesheets="@../stylesheets/style.css" AnchorPane.leftAnchor="753.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="151.0">
+            <children>
+                  <GridPane layoutX="24.0" layoutY="18.0" prefHeight="282.0" prefWidth="612.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
+                      <columnConstraints>
+                          <ColumnConstraints hgrow="SOMETIMES" maxWidth="122.66668701171875" minWidth="10.0" prefWidth="73.33333333333334" />
+                          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      </columnConstraints>
+                      <rowConstraints>
+                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      </rowConstraints>
+                      <children>
+                          <Label text="Thông tin khách hàng:" />
+                          <Label text="Mã khách hàng:" GridPane.rowIndex="1" />
+                          <Label text="Tên khách hàng:" GridPane.rowIndex="2" />
+                          <Label text="Số điện thoại:" GridPane.rowIndex="3" />
+                          <TextField fx:id="textMaKH" editable="false" prefHeight="26.0" prefWidth="242.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                          <TextField fx:id="textTenKH" editable="false" prefHeight="25.0" prefWidth="397.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                          <TextField fx:id="textsdtKH" prefHeight="26.0" prefWidth="242.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                  <Label prefHeight="18.0" prefWidth="31.0" text="Email" GridPane.rowIndex="4" />
+                  <TextField fx:id="textsdtKH1" prefHeight="26.0" prefWidth="242.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                  <TextField fx:id="textsdtKH2" prefHeight="26.0" prefWidth="242.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                  <TextField fx:id="textsdtKH3" prefHeight="26.0" prefWidth="242.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                  <TextField fx:id="textsdtKH4" prefHeight="26.0" prefWidth="242.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                  <Label prefHeight="18.0" prefWidth="67.0" text="Địa chỉ" GridPane.rowIndex="5" />
+                  <Label prefHeight="18.0" prefWidth="31.0" text="CCCD" GridPane.rowIndex="6" />
+                  <Label prefHeight="18.0" prefWidth="76.0" text="Điểm tích lũy" GridPane.rowIndex="7" />
+                      </children>
+                  </GridPane>
+            </children>
+            <styleClass>
+                <String fx:value="round-box" />
+                <String fx:value="gradient2" />
+            </styleClass>
+        </AnchorPane>
+        <TableView fx:id="tabTatCa" layoutX="29.0" layoutY="151.2" prefHeight="473.0" prefWidth="715.0" style="-fx-border-color: black;" styleClass="round-box" stylesheets="@../stylesheets/style.css" AnchorPane.bottomAnchor="11.0" AnchorPane.leftAnchor="29.0" AnchorPane.topAnchor="151.0">
+            <columns>
+                <TableColumn fx:id="colMaHoaDon" prefWidth="95.73335528373718" text="Mã khách hàng" />
+                <TableColumn fx:id="colNgayLap" prefWidth="140.0" text="Tên khách hàng" />
+                <TableColumn fx:id="colMaKhachHang" prefWidth="95.20005798339844" text="Số điện thoại" />
+                <TableColumn fx:id="colTrangThai" prefWidth="104.0" text="Email" />
+                <TableColumn fx:id="colMaBan" prefWidth="118.93331909179688" text="Địa chỉ" />
+            <TableColumn fx:id="colPhuThu1" prefWidth="69.86676025390625" text="CCCD" />
+            <TableColumn fx:id="colMaBan1" prefWidth="94.13323974609375" text="Điểm tích lũy" />
+            </columns>
+        </TableView>
+    </children>
+</AnchorPane>
