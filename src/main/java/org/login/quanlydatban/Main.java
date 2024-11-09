@@ -8,6 +8,7 @@ import javafx.stage.StageStyle;
 import org.hibernate.Session;
 
 import org.hibernate.SessionFactory;
+import org.login.quanlydatban.encryptionUtils.EncryptionUtils;
 import org.login.quanlydatban.entity.*;
 import org.login.quanlydatban.entity.enums.TrangThaiHoaDon;
 
@@ -25,6 +26,8 @@ public class Main extends Application {
 
         //test ne bay
         Session session = HibernateUtils.getFactory().openSession();
+        String s = EncryptionUtils.encrypt("12345", System.getenv("ENCRYPTION_KEY"));
+        System.out.println(s);
 //        LoaiMonDAO lm = new LoaiMonDAO();
 //        lm.themLoaiMonAn(new LoaiMonAn("LM02", "Chie", "asadsa"));
 //        session.getTransaction().begin();

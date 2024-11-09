@@ -23,6 +23,7 @@ import org.login.quanlydatban.hibernate.HibernateUtils;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Comparator;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -52,6 +53,16 @@ public class ThucDonController implements Initializable {
     private TextField txtDonViTinh;
 
     @FXML
+    private TextField txtTimKiem;
+
+
+    @FXML
+    private ComboBox<String> cbChiMuc;
+
+    @FXML
+    private ComboBox<String> cbSapXep;
+
+    @FXML
     private ComboBox<String> cbloaiMonAn;
     @FXML
     private ComboBox<String> cbtrangThaiMon;
@@ -71,6 +82,9 @@ public class ThucDonController implements Initializable {
 
     @FXML
     private Button btnXoaRong;
+
+    @FXML
+    private Button btnTimKiem;
 
     @FXML
     private Button btnRefresh;
@@ -130,12 +144,61 @@ public class ThucDonController implements Initializable {
             }
         });
 
+        btnTimKiem.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                String s = txtTimKiem.getText().trim();
+                if (cbChiMuc.getSelectionModel().isEmpty()) {
+                    showWarn("Bạn cần chọn một chỉ mục trước khi tìm kiếm");
+                }
+                else if (cbChiMuc.getSelectionModel().getSelectedIndex() == 0) {
+                    if (txtTimKiem.getText().trim().isEmpty()) {
+                        showWarn("Vui lòng điền tên muốn tìm");
+                    } else {
+                        timKiemTheoTen(s);
+                    }
+                }
+                else if (cbChiMuc.getSelectionModel().getSelectedIndex() == 1) {
+                    if (txtTimKiem.getText().trim().isEmpty()) {
+                        showWarn("Vui lòng điền tên muốn tìm");
+                    } else {
+                        timKiemTheoLoai(s);
+                    }
+                }
+                else if (cbChiMuc.getSelectionModel().getSelectedIndex() == 2) {
+                    if (cbSapXep.getSelectionModel().isEmpty()){
+                        showWarn("Vui lòng chọn cách sắp xếp");
+                    }
+                    else {
+                        if (cbSapXep.getSelectionModel().getSelectedIndex() == 0) {
+                            ascendingSorting();
+                        }
+                        else {
+                            descendingSorting();
+                        }
+                    }
+                }
+
+            }
+        });
+
         cbloaiMonAn.getEditor().setOnAction(actionEvent -> {
             String newValue = cbloaiMonAn.getEditor().getText();
             if (!newValue.isEmpty() && !cbloaiMonAn.getItems().contains(newValue)) {
                 cbloaiMonAn.getItems().add(newValue);
                 cbloaiMonAn.setValue(newValue); // Set the new value as selected
             }
+        });
+
+        cbChiMuc.setOnAction(actionEvent -> {
+            if (cbChiMuc.getSelectionModel().getSelectedIndex() == 2) {
+                txtTimKiem.setVisible(false);
+                cbSapXep.setVisible(true);
+            } else {
+                txtTimKiem.setVisible(true);
+                cbSapXep.setVisible(false);
+            }
+
         });
 
 //        btnXoaRong.setOnAction(new EventHandler<ActionEvent>() {
@@ -192,9 +255,14 @@ public class ThucDonController implements Initializable {
 
         if (source == btnThemMon) {
             try {
-                if (!regexGia()) {
+                if (txtTenMonAn.getText() == null || txtDonViTinh.getText() == null || txtGia.getText() == null ||
+                    cbloaiMonAn.getValue() == null){
+                    showWarn("Bạn cần nhập đầy đủ thông tin!");
+                }
+                else if (!regexGia()) {
                     showWarn("Bạn cần nhập đúng thông tin!");
-                } else {
+                }
+                else {
 
                     themMon();
                     refreshControl(event);
@@ -298,14 +366,121 @@ public class ThucDonController implements Initializable {
 
         Object source = event.getSource();
         if (source == btnXoaRong || source == btnXoaMon) {
+
             txtTenMonAn.requestFocus();
             txtTenMonAn.setText("");
-            cbloaiMonAn.getSelectionModel().selectFirst();
+            cbloaiMonAn.getSelectionModel().clearSelection();
             cbtrangThaiMon.getSelectionModel().selectFirst();
             txtDonViTinh.setText("");
             txtGia.setText("");
             anhMon.setImage(imageXoaRong);
             txfMoTa.setText("");
+        }
+    }
+
+    //FINDING
+    void timKiemTheoTen (String tenMonAn) {
+        monAnDAO.getAllMonAn();
+        flowPane.getChildren().clear();
+        flowPane.prefHeightProperty().bind(scrollPane.heightProperty());
+        flowPane.prefWidthProperty().bind(scrollPane.widthProperty());
+
+            for (MonAn i : monAnDAO.getAllMonAn()){
+                if (i.getTenMonAn().toLowerCase().contains(tenMonAn.toLowerCase())) {
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/uicomponents/CardMonAn_TrangThucDon.fxml"));
+                    try {
+                        AnchorPane pane = loader.load();
+
+                        CardMonAnThucDonController controller = loader.getController();
+                        controller.setMonAnThucDon(i, this);
+                        controller.setController(this);
+                        flowPane.getChildren().add(pane);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+            if (flowPane.getChildren().isEmpty()) {
+                showWarn("Không tìm thấy tên món bạn cần tìm!");
+            }
+
+    }
+
+    void timKiemTheoLoai (String loaiMonAn) {
+        monAnDAO.getAllMonAn();
+        flowPane.getChildren().clear();
+        flowPane.prefHeightProperty().bind(scrollPane.heightProperty());
+        flowPane.prefWidthProperty().bind(scrollPane.widthProperty());
+
+            for (MonAn i : monAnDAO.getAllMonAn()){
+                if (i.getLoaiMonAn().getTenLoaiMonAn().toLowerCase().contains(loaiMonAn.toLowerCase())) {
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/uicomponents/CardMonAn_TrangThucDon.fxml"));
+                    try {
+                        AnchorPane pane = loader.load();
+
+                        CardMonAnThucDonController controller = loader.getController();
+                        controller.setMonAnThucDon(i, this);
+                        controller.setController(this);
+                        flowPane.getChildren().add(pane);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+            if (flowPane.getChildren().isEmpty()) {
+                showWarn("Không tìm thấy tên loại món bạn cần tìm!");
+            }
+    }
+
+    void ascendingSorting () {
+        List<MonAn> sapXepMon = monAnDAO.getAllMonAn();
+        flowPane.getChildren().clear();
+        flowPane.prefHeightProperty().bind(scrollPane.heightProperty());
+        flowPane.prefWidthProperty().bind(scrollPane.widthProperty());
+
+        sapXepMon.sort(Comparator.comparing(MonAn::getDonGia).thenComparing(MonAn::getTenMonAn))  ;
+
+        for (MonAn i : sapXepMon){
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/uicomponents/CardMonAn_TrangThucDon.fxml"));
+                try {
+                    AnchorPane pane = loader.load();
+
+                    CardMonAnThucDonController controller = loader.getController();
+                    controller.setMonAnThucDon(i, this);
+                    controller.setController(this);
+                    flowPane.getChildren().add(pane);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+        }
+        if (flowPane.getChildren().isEmpty()) {
+            showWarn("Không tìm thấy danh sách!");
+        }
+    }
+
+    void descendingSorting () {
+        List<MonAn> sapXepMon = monAnDAO.getAllMonAn();
+        flowPane.getChildren().clear();
+        flowPane.prefHeightProperty().bind(scrollPane.heightProperty());
+        flowPane.prefWidthProperty().bind(scrollPane.widthProperty());
+
+        sapXepMon.sort(Comparator.comparing(MonAn::getDonGia).reversed().thenComparing(MonAn::getTenMonAn))  ;
+
+        for (MonAn i : sapXepMon){
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/uicomponents/CardMonAn_TrangThucDon.fxml"));
+            try {
+                AnchorPane pane = loader.load();
+
+                CardMonAnThucDonController controller = loader.getController();
+                controller.setMonAnThucDon(i, this);
+                controller.setController(this);
+                flowPane.getChildren().add(pane);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        if (flowPane.getChildren().isEmpty()) {
+            showWarn("Không tìm thấy danh sách!");
         }
     }
 
@@ -350,7 +525,7 @@ public class ThucDonController implements Initializable {
     }
 
     private String generateLoaiMonAn() {
-        Long maxId = getMaMonFromDatabase();
+        Long maxId = getMaLoaiFromDatabase();
         Long newIdNumber = (maxId == null) ? 1 : maxId + 1; // Tăng mã lên 1
         return String.format("%02d", newIdNumber); // Định dạng mã
     }
@@ -487,8 +662,6 @@ public class ThucDonController implements Initializable {
         alert.showAndWait();
     }
 
-
-
     //CRUD
     public void themMon() {
         MonAnDAO monAnDAO = new MonAnDAO(); // DAO for MonAn
@@ -554,10 +727,10 @@ public class ThucDonController implements Initializable {
 
         // Set the appropriate TrangThaiMonAn enum value
         switch (trangThaiValue) {
-            case "CO SAN":
+            case "Có sẵn":
                 trangThaiMonAn = TrangThaiMonAn.CO_SAN;
                 break;
-            case "TAM HET":
+            case "Tạm hết":
                 trangThaiMonAn = TrangThaiMonAn.TAM_HET;
                 break;
             default:
@@ -579,10 +752,10 @@ public class ThucDonController implements Initializable {
         } else {
             cbloaiMonAn.getSelectionModel().clearSelection();
         }
-
         cbtrangThaiMon.setValue(String.valueOf(monAn.getTrangThaiMonAn()));
         txtDonViTinh.setText(monAn.getDonViTinh());
         txtGia.setText(String.valueOf(monAn.getDonGia()));
+        txfMoTa.setText(loaiMon.getMoTaLoaiMonAn());
     }
 
 }
