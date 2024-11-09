@@ -10,6 +10,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.InputMethodEvent;
@@ -18,6 +19,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Popup;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import org.hibernate.Session;
 import org.login.quanlydatban.dao.BanDAO;
 import org.login.quanlydatban.dao.ChiTietHoaDonDAO;
@@ -34,6 +37,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -114,6 +118,7 @@ public class DatMonController implements Initializable {
     private ChiTietHoaDonDAO chiTietHoaDonDAO;
     private HoaDon hoaDon;
 
+    private Stage chuyenBanStage;
     private double tkd = 0.0;
     private double pt = 0.0;
     @Override
@@ -470,6 +475,42 @@ public class DatMonController implements Initializable {
         }
         else Notification.thongBao("Không thể huỷ, hãy tiến hành thanh toán", Alert.AlertType.INFORMATION);
     }
+
+    @FXML
+    void chuyenBan(ActionEvent event) throws IOException {
+        if(hoaDon == null){
+            Notification.thongBao("Bàn hiện tại đang trống, không thể tiếp tục", Alert.AlertType.INFORMATION);
+            return;
+        }
+
+        if(chuyenBanStage != null){
+            if(chuyenBanStage.isShowing()) {
+                chuyenBanStage.toFront();
+                return;
+            }
+        }
+
+        if(chuyenBanStage == null || chuyenBanStage.isShowing()){
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/TrangChuyenBan.fxml"));
+            Scene scene = new Scene(loader.load());
+            ChuyenBanController controller = loader.getController();
+            controller.setBanHienTai(ban);
+            controller.setCurrentHD(hoaDon);
+            controller.setDatMonController(this);
+
+            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/org/login/quanlydatban/stylesheets/style.css")).toExternalForm());
+
+            chuyenBanStage = new Stage();
+            chuyenBanStage.setScene(scene);
+            chuyenBanStage.initStyle(StageStyle.UNDECORATED);
+            chuyenBanStage.show();
+        }
+        else {
+            chuyenBanStage.show();
+            chuyenBanStage.toFront();
+        }
+    }
+
 
     @FXML
     void thanhToan(ActionEvent event) {

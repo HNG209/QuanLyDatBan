@@ -88,7 +88,7 @@
             <Button fx:id="btnHuy" layoutX="33.0" layoutY="222.0" mnemonicParsing="false" onAction="#huyBan" prefHeight="26.0" prefWidth="254.0" styleClass="sunset-orange" text="Huỷ" AnchorPane.bottomAnchor="52.0" />
             <Button layoutX="33.0" layoutY="261.0" mnemonicParsing="false" onAction="#thanhToan" prefHeight="26.0" prefWidth="540.0" styleClass="sage-green" text="Xác nhận thanh toán" AnchorPane.bottomAnchor="13.0" />
             <Button fx:id="btnGiuBan" layoutX="33.0" layoutY="209.0" mnemonicParsing="false" onAction="#giuBan" prefHeight="26.0" prefWidth="254.0" styleClass="sunset-orange" text="Giữ bàn" AnchorPane.bottomAnchor="52.0" />
-            <Button layoutX="294.0" layoutY="209.0" mnemonicParsing="false" onAction="#giuBan" prefHeight="26.0" prefWidth="278.0" styleClass="pale-lemon" text="Chuyển bàn" AnchorPane.bottomAnchor="52.0" />
+            <Button layoutX="294.0" layoutY="209.0" mnemonicParsing="false" onAction="#chuyenBan" prefHeight="26.0" prefWidth="278.0" styleClass="pale-lemon" text="Chuyển bàn" AnchorPane.bottomAnchor="52.0" />
          </children>
       </AnchorPane>
       <TableView fx:id="orderTable" layoutX="714.0" layoutY="19.0" prefHeight="287.0" prefWidth="597.0" styleClass="rounded-pane" AnchorPane.rightAnchor="19.0">

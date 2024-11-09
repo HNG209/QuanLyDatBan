@@ -1,14 +1,91 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import java.lang.String?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="org.login.quanlydatban.views.TrangChuyenBan"
-            prefHeight="400.0" prefWidth="600.0">
-
+<AnchorPane prefHeight="640.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.login.quanlydatban.controller.ChuyenBanController">
+   <children>
+      <ScrollPane layoutX="371.0" layoutY="47.0" prefHeight="533.0" prefWidth="626.0">
+         <content>
+            <FlowPane fx:id="flowPane" alignment="CENTER" hgap="20.0" prefHeight="530.0" prefWidth="625.0" vgap="20.0" />
+         </content>
+      </ScrollPane>
+      <Button layoutX="369.0" layoutY="595.0" mnemonicParsing="false" onAction="#chuyenBan" prefHeight="26.0" prefWidth="310.0" styleClass="sage-green" text="Chuyển bàn" />
+      <Button fx:id="btnHuy" layoutX="688.0" layoutY="595.0" mnemonicParsing="false" onAction="#huy" prefHeight="26.0" prefWidth="310.0" styleClass="sunset-orange" text="Huỷ" />
+      <TextField layoutX="370.0" layoutY="11.0" prefHeight="26.0" prefWidth="550.0" styleClass="underlined-style" />
+      <Button layoutX="929.0" layoutY="12.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="68.0">
+         <graphic>
+            <ImageView fitHeight="16.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../icons/find.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
+      <GridPane layoutX="33.0" layoutY="47.0" prefHeight="196.0" prefWidth="300.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="142.79998779296875" minWidth="10.0" prefWidth="79.99999389648437" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="220.80000610351559" minWidth="10.0" prefWidth="220.80000610351559" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Label text="Bàn hiện tại">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <Label text="Mã bàn:" GridPane.rowIndex="1" />
+            <Label text="Loại bàn:" GridPane.rowIndex="2" />
+            <Label layoutX="10.0" layoutY="100.0" text="Khu vực:" GridPane.rowIndex="3" />
+            <TextField fx:id="maBanHT" editable="false" layoutX="132.0" layoutY="22.0" styleClass="underlined-style" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <TextField fx:id="loaiBanHT" editable="false" layoutX="132.0" layoutY="72.0" styleClass="underlined-style" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <TextField fx:id="khuVucBanHT" editable="false" layoutX="132.0" layoutY="120.0" styleClass="underlined-style" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+         </children>
+      </GridPane>
+      <GridPane layoutX="33.0" layoutY="353.0" prefHeight="196.0" prefWidth="300.0">
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="142.79998779296875" minWidth="10.0" prefWidth="79.99999389648437" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="220.80000610351559" minWidth="10.0" prefWidth="220.80000610351559" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+         </rowConstraints>
+         <children>
+            <Label text="Bàn chuyển">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <Label text="Mã bàn:" GridPane.rowIndex="1" />
+            <Label text="Loại bàn:" GridPane.rowIndex="2" />
+            <Label layoutX="10.0" layoutY="100.0" text="Khu vực:" GridPane.rowIndex="3" />
+            <TextField fx:id="maBanChuyen" editable="false" layoutX="132.0" layoutY="22.0" styleClass="underlined-style" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <TextField fx:id="loaiBanChuyen" editable="false" layoutX="132.0" layoutY="72.0" styleClass="underlined-style" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <TextField fx:id="khuVucBanChuyen" editable="false" layoutX="132.0" layoutY="120.0" styleClass="underlined-style" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+         </children>
+      </GridPane>
+   </children>
+   <styleClass>
+      <String fx:value="gradient2" />
+      <String fx:value="rounded-pane" />
+   </styleClass>
 </AnchorPane>
