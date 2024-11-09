@@ -243,7 +243,7 @@ public class KetCaController {
         String maNhanVien = taiKhoan.getNhanVien().getMaNhanVien();
         String tenNhanVien = taiKhoan.getNhanVien().getTenNhanVien();
         String ngayLap = thoiGianHienTai.getText();
-        String tienVaoCaText = tienVaoCa.getText();
+        String tienVaoCaText = df.format(Double.parseDouble(tienVaoCa.getText()));
         String tongSoHoaDonText = tongSoHoaDon.getText();
         String tongDoanhThuText = tongDoanhThu.getText();
         String tongMenhGiaText = tongMenhGia.getText();
@@ -271,12 +271,12 @@ public class KetCaController {
             // Tạo báo cáo
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
                 String title = "BÁO CÁO KẾT CA";
-                int width = 80;
+                int width = 78;
                 int padding = (width - title.length()) / 2;
                 String centeredTitle = " ".repeat(padding) + title + " ".repeat(padding);
                 writer.write(centeredTitle);
                 writer.newLine();
-                writer.write("---------------------------------------------------------------------------------------");
+                writer.write("-----------------------------------------------------------------------");
                 writer.newLine();
                 writer.newLine();
 
@@ -287,7 +287,7 @@ public class KetCaController {
                 writer.newLine();
                 writer.write("Ngày lập báo cáo: " + ngayLap);
                 writer.newLine();
-                writer.write("---------------------------------------------------------------------------------------");
+                writer.write("-----------------------------------------------------------------------");
                 writer.newLine();
                 writer.write("Tiền vào ca: " + tienVaoCaText);
                 writer.newLine();
@@ -295,7 +295,7 @@ public class KetCaController {
                 writer.newLine();
                 writer.write("Tổng doanh thu: " + tongDoanhThuText);
                 writer.newLine();
-                writer.write("---------------------------------------------------------------------------------------");
+                writer.write("-----------------------------------------------------------------------");
                 writer.newLine();
                 writer.write("Tiền bàn giao thực tế: " + tongMenhGiaText);
                 writer.newLine();
