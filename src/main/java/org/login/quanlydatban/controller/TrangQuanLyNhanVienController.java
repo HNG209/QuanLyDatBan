@@ -201,12 +201,6 @@ public class TrangQuanLyNhanVienController implements Initializable {
                         String cellValue = tableNhanVien.getItems().get(rowIndex).getMaNhanVien();
                         NhanVienDAO nvdao = new  NhanVienDAO();
                         NhanVien nvtim = nvdao.getNhanVien(cellValue);
-                        if(nvtim != null){
-                            System.out.println(nvtim.getTenNhanVien());
-                            System.out.println("ma nahn vien"+ cellValue);
-                            System.out.println("nhan vien da lick co ten la "+ nvtim.getMaNhanVien());
-                        }
-
                         FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/HienvaSuaNhanVien.fxml"));
                         Parent newWindow = loader.load();
                         TrangHienNhanVienController nvfml = loader.getController();

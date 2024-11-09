@@ -13,6 +13,7 @@ import java.util.List;
 
 public class NhanVienDAO {
     private NhanVien nhanVien;
+    private TaiKhoanDAO taiKhoan;
     public List<NhanVien> getAllTaiKhoan() {
         List<NhanVien> taiKhoanList = null;
         Session session = HibernateUtils.getFactory().openSession();
@@ -84,16 +85,17 @@ public class NhanVienDAO {
         }
     }
 
-    public void updateNhanVien(String maNhanVien, NhanVien nhanVienMoi) {
+    public void updateNhanVien(String maNhanVienCu, NhanVien nhanVienMoi) {
         Session session = HibernateUtils.getFactory().openSession();
         Transaction transaction = null;
+        taiKhoan = new TaiKhoanDAO();
 
         try {
             transaction = session.beginTransaction(); // Bắt đầu giao dịch
 
             // Tìm nhân viên theo mã cũ
             NhanVien nhanVienCu = session.createQuery("FROM NhanVien WHERE maNhanVien = :maNhanVien", NhanVien.class)
-                    .setParameter("maNhanVien", maNhanVien)
+                    .setParameter("maNhanVien", maNhanVienCu)
                     .uniqueResult();
 
             if (nhanVienCu != null) {
@@ -102,28 +104,36 @@ public class NhanVienDAO {
                     return;
                 }
 
-                // Lưu thông tin nhân viên mới vào cơ sở dữ liệu
-                // Tạo đối tượng nhân viên mới với mã mới
-                NhanVien nhanVienMoiDaTao = new NhanVien();
-                nhanVienMoiDaTao.setMaNhanVien(nhanVienMoi.getMaNhanVien());
-                nhanVienMoiDaTao.setTenNhanVien(nhanVienMoi.getTenNhanVien());
-                nhanVienMoiDaTao.setNgaySinh(nhanVienMoi.getNgaySinh());
-                nhanVienMoiDaTao.setDiaChi(nhanVienMoi.getDiaChi());
-                nhanVienMoiDaTao.setGioiTinh(nhanVienMoi.isGioiTinh());
-                nhanVienMoiDaTao.setHinhAnh(nhanVienMoi.getHinhAnh());
-                nhanVienMoiDaTao.setSdt(nhanVienMoi.getSdt());
-                nhanVienMoiDaTao.setCccd(nhanVienMoi.getCccd());
-                nhanVienMoiDaTao.setTrangThaiNhanVien(nhanVienMoi.getTrangThaiNhanVien());
-                nhanVienMoiDaTao.setChucVuNhanVien(nhanVienMoi.getChucVuNhanVien());
+                // Cập nhật thông tin nhân viên
+                nhanVienCu.setMaNhanVien(nhanVienMoi.getMaNhanVien()); // Cập nhật mã nhân viên
+                nhanVienCu.setTenNhanVien(nhanVienMoi.getTenNhanVien());
+                nhanVienCu.setNgaySinh(nhanVienMoi.getNgaySinh());
+                nhanVienCu.setDiaChi(nhanVienMoi.getDiaChi());
+                nhanVienCu.setGioiTinh(nhanVienMoi.isGioiTinh());
+                nhanVienCu.setHinhAnh(nhanVienMoi.getHinhAnh());
+                nhanVienCu.setSdt(nhanVienMoi.getSdt());
+                nhanVienCu.setCccd(nhanVienMoi.getCccd());
+                nhanVienCu.setTrangThaiNhanVien(nhanVienMoi.getTrangThaiNhanVien());
+                nhanVienCu.setChucVuNhanVien(nhanVienMoi.getChucVuNhanVien());
 
-                // Xóa nhân viên cũ
-                session.delete(nhanVienCu);
-                // Lưu nhân viên mới
-                session.save(nhanVienMoiDaTao); // Lưu nhân viên mới vào cơ sở dữ liệu
+                // Cập nhật tài khoản liên kết
+                TaiKhoan tktim = taiKhoan.getTaiKhoanNhanVien(maNhanVienCu);
+                TaiKhoan taiKhoan1 = tktim;
+                if (tktim != null) {
+                    tktim.setNhanVien(nhanVienCu); // Cập nhật mã nhân viên trong tài khoản
+                    // Nếu cần, cập nhật các thuộc tính khác của tài khoản
+                    tktim.setUserName(taiKhoan1.getUserName());
+                    tktim.setPassword(taiKhoan1.getPassword());
+                }
+
+                // Lưu cập nhật
+                session.merge(nhanVienCu); // Sử dụng merge để cập nhật nhân viên cũ
+                session.merge(tktim); // Sử dụng merge để cập nhật tài khoản
+
                 transaction.commit(); // Cam kết giao dịch
                 System.out.println("Cập nhật thành công.");
             } else {
-                System.out.println("Không tìm thấy nhân viên với mã: " + maNhanVien);
+                System.out.println("Không tìm thấy nhân viên với mã: " + maNhanVienCu);
             }
         } catch (Exception e) {
             if (transaction != null) {
@@ -134,7 +144,6 @@ public class NhanVienDAO {
             session.close(); // Đảm bảo đóng session
         }
     }
-
     public List<NhanVien> getNhanVienWithTaiKhoan() {
         Session session = HibernateUtils.getFactory().openSession();
         Transaction transaction = null;

@@ -113,7 +113,7 @@ public class TrangHienNhanVienController implements Initializable {
 
     // cccd, 11 so
     public boolean cancuoccongdancheck(TextField cccd){
-        if(!cccd.getText().matches("^[0-9]{11}$")){
+        if(!cccd.getText().matches("^[0-9]{12}$")){
             showWarn("Can cuoc cong dan khong hop le");
             return false;
         }
@@ -320,14 +320,9 @@ public class TrangHienNhanVienController implements Initializable {
         NhanVienDAO nvd = new NhanVienDAO();
         nvd.updateNhanVien(nv);
 
-        System.out.println(maNhanVien.getText().toString()+ hoTen.getText().toString()+dienThoai.getText().toString()+ cccd.getText().toString()+ diaChi.getText().toString()+ ngaySinh.getValue()+ duongdan + tt + cv);
-        System.out.println(gt+"");
-
     }
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-//        System.out.println(getGetMaNhanVien() +" Ban trang sau khi thuc hien");
-
         maNhanVien.setEditable(false);
         hoTen.focusedProperty().addListener((obs, oldVal, newVal) ->{
             if(!newVal){
@@ -356,7 +351,6 @@ public class TrangHienNhanVienController implements Initializable {
                 diaChicheck(diaChi);
             }
         });
-
         dienThoai.focusedProperty().addListener((obs, oldVal, newVal) ->{
             if(!newVal){
                 sdtcheck(dienThoai);
@@ -378,7 +372,6 @@ public class TrangHienNhanVienController implements Initializable {
                 if(tencheck(hoTen) && cancuoccongdancheck(cccd) && sdtcheck(dienThoai) && diaChicheck(diaChi)){
                     if(chucvuCheck(chucVu) && trangThaiCheck(trangThaiLamViec) && gioiTinhCheck(gioiTinh)){
                         chinhSuaNhanVien();
-                       // nvdao.addNhanVien(nv);
                         trangQuanLyNhanVien.xetLaiduLieuChoBang();
                     }
                 }else{
@@ -424,12 +417,8 @@ public class TrangHienNhanVienController implements Initializable {
         }
 
         nv = new NhanVien(maNhanVien.getText().toString(),hoTen.getText().toString(),dienThoai.getText().toString(),cccd.getText().toString(),diaChi.getText().toString(),gt,ngaySinh.getValue(),duongdan.toString(),tt,cv);
-        System.out.println(nv.toString());
-        NhanVienDAO nvd = new NhanVienDAO();
-        nvd.updateNhanVien(maNhanVien.getText(),nv);
-
-        System.out.println(maNhanVien.getText().toString()+ hoTen.getText().toString()+dienThoai.getText().toString()+ cccd.getText().toString()+ diaChi.getText().toString()+ ngaySinh.getValue()+ duongdan + tt + cv);
-        System.out.println(gt+"");
+       // NhanVienDAO nvd = new NhanVienDAO();
+        nvdao.updateNhanVien(nv1.getMaNhanVien().toString(),nv);
     }
 
 }

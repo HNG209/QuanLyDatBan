@@ -316,13 +316,20 @@ public class TrangThemNhanVienController implements Initializable {
                @Override
                public void handle(ActionEvent event) {
                    if(tencheck(hoTen) && cancuoccongdancheck(cccd) && sdtcheck(dienThoai) && diaChicheck(diaChi)){
-                       if(chucvuCheck(chucVu) && trangThaiCheck(trangThaiLamViec) && gioiTinhCheck(gioiTinh)){
-                           try {
-                               ThemNhanVien();
-                           } catch (Exception e) {
-                               throw new RuntimeException(e);
+                       if(chucvuCheck(chucVu) && trangThaiCheck(trangThaiLamViec) && gioiTinhCheck(gioiTinh)) {
+                           if (duongdan!= null) {
+                               try {
+                                   ThemNhanVien();
+                                   showAlert("Thêm nhân viên thành công");
+                                   Stage stage = (Stage) btnLuu.getScene().getWindow();
+                                   stage.close();
+                               } catch (Exception e) {
+                                   throw new RuntimeException(e);
+                               }
+                               trangQuanLyNhanVien.xetLaiduLieuChoBang();
+                           }else{
+                               showAlert("Bạn phải chọn ảnh của nhân viên");
                            }
-                           trangQuanLyNhanVien.xetLaiduLieuChoBang();
                        }
                    }else{
                        showWarn("Ban can nhap day du thong tin");
@@ -337,9 +344,6 @@ public class TrangThemNhanVienController implements Initializable {
                    currentStage.close(); // Đóng cửa sổ
                }
            });
-
-
-
     }
 
     public  String encrypt(String data, SecretKey secretKey) throws Exception {
@@ -362,10 +366,6 @@ public class TrangThemNhanVienController implements Initializable {
         byte[] originalData = cipher.doFinal(decodedData);
         return new String(originalData);
     }
-
-    // ham thêm nhân viên public NhanVien(String maNhanVien, String tenNhanVien, String sdt, String cccd,
-    // String diaChi, boolean gioiTinh, LocalDate ngaySinh, String hinhAnh,
-    // TrangThaiNhanVien trangThaiNhanVien, ChucVu chucVuNhanVien) {
     public void ThemNhanVien() throws Exception {
          Boolean gt = gioiTinh.getValue().equals("NAM") ? false : true;
          taiKhoanDAO = new TaiKhoanDAO();
@@ -384,30 +384,13 @@ public class TrangThemNhanVienController implements Initializable {
         }else if(chucVu.getValue().equals("Quản Lý")){
             cv = ChucVu.QUAN_LY;
         }
-
          NhanVien nv = new NhanVien(maNhanVien.getText().toString(),hoTen.getText().toString(),dienThoai.getText().toString(),cccd.getText().toString(),diaChi.getText().toString(),gt,ngaySinh.getValue(),duongdan,tt,cv);
          NhanVienDAO nvd = new NhanVienDAO();
          nvd.addNhanVien(nv);
          String tenTaiKhoan = hoTen.getText().toString().replaceAll("\\s+","");
          String matKhau = "11111111";
-//         SecretKey secretKey = this.generateKey();
-//
-//        // Mã hóa dữ liệu
-//        String encryptedData = encrypt(matKhau, secretKey);
-//        System.out.println("Encrypted Data: " + encryptedData);
-//
-//        // Lưu dữ liệu đã mã hóa vào cơ sở dữ liệu
-//
-//        // Bạn cũng có thể giải mã nếu cần
-//        String decryptedData = decrypt(encryptedData, secretKey);
-//        System.out.println("Decrypted Data: " + decryptedData);
-
-        TaiKhoan takKhoan = new TaiKhoan(tenTaiKhoan,matKhau, nvd.getNhanVien(nv.getMaNhanVien().toString()));
-        taiKhoanDAO.addNhanVien(takKhoan);
-        System.out.println(tenTaiKhoan + matKhau);
-        System.out.println(maNhanVien.getText().toString()+ hoTen.getText().toString()+dienThoai.getText().toString()+ cccd.getText().toString()+ diaChi.getText().toString()+ ngaySinh.getValue()+ duongdan + tt + cv);
-        System.out.println(gt+"");
+         TaiKhoan takKhoan = new TaiKhoan(tenTaiKhoan,matKhau, nvd.getNhanVien(nv.getMaNhanVien().toString()));
+         taiKhoanDAO.addNhanVien(takKhoan);
     }
-
 }
 
