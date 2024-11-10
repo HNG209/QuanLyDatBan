@@ -202,6 +202,7 @@ public class DatMonController implements Initializable {
                         chiTietHoaDon.setMaChiTietHoaDon(key);
 
                         chiTietHoaDon.setGhiChu(note);
+                        chiTietHoaDon.setSoLuong(Integer.parseInt(String.valueOf(objects[3])));
 
                         chiTietHoaDonDAO.capNhatCTHD(chiTietHoaDon);
 

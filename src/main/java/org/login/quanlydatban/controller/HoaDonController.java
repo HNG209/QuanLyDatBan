@@ -114,7 +114,7 @@ public class HoaDonController implements Initializable {
                 return new SimpleStringProperty(monAn != null ? monAn.getTenMonAn() : "");
             });
             colSoLuong.setCellValueFactory(new PropertyValueFactory<>("soLuong"));
-            //colGhiChu.setCellValueFactory(new PropertyValueFactory<>("ghiChu"));
+            colGhiChu.setCellValueFactory(new PropertyValueFactory<>("ghiChu"));
             tabTatCa.setOnMouseClicked(event -> {
                 if (event.getClickCount() == 1) {
                     String maHoaDon = tabTatCa.getSelectionModel().getSelectedItem().getMaHoaDon();
