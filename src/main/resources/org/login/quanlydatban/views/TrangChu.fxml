@@ -60,6 +60,7 @@
                   <items>
                     <MenuItem mnemonicParsing="false" onAction="#datMon" text="Đặt món" />
                         <MenuItem mnemonicParsing="false" onAction="#xemHoaDon" text="Quản lý hóa đơn" />
+                        <MenuItem mnemonicParsing="false" onAction="#xemQuanLyBan" text="Quản lý bàn" />
                   </items>
                      <graphic>
                         <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">

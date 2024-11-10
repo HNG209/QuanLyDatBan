@@ -239,4 +239,19 @@ public class TrangChuController implements Initializable {
     public static void setBorderPaneStatic(BorderPane borderPaneStatic) {
         TrangChuController.borderPaneStatic = borderPaneStatic;
     }
+    @FXML
+    public void xemQuanLyBan() throws IOException {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/TrangQuanLyBan.fxml"));
+            AnchorPane anchorPane = loader.load();
+            borderPane.setCenter(anchorPane);
+
+            anchorPane.prefWidthProperty().bind(borderPane.widthProperty());
+            anchorPane.prefHeightProperty().bind(borderPane.heightProperty());
+        } catch (IOException e) {
+            // Hiển thị thông báo lỗi cho người dùng
+            System.err.println("Không thể tải giao diện Quản lý bàn: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
 }
