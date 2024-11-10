@@ -239,7 +239,6 @@ public class KetCaController {
     }
     @FXML
     private void xuatBaoCaoKetCa() {
-
         String maNhanVien = taiKhoan.getNhanVien().getMaNhanVien();
         String tenNhanVien = taiKhoan.getNhanVien().getTenNhanVien();
         String ngayLap = thoiGianHienTai.getText();
@@ -249,26 +248,29 @@ public class KetCaController {
         String tongMenhGiaText = tongMenhGia.getText();
         String chenhLechText = chenhLech.getText();
 
-        if (maNhanVien.isEmpty() || tenNhanVien.isEmpty() || ngayLap.isEmpty() || tienVaoCaText.isEmpty() || tongSoHoaDonText.isEmpty() ||
-                tongDoanhThuText.isEmpty() || tongMenhGiaText.isEmpty() || chenhLechText.isEmpty()) {
+        if (maNhanVien.isEmpty() || tenNhanVien.isEmpty() || ngayLap.isEmpty() || tienVaoCaText.isEmpty() ||
+                tongSoHoaDonText.isEmpty() || tongDoanhThuText.isEmpty() || tongMenhGiaText.isEmpty() || chenhLechText.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Dữ liệu không đầy đủ. Vui lòng kiểm tra lại.");
             return;
         }
 
         if (chenhLech.getTextFill() == Color.RED) {
-            int option = JOptionPane.showConfirmDialog(null, "Có chênh lệch giữa số tiền thực tế và bàn giao. Bạn có muốn tiếp tục?", "Thông báo",JOptionPane.YES_NO_OPTION);
+            int option = JOptionPane.showConfirmDialog(null, "Có chênh lệch giữa số tiền thực tế và bàn giao. Bạn có muốn tiếp tục?", "Thông báo", JOptionPane.YES_NO_OPTION);
             if (option != JOptionPane.YES_OPTION) {
                 return;
             }
         }
 
         try {
-            // Định dạng tên file báo cáo
             String folderPath = "src/main/resources/org/login/quanlydatban/baoCaoKetCa/";
+            File folder = new File(folderPath);
+            if (!folder.exists()) {
+                folder.mkdirs();  // Create the directory if it does not exist
+            }
+
             String fileName = "BaoCaoKetCa_" + maNhanVien + "_" + ngayLap.replace("/", "_").replace(":", "_").replace(" ", "") + ".txt";
             File file = new File(folderPath + fileName);
 
-            // Tạo báo cáo
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
                 String title = "BÁO CÁO KẾT CA";
                 int width = 78;
@@ -280,7 +282,6 @@ public class KetCaController {
                 writer.newLine();
                 writer.newLine();
 
-                // Ghi thông tin báo cáo vào file
                 writer.write("Mã nhân viên: " + maNhanVien);
                 writer.newLine();
                 writer.write("Tên nhân viên: " + tenNhanVien);
@@ -320,6 +321,7 @@ public class KetCaController {
             e.printStackTrace();
         }
     }
+
 
 
 
