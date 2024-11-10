@@ -60,7 +60,7 @@ public class TrangChuController implements Initializable {
         AnchorPane anchorPane = loader.load();
 
         ChonBanController controller = loader.getController();
-        controller.setNhanVien(taiKhoan.getNhanVien());
+        System.out.println(taiKhoan.getNhanVien());
 
         borderPane.setCenter(anchorPane);
 
@@ -214,5 +214,9 @@ public class TrangChuController implements Initializable {
                 contextMenu.show(setting, boundsInScreen.getMinX() - 30, boundsInScreen.getMaxY() + 5);
             }
         });
+    }
+
+    public static TaiKhoan getTaiKhoan() {
+        return taiKhoan;
     }
 }

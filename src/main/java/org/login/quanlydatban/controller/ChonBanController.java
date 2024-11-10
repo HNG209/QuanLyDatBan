@@ -30,14 +30,10 @@ public class ChonBanController implements Initializable {
     private ScrollPane scrollPane;
 
     @FXML
-    private AnchorPane anchorPane;
-
-    @FXML
     private Label selectedLoaiBan;
 
     private BanDAO banDAO;
 
-    private NhanVien nhanVien;
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         flowPane.prefHeightProperty().bind(scrollPane.heightProperty());
@@ -50,8 +46,6 @@ public class ChonBanController implements Initializable {
             try {
                 AnchorPane pane = loader.load();
                 CardBanController controller = loader.getController();
-                controller.setNhanVien(nhanVien);
-
                 controller.setBan(i);
 
                 flowPane.getChildren().add(pane);
@@ -71,7 +65,6 @@ public class ChonBanController implements Initializable {
             try {
                 AnchorPane pane = loader.load();
                 CardBanController controller = loader.getController();
-                controller.setNhanVien(nhanVien);
 
                 controller.setBan(i);
 
@@ -92,7 +85,6 @@ public class ChonBanController implements Initializable {
             try {
                 AnchorPane pane = loader.load();
                 CardBanController controller = loader.getController();
-                controller.setNhanVien(nhanVien);
 
                 controller.setBan(i);
 
@@ -113,7 +105,6 @@ public class ChonBanController implements Initializable {
             try {
                 AnchorPane pane = loader.load();
                 CardBanController controller = loader.getController();
-                controller.setNhanVien(nhanVien);
 
                 controller.setBan(i);
 
@@ -135,7 +126,6 @@ public class ChonBanController implements Initializable {
             try {
                 AnchorPane pane = loader.load();
                 CardBanController controller = loader.getController();
-                controller.setNhanVien(nhanVien);
 
                 controller.setBan(i);
 
@@ -156,7 +146,6 @@ public class ChonBanController implements Initializable {
             try {
                 AnchorPane pane = loader.load();
                 CardBanController controller = loader.getController();
-                controller.setNhanVien(nhanVien);
 
                 controller.setBan(i);
 
@@ -165,9 +154,5 @@ public class ChonBanController implements Initializable {
                 throw new RuntimeException(e);
             }
         }
-    }
-
-    public void setNhanVien(NhanVien nhanVien) {
-        this.nhanVien = nhanVien;
     }
 }

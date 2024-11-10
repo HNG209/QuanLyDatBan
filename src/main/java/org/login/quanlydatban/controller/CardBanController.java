@@ -42,9 +42,7 @@ public class CardBanController implements Initializable {
     @FXML
     private Label trangThai;
     private Ban ban;
-
     private HoaDonDAO hoaDonDAO;
-    private NhanVien nhanVien;
     @FXML
     void chonBan(ActionEvent event) throws IOException {
         if(ban.getTrangThaiBan() != TrangThaiBan.TAM_NGUNG_PHUC_VU){
@@ -55,7 +53,6 @@ public class CardBanController implements Initializable {
                 DatMonController controller = loader.getController();
 
                 controller.setBan(ban);
-                controller.setNhanVien(nhanVien);
 
                 List<HoaDon> list = hoaDonDAO.getHoaDonFromBan(ban);
 
@@ -114,9 +111,5 @@ public class CardBanController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         hoaDonDAO = new HoaDonDAO();
-    }
-
-    public void setNhanVien(NhanVien nhanVien) {
-        this.nhanVien = nhanVien;
     }
 }

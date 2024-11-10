@@ -448,6 +448,7 @@ public class DatMonController implements Initializable {
 
             //lap hoa don voi trang thai chua thanh toan khi giu ban
             HoaDon hoaDon = new HoaDon();
+            System.out.println(nhanVien);
             hoaDon.setNhanVien(nhanVien);
             hoaDon.setBan(ban);
             hoaDon.setTrangThaiHoaDon(TrangThaiHoaDon.CHUA_THANH_TOAN);
@@ -515,11 +516,12 @@ public class DatMonController implements Initializable {
     @FXML
     void thanhToan(ActionEvent event) {
         if(hoaDon != null){
-            if (tkd != 0.0){
-                if(pt != 0.0){
-                    if(Notification.xacNhan("Xác nhận thanh toán?")){
+            if(!orderTable.getItems().isEmpty()){
+                if (tkd != 0.0) {
+                    if (Notification.xacNhan("Xác nhận thanh toán?")) {
                         orderTable.getItems().clear();
                         this.hoaDon.setTrangThaiHoaDon(TrangThaiHoaDon.DA_THANH_TOAN);
+                        this.hoaDon.setNhanVien(TrangChuController.getTaiKhoan().getNhanVien());
 
                         ban.setTrangThaiBan(TrangThaiBan.BAN_TRONG);
                         trangThaiBanText.setText(TrangThaiBan.BAN_TRONG.toString());
@@ -537,9 +539,9 @@ public class DatMonController implements Initializable {
                         this.btnGiuBan.setVisible(true);
                     }
                 }
-                else Notification.thongBao("Vui lòng nhập phụ thu trước khi thanh toán", Alert.AlertType.INFORMATION);
+                else Notification.thongBao("Vui lòng nhập tiền khách đưa trước khi thanh toán", Alert.AlertType.INFORMATION);
             }
-            else Notification.thongBao("Vui lòng nhập tiền khách đưa trước khi thanh toán", Alert.AlertType.INFORMATION);
+            else Notification.thongBao("Hoá đơn rỗng, bạn chi có thể huỷ", Alert.AlertType.INFORMATION);
         }
         else {
             Notification.thongBao("Vui lòng giữ bàn", Alert.AlertType.INFORMATION);
@@ -553,8 +555,6 @@ public class DatMonController implements Initializable {
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/TrangChonBan.fxml"));
             AnchorPane anchorPane = loader.load();
-            ChonBanController controller = loader.getController();
-            controller.setNhanVien(nhanVien);
             pane.setCenter(anchorPane);
         }
     }
