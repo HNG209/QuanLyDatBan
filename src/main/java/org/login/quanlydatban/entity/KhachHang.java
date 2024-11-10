@@ -32,6 +32,16 @@ public class KhachHang implements Serializable {
 
     }
 
+    public KhachHang(String maKhachHang, String tenKhachHang, String sdt, String cccd, String diaChi, String email, int diemTichLuy) {
+        this.maKhachHang = maKhachHang;
+        this.tenKhachHang = tenKhachHang;
+        this.sdt = sdt;
+        this.cccd = cccd;
+        this.diaChi = diaChi;
+        this.email = email;
+        this.diemTichLuy = diemTichLuy;
+    }
+
     public String getDiaChi() {
         return diaChi;
     }
