@@ -4,6 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.login.quanlydatban.entity.ChiTietHoaDon;
 import org.login.quanlydatban.entity.NhanVien;
 import org.login.quanlydatban.entity.TaiKhoan;
 import org.login.quanlydatban.hibernate.HibernateUtils;
@@ -11,6 +12,7 @@ import org.login.quanlydatban.hibernate.HibernateUtils;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.List;
 
 public class TaiKhoanDAO {
     private NhanVienDAO nhanVienDAO;
@@ -73,5 +75,19 @@ public class TaiKhoanDAO {
         }
     }
 
+    public TaiKhoan updateTaiKhoan(TaiKhoan taiKhoan) {
+        Session session = HibernateUtils.getFactory().openSession();
+        session.getTransaction().begin();
+        String sql = "UPDATE taiKhoan SET password = :matKhau WHERE userName = :tenDN";
 
+        session.createNativeQuery(sql, TaiKhoan.class)
+                .setParameter("matKhau", taiKhoan.getPassword())
+                .setParameter("tenDN", taiKhoan.getUserName())
+                        .executeUpdate();
+
+        session.getTransaction().commit();
+        session.close();
+
+        return taiKhoan;
+    }
 }

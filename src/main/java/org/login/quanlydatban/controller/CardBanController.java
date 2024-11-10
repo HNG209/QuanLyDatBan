@@ -45,25 +45,22 @@ public class CardBanController implements Initializable {
     private HoaDonDAO hoaDonDAO;
     @FXML
     void chonBan(ActionEvent event) throws IOException {
-        if(ban.getTrangThaiBan() != TrangThaiBan.TAM_NGUNG_PHUC_VU){
-            if(anchorPane.getParent().getParent().getParent().getParent().getParent().getParent() instanceof BorderPane){
-                BorderPane pane = (BorderPane) anchorPane.getParent().getParent().getParent().getParent().getParent().getParent();
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/TrangDatMon.fxml"));
-                AnchorPane anchorPane = loader.load();
-                DatMonController controller = loader.getController();
+        if(ban.getTrangThaiBan() != TrangThaiBan.TAM_NGUNG_PHUC_VU) {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/TrangDatMon.fxml"));
+            AnchorPane anchorPane = loader.load();
+            DatMonController controller = loader.getController();
 
-                controller.setBan(ban);
+            controller.setBan(ban);
 
-                List<HoaDon> list = hoaDonDAO.getHoaDonFromBan(ban);
+            List<HoaDon> list = hoaDonDAO.getHoaDonFromBan(ban);
 
-                if(!list.isEmpty()){
-                    HoaDon hoaDon = list.get(list.size() - 1);
-                    controller.setHoaDon(hoaDon);
-                    controller.capNhatTongTien();
-                }
-
-                pane.setCenter(anchorPane);
+            if (!list.isEmpty()) {
+                HoaDon hoaDon = list.get(list.size() - 1);
+                controller.setHoaDon(hoaDon);
+                controller.capNhatTongTien();
             }
+
+            TrangChuController.getBorderPaneStatic().setCenter(anchorPane);
         }
         else {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);

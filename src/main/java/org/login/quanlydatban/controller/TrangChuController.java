@@ -35,6 +35,8 @@ public class TrangChuController implements Initializable {
     @FXML
     private BorderPane borderPane;
 
+    private static BorderPane borderPaneStatic;
+
     @FXML
     private ImageView setting;
 
@@ -170,42 +172,52 @@ public class TrangChuController implements Initializable {
         }
     }
 
-    public void dangXuat(Stage stage) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/TrangDangNhap.fxml"));
+    public static void dangXuat() throws IOException {
+        FXMLLoader loader = new FXMLLoader(TrangChuController.class.getResource("/org/login/quanlydatban/views/TrangDangNhap.fxml"));
         Scene scene = new Scene(loader.load());
-        stage = new Stage();
+        Stage stage = new Stage();
 
         if (stage != null){
             stage.setTitle("Đăng nhập");
             stage.setScene(scene);
             stage.initStyle(StageStyle.UNDECORATED);
             stage.setScene(scene);
-            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/org/login/quanlydatban/stylesheets/style.css")).toExternalForm());
+            scene.getStylesheets().add(Objects.requireNonNull(TrangChuController.class.getResource("/org/login/quanlydatban/stylesheets/style.css")).toExternalForm());
             stage.show();
         }
-
     }
 
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         ContextMenu contextMenu = new ContextMenu();
+        setBorderPaneStatic(borderPane);
 
         // Add MenuItems to the ContextMenu
-        MenuItem item1 = new MenuItem("Tài khoản");
+        MenuItem itemTaiKhoan = new MenuItem("Tài khoản");
+        itemTaiKhoan.setOnAction(event -> {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/TrangThongTinCaNhan.fxml"));
+            try {
+                AnchorPane anchorPane = loader.load();
+                TrangChuController.getBorderPaneStatic().setCenter(anchorPane);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+        });
         SeparatorMenuItem separatorMenuItem = new SeparatorMenuItem();
-        MenuItem item3 = new MenuItem("Đăng xuất");
-        item3.setOnAction(event -> {
+        MenuItem itemDangXuat = new MenuItem("Đăng xuất");
+        itemDangXuat.setOnAction(event -> {
             Stage stage = (Stage) setting.getScene().getWindow();
             stage.close();
             try {
-                dangXuat(stage);
+                dangXuat();
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         });
 
-        contextMenu.getItems().addAll(item1, separatorMenuItem, item3);
+        contextMenu.getItems().addAll(itemTaiKhoan, separatorMenuItem, itemDangXuat);
 
 
         setting.setOnMouseClicked(event -> {
@@ -218,5 +230,13 @@ public class TrangChuController implements Initializable {
 
     public static TaiKhoan getTaiKhoan() {
         return taiKhoan;
+    }
+
+    public static BorderPane getBorderPaneStatic() {
+        return borderPaneStatic;
+    }
+
+    public static void setBorderPaneStatic(BorderPane borderPaneStatic) {
+        TrangChuController.borderPaneStatic = borderPaneStatic;
     }
 }
