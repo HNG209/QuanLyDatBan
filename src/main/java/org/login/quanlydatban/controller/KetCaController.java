@@ -242,16 +242,18 @@ public class KetCaController {
         String maNhanVien = taiKhoan.getNhanVien().getMaNhanVien();
         String tenNhanVien = taiKhoan.getNhanVien().getTenNhanVien();
         String ngayLap = thoiGianHienTai.getText();
-        String tienVaoCaText = df.format(Double.parseDouble(tienVaoCa.getText()));
+        String tienVaoCaText = null;
         String tongSoHoaDonText = tongSoHoaDon.getText();
         String tongDoanhThuText = tongDoanhThu.getText();
         String tongMenhGiaText = tongMenhGia.getText();
         String chenhLechText = chenhLech.getText();
 
-        if (maNhanVien.isEmpty() || tenNhanVien.isEmpty() || ngayLap.isEmpty() || tienVaoCaText.isEmpty() ||
+        if (maNhanVien.isEmpty() || tenNhanVien.isEmpty() || ngayLap.isEmpty() || tienVaoCa.getText().isEmpty() ||
                 tongSoHoaDonText.isEmpty() || tongDoanhThuText.isEmpty() || tongMenhGiaText.isEmpty() || chenhLechText.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Dữ liệu không đầy đủ. Vui lòng kiểm tra lại.");
             return;
+        } else {
+            tienVaoCaText = df.format(Double.parseDouble(tienVaoCa.getText()));
         }
 
         if (chenhLech.getTextFill() == Color.RED) {

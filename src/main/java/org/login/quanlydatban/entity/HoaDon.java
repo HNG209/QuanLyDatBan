@@ -28,6 +28,7 @@ public class HoaDon implements Serializable {
 
     @OneToMany(mappedBy = "hoaDon", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<ChiTietHoaDon> chiTietHoaDon;
+
     @ManyToOne
     @JoinColumn(name = "maKhachHang")
     private KhachHang khachHang;

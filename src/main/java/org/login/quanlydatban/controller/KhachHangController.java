@@ -8,9 +8,13 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import org.apache.poi.hpsf.Decimal;
 import org.login.quanlydatban.dao.KhachHangDAO;
 import org.login.quanlydatban.entity.KhachHang;
 
+import javax.swing.*;
+import java.text.DecimalFormat;
+import java.time.LocalDate;
 import java.util.List;
 
 public class KhachHangController {
@@ -79,12 +83,13 @@ public class KhachHangController {
 
     @FXML
     private TextField txtTenKH;
+    private DecimalFormat df = new DecimalFormat("0000");
     private KhachHangDAO khachHangDAO = new KhachHangDAO();
     @FXML
     public void initialize() {
         tableKhachHang.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         List<Object[]> dsKhachHang = khachHangDAO.layDSKhachHang();
-        themDuLieuVaoBangKhachHang();
+
         ObservableList<KhachHang> data = FXCollections.observableArrayList();
 
         colmaKH.setCellValueFactory(new PropertyValueFactory<>("maKhachHang"));
@@ -96,28 +101,49 @@ public class KhachHangController {
         colDTL.setCellValueFactory(new PropertyValueFactory<>("diemTichLuy"));
 
         tableKhachHang.setItems(data);
+        themDuLieuVaoBangKhachHang();
+        tableKhachHang.setOnMouseClicked(event -> {
+            KhachHang selectedCustomer = tableKhachHang.getSelectionModel().getSelectedItem();
+            if (selectedCustomer != null) {
+                txtMaKH.setText(selectedCustomer.getMaKhachHang());
+                txtTenKH.setText(selectedCustomer.getTenKhachHang());
+                txtSDT.setText(selectedCustomer.getSdt());
+                txtEmail.setText(selectedCustomer.getEmail());
+                txtDiaChi.setText(selectedCustomer.getDiaChi());
+                txtCCCD.setText(selectedCustomer.getCccd());
+                txtDTL.setText(String.valueOf(selectedCustomer.getDiemTichLuy()));
+            }
+        });
 
     }
     @FXML
     public void timKiemKhachHang() {
-        String maKH = txtMaKH.getText().trim();
-        String sdt = txtSDT.getText().trim();
+        String maKH = txtTimMaKH.getText().trim();
+        String sdt = txtTimSDT.getText().trim();
         ObservableList<KhachHang> khachHangList = tableKhachHang.getItems();
+        boolean timTay = false;
+
         for (KhachHang kh : khachHangList) {
-            boolean found = (maKH.isEmpty() || kh.getMaKhachHang().equalsIgnoreCase(maKH)) &&
+            boolean trungKhop = (maKH.isEmpty() || kh.getMaKhachHang().equalsIgnoreCase(maKH)) &&
                     (sdt.isEmpty() || kh.getSdt().equalsIgnoreCase(sdt));
-            if (found) {
+            if (trungKhop) {
                 tableKhachHang.getSelectionModel().select(kh);
-                tableKhachHang.scrollTo(kh);  // Cuộn đến dòng được chọn
-                return;
+                tableKhachHang.scrollTo(kh);
+                timTay = true;
+                break;
             }
         }
 
-        tableKhachHang.getSelectionModel().clearSelection();
+        if (!timTay) {
+            JOptionPane.showMessageDialog(null, "Không tìm thấy khách hàng với thông tin đã nhập.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+            tableKhachHang.getSelectionModel().clearSelection();
+        }
     }
+
     @FXML
     public void suaKhachHang() {
         try {
+
             KhachHang khachHang = tableKhachHang.getSelectionModel().getSelectedItem();
 
             if (khachHang != null) {
@@ -126,39 +152,110 @@ public class KhachHangController {
                 khachHang.setEmail(txtEmail.getText().trim());
                 khachHang.setDiaChi(txtDiaChi.getText().trim());
                 khachHang.setCccd(txtCCCD.getText().trim());
-                khachHang.setDiemTichLuy(Integer.parseInt(txtDTL.getText().trim()));
 
-                if (khachHangDAO.suaKhachHang(khachHang)) {
+
+                boolean kq = khachHangDAO.suaKhachHang(khachHang);
+
+                if (kq) {
+
                     themDuLieuVaoBangKhachHang();
                     lamMoi();
+                    JOptionPane.showMessageDialog(null, "Sửa thông tin khách hàng thành công.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(null, "Sửa thông tin khách hàng thất bại.", "Lỗi", JOptionPane.ERROR_MESSAGE);
                 }
+            } else {
+                JOptionPane.showMessageDialog(null, "Vui lòng chọn khách hàng để sửa.", "Thông báo", JOptionPane.WARNING_MESSAGE);
             }
         } catch (Exception e) {
             e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Có lỗi xảy ra khi sửa thông tin khách hàng.", "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
     }
+
     @FXML
     public void themKhachHang() {
+        if (!txtMaKH.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null,
+                    "Vui lòng nhấn 'Làm mới' và nhập thông tin khách hàng để thêm mới.",
+                    "Cảnh báo",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        if (!validateInput()) {
+            return;
+        }
+
         try {
+            KhachHang kh = khachHangDAO.layKhachHangDauTienTheoNam();
+            String ma = null;
+            int maKH = 0;
+            if(kh == null) {
+                ma = "KH" + LocalDate.now().getYear() + "0001";
+
+            }
+            else{
+                maKH = Integer.parseInt(kh.getMaKhachHang().substring(kh.getMaKhachHang().length() - 4)) + 1;
+                ma = kh.getMaKhachHang().substring(0,6) + df.format(maKH);
+            }
+
+
             KhachHang khachHang = new KhachHang(
-                    txtMaKH.getText().trim(),
+                    ma,
                     txtTenKH.getText().trim(),
                     txtSDT.getText().trim(),
-                    txtEmail.getText().trim(),
-                    txtDiaChi.getText().trim(),
                     txtCCCD.getText().trim(),
-                    Integer.parseInt(txtDTL.getText().trim())
+                    txtDiaChi.getText().trim(),
+                    txtEmail.getText().trim(),
+                    0
             );
 
             if (khachHangDAO.themKhachHang(khachHang)) {
                 themDuLieuVaoBangKhachHang();
                 lamMoi();
+                JOptionPane.showMessageDialog(null, "Thêm khách hàng thành công", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
+    private boolean validateInput() {
+        String sdtRegex = "^(09|03|02|04)\\d{8}$";
+        String emailRegex = "^[A-Za-z0-9+_.-]+@(.+)$";
+        String cccdRegex = "^\\d{3}[0-9][0-9]\\d{6}$";
+        String tenRegex = "^[\\p{L} ]+$";
+        String diaChiRegex = "^([A-Z0-9].*)?$\n";
+
+
+        if (!txtSDT.getText().matches(sdtRegex)) {
+            JOptionPane.showMessageDialog(null, "Số điện thoại không hợp lệ.", "Lỗi nhập liệu", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        if (!txtEmail.getText().equalsIgnoreCase("")&&!txtEmail.getText().matches(emailRegex)) {
+            JOptionPane.showMessageDialog(null, "Email không hợp lệ.", "Lỗi nhập liệu", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        if (!txtCCCD.getText().matches(cccdRegex)) {
+            JOptionPane.showMessageDialog(null, "CCCD không hợp lệ.", "Lỗi nhập liệu", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        if (!txtTenKH.getText().matches(tenRegex)) {
+            JOptionPane.showMessageDialog(null, "Tên khách hàng không hợp lệ.", "Lỗi nhập liệu", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        if (!txtDiaChi.getText().equalsIgnoreCase("")&&!txtDiaChi.getText().matches(diaChiRegex)) {
+            JOptionPane.showMessageDialog(null, "Đianh chỉ nhập không hợp lệ.", "Lỗi nhập liệu", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        return true;
+    }
+
+
     public void themDuLieuVaoBangKhachHang(){
+        tableKhachHang.getItems().clear();
         List<Object[]> dsKhachHang = khachHangDAO.layDSKhachHang();
 
 
@@ -168,9 +265,9 @@ public class KhachHangController {
                     row[0].toString(), // MaKhachHang
                     row[1].toString(), // TenKhachHang
                     row[2].toString(), // Sdt
-                    row[3].toString(), // Email
+                    row[5].toString(), // Email
                     row[4].toString(), // DiaChi
-                    row[5].toString(), // CCCD
+                    row[3].toString(), // CCCD
                     Integer.parseInt(row[6].toString()) // DiemTichLuy
             );
 
@@ -189,6 +286,12 @@ public class KhachHangController {
 
         themDuLieuVaoBangKhachHang();
     }
+    @FXML
+    public void lamMoiTimKiem() {
+        txtTimMaKH.clear();
+        txtTimSDT.clear();
+    }
+
 
 
 
