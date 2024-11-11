@@ -12,10 +12,22 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.login.quanlydatban.dao.NhanVienDAO;
 import org.login.quanlydatban.entity.NhanVien;
+import org.login.quanlydatban.entity.enums.ChucVu;
+import org.login.quanlydatban.entity.enums.TrangThaiNhanVien;
+
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
@@ -23,13 +35,43 @@ import java.util.ResourceBundle;
 
 public class TrangQuanLyNhanVienController implements Initializable {
     @FXML
+    private Button btnTaiAnh1;
+    @FXML
+    private ImageView image1;
+    private String duongdan;
+    @FXML
+    private Button btnHuyBo; // btn huy bo
+    @FXML
+    private Button btnLuu; // btn luu
+    @FXML
+    private TextField diaChi1; // dia chi
+    @FXML
+    private TextField cccd;// can cuoc cong dan
+    @FXML
+    private TextField dienThoai;
+    @FXML
+    private TextField hoTen; // ho ten
+    @FXML
+    private TextField maNhanVien1; // ma nhan vien
+    @FXML
+    private ComboBox<String> gioiTinh1; // cbx gioi tinh
+    @FXML
+    private ComboBox<String> trangThaiLamViec; // cbx trang thai lam viec
+    @FXML
+    private ComboBox<String> chucVu; // cbx chuc vu
+    @FXML
+    private DatePicker ngaySinh;
+    private NhanVienDAO nhanVienDAO;
+
+    private String duongdananh;
+    @FXML
     private Button btnthem;
     @FXML
     private TextField searchID;
 
     // bien ten nhan vien
     private String nhanvien;
-    private NhanVienDAO nhanVienDAO;
+    private NhanVienDAO nvdao;
     @FXML
     private TableView<NhanVien> tableNhanVien;
     @FXML
@@ -50,6 +92,7 @@ public class TrangQuanLyNhanVienController implements Initializable {
 
     private NhanVienDAO employeeList1;
     private String maNhanVien;
+    private String cellValue;
 
 
     public void XuatFile(){
@@ -121,6 +164,34 @@ public class TrangQuanLyNhanVienController implements Initializable {
         }
     }
 
+    @FXML
+    public  void taiAnh(){
+        btnTaiAnh1.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                System.out.println("Nhan nut tai anh");
+                FileChooser fileChooser = new FileChooser();
+                fileChooser.setInitialDirectory(new File("E:\\QuanLyDatBanNhom2\\QuanLyDatBan\\src\\main\\resources\\org\\login\\quanlydatban\\Image"));
+                fileChooser.setTitle("Mở file");
+
+                // Thiết lập bộ lọc file nếu cần
+                FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif");
+                fileChooser.getExtensionFilters().add(extFilter);
+
+                File file = fileChooser.showOpenDialog(null);
+                System.out.println("Nhấn nút tải ảnh");
+
+                if (file != null) {
+                    duongdananh = file.getAbsolutePath(); // Cập nhật đường dẫn
+                    // Cập nhật ImageView với ảnh mới
+                    Image image = new Image(file.toURI().toString());
+                    image1.setImage(image);
+                }
+
+            }
+        });
+    }
+
 
     public String getNhanvien() {
         return nhanvien;
@@ -131,7 +202,106 @@ public class TrangQuanLyNhanVienController implements Initializable {
     }
 
     // xuat ra file excel
+    public void xuatFileExcel(Stage primaryStage){
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Lưu File Excel");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Excel Files", "*.xlsx"));
 
+        File file = fileChooser.showSaveDialog(primaryStage);
+        if (file != null) {
+            try (Workbook workbook = new XSSFWorkbook()) {
+                Sheet sheet = workbook.createSheet("Data");
+
+                // Tạo tiêu đề
+                Row headerRow = sheet.createRow(0);
+                headerRow.createCell(0).setCellValue("Mã Nhân Viên");
+                headerRow.createCell(1).setCellValue("Tên Nhân Viên");
+                headerRow.createCell(2).setCellValue("Số điện thoại");
+                headerRow.createCell(3).setCellValue("Địa chỉ");
+
+                // Thêm dữ liệu từ TableView
+                ObservableList<NhanVien> items = tableNhanVien.getItems();
+                int rowCount = 1;
+                for (NhanVien nv : items) {
+                    Row row = sheet.createRow(rowCount++);
+                    row.createCell(0).setCellValue(nv.getMaNhanVien());
+                    row.createCell(1).setCellValue(nv.getTenNhanVien());
+                    row.createCell(2).setCellValue(nv.getSdt());
+                    row.createCell(3).setCellValue(nv.getDiaChi());
+                }
+
+                // Ghi ra file
+                try (FileOutputStream outputStream = new FileOutputStream(file)) {
+                    workbook.write(outputStream);
+                }
+
+                System.out.println("Xuất file Excel thành công tại: " + file.getAbsolutePath());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    public void loaddulieulenform(NhanVien nhanVien){
+        String imageUrl = nhanVien.getHinhAnh();
+        // Tạo đối tượng Image từ URL
+        Image image = new Image("file:" + imageUrl);
+        // Tạo ImageView và đặt hình ảnh vào
+        image1.setImage(image);
+        maNhanVien1.setEditable(false);
+        maNhanVien1.setText(nhanVien.getMaNhanVien());
+        hoTen.setText(nhanVien.getTenNhanVien());
+        diaChi1.setText(nhanVien.getDiaChi());
+        cccd.setText(nhanVien.getCccd());
+        dienThoai.setText(nhanVien.getSdt());
+        ngaySinh.setValue(nhanVien.getNgaySinh());
+        if(nhanVien.getChucVuNhanVien().equals(ChucVu.NHAN_VIEN)){
+            chucVu.setValue("Nhân viên");
+        }else{
+            chucVu.setValue("Quản Lý");
+        }
+
+        // gioi tinh
+        if(nhanVien.isGioiTinh() == false){
+            gioiTinh1.setValue("NAM");
+        }else{
+            gioiTinh1.setValue("NỮ");
+        }
+        //Trang thai nhan vien
+        if(nhanVien.getTrangThaiNhanVien().equals(TrangThaiNhanVien.DANG_LAM)){
+            trangThaiLamViec.setValue("DANG_LAM");
+
+        }else if(nhanVien.getTrangThaiNhanVien().equals(TrangThaiNhanVien.NGHI_PHEP)){
+            trangThaiLamViec.setValue("NGHI_PHEP");
+        }else
+            trangThaiLamViec.setValue("NGHI_VIEC");
+
+    }
+
+    public void chinhSuaNhanVien(String getMaNhanVien){
+        nvdao = new NhanVienDAO();
+        NhanVien nv1 = nvdao.getNhanVien(getMaNhanVien);
+        duongdan = nv1.getHinhAnh();
+        Boolean gt = gioiTinh1.getValue().equals("NAM") ? false : true;
+        TrangThaiNhanVien tt = null;
+        if(trangThaiLamViec.getValue().equals("ĐANG LÀM")){
+            tt = TrangThaiNhanVien.DANG_LAM;
+        }else if(trangThaiLamViec.getValue().equals("NGHỈ PHÉP")){
+            tt = TrangThaiNhanVien.NGHI_PHEP;
+        }else if(trangThaiLamViec.getValue().equals("NGHỈ VIỆC")){
+            tt = TrangThaiNhanVien.NGHI_VIEC;
+        }
+
+        ChucVu cv = null;
+        if(chucVu.getValue().equals("Nhân viên")){
+            cv = ChucVu.NHAN_VIEN;
+        }else if(chucVu.getValue().equals("Quản Lý")){
+            cv = ChucVu.QUAN_LY;
+        }
+
+        NhanVien nv = new NhanVien(getMaNhanVien,hoTen.getText().toString(),dienThoai.getText().toString(),cccd.getText().toString(),diaChi.getText().toString(),gt,ngaySinh.getValue(),duongdan.toString(),tt,cv);
+        // NhanVienDAO nvd = new NhanVienDAO();
+        nvdao.updateNhanVien(nv1.getMaNhanVien().toString(),nv);
+    }
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         nhanVienDAO = new NhanVienDAO();
@@ -158,6 +328,30 @@ public class TrangQuanLyNhanVienController implements Initializable {
         }
         FilteredList<NhanVien> filteredList = new FilteredList<>(FXCollections.observableArrayList(listNhanVien), b -> true);
 
+
+        btnHuyBo.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                maNhanVien1.setEditable(false);
+                maNhanVien1.setText("");
+                hoTen.setText("");
+                diaChi1.setText("");
+                cccd.setText("");
+                dienThoai.setText("");
+                ngaySinh.setValue(null);
+                trangThaiLamViec.setValue(null);
+                gioiTinh1.setValue(null);
+                chucVu.setValue(null);
+                image1.setImage(null);
+            }
+        });
+        btnLuu.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                chinhSuaNhanVien(cellValue);
+                xetLaiduLieuChoBang();
+            }
+        });
         searchID.textProperty().addListener((observable, oldValue, newValue) -> {
             filteredList.setPredicate(employee -> {
                 // Nếu không có từ khóa tìm kiếm, hiển thị tất cả
@@ -187,39 +381,27 @@ public class TrangQuanLyNhanVienController implements Initializable {
         });
         // Cập nhật TableView với danh sách đã lọc
         tableNhanVien.setItems(filteredList);
+        btnxuatFile.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                Stage currentStage = (Stage) btnxuatFile.getScene().getWindow();
+                xuatFileExcel(currentStage);
+            }
+        });
 
         // khi click mo dong tren table, thi hien len thong tin day du
 
         tableNhanVien.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-
                 if (mouseEvent.getClickCount() == 1) { // Kiểm tra nhấp chuột đơn,nv.getNgaySinh()
-                    try {
-
                         int rowIndex = tableNhanVien.getSelectionModel().getSelectedIndex();
-                        String cellValue = tableNhanVien.getItems().get(rowIndex).getMaNhanVien();
+                        cellValue = tableNhanVien.getItems().get(rowIndex).getMaNhanVien();
                         NhanVienDAO nvdao = new  NhanVienDAO();
                         NhanVien nvtim = nvdao.getNhanVien(cellValue);
-                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/HienvaSuaNhanVien.fxml"));
-                        Parent newWindow = loader.load();
-                        TrangHienNhanVienController nvfml = loader.getController();
-                        nvfml.SetTrangQuanLyNhanVien(TrangQuanLyNhanVienController.this);
-                        nvfml.setGetMaNhanVien(cellValue);
-                        nvfml.loaddulieulenform(nvtim);
-                        System.out.println(nvfml.getGetMaNhanVien()+" ma nhan vien sau khi truyen ");
-                        Stage stage = new Stage();
-                        stage.setScene(new Scene(newWindow));
-                        stage.setTitle("Quản Lý Nhân Viên");
-                        stage.show();
-                    } catch (IOException e) {
-                        e.printStackTrace(); // Xử lý ngoại lệ nếu có lỗi khi tải FXML
-                    }
-
+                        loaddulieulenform(nvtim);
                 }
-
            }
-
    });
     }
 }

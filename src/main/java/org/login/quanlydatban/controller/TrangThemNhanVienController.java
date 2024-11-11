@@ -388,7 +388,7 @@ public class TrangThemNhanVienController implements Initializable {
          NhanVienDAO nvd = new NhanVienDAO();
          nvd.addNhanVien(nv);
          String tenTaiKhoan = hoTen.getText().toString().replaceAll("\\s+","");
-         String matKhau = "11111111";
+         String matKhau = "1111";
          TaiKhoan takKhoan = new TaiKhoan(tenTaiKhoan,matKhau, nvd.getNhanVien(nv.getMaNhanVien().toString()));
          taiKhoanDAO.addNhanVien(takKhoan);
     }

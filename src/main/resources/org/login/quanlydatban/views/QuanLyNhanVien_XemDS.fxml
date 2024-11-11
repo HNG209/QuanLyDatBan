@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.String?>
+<?import javafx.collections.FXCollections?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -10,42 +14,154 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="600.0" prefWidth="1280.0" styleClass="gradient3" stylesheets="@../stylesheets/style.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.login.quanlydatban.controller.TrangQuanLyNhanVienController">
+<AnchorPane prefHeight="600.0" prefWidth="1280.0" styleClass="gradient2" stylesheets="@../stylesheets/style.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.login.quanlydatban.controller.TrangQuanLyNhanVienController">
    <children>
-      <TableView fx:id="tableNhanVien" layoutX="22.4" layoutY="188.8" prefHeight="392.0" prefWidth="1105.0" AnchorPane.bottomAnchor="19.0" AnchorPane.leftAnchor="22.0" AnchorPane.rightAnchor="21.0" AnchorPane.topAnchor="189.0">
-        <columns>
-          <TableColumn id="nhanvienIDtb" fx:id="nhanVienID" prefWidth="123.20000916719437" text="ID Nhân Viên" />
-          <TableColumn fx:id="tenNhanVien" prefWidth="227.1999969482422" text="Tên Nhân Viên" />
-            <TableColumn fx:id="soDienThoai" prefWidth="312.0" text="Số điện thoại" />
-            <TableColumn fx:id="gioiTinh" prefWidth="137.60003662109375" text="Giới tính" />
-            <TableColumn fx:id="trangThai" prefWidth="160.0001220703125" text="Trạng thái" />
-            <TableColumn fx:id="diaChi" prefWidth="143.199951171875" text="Địa chỉ" />
-        </columns>
-      </TableView>
-      <Label alignment="CENTER" layoutY="140.0" prefHeight="38.0" prefWidth="1288.0" text="Danh sách nhân viên" textAlignment="CENTER">
+      <TextField fx:id="searchID" layoutX="1074.0" layoutY="9.0" prefHeight="47.0" prefWidth="192.0" promptText="nhập để tìm kiếm" style="-fx-background-color: #FFFFFF;" styleClass="round-box" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="9.0" />
+      <Button fx:id="btnthem" layoutX="931.0" layoutY="9.0" lineSpacing="1.0" mnemonicParsing="false" onAction="#themNhanVien" prefHeight="47.0" prefWidth="140.0" style="-fx-background-color: #8FA679;" styleClass="round-box" stylesheets="@../stylesheets/style.css" text="Thêm mới" AnchorPane.rightAnchor="209.0" AnchorPane.topAnchor="9.0">
+         <font>
+            <Font size="18.0" />
+         </font>
+         <graphic>
+            <ImageView fitHeight="30.0" fitWidth="31.0">
+               <image>
+                  <Image url="@../icons/plus.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
+      <Button fx:id="btnxuatFile" layoutX="796.0" layoutY="9.0" lineSpacing="1.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="130.0" style="-fx-background-color: #8FA679;" styleClass="round-box" text=" Xuất file" AnchorPane.rightAnchor="353.6" AnchorPane.topAnchor="9.0">
+         <font>
+            <Font size="18.0" />
+         </font>
+         <graphic>
+            <ImageView fitHeight="30.0" fitWidth="31.0">
+               <image>
+                  <Image url="@../icons/share.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
+      <AnchorPane layoutX="4.8" layoutY="70.4" prefHeight="530.0" prefWidth="766.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="70.0">
+         <children>
+            <TableView fx:id="tableNhanVien" layoutX="14.0" layoutY="20.0" prefHeight="483.0" prefWidth="774.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="20.0">
+              <columns>
+                <TableColumn id="nhanvienIDtb" fx:id="nhanVienID" prefWidth="81.6000007390976" text="ID Nhân Viên" />
+                <TableColumn fx:id="tenNhanVien" prefWidth="149.60002899169922" text="Tên Nhân Viên" />
+                  <TableColumn fx:id="soDienThoai" prefWidth="146.40003967285156" text="Số điện thoại" />
+                  <TableColumn fx:id="gioiTinh" prefWidth="136.80007934570312" text="Giới tính" />
+                  <TableColumn fx:id="trangThai" prefWidth="115.2000732421875" text="Trạng thái" />
+                  <TableColumn fx:id="diaChi" prefWidth="121.60009765625" text="Địa chỉ" />
+              </columns>
+               <columnResizePolicy>
+                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+               </columnResizePolicy>
+            </TableView>
+         </children>
+      </AnchorPane>
+      <AnchorPane layoutX="766.4" layoutY="59.2" prefHeight="542.0" prefWidth="514.0" AnchorPane.bottomAnchor="-1.0" AnchorPane.leftAnchor="766.0" AnchorPane.topAnchor="59.0">
+         <children>
+            <Label layoutX="38.0" layoutY="14.0" prefHeight="20.0" prefWidth="95.0" text="ID nhân viên:">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Label>
+            <Button fx:id="btnTaiAnh1" layoutX="378.0" layoutY="329.0" lineSpacing="2.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="119.0" stylesheets="@../stylesheets/style.css" text="Tải ảnh" />
+            <ImageView fx:id="image1" fitHeight="166.0" fitWidth="150.0" layoutX="366.0" layoutY="124.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../Image/img.png" />
+               </image>
+            </ImageView>
+            <Label layoutX="350.0" layoutY="76.0" text="Ảnh 3 x 4 của nhân viên">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Label>
+            <Label layoutX="38.0" layoutY="86.0" prefHeight="20.0" prefWidth="71.0" text="Họ và tên:">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Label>
+            <Button fx:id="btnLuu" layoutX="38.0" layoutY="492.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="125.0" styleClass="sage-green" stylesheets="@../stylesheets/style.css" text="Lưu lại">
+               <font>
+                  <Font name="Times New Roman Bold" size="14.0" />
+               </font>
+            </Button>
+            <Button fx:id="btnHuyBo" layoutX="189.0" layoutY="492.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="119.0" text="Hủy bỏ">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Button>
+         </children>
+      </AnchorPane>
+      <Label alignment="CENTER" layoutX="141.0" layoutY="13.0" prefHeight="38.0" prefWidth="430.0" text="Danh sách nhân viên" textAlignment="CENTER">
          <font>
             <Font name="Times New Roman" size="24.0" />
          </font>
       </Label>
-      <TextField fx:id="searchID" layoutX="22.0" layoutY="52.0" prefHeight="47.0" prefWidth="430.0" promptText="nhập để tìm kiếm" style="-fx-background-color: #FFFFFF;" styleClass="round-box" />
-      <Button fx:id="btnthem" layoutX="932.0" layoutY="29.0" lineSpacing="1.0" mnemonicParsing="false" onAction="#themNhanVien" prefHeight="74.0" prefWidth="171.0" style="-fx-background-color: #8FA679;" styleClass="round-box" stylesheets="@../stylesheets/style.css" text="    Thêm mới">
+      <Label layoutX="801.0" layoutY="273.0" text="CCCD:">
          <font>
-            <Font size="18.0" />
+            <Font name="System Bold" size="14.0" />
          </font>
-      </Button>
-      <ImageView fitHeight="30.0" fitWidth="31.0" layoutX="951.0" layoutY="51.0">
-         <image>
-            <Image url="@../icons/plus.png" />
-         </image>
-      </ImageView>
-      <Button fx:id="btnxuatFile" layoutX="1118.0" layoutY="29.0" lineSpacing="1.0" mnemonicParsing="false" prefHeight="74.0" prefWidth="150.0" style="-fx-background-color: #8FA679;" styleClass="round-box" text="      Xuất file">
+      </Label>
+      <TextField fx:id="maNhanVien1" layoutX="799.0" layoutY="102.0" prefHeight="33.0" prefWidth="157.0" />
+      <TextField fx:id="diaChi1" layoutX="799.0" layoutY="235.0" prefHeight="33.0" prefWidth="290.0" />
+      <TextField fx:id="cccd" layoutX="799.0" layoutY="298.0" maxWidth="380.0" prefHeight="35.0" prefWidth="290.0" />
+      <Label layoutX="799.0" layoutY="210.0" text="Địa chỉ thường trú:">
          <font>
-            <Font size="18.0" />
-         </font></Button>
-      <ImageView fitHeight="30.0" fitWidth="31.0" layoutX="1137.0" layoutY="46.0">
-         <image>
-            <Image url="@../icons/share.png" />
-         </image>
-      </ImageView>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Label>
+      <TextField fx:id="hoTen" layoutX="799.0" layoutY="169.0" prefHeight="33.0" prefWidth="290.0" />
+      <Label layoutX="801.0" layoutY="406.0" text="Chức vụ">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Label>
+      <Label layoutX="803.0" layoutY="341.0" text="Số điện thoại:">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Label>
+      <TextField fx:id="dienThoai" layoutX="799.0" layoutY="364.0" prefHeight="35.0" prefWidth="290.0" />
+      <Label layoutX="802.0" layoutY="480.0" text="Ngày/ tháng/năm">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Label>
+      <Label layoutX="956.0" layoutY="406.0" text="Trạng thái làm việc:">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Label>
+      <DatePicker fx:id="ngaySinh" layoutX="799.0" layoutY="508.0" prefHeight="30.0" prefWidth="290.0" />
+      <ComboBox fx:id="trangThaiLamViec" layoutX="957.0" layoutY="439.0" prefHeight="30.0" prefWidth="129.0">
+         <items>
+            <FXCollections fx:factory="observableArrayList">
+               <String fx:value="ĐANG LÀM" />
+               <String fx:value="NGHỈ PHÉP" />
+            </FXCollections>
+         </items>
+      </ComboBox>
+      <ComboBox fx:id="gioiTinh1" layoutX="964.0" layoutY="102.0" prefHeight="33.0" prefWidth="125.0">
+         <items>
+            <FXCollections fx:factory="observableArrayList">
+               <String fx:value="NAM" />
+               <String fx:value="NỮ" />
+            </FXCollections>
+         </items>
+      </ComboBox>
+      <Label layoutX="971.0" layoutY="68.0" prefHeight="17.0" prefWidth="77.0" text="Giới tính">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Label>
+      <ComboBox fx:id="chucVu" layoutX="801.0" layoutY="439.0" prefHeight="30.0" prefWidth="149.0">
+         <items>
+            <FXCollections fx:factory="observableArrayList">
+               <String fx:value="Nhân viên" />
+               <String fx:value="Quản Lý" />
+            </FXCollections>
+         </items>
+      </ComboBox>
    </children>
 </AnchorPane>
