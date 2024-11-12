@@ -29,7 +29,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button fx:id="btnxuatFile" layoutX="796.0" layoutY="9.0" lineSpacing="1.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="130.0" style="-fx-background-color: #8FA679;" styleClass="round-box" text=" Xuất file" AnchorPane.rightAnchor="353.6" AnchorPane.topAnchor="9.0">
+      <Button fx:id="btnxuatFile" layoutX="796.0" layoutY="8.0" lineSpacing="1.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="140.0" style="-fx-background-color: #8FA679;" styleClass="round-box" text=" Xuất file" AnchorPane.rightAnchor="358.0" AnchorPane.topAnchor="8.0">
          <font>
             <Font size="18.0" />
          </font>
@@ -41,7 +41,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <AnchorPane layoutX="4.8" layoutY="70.4" prefHeight="530.0" prefWidth="766.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="70.0">
+      <AnchorPane layoutX="4.8" layoutY="70.4" prefHeight="530.0" prefWidth="766.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="70.0">
          <children>
             <TableView fx:id="tableNhanVien" layoutX="14.0" layoutY="20.0" prefHeight="483.0" prefWidth="774.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="20.0">
               <columns>
@@ -58,15 +58,15 @@
             </TableView>
          </children>
       </AnchorPane>
-      <AnchorPane layoutX="766.4" layoutY="59.2" prefHeight="542.0" prefWidth="514.0" AnchorPane.bottomAnchor="-1.0" AnchorPane.leftAnchor="766.0" AnchorPane.topAnchor="59.0">
+      <AnchorPane layoutX="772.8" layoutY="62.4" prefHeight="539.0" prefWidth="517.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="773.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="62.0">
          <children>
             <Label layoutX="38.0" layoutY="14.0" prefHeight="20.0" prefWidth="95.0" text="ID nhân viên:">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
             </Label>
-            <Button fx:id="btnTaiAnh1" layoutX="378.0" layoutY="329.0" lineSpacing="2.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="119.0" stylesheets="@../stylesheets/style.css" text="Tải ảnh" />
-            <ImageView fx:id="image1" fitHeight="166.0" fitWidth="150.0" layoutX="366.0" layoutY="124.0" pickOnBounds="true" preserveRatio="true">
+            <Button fx:id="btnTaiAnh1" layoutX="358.0" layoutY="329.0" lineSpacing="2.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="107.0" stylesheets="@../stylesheets/style.css" text="Tải ảnh" />
+            <ImageView fx:id="image1" fitHeight="166.0" fitWidth="150.0" layoutX="366.0" layoutY="124.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="357.20000000000005" AnchorPane.topAnchor="124.0">
                <image>
                   <Image url="@../Image/img.png" />
                </image>
@@ -81,7 +81,7 @@
                   <Font name="System Bold" size="14.0" />
                </font>
             </Label>
-            <Button fx:id="btnLuu" layoutX="38.0" layoutY="492.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="125.0" styleClass="sage-green" stylesheets="@../stylesheets/style.css" text="Lưu lại">
+            <Button fx:id="btnLuu" layoutX="29.0" layoutY="492.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="125.0" styleClass="sage-green" stylesheets="@../stylesheets/style.css" text="Lưu lại">
                <font>
                   <Font name="Times New Roman Bold" size="14.0" />
                </font>
@@ -91,16 +91,16 @@
                   <Font name="System Bold" size="12.0" />
                </font>
             </Button>
+            <Label layoutX="38.0" layoutY="211.0" text="CCCD:">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Label>
          </children>
       </AnchorPane>
-      <Label alignment="CENTER" layoutX="141.0" layoutY="13.0" prefHeight="38.0" prefWidth="430.0" text="Danh sách nhân viên" textAlignment="CENTER">
+      <Label alignment="CENTER" layoutX="149.0" layoutY="29.0" prefHeight="38.0" prefWidth="430.0" text="Danh sách nhân viên" textAlignment="CENTER">
          <font>
             <Font name="Times New Roman" size="24.0" />
-         </font>
-      </Label>
-      <Label layoutX="801.0" layoutY="273.0" text="CCCD:">
-         <font>
-            <Font name="System Bold" size="14.0" />
          </font>
       </Label>
       <TextField fx:id="maNhanVien1" layoutX="799.0" layoutY="102.0" prefHeight="33.0" prefWidth="157.0" />
