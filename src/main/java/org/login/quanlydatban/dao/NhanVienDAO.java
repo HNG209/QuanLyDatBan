@@ -113,7 +113,8 @@ public class NhanVienDAO {
                 nhanVienCu.setHinhAnh(nhanVienMoi.getHinhAnh());
                 nhanVienCu.setSdt(nhanVienMoi.getSdt());
                 nhanVienCu.setCccd(nhanVienMoi.getCccd());
-               // nhanVienCu.setTrangThaiNhanVien(nhanVienMoi.getTrangThaiNhanVien()); // Cập nhật trạng thái
+                System.out.println(nhanVienMoi.getTrangThaiNhanVien());
+                nhanVienCu.setTrangThaiNhanVien(nhanVienMoi.getTrangThaiNhanVien()); // Cập nhật trạng thái
                 nhanVienCu.setChucVuNhanVien(nhanVienMoi.getChucVuNhanVien());
 
                 // Cập nhật tài khoản liên kết

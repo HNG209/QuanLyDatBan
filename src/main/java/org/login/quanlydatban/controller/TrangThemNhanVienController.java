@@ -66,6 +66,11 @@ public class TrangThemNhanVienController implements Initializable {
     private TaiKhoanDAO taiKhoanDAO;
     private String duongdan;// duong dan cua anh
     private TrangQuanLyNhanVienController trangQuanLyNhanVien;
+    private SecretKey key  = generateKey();
+
+    public TrangThemNhanVienController() throws Exception {
+
+    }
 
 
     public void SetTrangQuanLyNhanVien(TrangQuanLyNhanVienController trangQuanLyNhanVien) {
@@ -123,7 +128,7 @@ public class TrangThemNhanVienController implements Initializable {
 
     // bat regex cho ten
     public boolean tencheck(TextField hoTen){
-        if(!hoTen.getText().matches("^([A-Z][a-zà-ÿ]*)( [A-Z][a-zà-ÿ]*)*$")){
+        if(!hoTen.getText().matches("^([A-Z][a-z]*)( [A-Z][a-z]*)*$")){
             showWarn("Ten khong hop le");
         }
         return true;
@@ -280,42 +285,50 @@ public class TrangThemNhanVienController implements Initializable {
         alert.showAndWait();
     }
 
+    public SecretKey getKey() {
+        return key;
+    }
+
+    public void setKey(SecretKey key) {
+        this.key = key;
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
             maNhanVien.setEditable(false);
-            hoTen.focusedProperty().addListener((obs, oldVal, newVal) ->{
-                if(!newVal){
-                    tencheck(hoTen);
-                }
-            });
-
-            ngaySinh.focusedProperty().addListener((obs, oldVal, newVal) ->{
-                if(!newVal){
-                   LocalDate l = ngaySinh.getValue();
-                   if(l != null){
-                      int tuoi = calculateAge(l);
-                      if(tuoi <= 15){
-                          showAlert("Tuoi khong hop le");
-                      }
-                   }
-                }
-            });
-            cccd.focusedProperty().addListener((obs, oldVal, newVal) ->{
-                if(!newVal){
-                    cancuoccongdancheck(cccd);
-                }
-            });
-            diaChi.focusedProperty().addListener((obs,oldVal,newVal)->{
-                if(!newVal){
-                    diaChicheck(diaChi);
-                }
-            });
-
-           dienThoai.focusedProperty().addListener((obs, oldVal, newVal) ->{
-                if(!newVal){
-                    sdtcheck(dienThoai);
-                }
-           });
+//            hoTen.focusedProperty().addListener((obs, oldVal, newVal) ->{
+//                if(!newVal){
+//                    tencheck(hoTen);
+//                }
+//            });
+//
+//            ngaySinh.focusedProperty().addListener((obs, oldVal, newVal) ->{
+//                if(!newVal){
+//                   LocalDate l = ngaySinh.getValue();
+//                   if(l != null){
+//                      int tuoi = calculateAge(l);
+//                      if(tuoi <= 15){
+//                          showAlert("Tuoi khong hop le");
+//                      }
+//                   }
+//                }
+//            });
+//            cccd.focusedProperty().addListener((obs, oldVal, newVal) ->{
+//                if(!newVal){
+//                    cancuoccongdancheck(cccd);
+//                }
+//            });
+//            diaChi.focusedProperty().addListener((obs,oldVal,newVal)->{
+//                if(!newVal){
+//                    diaChicheck(diaChi);
+//                }
+//            });
+//
+//           dienThoai.focusedProperty().addListener((obs, oldVal, newVal) ->{
+//                if(!newVal){
+//                    sdtcheck(dienThoai);
+//                }
+//           });
 
            chucVu.setOnAction(new EventHandler<ActionEvent>() {
                @Override
@@ -367,7 +380,7 @@ public class TrangThemNhanVienController implements Initializable {
         return Base64.getEncoder().encodeToString(encryptedData);
     }
 
-    public  SecretKey generateKey() throws Exception {
+    public SecretKey generateKey() throws Exception {
         KeyGenerator keyGen = KeyGenerator.getInstance(ALGORITHM);
         keyGen.init(128); // You can choose 192 or 256 bits
         return keyGen.generateKey();
@@ -402,8 +415,13 @@ public class TrangThemNhanVienController implements Initializable {
          NhanVienDAO nvd = new NhanVienDAO();
          nvd.addNhanVien(nv);
          String tenTaiKhoan = hoTen.getText().toString().replaceAll("\\s+","");
-         String matKhau = "11111111";
-         TaiKhoan takKhoan = new TaiKhoan(tenTaiKhoan,matKhau, nvd.getNhanVien(nv.getMaNhanVien().toString()));
+         String matKhau = "1111";
+         String mkMaHoaVeKiTu = encrypt(matKhau,key);
+         String bienDoibth = decrypt(mkMaHoaVeKiTu,key);
+         System.out.println("Mat khau o dang ki tu " + mkMaHoaVeKiTu);
+         System.out.println("Mat khau sau khi bien tu chuoi" + bienDoibth);
+
+         TaiKhoan takKhoan = new TaiKhoan(tenTaiKhoan,mkMaHoaVeKiTu, nvd.getNhanVien(nv.getMaNhanVien().toString()));
          taiKhoanDAO.addNhanVien(takKhoan);
     }
 }

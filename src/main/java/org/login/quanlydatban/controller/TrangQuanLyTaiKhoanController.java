@@ -14,7 +14,12 @@ import javafx.scene.input.MouseEvent;
 import org.login.quanlydatban.dao.NhanVienDAO;
 import org.login.quanlydatban.dao.TaiKhoanDAO;
 import org.login.quanlydatban.entity.NhanVien;
+
+import javax.crypto.Cipher;
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
 import java.net.URL;
+import java.util.Base64;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -53,8 +58,11 @@ public class TrangQuanLyTaiKhoanController implements Initializable {
     private String matKhauHien;
     @FXML
     private TextField nhapLaiMatKhau;
+    private TrangThemNhanVienController themNhanVienController = new TrangThemNhanVienController();
+    private static final String ALGORITHM = "AES";
 
-
+    public TrangQuanLyTaiKhoanController() throws Exception {
+    }
 
 
     public String getTenNhanVien() {
@@ -63,6 +71,27 @@ public class TrangQuanLyTaiKhoanController implements Initializable {
 
     public void setTenNhanVien(String tenNhanVien) {
         this.tenNhanVien = tenNhanVien;
+    }
+
+    public  String encrypt(String data, SecretKey secretKey) throws Exception {
+        Cipher cipher = Cipher.getInstance(ALGORITHM);
+        cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+        byte[] encryptedData = cipher.doFinal(data.getBytes());
+        return Base64.getEncoder().encodeToString(encryptedData);
+    }
+
+    public SecretKey generateKey() throws Exception {
+        KeyGenerator keyGen = KeyGenerator.getInstance(ALGORITHM);
+        keyGen.init(128); // You can choose 192 or 256 bits
+        return keyGen.generateKey();
+    }
+
+    public String decrypt(String encryptedData, SecretKey secretKey) throws Exception {
+        Cipher cipher = Cipher.getInstance(ALGORITHM);
+        cipher.init(Cipher.DECRYPT_MODE, secretKey);
+        byte[] decodedData = Base64.getDecoder().decode(encryptedData);
+        byte[] originalData = cipher.doFinal(decodedData);
+        return new String(originalData);
     }
 
     @Override
@@ -108,11 +137,13 @@ public class TrangQuanLyTaiKhoanController implements Initializable {
                         NhanVien nvtim = nvdao.getNhanVien(cellValue);
                         matKhauHien = taiKhoanDAO.getTaiKhoanNhanVien(cellValue).getPassword().toString();
                         if(nvtim != null){
+                            //String mk = themNhanVienController.decrypt(matKhauHien,themNhanVienController.generateKey());
                             tenNhanVienn.setText(nvtim.getTenNhanVien());
                             maNhanVien.setText(nvtim.getMaNhanVien());
                             tenTaiKhoan.setText(taiKhoanDAO.getTaiKhoanNhanVien(cellValue).getUserName().toString());
                             password.setText(taiKhoanDAO.getTaiKhoanNhanVien(cellValue).getPassword().toString());
-                            nhapLaiMatKhau.setText(taiKhoanDAO.getTaiKhoanNhanVien(cellValue).getPassword().toString());
+                            System.out.println(decrypt(matKhauHien,generateKey()));
+                            //nhapLaiMatKhau.setText(themNhanVienController.decrypt(password.getText(), themNhanVienController.getKey()));
                             Image image = new Image("file:"+ nvtim.getHinhAnh());
                             hinhAnh.setImage(image);
 

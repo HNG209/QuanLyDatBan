@@ -7,6 +7,7 @@ module org.login.quanlydatban {
     requires java.sql;
     requires java.desktop;
     requires org.apache.poi.poi;
+    requires org.apache.poi.ooxml;
 
     opens org.login.quanlydatban.entity.keygenerator to org.hibernate.orm.core;
     opens org.login.quanlydatban.entity to org.hibernate.orm.core, javafx.base;
