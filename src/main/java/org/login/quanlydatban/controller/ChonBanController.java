@@ -55,6 +55,21 @@ public class ChonBanController implements Initializable {
         }
     }
 
+//    public static void refresh() {
+//        for (Ban i : banDAO.readAll()){
+//            FXMLLoader loader = new FXMLLoader(ChonBanController.class.getResource("/org/login/quanlydatban/uicomponents/CardBan.fxml"));
+//            try {
+//                AnchorPane pane = loader.load();
+//                CardBanController controller = loader.getController();
+//                controller.setBan(i);
+//
+//                flowPane.getChildren().add(pane);
+//            } catch (IOException e) {
+//                throw new RuntimeException(e);
+//            }
+//        }
+//    }
+
     @FXML
     void showBanDaDat(MouseEvent event) {
         selectedLoaiBan.setText(TrangThaiBan.DA_DAT.toString());

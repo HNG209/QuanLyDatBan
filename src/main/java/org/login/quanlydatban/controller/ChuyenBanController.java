@@ -126,7 +126,10 @@ public class ChuyenBanController implements Initializable {
                 banDAO.updateBan(banHienTai);
                 banDAO.updateBan(banChuyen);
 
-                datMonController.setBan(banChuyen);
+                //(1) called from CardBanController, datMonController = null
+                //(2) called from DatMonController, datMonController != null, point: to update the current table in datMonController
+                if(datMonController != null)
+                    datMonController.setBan(banChuyen);
 
                 Notification.thongBao("Chuyển thành công từ bàn " + banHienTai.getMaBan() + " sang bàn " + banChuyen.getMaBan(), Alert.AlertType.INFORMATION);
 
