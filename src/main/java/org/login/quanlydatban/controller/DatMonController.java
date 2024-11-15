@@ -10,6 +10,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -47,9 +48,6 @@ public class DatMonController implements Initializable {
 
     @FXML
     private ScrollPane scrollPane;
-
-    @FXML
-    private AnchorPane anchorPane;
 
     @FXML
     private TextField banID;
@@ -121,6 +119,26 @@ public class DatMonController implements Initializable {
     private Stage chuyenBanStage;
     private double tkd = 0.0;
     private double pt = 0.0;
+
+//    private static Parent root;
+//    private static DatMonController instance;
+//
+//    public static DatMonController getInstance() throws IOException {
+//        if(instance == null)
+//            instance = loadTrangDatMon();
+//        return instance;
+//    }
+//
+//    private static DatMonController loadTrangDatMon() throws IOException {
+//        FXMLLoader loader = new FXMLLoader(ChonBanController.class.getResource("/org/login/quanlydatban/views/TrangDatMon.fxml"));
+//        root = loader.load();
+//        return loader.getController();
+//    }
+//
+//    public Parent getRoot() {
+//        return root;
+//    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
@@ -426,6 +444,9 @@ public class DatMonController implements Initializable {
         return this.ban;
     }
 
+    public void refresh() {
+        orderTable.getItems().clear();
+    }
     public void setHoaDon(HoaDon hoaDon) {
         this.hoaDon = hoaDon;
         chiTietHoaDonDAO.getCTHDfromHD(hoaDon).forEach(
@@ -597,6 +618,7 @@ public class DatMonController implements Initializable {
     }
 
     public void loadBang(Object[] objects) {
+        orderTable.getItems().clear();
         orderTable.getItems().add(objects);
     }
 

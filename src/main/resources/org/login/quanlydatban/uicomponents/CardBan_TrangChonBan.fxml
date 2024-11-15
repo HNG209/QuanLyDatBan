@@ -13,7 +13,7 @@
             <Label layoutX="12.0" layoutY="42.0" text="Loại bàn:" />
             <Label layoutX="13.0" layoutY="16.0" text="Mã bàn:" />
             <Label layoutX="14.0" layoutY="69.0" text="Khu vực:" />
-            <Button layoutX="14.0" layoutY="97.0" mnemonicParsing="false" onAction="#chuyenBan" prefHeight="25.0" prefWidth="161.0" styleClass="sunset-orange" text="Chuyển bàn" />
+            <Button fx:id="chuyenBan" layoutX="14.0" layoutY="97.0" mnemonicParsing="false" onAction="#chuyenBan" prefHeight="25.0" prefWidth="161.0" styleClass="sunset-orange" text="Chuyển bàn" />
             <Button layoutX="14.0" layoutY="132.0" mnemonicParsing="false" onAction="#chonBan" prefHeight="25.0" prefWidth="161.0" styleClass="sage-green" text="Chọn bàn" />
             <Label fx:id="maBan" layoutX="79.0" layoutY="16.0" prefHeight="17.0" prefWidth="94.0" text="Label" />
             <Label fx:id="loaiBan" layoutX="79.0" layoutY="42.0" prefHeight="17.0" prefWidth="94.0" text="Label" />

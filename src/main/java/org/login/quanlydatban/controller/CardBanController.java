@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -32,6 +33,9 @@ public class CardBanController implements Initializable {
 
     @FXML
     private Label loaiBan;
+
+    @FXML
+    private Button chuyenBan;
 
     @FXML
     private Label maBan;
@@ -86,16 +90,19 @@ public class CardBanController implements Initializable {
             case BAN_TRONG:
                 img = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/org/login/quanlydatban/icons/bantrong.png")));
                 this.image.setImage(img);
+                this.chuyenBan.setDisable(true);
                 this.anchorPane.getStyleClass().add("sage-green");
                 break;
             case DANG_PHUC_VU:
                 img = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/org/login/quanlydatban/icons/bandangphucvu.png")));
                 this.image.setImage(img);
+                this.chuyenBan.setDisable(false);
                 this.anchorPane.getStyleClass().add("pale-lemon");
                 break;
             case TAM_NGUNG_PHUC_VU:
                 img = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/org/login/quanlydatban/icons/banhong.png")));
                 this.image.setImage(img);
+                this.chuyenBan.setDisable(true);
                 this.anchorPane.getStyleClass().add("light-coral");
                 break;
             default:

@@ -65,6 +65,8 @@ public class TrangChuController implements Initializable {
 
         borderPane.setCenter(ChonBanController.getInstance().getRoot());
 
+        ChonBanController.getInstance().refresh();
+
         AnchorPane pane = (AnchorPane) ChonBanController.getInstance().getRoot();
 
         pane.prefWidthProperty().bind(borderPane.widthProperty());
