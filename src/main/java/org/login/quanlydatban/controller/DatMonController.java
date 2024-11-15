@@ -551,13 +551,15 @@ public class DatMonController implements Initializable {
 
     @FXML
     void back(MouseEvent event) throws IOException {
-        if(anchorPane.getParent() instanceof BorderPane){
-            BorderPane pane = (BorderPane) anchorPane.getParent();
-
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/TrangChonBan.fxml"));
-            AnchorPane anchorPane = loader.load();
-            pane.setCenter(anchorPane);
-        }
+//        if(anchorPane.getParent() instanceof BorderPane){
+//            BorderPane pane = (BorderPane) anchorPane.getParent();
+//
+//            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/TrangChonBan.fxml"));
+//            AnchorPane anchorPane = loader.load();
+//            pane.setCenter(anchorPane);
+//        }
+        ChonBanController.getInstance().refresh();
+        TrangChuController.getBorderPaneStatic().setCenter(ChonBanController.getInstance().getRoot());
     }
 
     public void themChiTietHoaDon(MonAn monAn){//tao 1 lan

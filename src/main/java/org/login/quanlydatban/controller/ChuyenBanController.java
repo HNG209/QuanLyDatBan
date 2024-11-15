@@ -114,7 +114,7 @@ public class ChuyenBanController implements Initializable {
     }
 
     @FXML
-    void chuyenBan(ActionEvent event) {
+    void chuyenBan(ActionEvent event) throws IOException {
         if (banChuyen != null) {
             if (Notification.xacNhan("Xác nhận chuyển bàn?")) {
                 currentHD.setBan(banChuyen);
@@ -130,6 +130,8 @@ public class ChuyenBanController implements Initializable {
                 //(2) called from DatMonController, datMonController != null, point: to update the current table in datMonController
                 if(datMonController != null)
                     datMonController.setBan(banChuyen);
+                else
+                    ChonBanController.getInstance().refresh();
 
                 Notification.thongBao("Chuyển thành công từ bàn " + banHienTai.getMaBan() + " sang bàn " + banChuyen.getMaBan(), Alert.AlertType.INFORMATION);
 

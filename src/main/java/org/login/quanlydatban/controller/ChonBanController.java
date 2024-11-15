@@ -4,6 +4,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseEvent;
@@ -34,6 +35,25 @@ public class ChonBanController implements Initializable {
 
     private BanDAO banDAO;
 
+    private static ChonBanController instance;
+    private static Parent root;
+    public static ChonBanController getInstance() throws IOException {
+        if (instance == null){
+            instance = loadTrangChonBan();
+        }
+        return instance;
+    }
+
+    private static ChonBanController loadTrangChonBan() throws IOException {
+        FXMLLoader loader = new FXMLLoader(ChonBanController.class.getResource("/org/login/quanlydatban/views/TrangChonBan.fxml"));
+        root = loader.load();
+        return loader.getController();
+    }
+
+    public Parent getRoot() {
+        return root;
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         flowPane.prefHeightProperty().bind(scrollPane.heightProperty());
@@ -55,20 +75,21 @@ public class ChonBanController implements Initializable {
         }
     }
 
-//    public static void refresh() {
-//        for (Ban i : banDAO.readAll()){
-//            FXMLLoader loader = new FXMLLoader(ChonBanController.class.getResource("/org/login/quanlydatban/uicomponents/CardBan.fxml"));
-//            try {
-//                AnchorPane pane = loader.load();
-//                CardBanController controller = loader.getController();
-//                controller.setBan(i);
-//
-//                flowPane.getChildren().add(pane);
-//            } catch (IOException e) {
-//                throw new RuntimeException(e);
-//            }
-//        }
-//    }
+    public void refresh() {
+        flowPane.getChildren().clear();
+        for (Ban i : banDAO.readAll()){
+            FXMLLoader loader = new FXMLLoader(ChonBanController.class.getResource("/org/login/quanlydatban/uicomponents/CardBan.fxml"));
+            try {
+                AnchorPane pane = loader.load();
+                CardBanController controller = loader.getController();
+                controller.setBan(i);
+
+                flowPane.getChildren().add(pane);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
 
     @FXML
     void showBanDaDat(MouseEvent event) {
