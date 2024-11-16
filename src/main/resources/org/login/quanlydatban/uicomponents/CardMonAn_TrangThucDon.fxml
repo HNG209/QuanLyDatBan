@@ -9,7 +9,7 @@
 
 <AnchorPane onMouseClicked="#chonControl" prefHeight="208.0" prefWidth="159.0" stylesheets="@../stylesheets/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.login.quanlydatban.controller.CardMonAnThucDonController">
    <children>
-      <ImageView fx:id="cardAnhMon" fitHeight="142.0" fitWidth="127.0" layoutX="15.0" layoutY="9.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="anhMonDisplay" fitHeight="142.0" fitWidth="127.0" layoutX="15.0" layoutY="9.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../icons/empty.png" />
          </image>

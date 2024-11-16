@@ -127,7 +127,7 @@ public class ThucDonController implements Initializable {
                 System.out.println("Nhan nut tai anh");
                 FileChooser fileChooser = new FileChooser();
 
-                fileChooser.setInitialDirectory(new File("../QuanLyDatBan/src/main/resources/org/login/quanlydatban/Image"));
+                fileChooser.setInitialDirectory(new File("../QuanLyDatBan/src/main/resources/org/login/quanlydatban/ImageFood"));
                 fileChooser.setTitle("Mở file");
 
                 // Thiết lập bộ lọc file nếu cần
@@ -767,7 +767,7 @@ public class ThucDonController implements Initializable {
             txtGia.setText(String.valueOf(monAn.getDonGia()));
 
             String imagePath = monAn.getHinhAnh();
-            String imageDefaultPath = "/org/login/quanlydatban/icons/restaurant.png";
+            String imageDefaultPath = "/org/login/quanlydatban/icons/empty.png";
             if (imagePath != null && !imagePath.isEmpty()) {
                 anhMon.setImage(new Image(new File(imagePath).toURI().toString()));
             } else {
