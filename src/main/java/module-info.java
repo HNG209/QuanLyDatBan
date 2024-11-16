@@ -20,4 +20,6 @@ module org.login.quanlydatban {
     exports org.login.quanlydatban.controller;
     opens org.login.quanlydatban.entity.enums to org.hibernate.orm.core;
     opens org.login.quanlydatban.views to javafx.fxml;
+    exports org.login.quanlydatban.utilities;
+    opens org.login.quanlydatban.utilities to javafx.fxml;
 }

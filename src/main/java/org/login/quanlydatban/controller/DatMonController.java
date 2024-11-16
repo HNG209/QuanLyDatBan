@@ -33,6 +33,7 @@ import org.login.quanlydatban.entity.enums.TrangThaiHoaDon;
 import org.login.quanlydatban.entity.keygenerator.CTHDCompositeKey;
 import org.login.quanlydatban.hibernate.HibernateUtils;
 import org.login.quanlydatban.notification.Notification;
+import org.login.quanlydatban.utilities.NumberFormatter;
 
 import java.io.IOException;
 import java.net.URL;
@@ -253,6 +254,7 @@ public class DatMonController implements Initializable {
                     }
                 });
 
+                button.setStyle("-fx-background-color: #F1EB90;");
                 pane.getChildren().add(button);
                 pane.setStyle("-fx-alignment: center;"); // Center the button within the StackPane
             }
@@ -283,7 +285,7 @@ public class DatMonController implements Initializable {
                     chiTietHoaDonDAO.deleteChiTietHoaDon(hoaDon.getMaHoaDon(), String.valueOf(objects[0]));
                     getTableView().getItems().remove(getIndex());
                     capNhatTongTien();
-
+                    capNhatTienTraLai();
                 });
 
                 button.setStyle("-fx-background-color: #F3B664");
@@ -323,7 +325,7 @@ public class DatMonController implements Initializable {
                     orderTable.refresh();
 
                     capNhatTongTien();
-
+                    capNhatTienTraLai();
                 });
 
                 button.setStyle("-fx-background-color: #9FBB73");
@@ -365,6 +367,7 @@ public class DatMonController implements Initializable {
                     orderTable.refresh();
 
                     capNhatTongTien();
+                    capNhatTienTraLai();
                 });
 
                 button.setStyle("-fx-background-color: #F3B664");
@@ -421,7 +424,7 @@ public class DatMonController implements Initializable {
     }
 
     public void capNhatTongTien() {
-        tongTienTxt.setText(String.valueOf(hoaDon.tinhTongTien()));
+        tongTienTxt.setText(NumberFormatter.formatPrice(String.valueOf((int) hoaDon.tinhTongTien())));
     }
 
     public void setBan(Ban ban) {
@@ -624,7 +627,6 @@ public class DatMonController implements Initializable {
     }
 
     public void loadBang(Object[] objects) {
-        orderTable.getItems().clear();
         orderTable.getItems().add(objects);
     }
 
@@ -632,9 +634,13 @@ public class DatMonController implements Initializable {
     void tinhTienTraLai(KeyEvent event) {
         if(hoaDon != null){
             if(event.getSource().equals(tienKhachDua)){
-                System.out.println(0);
-                if (tienKhachDua.getText().matches("\\d+"))
-                    tkd = Double.parseDouble(tienKhachDua.getText());
+                if(tienKhachDua.getText().equals(""))
+                    return;
+                tienKhachDua.setText(NumberFormatter.formatPrice(tienKhachDua.getText()));
+                tienKhachDua.positionCaret(tienKhachDua.getText().length());
+
+                if (tienKhachDua.getText().replace(".", "").matches("\\d+"))
+                    tkd = Double.parseDouble(tienKhachDua.getText().replace(".", ""));
                 else {
                     Notification.thongBao("Chỉ được nhập số", Alert.AlertType.INFORMATION);
                     tienKhachDua.setText(tienKhachDua.getText().substring(0, tienKhachDua.getLength() - 1));
@@ -642,22 +648,41 @@ public class DatMonController implements Initializable {
                 }
             }
             else {
-                if (phuThu.getText().matches("\\d+"))
-                    pt = Double.parseDouble(phuThu.getText());
+                if (phuThu.getText().equals("")){
+                    pt = 0.0;
+                    capNhatTienTraLai();
+                    return;
+                }
+
+                phuThu.setText(NumberFormatter.formatPrice(phuThu.getText()));
+                phuThu.positionCaret(phuThu.getText().length());
+
+                if (phuThu.getText().replace(".", "").matches("\\d+"))
+                    pt = Double.parseDouble(phuThu.getText().replace(".", ""));
                 else {
-                    System.out.println(phuThu.getText());
                     Notification.thongBao("Chỉ được nhập số", Alert.AlertType.INFORMATION);
                     phuThu.setText(phuThu.getText().substring(0, phuThu.getLength() - 1));
                     phuThu.positionCaret(phuThu.getText().length());
                 }
             }
-            System.out.println(tkd);
-            System.out.println(hoaDon.getTongTien() + pt);
 
             if (tkd >= (hoaDon.getTongTien() + pt)){
-                tienTraLai.setText(String.valueOf(tkd - (hoaDon.getTongTien() + pt)));
+                tienTraLai.setText(NumberFormatter.formatPrice(String.valueOf((int) (tkd - (hoaDon.getTongTien() + pt)))));
             }
             else tienTraLai.setText("Tiền khách đưa phải lớn hơn hoặc bằng tổng tiền");
+        }
+        else {
+            tienKhachDua.clear();
+            phuThu.clear();
+            Notification.thongBao("Hãy lập hoá đơn trước khi nhập", Alert.AlertType.INFORMATION);
+        }
+    }
+
+    public void capNhatTienTraLai() {
+        if (hoaDon != null) {
+            if (tkd >= (hoaDon.getTongTien() + pt)) {
+                tienTraLai.setText(NumberFormatter.formatPrice(String.valueOf((int) (tkd - (hoaDon.getTongTien() + pt)))));
+            } else tienTraLai.setText("Tiền khách đưa phải lớn hơn hoặc bằng tổng tiền");
         }
         else Notification.thongBao("Hãy lập hoá đơn trước khi nhập", Alert.AlertType.INFORMATION);
     }
