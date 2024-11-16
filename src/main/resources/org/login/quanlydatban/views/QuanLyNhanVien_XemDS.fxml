@@ -41,7 +41,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <AnchorPane layoutX="4.8" layoutY="60.0" prefHeight="559.0" prefWidth="706.0" styleClass="rounded-pane" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="60.0">
+      <AnchorPane layoutX="4.8" layoutY="60.0" prefHeight="559.0" prefWidth="706.0" styleClass="rounded-pane" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="563.1999999999999" AnchorPane.topAnchor="60.0">
          <children>
             <TableView fx:id="tableNhanVien" layoutX="44.8" layoutY="15.2" prefHeight="550.0" prefWidth="650.0" AnchorPane.bottomAnchor="6.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="3.0">
               <columns>
@@ -158,7 +158,7 @@
             </ComboBox>
          </children>
       </AnchorPane>
-      <Label alignment="CENTER" layoutX="145.0" layoutY="12.0" prefHeight="38.0" prefWidth="430.0" text="Danh sách nhân viên" textAlignment="CENTER">
+      <Label alignment="CENTER" layoutX="145.0" layoutY="12.0" prefHeight="38.0" prefWidth="430.0" text="Danh sách nhân viên" textAlignment="CENTER" AnchorPane.leftAnchor="145.0" AnchorPane.rightAnchor="704.8000000000001">
          <font>
             <Font name="Times New Roman" size="24.0" />
          </font>

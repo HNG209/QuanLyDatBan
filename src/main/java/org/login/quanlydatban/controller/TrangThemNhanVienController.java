@@ -127,7 +127,7 @@ public class TrangThemNhanVienController implements Initializable {
     // bat regex cho ten
     public boolean tencheck(TextField hoTen){
         if(!hoTen.getText().matches("^([A-Z][a-z]*)( [A-Z][a-z]*)*$")){
-            showWarn("Ten khong hop le");
+            showWarn("Ten bạn nhập không hợp lệ, tên không có dấu , và những kí tự đặc biệt");
         }
         return true;
     }
@@ -135,7 +135,7 @@ public class TrangThemNhanVienController implements Initializable {
     // cccd, 11 so
     public boolean cancuoccongdancheck(TextField cccd){
         if(!cccd.getText().matches("^[0-9]{12}$")){
-            showWarn("Can cuoc cong dan khong hop le");
+            showWarn("Can cuoc cong dan phải là k tự số và có 12 kí tự");
             return false;
         }
         return true;
@@ -144,7 +144,7 @@ public class TrangThemNhanVienController implements Initializable {
     // so dien thoai
     public boolean sdtcheck(TextField dienThoai){
         if(!dienThoai.getText().matches("^0[0-9]{9}$")){
-           showWarn("So dien thoai khong hop le");
+           showWarn("So dien thoai bạn nhập không hợp lệ và phải có đủ 10 kí tự");
            return false;
         }
         return true;
@@ -335,15 +335,21 @@ public class TrangThemNhanVienController implements Initializable {
                    if(tencheck(hoTen) && cancuoccongdancheck(cccd) && sdtcheck(dienThoai) && diaChicheck(diaChi)){
                        if(chucvuCheck(chucVu) && trangThaiCheck(trangThaiLamViec) && gioiTinhCheck(gioiTinh)) {
                            if (duongdan!= null) {
-                               try {
-                                   ThemNhanVien();
-                                   showAlert("Thêm nhân viên thành công");
-                                   Stage stage = (Stage) btnLuu.getScene().getWindow();
-                                   stage.close();
-                               } catch (Exception e) {
-                                   throw new RuntimeException(e);
+                               int tuoi = calculateAge(ngaySinh.getValue());
+                               if(tuoi < 15){
+                                   showWarn("Tuổi nhân viên phải lớn hơn 15");
+                               }else {
+                                   try {
+                                       ThemNhanVien();
+                                       showAlert("Thêm nhân viên thành công");
+                                       Stage stage = (Stage) btnLuu.getScene().getWindow();
+                                       stage.close();
+                                   } catch (Exception e) {
+                                       throw new RuntimeException(e);
+                                   }
+                                   trangQuanLyNhanVien.xetLaiduLieuChoBang();
                                }
-                               trangQuanLyNhanVien.xetLaiduLieuChoBang();
+
                            }else{
                                showAlert("Bạn phải chọn ảnh của nhân viên");
                            }
