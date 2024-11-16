@@ -6,30 +6,34 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="240.0" prefWidth="150.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.login.quanlydatban.controller.CardMonAnController">
+<AnchorPane prefHeight="273.0" prefWidth="150.0" style="-fx-border-color: black;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.login.quanlydatban.controller.CardMonAnController">
    <children>
-      <ImageView fitHeight="120.0" fitWidth="168.0" layoutX="22.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../icons/empty.png" />
-         </image>
-      </ImageView>
-      <Label fx:id="tenMon" layoutX="22.0" layoutY="131.0" prefHeight="18.0" prefWidth="118.0" text="Tên món">
+      <StackPane layoutX="12.0" layoutY="14.0" prefHeight="113.0" prefWidth="113.0" styleClass="bottom-border">
+         <children>
+            <ImageView fitHeight="132.0" fitWidth="125.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../Image/test.png" />
+               </image>
+            </ImageView>
+         </children>
+      </StackPane>
+      <Label fx:id="tenMon" layoutX="12.0" layoutY="153.0" prefHeight="18.0" prefWidth="126.0" text="Tên món">
          <font>
             <Font name="System Bold" size="12.0" />
          </font>
       </Label>
-      <Label fx:id="giaTien" layoutX="22.0" layoutY="148.0" prefHeight="18.0" prefWidth="46.0" text="Giá tiền:">
+      <Label fx:id="giaTien" layoutX="12.0" layoutY="178.0" prefHeight="18.0" prefWidth="126.0" text="Giá tiền:">
          <font>
             <Font size="10.0" />
          </font>
       </Label>
-      <Button layoutX="22.0" layoutY="170.0" mnemonicParsing="false" prefHeight="20.0" prefWidth="120.0" styleClass="sunset-orange" text="Chi tiết" />
-      <Button layoutX="22.0" layoutY="201.0" mnemonicParsing="false" onAction="#them" prefHeight="20.0" prefWidth="120.0" styleClass="sage-green" text="Thêm" />
+      <Button layoutX="8.0" layoutY="203.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="133.0" styleClass="sunset-orange" text="Chi tiết" />
+      <Button layoutX="8.0" layoutY="236.0" mnemonicParsing="false" onAction="#them" prefHeight="26.0" prefWidth="134.0" styleClass="sage-green" text="Thêm" />
    </children>
    <styleClass>
-      <String fx:value="rounded-pane" />
       <String fx:value="gradient2" />
       <String fx:value="image-hover-effect" />
    </styleClass>

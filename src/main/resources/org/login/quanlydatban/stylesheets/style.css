@@ -92,4 +92,8 @@
     -fx-padding: 0 0 5 0;              /* Adjusts padding */
 }
 
+.bottom-border {
+    -fx-border-color: transparent transparent black transparent;
+    -fx-border-width: 0 0 2 0;
+}
 

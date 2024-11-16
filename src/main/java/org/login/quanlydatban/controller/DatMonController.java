@@ -73,6 +73,12 @@ public class DatMonController implements Initializable {
     private TextField tienTraLai;
 
     @FXML
+    private TextField sdt;
+
+    @FXML
+    private TextField tenKhachHang;
+
+    @FXML
     private TextField phuThu;
 
     @FXML
