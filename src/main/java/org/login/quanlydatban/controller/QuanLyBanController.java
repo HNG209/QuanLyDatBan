@@ -158,7 +158,20 @@ public class QuanLyBanController implements Initializable {
             showAlert("Vui lòng nhập đầy đủ thông tin!");
             return;
         }
-
+        for (Ban ban : tableBan.getItems()) {
+            if (ban.getMaBan().equals(maBan)) {
+                String LB;
+                if (loaiBan == LoaiBan.BAN_2_NGUOI) {
+                    LB="02";
+                } else if (loaiBan == LoaiBan.BAN_5_NGUOI) {
+                    LB="05";
+                } else {
+                    LB="10";
+                }
+                maBan = generateMaBan(khuVuc,LB);
+            }
+        }
+        System.out.println(maBan);
         Ban newBan = new Ban(maBan,loaiBan, trangThai,khuVuc);
         List<Ban> banList = banDAO.readAll();
         banDAO.themBan(newBan);
@@ -168,6 +181,7 @@ public class QuanLyBanController implements Initializable {
         checkTamNgungPV.setSelected(false);
         onClickReset();
         isEditing = false;
+
     }
 
     @FXML

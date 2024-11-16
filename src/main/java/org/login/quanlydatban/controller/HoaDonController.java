@@ -59,7 +59,7 @@ public class HoaDonController implements Initializable {
     @FXML
     private TableColumn<HoaDon, String> colMaNhanVien;
     @FXML
-    private TableColumn<HoaDon, Double> colTongTien;
+    private TableColumn<HoaDon, String> colTongTien;
     @FXML
     private TableColumn<HoaDon, Double> colPhuThu;
 
@@ -73,10 +73,15 @@ public class HoaDonController implements Initializable {
     @FXML
     private TableColumn<ChiTietHoaDon, Integer> colSoLuong;
     @FXML
+    private TableColumn<ChiTietHoaDon, String> colDonGia;
+    @FXML
     private TableColumn<ChiTietHoaDon, String> colGhiChu;
+    @FXML
+    private TableColumn<ChiTietHoaDon, String> colCTHDTongTien;
     @FXML
     private TableView<ChiTietHoaDon> tableCTHD;
     private HoaDonDAO HoaDonDAO;
+    private MonAn monAn;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -104,7 +109,11 @@ public class HoaDonController implements Initializable {
                 return new SimpleStringProperty(nhanVien != null ? nhanVien.getMaNhanVien() : "");
             });
 
-            colTongTien.setCellValueFactory(new PropertyValueFactory<>("tongTien"));
+            colTongTien.setCellValueFactory(cellData -> {
+                HoaDon hoaDon = cellData.getValue();
+                String tongTien = String.valueOf(hoaDon.tinhTongTien()+ hoaDon.getPhuThu());
+                return new SimpleStringProperty(tongTien);
+            });
             colPhuThu.setCellValueFactory(new PropertyValueFactory<>("phuThu"));
 
             tabTatCa.setItems(observableList);
@@ -114,7 +123,22 @@ public class HoaDonController implements Initializable {
                 return new SimpleStringProperty(monAn != null ? monAn.getTenMonAn() : "");
             });
             colSoLuong.setCellValueFactory(new PropertyValueFactory<>("soLuong"));
+            colDonGia.setCellValueFactory(cellData -> {
+                ChiTietHoaDon chiTiet = cellData.getValue();
+                MonAn monAn = chiTiet.getMonAn();
+
+                String donGia = (monAn != null) ? String.format("%.0f", monAn.getDonGia()) : "0";
+
+                return new SimpleStringProperty(donGia);
+            });
+
             colGhiChu.setCellValueFactory(new PropertyValueFactory<>("ghiChu"));
+            colCTHDTongTien.setCellValueFactory(cellData -> {
+                ChiTietHoaDon chiTiet = cellData.getValue();
+                double tongTien = chiTiet.tinhTongCTHD();
+                return new SimpleStringProperty(String.format("%.2f", tongTien));
+            });
+
             tabTatCa.setOnMouseClicked(event -> {
                 if (event.getClickCount() == 1) {
                     String maHoaDon = tabTatCa.getSelectionModel().getSelectedItem().getMaHoaDon();
@@ -144,7 +168,12 @@ public class HoaDonController implements Initializable {
                             textMaKH.setText(khachHang.getMaKhachHang());
                             textTenKH.setText(khachHang.getTenKhachHang());
                             textsdtKH.setText(khachHang.getSdt());
+                        }else {
+                            textMaKH.setText("");
+                            textTenKH.setText("");
+                            textsdtKH.setText("");
                         }
+
                     }
                 }
             });
@@ -224,6 +253,22 @@ public class HoaDonController implements Initializable {
         }
         return null;
     }
+    public double tinhTongTien() {
+        ChiTietHoaDonDAO chiTietHoaDonDAO = new ChiTietHoaDonDAO();
+
+        // Lấy danh sách các chi tiết hóa đơn cho hóa đơn hiện tại
+        List<ChiTietHoaDon> chiTietList = chiTietHoaDonDAO.getChiTietHoaDonByMaHoaDon(String.valueOf(this.colMaHoaDon));
+
+        // Kiểm tra danh sách chi tiết hóa đơn có hợp lệ không
+        if (chiTietList == null || chiTietList.isEmpty()) {
+            return 0.0;
+        }
+
+        return chiTietList.stream()
+                .mapToDouble(chiTiet -> chiTiet.tinhTongCTHD())
+                .sum();
+    }
+
 
 
 
