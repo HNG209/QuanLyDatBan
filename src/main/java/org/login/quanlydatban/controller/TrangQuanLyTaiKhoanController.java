@@ -13,6 +13,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import org.login.quanlydatban.dao.NhanVienDAO;
 import org.login.quanlydatban.dao.TaiKhoanDAO;
+import org.login.quanlydatban.encryptionUtils.EncryptionUtils;
 import org.login.quanlydatban.entity.NhanVien;
 
 import javax.crypto.Cipher;
@@ -73,26 +74,6 @@ public class TrangQuanLyTaiKhoanController implements Initializable {
         this.tenNhanVien = tenNhanVien;
     }
 
-    public  String encrypt(String data, SecretKey secretKey) throws Exception {
-        Cipher cipher = Cipher.getInstance(ALGORITHM);
-        cipher.init(Cipher.ENCRYPT_MODE, secretKey);
-        byte[] encryptedData = cipher.doFinal(data.getBytes());
-        return Base64.getEncoder().encodeToString(encryptedData);
-    }
-
-    public SecretKey generateKey() throws Exception {
-        KeyGenerator keyGen = KeyGenerator.getInstance(ALGORITHM);
-        keyGen.init(128); // You can choose 192 or 256 bits
-        return keyGen.generateKey();
-    }
-
-    public String decrypt(String encryptedData, SecretKey secretKey) throws Exception {
-        Cipher cipher = Cipher.getInstance(ALGORITHM);
-        cipher.init(Cipher.DECRYPT_MODE, secretKey);
-        byte[] decodedData = Base64.getDecoder().decode(encryptedData);
-        byte[] originalData = cipher.doFinal(decodedData);
-        return new String(originalData);
-    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -141,9 +122,9 @@ public class TrangQuanLyTaiKhoanController implements Initializable {
                             tenNhanVienn.setText(nvtim.getTenNhanVien());
                             maNhanVien.setText(nvtim.getMaNhanVien());
                             tenTaiKhoan.setText(taiKhoanDAO.getTaiKhoanNhanVien(cellValue).getUserName().toString());
-                            password.setText(taiKhoanDAO.getTaiKhoanNhanVien(cellValue).getPassword().toString());
-                            System.out.println(decrypt(matKhauHien,generateKey()));
-                            //nhapLaiMatKhau.setText(themNhanVienController.decrypt(password.getText(), themNhanVienController.getKey()));
+                            password.setText(EncryptionUtils.decrypt(taiKhoanDAO.getTaiKhoanNhanVien(cellValue).getPassword().toString(), System.getenv("ENCRYPTION_KEY")));
+                            //System.out.println(decrypt(matKhauHien,generateKey()));
+                            nhapLaiMatKhau.setText(EncryptionUtils.decrypt(taiKhoanDAO.getTaiKhoanNhanVien(cellValue).getPassword().toString(), System.getenv("ENCRYPTION_KEY")));
                             Image image = new Image("file:"+ nvtim.getHinhAnh());
                             hinhAnh.setImage(image);
 

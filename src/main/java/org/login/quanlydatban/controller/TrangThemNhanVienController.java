@@ -13,6 +13,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.login.quanlydatban.dao.NhanVienDAO;
 import org.login.quanlydatban.dao.TaiKhoanDAO;
+import org.login.quanlydatban.encryptionUtils.EncryptionUtils;
 import org.login.quanlydatban.entity.NhanVien;
 import org.login.quanlydatban.entity.TaiKhoan;
 import org.login.quanlydatban.entity.enums.ChucVu;
@@ -35,7 +36,6 @@ import java.util.ResourceBundle;
 public class TrangThemNhanVienController implements Initializable {
     @FXML
     private Button btnTaiAnh;
-    private static final String ALGORITHM = "AES";
     @FXML
     private ImageView image1;
     private String duongdananh;
@@ -66,8 +66,6 @@ public class TrangThemNhanVienController implements Initializable {
     private TaiKhoanDAO taiKhoanDAO;
     private String duongdan;// duong dan cua anh
     private TrangQuanLyNhanVienController trangQuanLyNhanVien;
-    private SecretKey key  = generateKey();
-
     public TrangThemNhanVienController() throws Exception {
 
     }
@@ -285,14 +283,6 @@ public class TrangThemNhanVienController implements Initializable {
         alert.showAndWait();
     }
 
-    public SecretKey getKey() {
-        return key;
-    }
-
-    public void setKey(SecretKey key) {
-        this.key = key;
-    }
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
             maNhanVien.setEditable(false);
@@ -373,26 +363,6 @@ public class TrangThemNhanVienController implements Initializable {
            });
     }
 
-    public  String encrypt(String data, SecretKey secretKey) throws Exception {
-        Cipher cipher = Cipher.getInstance(ALGORITHM);
-        cipher.init(Cipher.ENCRYPT_MODE, secretKey);
-        byte[] encryptedData = cipher.doFinal(data.getBytes());
-        return Base64.getEncoder().encodeToString(encryptedData);
-    }
-
-    public SecretKey generateKey() throws Exception {
-        KeyGenerator keyGen = KeyGenerator.getInstance(ALGORITHM);
-        keyGen.init(128); // You can choose 192 or 256 bits
-        return keyGen.generateKey();
-    }
-
-    public String decrypt(String encryptedData, SecretKey secretKey) throws Exception {
-        Cipher cipher = Cipher.getInstance(ALGORITHM);
-        cipher.init(Cipher.DECRYPT_MODE, secretKey);
-        byte[] decodedData = Base64.getDecoder().decode(encryptedData);
-        byte[] originalData = cipher.doFinal(decodedData);
-        return new String(originalData);
-    }
     public void ThemNhanVien() throws Exception {
          Boolean gt = gioiTinh.getValue().equals("NAM") ? false : true;
          taiKhoanDAO = new TaiKhoanDAO();
@@ -415,13 +385,8 @@ public class TrangThemNhanVienController implements Initializable {
          NhanVienDAO nvd = new NhanVienDAO();
          nvd.addNhanVien(nv);
          String tenTaiKhoan = hoTen.getText().toString().replaceAll("\\s+","");
-         String matKhau = "1111";
-         String mkMaHoaVeKiTu = encrypt(matKhau,key);
-         String bienDoibth = decrypt(mkMaHoaVeKiTu,key);
-         System.out.println("Mat khau o dang ki tu " + mkMaHoaVeKiTu);
-         System.out.println("Mat khau sau khi bien tu chuoi" + bienDoibth);
-
-         TaiKhoan takKhoan = new TaiKhoan(tenTaiKhoan,mkMaHoaVeKiTu, nvd.getNhanVien(nv.getMaNhanVien().toString()));
+         String matKhau = EncryptionUtils.encrypt("1111", System.getenv("ENCRYPTION_KEY"));
+         TaiKhoan takKhoan = new TaiKhoan(tenTaiKhoan,matKhau, nvd.getNhanVien(nv.getMaNhanVien().toString()));
          taiKhoanDAO.addNhanVien(takKhoan);
     }
 }
