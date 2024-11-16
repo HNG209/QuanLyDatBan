@@ -12,15 +12,12 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="635.0" prefWidth="1280.0" styleClass="gradient1" stylesheets="../stylesheets/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.login.quanlydatban.controller.QuanLyBanController">
+<AnchorPane styleClass="gradient1" stylesheets="../stylesheets/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.login.quanlydatban.controller.QuanLyBanController">
    <children>
       <TableView fx:id="tableBan" layoutX="246.0" layoutY="76.0" prefHeight="546.0" prefWidth="587.0" style="-fx-border-color: green;" styleClass="small-round-box" stylesheets="@../stylesheets/style.css" AnchorPane.bottomAnchor="13.0" AnchorPane.leftAnchor="246.0" AnchorPane.rightAnchor="447.0" AnchorPane.topAnchor="76.0">
         <columns>
@@ -52,7 +49,7 @@
                      </image>
                   </ImageView>
                   <Label layoutX="77.0" layoutY="6.0" text="BÀN TRỐNG" />
-                  <HBox alignment="CENTER" layoutX="89.0" layoutY="19.0" prefHeight="40.0" prefWidth="43.0">
+                  <HBox alignment="CENTER" layoutX="89.0" layoutY="19.0">
                      <children>
                         <Label fx:id="textSLBanTrong" text="0" />
                         <Label text="/" />
@@ -143,72 +140,27 @@
                   <Font size="15.0" />
                </font>
             </CheckBox>
-            <GridPane hgap="20.0" layoutX="28.0" layoutY="474.0" prefHeight="94.0" prefWidth="374.0" vgap="25.0" AnchorPane.bottomAnchor="29.0">
-              <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="203.99991861979166" minWidth="10.0" prefWidth="185.0" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="185.99991861979163" minWidth="10.0" prefWidth="178.33333333333337" />
-              </columnConstraints>
-              <rowConstraints>
-                <RowConstraints maxHeight="45.0" minHeight="10.0" prefHeight="45.0" vgrow="SOMETIMES" />
-                  <RowConstraints maxHeight="41.33331298828125" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
-              </rowConstraints>
-               <children>
-                  <Button fx:id="btnThem" mnemonicParsing="false" onAction="#handleThemBan" prefHeight="60.0" prefWidth="194.0" text="Thêm bàn">
-                     <graphic>
-                        <ImageView fitHeight="40.0" fitWidth="34.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../icons/add%20(1).png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                  </Button>
-                  <Button fx:id="btnXoa" mnemonicParsing="false" onAction="#handleXoaBan" prefHeight="73.0" prefWidth="183.0" text="Xóa bàn" GridPane.columnIndex="1">
-                     <graphic>
-                        <ImageView fitHeight="40.0" fitWidth="34.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../icons/delete.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                  </Button>
-                  <Button fx:id="BtnChinhSua" mnemonicParsing="false" onAction="#handleSuaBan" prefHeight="19.0" prefWidth="188.0" text="Chỉnh sửa " GridPane.rowIndex="1">
-                     <graphic>
-                        <ImageView fitHeight="40.0" fitWidth="34.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../icons/edit.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                  </Button>
-                  <Button fx:id="BtnClear" mnemonicParsing="false" onAction="#handleClear" prefHeight="40.0" prefWidth="215.0" text="Làm sạch" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                     <graphic>
-                        <ImageView fitHeight="40.0" fitWidth="34.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../icons/eraser.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                  </Button>
-               </children>
-            </GridPane>
             <TextField fx:id="textMaBan" layoutX="101.0" layoutY="72.0" prefHeight="26.0" prefWidth="303.0" styleClass="round-box" />
             <Label layoutX="28.0" layoutY="76.0" prefHeight="18.0" prefWidth="87.0" text="Mã bàn" />
             <ComboBox fx:id="textLoaiBan" layoutX="101.0" layoutY="179.0" prefHeight="25.0" prefWidth="303.0" />
             <ComboBox fx:id="textKhuVuc" layoutX="100.0" layoutY="126.0" prefHeight="25.0" prefWidth="303.0" />
             <ImageView fitHeight="45.0" fitWidth="49.0" layoutX="22.0" layoutY="244.0" pickOnBounds="true" preserveRatio="true" />
             <ImageView fitHeight="45.0" fitWidth="49.0" layoutX="32.0" layoutY="254.0" pickOnBounds="true" preserveRatio="true" />
+            <Button fx:id="btnThem" layoutX="21.0" layoutY="527.0" mnemonicParsing="false" onAction="#handleThemBan" prefHeight="30.0" prefWidth="390.0" styleClass="sage-green" text="Thêm bàn" AnchorPane.bottomAnchor="41.0" AnchorPane.leftAnchor="21.0" AnchorPane.rightAnchor="20.999999999999943">
+               <font>
+                  <Font size="13.0" />
+               </font>
+            </Button>
+            <Button fx:id="BtnChinhSua" layoutX="222.0" layoutY="477.0" mnemonicParsing="false" onAction="#handleSuaBan" prefHeight="30.0" prefWidth="183.0" styleClass="pale-lemon" text="Chỉnh sửa " AnchorPane.leftAnchor="220.66666666666666" AnchorPane.rightAnchor="20.666666666666657">
+               <font>
+                  <Font size="13.0" />
+               </font>
+            </Button>
+            <Button fx:id="BtnClear" layoutX="21.0" layoutY="477.0" mnemonicParsing="false" onAction="#handleClear" prefHeight="30.0" prefWidth="183.0" styleClass="sunset-orange" text="Làm sạch" AnchorPane.leftAnchor="24.0" AnchorPane.rightAnchor="221.3333333333333">
+               <font>
+                  <Font size="13.0" />
+               </font>
+            </Button>
          </children>
       </AnchorPane>
       <ComboBox fx:id="locKhuVuc" layoutX="247.2" layoutY="24.0" prefHeight="17.0" prefWidth="115.0" promptText="Khu vực" AnchorPane.leftAnchor="247.0" AnchorPane.topAnchor="24.0" />

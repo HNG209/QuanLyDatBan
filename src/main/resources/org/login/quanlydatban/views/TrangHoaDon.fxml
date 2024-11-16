@@ -74,13 +74,13 @@
             <Insets left="10.0" right="10.0" />
          </padding>
       </HBox>
-      <TableView fx:id="tableCTHD" layoutX="934.0" layoutY="322.0" prefHeight="304.0" prefWidth="357.0" style="-fx-border-color: green;" styleClass="small-round-box" AnchorPane.bottomAnchor="9.0" AnchorPane.rightAnchor="16.0" AnchorPane.topAnchor="322.0">
+      <TableView fx:id="tableCTHD" layoutX="934.0" layoutY="322.0" prefHeight="304.0" prefWidth="449.0" style="-fx-border-color: green;" styleClass="small-round-box" AnchorPane.bottomAnchor="9.0" AnchorPane.rightAnchor="16.0" AnchorPane.topAnchor="322.0">
          <columns>
             <TableColumn fx:id="colTenMonAn" prefWidth="96.00000262260437" text="Tên món ăn" />
             <TableColumn fx:id="colSoLuong" prefWidth="61.33324432373047" text="Số lượng" />
             <TableColumn fx:id="colDonGia" prefWidth="62.0" text="Đơn giá" />
-            <TableColumn fx:id="colGhiChu" prefWidth="69.33326721191406" text="Ghi chú" />
             <TableColumn fx:id="colCTHDTongTien" prefWidth="68.0001220703125" text="Tổng tiền" />
+            <TableColumn fx:id="colGhiChu" prefWidth="69.33326721191406" text="Ghi chú" />
          </columns>
          <columnResizePolicy>
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -157,14 +157,14 @@
             <String fx:value="gradient2" />
          </styleClass>
       </AnchorPane>
-      <TableView fx:id="tabTatCa" layoutY="323.3333333333333" prefHeight="304.0" prefWidth="895.0" style="-fx-border-color: green;" AnchorPane.bottomAnchor="8.0" AnchorPane.leftAnchor="7.0" AnchorPane.rightAnchor="378.0" AnchorPane.topAnchor="323.0">
+      <TableView fx:id="tabTatCa" layoutX="8.0" layoutY="322.0" prefHeight="304.0" prefWidth="801.0" style="-fx-border-color: green;" AnchorPane.bottomAnchor="9.0" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="471.0" AnchorPane.topAnchor="322.0">
         <columns>
             <TableColumn fx:id="colMaHoaDon" prefWidth="96.0000228881836" text="Mã hóa đơn" />
-            <TableColumn fx:id="colNgayLap" prefWidth="150.00001525878906" text="Ngày lập hóa đơn" />
-            <TableColumn fx:id="colMaKhachHang" prefWidth="126.66665649414062" text="Mã khách hàng" />
-            <TableColumn fx:id="colTrangThai" prefWidth="100.00003051757812" text="Trạng thái" />
-            <TableColumn fx:id="colMaBan" prefWidth="94.00009155273438" text="Khu vực/ Bàn" />
-            <TableColumn fx:id="colMaNhanVien" prefWidth="142.66668701171875" text="Nhân viên" />
+            <TableColumn fx:id="colNgayLap" prefWidth="133.33333587646484" text="Ngày lập hóa đơn" />
+            <TableColumn fx:id="colMaKhachHang" prefWidth="95.33338928222656" text="Mã khách hàng" />
+            <TableColumn fx:id="colTrangThai" prefWidth="130.66665649414062" text="Trạng thái" />
+            <TableColumn fx:id="colMaBan" prefWidth="95.33334350585938" text="Khu vực/ Bàn" />
+            <TableColumn fx:id="colMaNhanVien" prefWidth="86.66668701171875" text="Nhân viên" />
             <TableColumn fx:id="colTongTien" prefWidth="98.6666259765625" text="Tổng tiền" />
             <TableColumn fx:id="colPhuThu" prefWidth="78.0" text="Phụ thu" />
         </columns>
