@@ -122,7 +122,13 @@ public class KhachHangController {
         String sdt = txtTimSDT.getText().trim();
         ObservableList<KhachHang> khachHangList = tableKhachHang.getItems();
         boolean timTay = false;
-
+        if(maKH.isEmpty() && sdt.isEmpty()) {
+            JOptionPane.showMessageDialog(null,
+                    "Vui lòng nhập thông tin khách hàng cần tìm",
+                    "Thông báo",
+                    JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
         for (KhachHang kh : khachHangList) {
             boolean trungKhop = (maKH.isEmpty() || kh.getMaKhachHang().equalsIgnoreCase(maKH)) &&
                     (sdt.isEmpty() || kh.getSdt().equalsIgnoreCase(sdt));
@@ -132,6 +138,7 @@ public class KhachHangController {
                 timTay = true;
                 break;
             }
+
         }
 
         if (!timTay) {
@@ -224,11 +231,14 @@ public class KhachHangController {
     private boolean validateInput() {
         String sdtRegex = "^(09|03|02|04)\\d{8}$";
         String emailRegex = "^[A-Za-z0-9+_.-]+@(.+)$";
-        String cccdRegex = "^\\d{3}[0-9][0-9]\\d{6}$";
-        String tenRegex = "^[\\p{L} ]+$";
-        String diaChiRegex = "^([A-Z0-9].*)?$\n";
+        String cccdRegex = "^\\d{3}[0-9][0-9]\\d{7}$";
+        String tenRegex = "/^[A-Z][a-zA-Z]*( [A-Z][a-zA-Z]*)*$/";
+        String diaChiRegex = "^[A-Z0-9][a-zA-Z0-9/]*( [A-Z0-9][a-zA-Z0-9/]*)*$";
 
-
+        if (!txtTenKH.getText().matches(tenRegex)) {
+            JOptionPane.showMessageDialog(null, "Tên khách hàng không hợp lệ.", "Lỗi nhập liệu", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
         if (!txtSDT.getText().matches(sdtRegex)) {
             JOptionPane.showMessageDialog(null, "Số điện thoại không hợp lệ.", "Lỗi nhập liệu", JOptionPane.ERROR_MESSAGE);
             return false;
@@ -241,15 +251,10 @@ public class KhachHangController {
             JOptionPane.showMessageDialog(null, "CCCD không hợp lệ.", "Lỗi nhập liệu", JOptionPane.ERROR_MESSAGE);
             return false;
         }
-        if (!txtTenKH.getText().matches(tenRegex)) {
-            JOptionPane.showMessageDialog(null, "Tên khách hàng không hợp lệ.", "Lỗi nhập liệu", JOptionPane.ERROR_MESSAGE);
-            return false;
-        }
         if (!txtDiaChi.getText().equalsIgnoreCase("")&&!txtDiaChi.getText().matches(diaChiRegex)) {
-            JOptionPane.showMessageDialog(null, "Đianh chỉ nhập không hợp lệ.", "Lỗi nhập liệu", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Địa chỉ nhập không hợp lệ.", "Lỗi nhập liệu", JOptionPane.ERROR_MESSAGE);
             return false;
         }
-
         return true;
     }
 

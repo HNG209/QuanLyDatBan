@@ -89,6 +89,8 @@ public class ThongKeQuanLyController {
         if ("Tất cả".equals(namThongKeBieuDoTron.getSelectionModel().getSelectedItem())) {
             quyThongKeBieuDoTron.setVisible(false);
             thangThongKeBieuDoTron.setVisible(false);
+            thangThongKeBieuDoTron.getSelectionModel().select(0);
+            quyThongKeBieuDoTron.getSelectionModel().select(0);
         } else {
             quyThongKeBieuDoTron.setVisible(true);
             thangThongKeBieuDoTron.setVisible(true);
@@ -97,6 +99,8 @@ public class ThongKeQuanLyController {
             if ("Tất cả".equals(newValue)) {
                 quyThongKeBieuDoTron.setVisible(false);
                 thangThongKeBieuDoTron.setVisible(false);
+                thangThongKeBieuDoTron.getSelectionModel().select(0);
+                quyThongKeBieuDoTron.getSelectionModel().select(0);
             } else {
                 quyThongKeBieuDoTron.setVisible(true);
                 thangThongKeBieuDoTron.setVisible(true);

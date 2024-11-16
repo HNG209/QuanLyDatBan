@@ -86,6 +86,8 @@ public class ThongKeNhanVienController {
         if ("Tất cả".equals(namThongKeMonAn.getSelectionModel().getSelectedItem())) {
             quyThongKeMonAn.setVisible(false);
             thangThongKeMonAn.setVisible(false);
+            thangThongKeMonAn.getSelectionModel().select(0);
+            quyThongKeMonAn.getSelectionModel().select(0);
         } else {
             quyThongKeMonAn.setVisible(true);
             thangThongKeMonAn.setVisible(true);
@@ -94,6 +96,8 @@ public class ThongKeNhanVienController {
             if ("Tất cả".equals(newValue)) {
                 quyThongKeMonAn.setVisible(false);
                 thangThongKeMonAn.setVisible(false);
+                thangThongKeMonAn.getSelectionModel().select(0);
+                quyThongKeMonAn.getSelectionModel().select(0);
             } else {
                 quyThongKeMonAn.setVisible(true);
                 thangThongKeMonAn.setVisible(true);
