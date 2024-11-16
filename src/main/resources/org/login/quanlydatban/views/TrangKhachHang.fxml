@@ -129,28 +129,13 @@
                <children>
                   <HBox alignment="CENTER" prefHeight="50.0" prefWidth="506.0" spacing="26.0">
                      <children>
-                        <Button fx:id="btnSuaTT" mnemonicParsing="false" onAction="#suaKhachHang" prefHeight="26.0" prefWidth="240.0" text="Sửa thông tin">
-                           <styleClass>
-                              <String fx:value="sunset-orange" />
-                              <String fx:value="round-box" />
-                           </styleClass>
-                        </Button>
-                        <Button fx:id="btnLamMoi" mnemonicParsing="false" onAction="#lamMoi" prefHeight="26.0" prefWidth="240.0" text="Làm mới">
-                           <styleClass>
-                              <String fx:value="round-box" />
-                              <String fx:value="pale-lemon" />
-                           </styleClass>
-                        </Button>
+                        <Button fx:id="btnSuaTT" mnemonicParsing="false" onAction="#suaKhachHang" prefHeight="26.0" prefWidth="240.0" styleClass="sunset-orange" text="Sửa thông tin" />
+                        <Button fx:id="btnLamMoi" mnemonicParsing="false" onAction="#lamMoi" prefHeight="26.0" prefWidth="240.0" styleClass="pale-lemon" text="Làm mới" />
                      </children>
                   </HBox>
                   <HBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="40.0" prefWidth="506.0" spacing="20.0">
                      <children>
-                        <Button fx:id="btnThem" mnemonicParsing="false" onAction="#themKhachHang" prefHeight="26.0" prefWidth="506.0" text="Thêm khách hàng">
-                           <styleClass>
-                              <String fx:value="round-box" />
-                              <String fx:value="sage-green" />
-                           </styleClass>
-                        </Button>
+                        <Button fx:id="btnThem" mnemonicParsing="false" onAction="#themKhachHang" prefHeight="26.0" prefWidth="506.0" styleClass="sage-green" text="Thêm khách hàng" />
                      </children>
                   </HBox>
                </children>
