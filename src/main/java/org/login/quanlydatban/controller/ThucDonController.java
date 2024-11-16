@@ -96,7 +96,7 @@ public class ThucDonController implements Initializable {
 
     private LoaiMonDAO loaiMonDAO;
 
-    private String duongDanAnh;
+    private String duongDanAnh = null;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -325,8 +325,10 @@ public class ThucDonController implements Initializable {
                     String donViMoi = txtDonViTinh.getText();
                     double giaMoi = Double.parseDouble(txtGia.getText());
                     TrangThaiMonAn trangThaiMoi = comboTTValue();
-                    String loaiMonMoiName = cbloaiMonAn.getValue();
 
+                    String anhMoi = anhMon.toString();
+
+                    String loaiMonMoiName = cbloaiMonAn.getValue();
                     LoaiMonAn loaiMonMoi = loaiMonDAO.getLoaiMonByName(loaiMonMoiName);
 
                     // If LoaiMonAn doesn't exist, add it
@@ -342,7 +344,7 @@ public class ThucDonController implements Initializable {
                     ButtonType result = alert.showAndWait().orElse(ButtonType.CANCEL);
 
                     if (result == ButtonType.OK) {
-                        monMoi = new MonAn(monAn.getMaMonAn(), loaiMonMoi, tenMonMoi, giaMoi, donViMoi, duongDanAnh, trangThaiMoi);
+                        monMoi = new MonAn(monAn.getMaMonAn(), loaiMonMoi, tenMonMoi, giaMoi, donViMoi, anhMoi, trangThaiMoi);
                         monAnDAO.capNhatMonAn(monAn, monMoi);
                         showWarn("Đã cập nhật thành công!");
                         refreshControl(event);
@@ -675,7 +677,7 @@ public class ThucDonController implements Initializable {
             loaiMon = loaiMonDAO.getLoaiMonByName(selectedLoaiMon); // Retrieve the newly added LoaiMonAn
         }
 
-        System.out.println(loaiMon.getMaLoaiMonAn());
+        //System.out.println(loaiMon.getMaLoaiMonAn());
 
         TrangThaiMonAn ttMonAn = comboTTValue();
 
@@ -689,7 +691,7 @@ public class ThucDonController implements Initializable {
         String maMonAn = generateMaMonAn();
 
         // Assuming duongDanAnh is a field that holds the path of the selected image
-        String duongDanAnh = "path_to_image"; // replace with actual image path
+        String duongDanAnh = this.duongDanAnh; // replace with actual image path
 
         // Create the new MonAn object
         MonAn monAn = new MonAn(maMonAn, loaiMon, tenMonAn, gia, donViTinh, duongDanAnh, ttMonAn);
@@ -756,6 +758,15 @@ public class ThucDonController implements Initializable {
             cbtrangThaiMon.setValue(String.valueOf(monAn.getTrangThaiMonAn()));
             txtDonViTinh.setText(monAn.getDonViTinh());
             txtGia.setText(String.valueOf(monAn.getDonGia()));
+
+            String imagePath = monAn.getHinhAnh();
+            String imageDefaultPath = "/org/login/quanlydatban/icons/restaurant.png";
+            if (imagePath != null && !imagePath.isEmpty()) {
+                anhMon.setImage(new Image(new File(imagePath).toURI().toString()));
+            } else {
+                anhMon.setImage(new Image(getClass().getResource(imageDefaultPath).toString()));
+            }
+
             txfMoTa.setText(loaiMon.getMoTaLoaiMonAn());
         }
 
