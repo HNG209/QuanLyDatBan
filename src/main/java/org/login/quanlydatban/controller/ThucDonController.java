@@ -22,7 +22,10 @@ import org.login.quanlydatban.hibernate.HibernateUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Comparator;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -327,6 +330,10 @@ public class ThucDonController implements Initializable {
                     TrangThaiMonAn trangThaiMoi = comboTTValue();
 
                     String anhMoi = anhMon.getImage().getUrl();
+                    if (anhMoi.startsWith("file:")) {
+                        Path path = Paths.get(URI.create(anhMoi)); // Convert the URI to a Path
+                        anhMoi = path.toString(); // Get the standard file path
+                    }
 
                     String loaiMonMoiName = cbloaiMonAn.getValue();
                     LoaiMonAn loaiMonMoi = loaiMonDAO.getLoaiMonByName(loaiMonMoiName);
