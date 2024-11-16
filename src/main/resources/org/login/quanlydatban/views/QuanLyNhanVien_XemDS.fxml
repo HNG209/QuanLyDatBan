@@ -66,8 +66,8 @@
                   <Font name="System Bold" size="14.0" />
                </font>
             </Label>
-            <Button fx:id="btnTaiAnh1" layoutX="366.0" layoutY="331.0" lineSpacing="2.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="107.0" stylesheets="@../stylesheets/style.css" text="Tải ảnh" />
-            <ImageView fx:id="image1" fitHeight="166.0" fitWidth="150.0" layoutX="366.0" layoutY="124.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="124.0">
+            <Button fx:id="btnTaiAnh1" layoutX="375.0" layoutY="333.0" lineSpacing="2.0" mnemonicParsing="false" onAction="#taiAnh" prefHeight="30.0" prefWidth="107.0" stylesheets="@../stylesheets/style.css" text="Tải ảnh" />
+            <ImageView fx:id="image1" fitHeight="166.0" fitWidth="150.0" layoutX="366.0" layoutY="124.0" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="24.799999999999955" AnchorPane.topAnchor="124.0">
                <image>
                   <Image url="@../Image/img.png" />
                </image>
@@ -82,7 +82,7 @@
                   <Font name="System Bold" size="14.0" />
                </font>
             </Label>
-            <Button fx:id="btnLuu" layoutX="37.0" layoutY="492.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="125.0" styleClass="sage-green" stylesheets="@../stylesheets/style.css" text="Lưu lại">
+            <Button fx:id="btnLuu" layoutX="37.0" layoutY="492.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="126.0" styleClass="sage-green" stylesheets="@../stylesheets/style.css" text="Lưu lại">
                <font>
                   <Font name="Times New Roman Bold" size="14.0" />
                </font>
@@ -143,7 +143,7 @@
                   </FXCollections>
                </items>
             </ComboBox>
-            <Label layoutX="201.0" layoutY="4.0" prefHeight="17.0" prefWidth="77.0" text="Giới tính">
+            <Label layoutX="203.0" layoutY="14.0" prefHeight="17.0" prefWidth="77.0" text="Giới tính">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>

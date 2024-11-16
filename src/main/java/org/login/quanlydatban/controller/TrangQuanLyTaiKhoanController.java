@@ -42,25 +42,17 @@ public class TrangQuanLyTaiKhoanController implements Initializable {
     private PasswordField password;
     @FXML
     private TextField tim;
-
-    private   String showImageUrl = getClass().getResource("/org/login/quanlydatban/icons/show.png").toString();
-    private   String hideImageUrl = getClass().getResource("/org/login/quanlydatban/icons/hide.png").toString();
+    private   String hienthi;
     @FXML
     private TableColumn<NhanVien, String> tableMaNhanVien; // 0 Cột ID
     @FXML
     private TableColumn<NhanVien, String> tableTenNhanVien; // 1 Cột Họ Tên
     @FXML
     private TableColumn<NhanVien, String> tableTenTaiKhoan; // 2
-    @FXML
-    private Button btnLuu;
-    @FXML
-    private Button btnHuy;
     private NhanVienDAO nhanVienDAO;
     private String matKhauHien;
     @FXML
     private TextField nhapLaiMatKhau;
-    private TrangThemNhanVienController themNhanVienController = new TrangThemNhanVienController();
-    private static final String ALGORITHM = "AES";
 
     public TrangQuanLyTaiKhoanController() throws Exception {
     }
@@ -73,7 +65,6 @@ public class TrangQuanLyTaiKhoanController implements Initializable {
     public void setTenNhanVien(String tenNhanVien) {
         this.tenNhanVien = tenNhanVien;
     }
-
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -105,7 +96,6 @@ public class TrangQuanLyTaiKhoanController implements Initializable {
             });
         });
         tableTaiKhoan.setItems(filteredList);
-
         tableTaiKhoan.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
@@ -123,11 +113,11 @@ public class TrangQuanLyTaiKhoanController implements Initializable {
                             maNhanVien.setText(nvtim.getMaNhanVien());
                             tenTaiKhoan.setText(taiKhoanDAO.getTaiKhoanNhanVien(cellValue).getUserName().toString());
                             password.setText(EncryptionUtils.decrypt(taiKhoanDAO.getTaiKhoanNhanVien(cellValue).getPassword().toString(), System.getenv("ENCRYPTION_KEY")));
-                            //System.out.println(decrypt(matKhauHien,generateKey()));
-                            nhapLaiMatKhau.setText(EncryptionUtils.decrypt(taiKhoanDAO.getTaiKhoanNhanVien(cellValue).getPassword().toString(), System.getenv("ENCRYPTION_KEY")));
+                            hienthi = EncryptionUtils.decrypt(taiKhoanDAO.getTaiKhoanNhanVien(cellValue).getPassword().toString(), System.getenv("ENCRYPTION_KEY"));
+                            Tooltip tooltip = new Tooltip(hienthi);
+                            Tooltip.install(password, tooltip); // Cài đặt Tooltip cho PasswordField
                             Image image = new Image("file:"+ nvtim.getHinhAnh());
                             hinhAnh.setImage(image);
-
                         }
                     } catch (Exception e) {
                         e.printStackTrace();

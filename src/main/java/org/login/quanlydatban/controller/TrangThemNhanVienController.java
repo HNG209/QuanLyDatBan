@@ -116,26 +116,25 @@ public class TrangThemNhanVienController implements Initializable {
             }
         });
     }
-    // them nhan vien
-    public void ThemNhanVien(String tenNhanVien){
-        NhanVienDAO nvdao = new NhanVienDAO();
-        NhanVien nv = nvdao.getNhanVien(tenNhanVien);
-
-    }
-
-
     // bat regex cho ten
     public boolean tencheck(TextField hoTen){
         if(!hoTen.getText().matches("^([A-Z][a-z]*)( [A-Z][a-z]*)*$")){
-            showWarn("Ten bạn nhập không hợp lệ, tên không có dấu , và những kí tự đặc biệt");
+            showWarn("Ten bạn nhập không hợp lệ, có thể do tên chưa kí tự số, kí tự đặc biệt");
+            return false;
+        }else if(hoTen.equals("") || hoTen == null){
+            showWarn("Bạn vui lòng nhập tên của nhân viên không!!");
+            return false;
         }
         return true;
     }
 
-    // cccd, 11 so
+    // cccd, 12 so
     public boolean cancuoccongdancheck(TextField cccd){
         if(!cccd.getText().matches("^[0-9]{12}$")){
-            showWarn("Can cuoc cong dan phải là k tự số và có 12 kí tự");
+            showWarn("Can cuoc cong dan phải là kí tự số và có 12 kí tự");
+            return false;
+        }else if(cccd.equals("") || cccd == null){
+            showWarn("Bạn vui lòng nhập căn cước công dân của nhân viên!!");
             return false;
         }
         return true;
@@ -146,6 +145,9 @@ public class TrangThemNhanVienController implements Initializable {
         if(!dienThoai.getText().matches("^0[0-9]{9}$")){
            showWarn("So dien thoai bạn nhập không hợp lệ và phải có đủ 10 kí tự");
            return false;
+        }else if(dienThoai.equals("") || dienThoai == null){
+            showWarn("Bạn vui loòng nhập số điện thoại của nhân viên!!");
+            return false;
         }
         return true;
     }
@@ -175,14 +177,11 @@ public class TrangThemNhanVienController implements Initializable {
         }
         return true;
     }
-
-
    // rang buoc cho tuoi
     private int calculateAge(LocalDate birthDate) {
         LocalDate currentDate = LocalDate.now();
         return Period.between(birthDate, currentDate).getYears();
     }
-
 
     public boolean gioiTinhCheck(ComboBox<String> gioiTinh){
         if (gioiTinh.getValue() == null || gioiTinh.getValue().isEmpty()) {
@@ -192,8 +191,6 @@ public class TrangThemNhanVienController implements Initializable {
         }
         return true;
     }
-
-
     private void showWarn(String message) {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle("Kết Quả");
@@ -210,8 +207,6 @@ public class TrangThemNhanVienController implements Initializable {
         Long newIdNumber = (maxId == null) ? 1 : maxId + 1; // Tăng mã lên 1
         return prefix + String.format("%04d", newIdNumber); // Định dạng mã
     }
-
-
 
     public Long getMaxIdFromDatabase(String prefix) {
         Session session = HibernateUtils.getFactory().openSession();
@@ -240,8 +235,6 @@ public class TrangThemNhanVienController implements Initializable {
         }
         return maxId;
     }
-
-    // ham sua nhan vien
 
     public String getTenNhanVien() {
         return tenNhanVien;
@@ -285,41 +278,7 @@ public class TrangThemNhanVienController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-            maNhanVien.setEditable(false);
-//            hoTen.focusedProperty().addListener((obs, oldVal, newVal) ->{
-//                if(!newVal){
-//                    tencheck(hoTen);
-//                }
-//            });
-//
-//            ngaySinh.focusedProperty().addListener((obs, oldVal, newVal) ->{
-//                if(!newVal){
-//                   LocalDate l = ngaySinh.getValue();
-//                   if(l != null){
-//                      int tuoi = calculateAge(l);
-//                      if(tuoi <= 15){
-//                          showAlert("Tuoi khong hop le");
-//                      }
-//                   }
-//                }
-//            });
-//            cccd.focusedProperty().addListener((obs, oldVal, newVal) ->{
-//                if(!newVal){
-//                    cancuoccongdancheck(cccd);
-//                }
-//            });
-//            diaChi.focusedProperty().addListener((obs,oldVal,newVal)->{
-//                if(!newVal){
-//                    diaChicheck(diaChi);
-//                }
-//            });
-//
-//           dienThoai.focusedProperty().addListener((obs, oldVal, newVal) ->{
-//                if(!newVal){
-//                    sdtcheck(dienThoai);
-//                }
-//           });
-
+           maNhanVien.setEditable(false);
            chucVu.setOnAction(new EventHandler<ActionEvent>() {
                @Override
                public void handle(ActionEvent event) {
@@ -332,30 +291,35 @@ public class TrangThemNhanVienController implements Initializable {
            btnLuu.setOnAction(new EventHandler<ActionEvent>() {
                @Override
                public void handle(ActionEvent event) {
-                   if(tencheck(hoTen) && cancuoccongdancheck(cccd) && sdtcheck(dienThoai) && diaChicheck(diaChi)){
-                       if(chucvuCheck(chucVu) && trangThaiCheck(trangThaiLamViec) && gioiTinhCheck(gioiTinh)) {
-                           if (duongdan!= null) {
-                               int tuoi = calculateAge(ngaySinh.getValue());
-                               if(tuoi < 15){
-                                   showWarn("Tuổi nhân viên phải lớn hơn 15");
-                               }else {
-                                   try {
-                                       ThemNhanVien();
-                                       showAlert("Thêm nhân viên thành công");
-                                       Stage stage = (Stage) btnLuu.getScene().getWindow();
-                                       stage.close();
-                                   } catch (Exception e) {
-                                       throw new RuntimeException(e);
+                   if(gioiTinhCheck(gioiTinh)){
+                       if(tencheck(hoTen)){
+                           if(diaChicheck(diaChi)){
+                               if(cancuoccongdancheck(cccd)){
+                                   if(sdtcheck(dienThoai)){
+                                       if(trangThaiCheck(trangThaiLamViec)){
+                                           if(duongdan!= null){
+                                               int tuoi = calculateAge(ngaySinh.getValue());
+                                               if(tuoi < 15){
+                                                   showWarn("Tuổi nhân viên phải lớn hơn 15");
+                                               }else {
+                                                   try {
+                                                      ThemNhanVien();
+                                                      showAlert("Thêm nhân viên thành công");
+                                                      Stage stage = (Stage) btnLuu.getScene().getWindow();
+                                                      stage.close();
+                                                   } catch (Exception e) {
+                                                      throw new RuntimeException(e);
+                                                   }
+                                                trangQuanLyNhanVien.xetLaiduLieuChoBang();
+                                               }
+                                           }else{
+                                               showAlert("Bạn phải chọn ảnh của nhân viên");
+                                           }
+                                       }
                                    }
-                                   trangQuanLyNhanVien.xetLaiduLieuChoBang();
                                }
-
-                           }else{
-                               showAlert("Bạn phải chọn ảnh của nhân viên");
                            }
                        }
-                   }else{
-                       showWarn("Ban can nhap day du thong tin");
                    }
                }
            });

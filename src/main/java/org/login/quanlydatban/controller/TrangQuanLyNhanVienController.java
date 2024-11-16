@@ -30,6 +30,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -193,6 +195,89 @@ public class TrangQuanLyNhanVienController implements Initializable {
     }
 
 
+
+    // bat regex cho ten
+    public boolean tencheck(TextField hoTen){
+        if(!hoTen.getText().matches("^([A-Z][a-z]*)( [A-Z][a-z]*)*$")){
+            showWarn("Ten bạn nhập không hợp lệ, có thể do tên chưa kí tự số, kí tự đặc biệt");
+            return false;
+        }else if(hoTen.equals("") || hoTen == null){
+            showWarn("Bạn vui lòng nhập tên của nhân viên không!!");
+            return false;
+        }
+        return true;
+    }
+
+    // cccd, 12 so
+    public boolean cancuoccongdancheck(TextField cccd){
+        if(!cccd.getText().matches("^[0-9]{12}$")){
+            showWarn("Can cuoc cong dan phải là kí tự số và có 12 kí tự");
+            return false;
+        }else if(cccd.equals("") || cccd == null){
+            showWarn("Bạn vui lòng nhập căn cước công dân của nhân viên!!");
+            return false;
+        }
+        return true;
+    }
+
+    // so dien thoai
+    public boolean sdtcheck(TextField dienThoai){
+        if(!dienThoai.getText().matches("^0[0-9]{9}$")){
+            showWarn("So dien thoai bạn nhập không hợp lệ và phải có đủ 10 kí tự");
+            return false;
+        }else if(dienThoai.equals("") || dienThoai == null){
+            showWarn("Bạn vui loòng nhập số điện thoại của nhân viên!!");
+            return false;
+        }
+        return true;
+    }
+    public boolean diaChicheck(TextField diaChi){
+        if(diaChi.getText().equals("")){
+            showWarn("Ban phai nhap dia chi");
+            return false;
+        }
+        return true;
+    }
+
+    // chuc vu
+    public boolean chucvuCheck(ComboBox<String> chucVu){
+        if (chucVu.getValue() == null || chucVu.getValue().isEmpty()) {
+            // Tạo một hộp thoại thông báo
+            showWarn("Ban phai chon chuc vu");
+            return false;
+        }
+        return true;
+    }
+
+    public boolean trangThaiCheck(ComboBox<String> trangthai){
+        if (trangthai.getValue() == null || trangthai.getValue().isEmpty()) {
+            // Tạo một hộp thoại thông báo
+            showWarn("Phai chon trang thai");
+            return  false;
+        }
+        return true;
+    }
+    // rang buoc cho tuoi
+    private int calculateAge(LocalDate birthDate) {
+        LocalDate currentDate = LocalDate.now();
+        return Period.between(birthDate, currentDate).getYears();
+    }
+
+    public boolean gioiTinhCheck(ComboBox<String> gioiTinh){
+        if (gioiTinh.getValue() == null || gioiTinh.getValue().isEmpty()) {
+            // Tạo một hộp thoại thông báo
+            showWarn("Ban can phai chon gioi tinh");
+            return  false;
+        }
+        return true;
+    }
+    private void showWarn(String message) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Kết Quả");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
     public String getNhanvien() {
         return nhanvien;
     }
@@ -254,6 +339,7 @@ public class TrangQuanLyNhanVienController implements Initializable {
         cccd.setText(nhanVien.getCccd());
         dienThoai.setText(nhanVien.getSdt());
         ngaySinh.setValue(nhanVien.getNgaySinh());
+
         if(nhanVien.getChucVuNhanVien().equals(ChucVu.NHAN_VIEN)){
             chucVu.setValue("Nhân viên");
         }else{
@@ -268,19 +354,25 @@ public class TrangQuanLyNhanVienController implements Initializable {
         }
         //Trang thai nhan vien
         if(nhanVien.getTrangThaiNhanVien().equals(TrangThaiNhanVien.DANG_LAM)){
-            trangThaiLamViec.setValue("DANG_LAM");
+            trangThaiLamViec.setValue("ĐANG LÀM");
 
         }else if(nhanVien.getTrangThaiNhanVien().equals(TrangThaiNhanVien.NGHI_PHEP)){
-            trangThaiLamViec.setValue("NGHI_PHEP");
+            trangThaiLamViec.setValue("NGHỈ PHÉP");
         }else
             trangThaiLamViec.setValue("NGHI_VIEC");
 
+    }
+    private void showAlert(String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Kết Quả");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
     public void chinhSuaNhanVien(String getMaNhanVien){
         nvdao = new NhanVienDAO();
         NhanVien nv1 = nvdao.getNhanVien(getMaNhanVien);
-        duongdan = nv1.getHinhAnh();
         Boolean gt = gioiTinh1.getValue().equals("NAM") ? false : true;
         TrangThaiNhanVien tt = null;
         if(trangThaiLamViec.getValue().equals("ĐANG LÀM")){
@@ -298,9 +390,10 @@ public class TrangQuanLyNhanVienController implements Initializable {
             cv = ChucVu.QUAN_LY;
         }
 
-        NhanVien nv = new NhanVien(getMaNhanVien,hoTen.getText().toString(),dienThoai.getText().toString(),cccd.getText().toString(),diaChi.getText().toString(),gt,ngaySinh.getValue(),duongdan.toString(),tt,cv);
-        // NhanVienDAO nvd = new NhanVienDAO();
-        nvdao.updateNhanVien(nv1.getMaNhanVien().toString(),nv);
+        NhanVien nv = new NhanVien(getMaNhanVien,hoTen.getText().toString(),dienThoai.getText().toString(),cccd.getText().toString(),diaChi.getText().toString(),gt,ngaySinh.getValue(),duongdananh.toString(),tt,cv);
+        System.out.println("Nhan vien moi" + nv.getHinhAnh());
+        NhanVienDAO nvd = new NhanVienDAO();
+        nvd.updateNhanVien(nv1.getMaNhanVien().toString(),nv);
     }
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -348,9 +441,32 @@ public class TrangQuanLyNhanVienController implements Initializable {
         btnLuu.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                chinhSuaNhanVien(cellValue);
-                xetLaiduLieuChoBang();
+                if(gioiTinhCheck(gioiTinh1)){
+                    if(tencheck(hoTen)){
+                        if(diaChicheck(diaChi1)){
+                            if(cancuoccongdancheck(cccd)){
+                                if(sdtcheck(dienThoai)){
+                                    if(trangThaiCheck(trangThaiLamViec)){
+                                        if(duongdananh!= null){
+                                            int tuoi = calculateAge(ngaySinh.getValue());
+                                            if(tuoi < 15){
+                                                showWarn("Tuổi nhân viên phải lớn hơn 15");
+                                            }else {
+                                                    chinhSuaNhanVien(cellValue);
+                                                    showAlert("Thêm nhân viên thành công");
+                                                    xetLaiduLieuChoBang();
+                                            }
+                                        }else{
+                                            showAlert("Bạn phải chọn ảnh của nhân viên");
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
+
         });
         searchID.textProperty().addListener((observable, oldValue, newValue) -> {
             filteredList.setPredicate(employee -> {
@@ -402,6 +518,6 @@ public class TrangQuanLyNhanVienController implements Initializable {
                         loaddulieulenform(nvtim);
                 }
            }
-   });
+        });
     }
 }
