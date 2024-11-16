@@ -96,7 +96,7 @@ public class ThucDonController implements Initializable {
 
     private LoaiMonDAO loaiMonDAO;
 
-    private String duongDanAnh = null;
+    private String duongDanAnh;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -135,7 +135,7 @@ public class ThucDonController implements Initializable {
                 System.out.println("Nhấn nút tải ảnh");
 
                 if (file != null) {
-                    duongDanAnh = file.getAbsolutePath();
+                    //duongDanAnh = file.getAbsolutePath();
                     duongDanAnh = file.getAbsolutePath(); // Cập nhật đường dẫn
                     // Cập nhật ImageView với ảnh mới
                     Image image = new Image(file.toURI().toString());
@@ -326,7 +326,7 @@ public class ThucDonController implements Initializable {
                     double giaMoi = Double.parseDouble(txtGia.getText());
                     TrangThaiMonAn trangThaiMoi = comboTTValue();
 
-                    String anhMoi = anhMon.toString();
+                    String anhMoi = anhMon.getImage().getUrl();
 
                     String loaiMonMoiName = cbloaiMonAn.getValue();
                     LoaiMonAn loaiMonMoi = loaiMonDAO.getLoaiMonByName(loaiMonMoiName);
