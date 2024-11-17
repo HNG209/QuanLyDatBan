@@ -8,6 +8,7 @@ import org.login.quanlydatban.dao.ChiTietHoaDonDAO;
 import org.login.quanlydatban.entity.ChiTietHoaDon;
 import org.login.quanlydatban.entity.MonAn;
 import org.login.quanlydatban.notification.Notification;
+import org.login.quanlydatban.utilities.NumberFormatter;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -51,7 +52,7 @@ public class CardMonAnController implements Initializable {
         this.monAn = monAn;
         this.controller = controller;
         tenMon.setText(monAn.getTenMonAn());
-        giaTien.setText(String.valueOf(monAn.getDonGia()));
+        giaTien.setText(NumberFormatter.formatPrice(String.valueOf((int) monAn.getDonGia())) + "đ/ " + monAn.getDonViTinh());
     }
 
     @Override
