@@ -1,6 +1,7 @@
 package org.login.quanlydatban.controller;
 
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -8,6 +9,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.FileChooser;
@@ -42,6 +44,9 @@ public class ThucDonController implements Initializable {
 
     @FXML
     private TableView<?> orderTable;
+
+    @FXML
+    private ImageView btnRefresh;
 
     @FXML
     private TextField txtTenMonAn;
@@ -86,11 +91,11 @@ public class ThucDonController implements Initializable {
     @FXML
     private Button btnXoaRong;
 
-    @FXML
-    private Button btnTimKiem;
-
-    @FXML
-    private Button btnRefresh;
+//    @FXML
+//    private Button btnTimKiem;
+//
+//    @FXML
+//    private Button btnRefresh;
 
 
     private MonAn monAn;
@@ -147,43 +152,43 @@ public class ThucDonController implements Initializable {
             }
         });
 
-        btnTimKiem.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                String s = txtTimKiem.getText().trim();
-                if (cbChiMuc.getSelectionModel().isEmpty()) {
-                    showWarn("Bạn cần chọn một chỉ mục trước khi tìm kiếm");
-                }
-                else if (cbChiMuc.getSelectionModel().getSelectedIndex() == 0) {
-                    if (txtTimKiem.getText().trim().isEmpty()) {
-                        showWarn("Vui lòng điền tên muốn tìm");
-                    } else {
-                        timKiemTheoTen(s);
-                    }
-                }
-                else if (cbChiMuc.getSelectionModel().getSelectedIndex() == 1) {
-                    if (txtTimKiem.getText().trim().isEmpty()) {
-                        showWarn("Vui lòng điền tên muốn tìm");
-                    } else {
-                        timKiemTheoLoai(s);
-                    }
-                }
-                else if (cbChiMuc.getSelectionModel().getSelectedIndex() == 2) {
-                    if (cbSapXep.getSelectionModel().isEmpty()){
-                        showWarn("Vui lòng chọn cách sắp xếp");
-                    }
-                    else {
-                        if (cbSapXep.getSelectionModel().getSelectedIndex() == 0) {
-                            ascendingSorting();
-                        }
-                        else {
-                            descendingSorting();
-                        }
-                    }
-                }
-
-            }
-        });
+//        btnTimKiem.setOnAction(new EventHandler<ActionEvent>() {
+//            @Override
+//            public void handle(ActionEvent actionEvent) {
+//                String s = txtTimKiem.getText().trim();
+//                if (cbChiMuc.getSelectionModel().isEmpty()) {
+//                    showWarn("Bạn cần chọn một chỉ mục trước khi tìm kiếm");
+//                }
+//                else if (cbChiMuc.getSelectionModel().getSelectedIndex() == 0) {
+//                    if (txtTimKiem.getText().trim().isEmpty()) {
+//                        showWarn("Vui lòng điền tên muốn tìm");
+//                    } else {
+//                        timKiemTheoTen(s);
+//                    }
+//                }
+//                else if (cbChiMuc.getSelectionModel().getSelectedIndex() == 1) {
+//                    if (txtTimKiem.getText().trim().isEmpty()) {
+//                        showWarn("Vui lòng điền tên muốn tìm");
+//                    } else {
+//                        timKiemTheoLoai(s);
+//                    }
+//                }
+//                else if (cbChiMuc.getSelectionModel().getSelectedIndex() == 2) {
+//                    if (cbSapXep.getSelectionModel().isEmpty()){
+//                        showWarn("Vui lòng chọn cách sắp xếp");
+//                    }
+//                    else {
+//                        if (cbSapXep.getSelectionModel().getSelectedIndex() == 0) {
+//                            ascendingSorting();
+//                        }
+//                        else {
+//                            descendingSorting();
+//                        }
+//                    }
+//                }
+//
+//            }
+//        });
 
         cbloaiMonAn.getEditor().setOnAction(actionEvent -> {
             String newValue = cbloaiMonAn.getEditor().getText();
@@ -235,6 +240,7 @@ public class ThucDonController implements Initializable {
                 throw new RuntimeException(e);
             }
         }
+
         //monAnDAO.getListMonAn();
 //        scrollPane.vvalueProperty().addListener((obs, oldValue, newValue) -> {
 //            if(newValue.doubleValue() == 1.0){
@@ -387,6 +393,43 @@ public class ThucDonController implements Initializable {
         }
     }
 
+    @FXML
+    void btnTimKiem(MouseEvent event) {
+        String s = txtTimKiem.getText().trim();
+        if (cbChiMuc.getSelectionModel().isEmpty()) {
+            showWarn("Bạn cần chọn một chỉ mục trước khi tìm kiếm");
+        }
+        else if (cbChiMuc.getSelectionModel().getSelectedIndex() == 0) {
+            if (txtTimKiem.getText().trim().isEmpty()) {
+                showWarn("Vui lòng điền tên muốn tìm");
+            } else {
+                timKiemTheoTen(s);
+            }
+        }
+        else if (cbChiMuc.getSelectionModel().getSelectedIndex() == 1) {
+            if (txtTimKiem.getText().trim().isEmpty()) {
+                showWarn("Vui lòng điền tên muốn tìm");
+            } else {
+                timKiemTheoLoai(s);
+            }
+        }
+        else if (cbChiMuc.getSelectionModel().getSelectedIndex() == 2) {
+            if (cbSapXep.getSelectionModel().isEmpty()){
+                showWarn("Vui lòng chọn cách sắp xếp");
+            }
+            else {
+                if (cbSapXep.getSelectionModel().getSelectedIndex() == 0) {
+                    ascendingSorting();
+                }
+                else {
+                    descendingSorting();
+                }
+            }
+        }
+
+    }
+
+
     //FINDING
     void timKiemTheoTen (String tenMonAn) {
         monAnDAO.getAllMonAn();
@@ -494,7 +537,7 @@ public class ThucDonController implements Initializable {
     }
 
     @FXML
-    void refreshControl(ActionEvent event) {
+    void refreshControl(Event event) {
         Object source = event.getSource();
         if (source == btnRefresh || source == btnThemMon || source == btnXoaMon || source == btnCapNhat) {
             flowPane.getChildren().clear(); // Clear existing items
@@ -607,15 +650,6 @@ public class ThucDonController implements Initializable {
         return String.format("%04d", newIdNumber); // Định dạng mã
     }
 
-//    private void generateMaMonAn1() {
-//        int countRecord = 10;
-//        for(int i = 0; i < 10; i++) {
-//            String ma = "MA" +  String.format("%04d", i);
-//            System.out.println();
-//        }
-//    }
-
-    //
     public Long getMaMonFromDatabase() {
         Session session = HibernateUtils.getFactory().openSession();
         Transaction transaction = null;

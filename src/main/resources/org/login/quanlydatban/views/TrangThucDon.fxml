@@ -20,7 +20,7 @@
 
 <AnchorPane prefHeight="635.0" prefWidth="1280.0" styleClass="gradient1" stylesheets="@../stylesheets/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.login.quanlydatban.controller.ThucDonController">
    <children>
-      <AnchorPane layoutX="715.2000122070312" layoutY="51.20000076293945" prefHeight="565.0" prefWidth="550.0" style="-fx-background-color: white;" styleClass="round-box" stylesheets="@../stylesheets/style.css" AnchorPane.bottomAnchor="19.0" AnchorPane.rightAnchor="17.0" AnchorPane.topAnchor="51.0">
+      <AnchorPane layoutX="715.2000122070312" layoutY="51.20000076293945" prefHeight="565.0" prefWidth="550.0" style="-fx-background-color: white; -fx-border-color: black;" styleClass="round-box" stylesheets="@../stylesheets/style.css" AnchorPane.bottomAnchor="19.0" AnchorPane.rightAnchor="17.0" AnchorPane.topAnchor="51.0">
          <children>
             <Label layoutX="14.0" layoutY="23.0" prefHeight="18.0" prefWidth="75.0" text="Tên món ăn">
                <font>
@@ -108,15 +108,6 @@
          </content>
       </ScrollPane>
       <TextField fx:id="txtTimKiem" layoutX="364.8" layoutY="17.0" prefHeight="26.0" prefWidth="273.0" promptText="Tìm kiếm..." style="-fx-border-color: #F3B664;" styleClass="round-box" AnchorPane.leftAnchor="365.0" AnchorPane.rightAnchor="642.0" />
-      <Button fx:id="btnTimKiem" layoutX="653.6" layoutY="17.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="60.0" style="-fx-border-color: #F3B664; -fx-background-color: white;" styleClass="round-box" AnchorPane.rightAnchor="576.0">
-         <graphic>
-            <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../icons/find.png" />
-               </image>
-            </ImageView>
-         </graphic>
-      </Button>
       <ComboBox fx:id="cbChiMuc" layoutX="48.8" layoutY="17.0" prefHeight="26.0" prefWidth="309.0" promptText="Chọn danh mục tìm kiếm" style="-fx-background-color: white; -fx-border-color: #F3B664;" styleClass="round-box" AnchorPane.leftAnchor="49.0">
          <items>
             <FXCollections fx:factory="observableArrayList">
@@ -204,15 +195,6 @@
             </Button>
          </children>
       </GridPane>
-      <Button fx:id="btnRefresh" layoutX="713.0" layoutY="17.0" mnemonicParsing="false" onAction="#refreshControl" prefHeight="20.0" prefWidth="60.0" style="-fx-border-color: #F3B664; -fx-background-color: white;" styleClass="round-box" AnchorPane.rightAnchor="507.0">
-         <graphic>
-            <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../icons/refresh.png" />
-               </image>
-            </ImageView>
-         </graphic>
-      </Button>
       <ComboBox fx:id="cbSapXep" layoutX="364.0" layoutY="17.0" prefHeight="20.0" prefWidth="274.0" promptText="Chọn cách sắp xếp" style="-fx-background-color: white; -fx-border-color: #F3B664;" styleClass="round-box" visible="false" AnchorPane.leftAnchor="364.0" AnchorPane.rightAnchor="641.6">
          <items>
             <FXCollections fx:factory="observableArrayList">
@@ -221,5 +203,15 @@
             </FXCollections>
          </items>
       </ComboBox>
+      <ImageView fitHeight="27.0" fitWidth="29.0" layoutX="648.0" layoutY="16.0" onMouseClicked="#btnTimKiem" pickOnBounds="true" preserveRatio="true" styleClass="image-hover-effect">
+         <image>
+            <Image url="@../icons/find.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="btnRefresh" fitHeight="27.0" fitWidth="27.0" layoutX="686.0" layoutY="16.0" onMouseClicked="#refreshControl" pickOnBounds="true" preserveRatio="true" styleClass="image-hover-effect">
+         <image>
+            <Image url="@../icons/refresh.png" />
+         </image>
+      </ImageView>
    </children>
 </AnchorPane>
