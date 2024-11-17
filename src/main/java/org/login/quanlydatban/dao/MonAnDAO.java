@@ -14,28 +14,7 @@ import javax.persistence.criteria.Root;
 import java.util.List;
 
 public class MonAnDAO {
-    private MonAn monAn;
     private List<MonAn> listMonAn;
-
-    public MonAn getOneMonAn(String maMon) {
-        Session session = HibernateUtils.getFactory().openSession();
-        Transaction transaction = null;
-        MonAn monAn = new MonAn();
-        try {
-            transaction = session.beginTransaction();
-            monAn = session.createQuery("FROM MonAn WHERE maMonAn = :maMonAn", MonAn.class)
-                    .setParameter("maMonAn", maMon)
-                    .uniqueResult();
-
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction != null) transaction.rollback();
-            e.printStackTrace(); // Xử lý ngoại lệ nếu có lỗi
-        } finally {
-            session.close();
-        }
-        return monAn;
-    }
 
     public List<MonAn> readAll() {
         Session session = HibernateUtils.getFactory().openSession();
@@ -53,17 +32,6 @@ public class MonAnDAO {
         return listMonAn;
     }
 
-    public MonAn getMonAnByID(String id) {
-        Session session = HibernateUtils.getFactory().openSession();
-        session.getTransaction().begin();
-
-        MonAn monAn = session.get(MonAn.class, id);
-
-        session.getTransaction().commit();
-        session.close();
-
-        return monAn;
-    }
     public List<MonAn> getAllMonAn() {
         List<MonAn> monAnList = null;
         Session session = HibernateUtils.getFactory().openSession();
@@ -169,6 +137,29 @@ public class MonAnDAO {
         } finally {
             session.close();
         }
+    }
+
+    public List<MonAn> getMonAnBy(String ten, double giaTT, double giaTD, String loai) {
+        Session session = HibernateUtils.getFactory().openSession();
+        session.getTransaction().begin();
+
+        List<MonAn> monAnList = session.createNativeQuery(
+                        "SELECT m.* FROM monan AS m " +
+                                "INNER JOIN loaimonan ON loaimonan.maLoaiMonAn = m.maLoaiMonAn " +
+                                "WHERE (:loai LIKE '' OR loaimonan.tenLoaiMonAn LIKE :loai) AND " +
+                                "(:ten LIKE '' OR m.tenMonAn LIKE :ten) AND " +
+                                "(:giaTT = 0 OR m.donGia >= :giaTT) AND " +
+                                "(:giaTD = 0 OR m.donGia <= :giaTD)", MonAn.class)
+                .setParameter("loai", "%" + loai + "%")
+                .setParameter("ten", "%" + ten + "%")
+                .setParameter("giaTT", giaTT)
+                .setParameter("giaTD", giaTD)
+                .getResultList();
+
+        session.getTransaction().commit();
+        session.close();
+
+        return monAnList;
     }
 
     public List<MonAn> getListMonAn() {

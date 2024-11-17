@@ -2,7 +2,6 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TableColumn?>
@@ -118,9 +117,7 @@
             <TableColumn fx:id="ghiChu" prefWidth="50.39990234375" text="NOTE" />
         </columns>
       </TableView>
-      <TextField layoutX="364.8" layoutY="17.0" prefHeight="26.0" prefWidth="244.0" promptText="Tìm kiếm..." styleClass="underlined-style" AnchorPane.leftAnchor="365.0" AnchorPane.rightAnchor="671.0" />
-      <ComboBox layoutX="88.8" layoutY="17.0" prefHeight="27.0" prefWidth="269.0" promptText="Chọn danh mục tìm kiếm" style="-fx-background-color: white; -fx-border-color: #F3B664;" styleClass="round-box" AnchorPane.leftAnchor="89.0" />
-      <ImageView fitHeight="29.0" fitWidth="29.0" layoutX="55.0" layoutY="16.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="55.0">
+      <ImageView fitHeight="29.0" fitWidth="29.0" layoutX="55.0" layoutY="16.0" onMouseClicked="#refreshSearch" pickOnBounds="true" preserveRatio="true" styleClass="image-hover-effect" AnchorPane.leftAnchor="55.0">
          <image>
             <Image url="@../icons/filter.png" />
          </image>
@@ -130,10 +127,27 @@
             <Image url="@../icons/turn-around.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="29.0" fitWidth="29.0" layoutX="615.0" layoutY="16.0" pickOnBounds="true" preserveRatio="true" styleClass="image-hover-effect" AnchorPane.rightAnchor="636.0">
+      <ImageView fitHeight="29.0" fitWidth="29.0" layoutX="615.0" layoutY="16.0" onMouseClicked="#timKiem" pickOnBounds="true" preserveRatio="true" styleClass="image-hover-effect" AnchorPane.rightAnchor="636.0">
          <image>
             <Image url="@../icons/find.png" />
          </image>
       </ImageView>
+      <GridPane hgap="20.0" layoutX="91.2" layoutY="6.0" prefHeight="51.0" prefWidth="513.0" AnchorPane.leftAnchor="91.0" AnchorPane.rightAnchor="676.0">
+        <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <TextField fx:id="timTheoGiaTT" onKeyTyped="#formatGia" promptText="Giá tối thiểu" styleClass="underlined-style" GridPane.columnIndex="1" />
+            <TextField fx:id="timTheoGiaTD" layoutX="10.0" layoutY="36.0" onKeyTyped="#formatGia" promptText="Giá tối đa" styleClass="underlined-style" GridPane.columnIndex="2" />
+            <TextField fx:id="timTheoTen" layoutX="122.0" layoutY="22.0" prefWidth="166.0" promptText="Tên món ăn" styleClass="underlined-style" />
+            <TextField fx:id="timTheoLoai" layoutX="278.0" layoutY="24.0" promptText="Loại món ăn" styleClass="underlined-style" GridPane.columnIndex="3" />
+         </children>
+      </GridPane>
    </children>
 </AnchorPane>
