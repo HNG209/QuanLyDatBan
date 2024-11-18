@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane onMouseClicked="#chonControl" prefHeight="208.0" prefWidth="159.0" stylesheets="@../stylesheets/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.login.quanlydatban.controller.CardMonAnThucDonController">
+<AnchorPane onMouseClicked="#chonControl" prefHeight="208.0" prefWidth="159.0" style="-fx-border-color: black;" stylesheets="@../stylesheets/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.login.quanlydatban.controller.CardMonAnThucDonController">
    <children>
       <ImageView fx:id="anhMonDisplay" fitHeight="142.0" fitWidth="127.0" layoutX="15.0" layoutY="9.0" pickOnBounds="true" preserveRatio="true">
          <image>
@@ -22,7 +22,6 @@
       <Label fx:id="giaTien" layoutX="16.0" layoutY="171.0" prefHeight="18.0" prefWidth="46.0" text="Giá tiền:" />
    </children>
    <styleClass>
-      <String fx:value="rounded-pane" />
       <String fx:value="gradient2" />
       <String fx:value="image-hover-effect" />
    </styleClass>

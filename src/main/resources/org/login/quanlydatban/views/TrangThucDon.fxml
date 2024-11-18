@@ -82,17 +82,17 @@
                </items>
             </ComboBox>
             <TextField fx:id="txtTenMonAn" layoutX="128.0" layoutY="20.0" prefHeight="26.0" prefWidth="398.0" styleClass="underlined-style" AnchorPane.rightAnchor="32.0" />
-            <Button fx:id="btnCapNhat" layoutX="33.0" layoutY="466.0" mnemonicParsing="false" onAction="#capNhatControl" prefHeight="30.0" prefWidth="238.0" styleClass="sunset-orange" text="Chỉnh sửa món" textFill="#0b0b0b">
+            <Button fx:id="btnCapNhat" layoutX="28.0" layoutY="466.0" mnemonicParsing="false" onAction="#capNhatControl" prefHeight="31.0" prefWidth="245.0" styleClass="sunset-orange" text="Chỉnh sửa món" textFill="#0b0b0b">
                <font>
                   <Font size="15.0" />
                </font>
             </Button>
-            <Button fx:id="btnXoaRong" layoutX="287.0" layoutY="466.0" mnemonicParsing="false" onAction="#xoaRongControl" prefHeight="30.0" prefWidth="238.0" styleClass="pale-lemon" text="Làm sạch bảng" textFill="#0b0b0b">
+            <Button fx:id="btnXoaRong" layoutX="279.0" layoutY="466.0" mnemonicParsing="false" onAction="#xoaRongControl" prefHeight="31.0" prefWidth="246.0" styleClass="pale-lemon" text="Làm sạch bảng" textFill="#0b0b0b">
                <font>
                   <Font size="15.0" />
                </font>
             </Button>
-            <Button fx:id="btnThemMon" layoutX="32.0" layoutY="511.0" mnemonicParsing="false" onAction="#themControl" prefHeight="30.0" prefWidth="494.0" styleClass="sage-green" stylesheets="@style.css" text="Thêm món ăn" textFill="#0b0b0b">
+            <Button fx:id="btnThemMon" layoutX="28.0" layoutY="511.0" mnemonicParsing="false" onAction="#themControl" prefHeight="31.0" prefWidth="498.0" styleClass="sage-green" stylesheets="@style.css" text="Thêm món ăn" textFill="#0b0b0b">
                <font>
                   <Font size="15.0" />
                </font>
