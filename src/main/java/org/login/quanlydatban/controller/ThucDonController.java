@@ -81,8 +81,8 @@ public class ThucDonController implements Initializable {
     @FXML
     private Button btnThemMon;
 
-    @FXML
-    private Button btnXoaMon;
+//    @FXML
+//    private Button btnXoaMon;
 
     @FXML
     private Button btnCapNhat;
@@ -287,37 +287,37 @@ public class ThucDonController implements Initializable {
         }
     }
 
-    @FXML
-    void xoaControl(ActionEvent event) {
-        Object source = event.getSource();
-        if (source == btnXoaMon) {
-            try{
-                if (monAn == null) {
-                    showWarn("Bạn cần chọn một món để xóa!");
-                }
-                else {
-                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                    alert.setTitle("XÁC NHẬN XÓA");
-                    alert.setHeaderText("Bạn có chắc chắn muốn xóa món này?");
-
-                    ButtonType result = alert.showAndWait().orElse(ButtonType.CANCEL);
-                    if (result == ButtonType.OK) {
-                        monAnDAO.xoaMonAn(monAn.getMaMonAn());
-                        showWarn("Đã xóa thành công!");
-                        refreshControl(event);
-                        xoaRongControl(event);
-                    }
-                    else {
-                        System.out.println("Delete cancel");
-                    }
-
-                }
-            } catch (Exception e) {
-                System.out.println(e);
-            }
-
-        }
-    }
+//    @FXML
+//    void xoaControl(ActionEvent event) {
+//        Object source = event.getSource();
+//        if (source == btnXoaMon) {
+//            try{
+//                if (monAn == null) {
+//                    showWarn("Bạn cần chọn một món để xóa!");
+//                }
+//                else {
+//                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+//                    alert.setTitle("XÁC NHẬN XÓA");
+//                    alert.setHeaderText("Bạn có chắc chắn muốn xóa món này?");
+//
+//                    ButtonType result = alert.showAndWait().orElse(ButtonType.CANCEL);
+//                    if (result == ButtonType.OK) {
+//                        monAnDAO.xoaMonAn(monAn.getMaMonAn());
+//                        showWarn("Đã xóa thành công!");
+//                        refreshControl(event);
+//                        xoaRongControl(event);
+//                    }
+//                    else {
+//                        System.out.println("Delete cancel");
+//                    }
+//
+//                }
+//            } catch (Exception e) {
+//                System.out.println(e);
+//            }
+//
+//        }
+//    }
 
     @FXML
     void capNhatControl(ActionEvent event) {
@@ -380,7 +380,7 @@ public class ThucDonController implements Initializable {
         Image imageXoaRong = new Image(getClass().getResource("/org/login/quanlydatban/icons/restaurant.png").toExternalForm());
 
         Object source = event.getSource();
-        if (source == btnXoaRong || source == btnXoaMon) {
+        if (source == btnXoaRong) {
             setMonAn(null);
             txtTenMonAn.requestFocus();
             txtTenMonAn.setText("");
@@ -539,7 +539,7 @@ public class ThucDonController implements Initializable {
     @FXML
     void refreshControl(Event event) {
         Object source = event.getSource();
-        if (source == btnRefresh || source == btnThemMon || source == btnXoaMon || source == btnCapNhat) {
+        if (source == btnRefresh || source == btnThemMon || source == btnCapNhat) {
             flowPane.getChildren().clear(); // Clear existing items
 
             List<MonAn> monAnList = monAnDAO.getAllMonAn(); // Retrieve the latest data from the database
