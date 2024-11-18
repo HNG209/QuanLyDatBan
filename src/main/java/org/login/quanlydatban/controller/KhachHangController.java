@@ -102,26 +102,29 @@ public class KhachHangController {
 
         tableKhachHang.setItems(data);
         themDuLieuVaoBangKhachHang();
-        tableKhachHang.setOnMouseClicked(event -> {
-            KhachHang selectedCustomer = tableKhachHang.getSelectionModel().getSelectedItem();
-            if (selectedCustomer != null) {
-                txtMaKH.setText(selectedCustomer.getMaKhachHang());
-                txtTenKH.setText(selectedCustomer.getTenKhachHang());
-                txtSDT.setText(selectedCustomer.getSdt());
-                txtEmail.setText(selectedCustomer.getEmail());
-                txtDiaChi.setText(selectedCustomer.getDiaChi());
-                txtCCCD.setText(selectedCustomer.getCccd());
-                txtDTL.setText(String.valueOf(selectedCustomer.getDiemTichLuy()));
-            }
-        });
-
     }
+    @FXML
+    public void onCustomerSelected() {
+
+        KhachHang selectedCustomer = tableKhachHang.getSelectionModel().getSelectedItem();
+
+        if (selectedCustomer != null) {
+            txtMaKH.setText(selectedCustomer.getMaKhachHang());
+            txtTenKH.setText(selectedCustomer.getTenKhachHang());
+            txtSDT.setText(selectedCustomer.getSdt());
+            txtEmail.setText(selectedCustomer.getEmail());
+            txtDiaChi.setText(selectedCustomer.getDiaChi());
+            txtCCCD.setText(selectedCustomer.getCccd());
+            txtDTL.setText(String.valueOf(selectedCustomer.getDiemTichLuy()));
+        }
+    }
+
     @FXML
     public void timKiemKhachHang() {
         String maKH = txtTimMaKH.getText().trim();
         String sdt = txtTimSDT.getText().trim();
         ObservableList<KhachHang> khachHangList = tableKhachHang.getItems();
-        boolean timTay = false;
+        boolean timThay = false;
         if(maKH.isEmpty() && sdt.isEmpty()) {
             JOptionPane.showMessageDialog(null,
                     "Vui lòng nhập thông tin khách hàng cần tìm",
@@ -135,13 +138,14 @@ public class KhachHangController {
             if (trungKhop) {
                 tableKhachHang.getSelectionModel().select(kh);
                 tableKhachHang.scrollTo(kh);
-                timTay = true;
+                onCustomerSelected();
+                timThay = true;
                 break;
             }
 
         }
 
-        if (!timTay) {
+        if (!timThay) {
             JOptionPane.showMessageDialog(null, "Không tìm thấy khách hàng với thông tin đã nhập.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
             tableKhachHang.getSelectionModel().clearSelection();
         }
@@ -182,6 +186,7 @@ public class KhachHangController {
 
     @FXML
     public void themKhachHang() {
+        // Check if ID is already populated (should be empty for new customers)
         if (!txtMaKH.getText().isEmpty()) {
             JOptionPane.showMessageDialog(null,
                     "Vui lòng nhấn 'Làm mới' và nhập thông tin khách hàng để thêm mới.",
@@ -189,26 +194,13 @@ public class KhachHangController {
                     JOptionPane.WARNING_MESSAGE);
             return;
         }
+
         if (!validateInput()) {
             return;
         }
-
         try {
-            KhachHang kh = khachHangDAO.layKhachHangDauTienTheoNam();
-            String ma = null;
-            int maKH = 0;
-            if(kh == null) {
-                ma = "KH" + LocalDate.now().getYear() + "0001";
-
-            }
-            else{
-                maKH = Integer.parseInt(kh.getMaKhachHang().substring(kh.getMaKhachHang().length() - 4)) + 1;
-                ma = kh.getMaKhachHang().substring(0,6) + df.format(maKH);
-            }
-
-
             KhachHang khachHang = new KhachHang(
-                    ma,
+                    null,
                     txtTenKH.getText().trim(),
                     txtSDT.getText().trim(),
                     txtCCCD.getText().trim(),
@@ -216,23 +208,24 @@ public class KhachHangController {
                     txtEmail.getText().trim(),
                     0
             );
+            KhachHang kh = khachHangDAO.themKhachHang(khachHang);
 
-            if (khachHangDAO.themKhachHang(khachHang)) {
+            if (kh != null) {
                 themDuLieuVaoBangKhachHang();
                 lamMoi();
                 JOptionPane.showMessageDialog(null, "Thêm khách hàng thành công", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
-
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Có lỗi xảy ra khi thêm khách hàng.", "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
     }
+
 
     private boolean validateInput() {
         String sdtRegex = "^(09|03|02|04)\\d{8}$";
         String emailRegex = "^[A-Za-z0-9+_.-]+@(.+)$";
         String cccdRegex = "^\\d{3}[0-9][0-9]\\d{7}$";
-        String tenRegex = "/^[A-Z][a-zA-Z]*( [A-Z][a-zA-Z]*)*$/";
+        String tenRegex = "^[A-Z][a-zA-Z]*( [A-Z][a-zA-Z]*)*$";
         String diaChiRegex = "^[A-Z0-9][a-zA-Z0-9/]*( [A-Z0-9][a-zA-Z0-9/]*)*$";
 
         if (!txtTenKH.getText().matches(tenRegex)) {
@@ -267,13 +260,13 @@ public class KhachHangController {
         for (Object[] row : dsKhachHang) {
 
             KhachHang khachHang = new KhachHang(
-                    row[0].toString(), // MaKhachHang
-                    row[1].toString(), // TenKhachHang
-                    row[2].toString(), // Sdt
-                    row[5].toString(), // Email
-                    row[4].toString(), // DiaChi
-                    row[3].toString(), // CCCD
-                    Integer.parseInt(row[6].toString()) // DiemTichLuy
+                    row[0].toString(),
+                    row[1].toString(),
+                    row[2].toString(),
+                    row[5].toString(),
+                    row[4].toString(),
+                    row[3].toString(),
+                    Integer.parseInt(row[6].toString())
             );
 
             tableKhachHang.getItems().add(khachHang);
@@ -295,6 +288,7 @@ public class KhachHangController {
     public void lamMoiTimKiem() {
         txtTimMaKH.clear();
         txtTimSDT.clear();
+        lamMoi();
     }
 
 

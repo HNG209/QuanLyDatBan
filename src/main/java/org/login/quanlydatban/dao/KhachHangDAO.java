@@ -8,7 +8,6 @@ import org.login.quanlydatban.hibernate.HibernateUtils;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import javax.swing.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,24 +42,13 @@ public class KhachHangDAO {
 
         return resultList;
     }
-    public boolean themKhachHang(KhachHang khachHang) {
+    public KhachHang themKhachHang(KhachHang khachHang) {
         Session session = HibernateUtils.getFactory().openSession();
-        Transaction transaction = null;
-
-        try {
-            transaction = session.beginTransaction();
-            session.save(khachHang);
-            transaction.commit();
-            return true;
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            e.printStackTrace();
-            return false;
-        } finally {
-            session.close();
-        }
+        session.getTransaction().begin();
+        session.persist(khachHang);
+        session.getTransaction().commit();
+        session.close();
+        return khachHang;
     }
     public boolean suaKhachHang(KhachHang khachHang) {
         Session session = HibernateUtils.getFactory().openSession();

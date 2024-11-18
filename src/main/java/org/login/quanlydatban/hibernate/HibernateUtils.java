@@ -7,6 +7,7 @@ import org.hibernate.cfg.Environment;
 import org.hibernate.service.ServiceRegistry;
 import org.login.quanlydatban.entity.*;
 import org.login.quanlydatban.entity.keygenerator.DailyCounter;
+import org.login.quanlydatban.entity.keygenerator.DailyCustomerCounter;
 
 import java.util.Properties;
 
@@ -37,7 +38,7 @@ public class HibernateUtils {
         configuration.addAnnotatedClass(ChiTietHoaDon.class);
         configuration.addAnnotatedClass(LichDat.class);
         configuration.addAnnotatedClass(DailyCounter.class);
-
+        configuration.addAnnotatedClass(DailyCustomerCounter.class);
         ServiceRegistry registry = new StandardServiceRegistryBuilder()
                 .applySettings(configuration.getProperties())   
                 .build();

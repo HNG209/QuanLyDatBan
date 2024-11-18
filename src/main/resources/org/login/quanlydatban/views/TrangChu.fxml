@@ -144,4 +144,12 @@
          </children>
       </VBox>
    </top>
+   <center>
+      <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+            <AnchorPane layoutX="-2.0" layoutY="5.0" prefHeight="624.0" prefWidth="839.0" style="-fx-background-color: black;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="-0.0" AnchorPane.rightAnchor="440.0" AnchorPane.topAnchor="0.0" />
+            <AnchorPane layoutX="849.0" prefHeight="626.0" prefWidth="430.0" styleClass="sage-green" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+         </children>
+      </AnchorPane>
+   </center>
 </BorderPane>

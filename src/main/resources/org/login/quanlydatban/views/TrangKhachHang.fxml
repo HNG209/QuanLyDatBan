@@ -66,7 +66,7 @@
                 <Insets left="10.0" right="10.0" />
             </padding>
         </HBox>
-        <AnchorPane layoutX="752.8" layoutY="76.0" prefHeight="550.0" prefWidth="518.0" style="-fx-border-color: black;" stylesheets="@../stylesheets/style.css" AnchorPane.bottomAnchor="9.0" AnchorPane.rightAnchor="11.0" AnchorPane.topAnchor="76.0">
+        <AnchorPane layoutX="752.8" layoutY="76.0" prefHeight="550.0" prefWidth="518.0" style="-fx-border-color: black;" stylesheets="@../stylesheets/style.css" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="76.0">
             <children>
                   <GridPane layoutX="16.8" layoutY="7.2" prefHeight="458.0" prefWidth="486.0" AnchorPane.bottomAnchor="87.0" AnchorPane.leftAnchor="16.0" AnchorPane.rightAnchor="16.0" AnchorPane.topAnchor="6.0">
                       <columnConstraints>
@@ -146,7 +146,7 @@
                 <String fx:value="gradient2" />
             </styleClass>
         </AnchorPane>
-        <TableView fx:id="tableKhachHang" layoutX="11.2" layoutY="132.8" prefHeight="550.0" prefWidth="715.0" style="-fx-border-color: black;" styleClass="round-box" stylesheets="@../stylesheets/style.css" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="11.0" AnchorPane.rightAnchor="554.0" AnchorPane.topAnchor="74.20000000000005">
+        <TableView fx:id="tableKhachHang" layoutX="11.2" layoutY="132.8" onMouseClicked="#onCustomerSelected" prefHeight="550.0" prefWidth="715.0" style="-fx-border-color: black;" styleClass="round-box" stylesheets="@../stylesheets/style.css" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="554.0" AnchorPane.topAnchor="74.20000000000005">
             <columns>
                 <TableColumn fx:id="colmaKH" prefWidth="95.73335528373718" text="Mã khách hàng" />
                 <TableColumn fx:id="colTenKH" prefWidth="127.60000610351562" text="Tên khách hàng" />
