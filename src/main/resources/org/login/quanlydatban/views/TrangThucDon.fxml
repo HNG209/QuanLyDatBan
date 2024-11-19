@@ -27,7 +27,7 @@
                <font>
                   <Font size="15.0" />
                </font></Label>
-            <TextArea fx:id="txfMoTa" layoutX="114.0" layoutY="400.0" prefHeight="55.0" prefWidth="398.0" styleClass="round-box" text="Nếu có&#10;" AnchorPane.bottomAnchor="110.0" AnchorPane.rightAnchor="33.0" AnchorPane.topAnchor="399.0" />
+            <TextArea fx:id="txfMoTa" layoutX="114.0" layoutY="400.0" prefHeight="55.0" prefWidth="398.0" promptText="Nếu có" styleClass="round-box" AnchorPane.bottomAnchor="110.0" AnchorPane.rightAnchor="33.0" AnchorPane.topAnchor="399.0" />
             <Label layoutX="33.0" layoutY="254.0" prefHeight="18.0" prefWidth="87.0" text="Hình ảnh:">
                <font>
                   <Font size="15.0" />
@@ -41,12 +41,12 @@
                <font>
                   <Font size="15.0" />
                </font></Button>
-            <TextField fx:id="txtGia" layoutX="129.0" layoutY="199.0" prefHeight="26.0" prefWidth="398.0" styleClass="underlined-style" text="Vui lòng nhập" />
+            <TextField fx:id="txtGia" layoutX="129.0" layoutY="199.0" prefHeight="26.0" prefWidth="398.0" promptText="Vui lòng nhập" styleClass="underlined-style" />
             <Label layoutX="33.0" layoutY="202.0" prefHeight="18.0" prefWidth="87.0" text="Giá:">
                <font>
                   <Font size="15.0" />
                </font></Label>
-            <TextField fx:id="txtDonViTinh" layoutX="129.0" layoutY="156.0" prefHeight="26.0" prefWidth="398.0" styleClass="underlined-style" text="Vui lòng nhập" />
+            <TextField fx:id="txtDonViTinh" layoutX="129.0" layoutY="156.0" prefHeight="26.0" prefWidth="398.0" promptText="Vui lòng nhập" styleClass="underlined-style" />
             <Label layoutX="33.0" layoutY="159.0" prefHeight="18.0" prefWidth="87.0" text="Đơn vị tính:">
                <font>
                   <Font size="15.0" />
@@ -81,18 +81,18 @@
                   </FXCollections>
                </items>
             </ComboBox>
-            <TextField fx:id="txtTenMonAn" layoutX="128.0" layoutY="20.0" prefHeight="26.0" prefWidth="398.0" styleClass="underlined-style" text="Vui lòng nhập" AnchorPane.rightAnchor="32.0" />
-            <Button fx:id="btnCapNhat" layoutX="28.0" layoutY="466.0" mnemonicParsing="false" onAction="#capNhatControl" prefHeight="31.0" prefWidth="245.0" styleClass="sunset-orange" text="Chỉnh sửa món" textFill="#0b0b0b">
+            <TextField fx:id="txtTenMonAn" layoutX="128.0" layoutY="20.0" prefHeight="26.0" prefWidth="398.0" promptText="Vui lòng nhập" styleClass="underlined-style" AnchorPane.rightAnchor="32.0" />
+            <Button fx:id="btnCapNhat" layoutX="28.0" layoutY="466.0" mnemonicParsing="false" onAction="#capNhatControl" prefHeight="31.0" prefWidth="245.0" styleClass="sunset-orange" text="Chỉnh sửa món" textFill="#0b0b0b" AnchorPane.bottomAnchor="67.3999999999999" AnchorPane.leftAnchor="28.0" AnchorPane.rightAnchor="284.0">
                <font>
                   <Font size="15.0" />
                </font>
             </Button>
-            <Button fx:id="btnXoaRong" layoutX="279.0" layoutY="466.0" mnemonicParsing="false" onAction="#xoaRongControl" prefHeight="31.0" prefWidth="246.0" styleClass="pale-lemon" text="Làm sạch bảng" textFill="#0b0b0b">
+            <Button fx:id="btnXoaRong" layoutX="279.0" layoutY="466.0" mnemonicParsing="false" onAction="#xoaRongControl" prefHeight="31.0" prefWidth="246.0" styleClass="pale-lemon" text="Làm sạch bảng" textFill="#0b0b0b" AnchorPane.bottomAnchor="67.3999999999999" AnchorPane.leftAnchor="279.0" AnchorPane.rightAnchor="31.99999999999997">
                <font>
                   <Font size="15.0" />
                </font>
             </Button>
-            <Button fx:id="btnThemMon" layoutX="28.0" layoutY="511.0" mnemonicParsing="false" onAction="#themControl" prefHeight="31.0" prefWidth="498.0" styleClass="sage-green" stylesheets="@style.css" text="Thêm món ăn" textFill="#0b0b0b">
+            <Button fx:id="btnThemMon" layoutX="28.0" layoutY="511.0" mnemonicParsing="false" onAction="#themControl" prefHeight="31.0" prefWidth="498.0" styleClass="sage-green" stylesheets="@style.css" text="Thêm món ăn" textFill="#0b0b0b" AnchorPane.bottomAnchor="22.39999999999991" AnchorPane.leftAnchor="28.0" AnchorPane.rightAnchor="31.200000000000045">
                <font>
                   <Font size="15.0" />
                </font>
@@ -130,12 +130,12 @@
             </FXCollections>
          </items>
       </ComboBox>
-      <ImageView fitHeight="27.0" fitWidth="29.0" layoutX="648.0" layoutY="16.0" onMouseClicked="#btnTimKiem" pickOnBounds="true" preserveRatio="true" styleClass="image-hover-effect">
+      <ImageView fitHeight="27.0" fitWidth="29.0" layoutX="648.0" layoutY="16.0" onMouseClicked="#btnTimKiem" pickOnBounds="true" preserveRatio="true" styleClass="image-hover-effect" AnchorPane.rightAnchor="605.0">
          <image>
             <Image url="@../icons/find.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="btnRefresh" fitHeight="27.0" fitWidth="27.0" layoutX="686.0" layoutY="16.0" onMouseClicked="#refreshControl" pickOnBounds="true" preserveRatio="true" styleClass="image-hover-effect">
+      <ImageView fx:id="btnRefresh" fitHeight="27.0" fitWidth="27.0" layoutX="686.0" layoutY="16.0" onMouseClicked="#refreshControl" pickOnBounds="true" preserveRatio="true" styleClass="image-hover-effect" AnchorPane.rightAnchor="566.6">
          <image>
             <Image url="@../icons/refresh.png" />
          </image>
