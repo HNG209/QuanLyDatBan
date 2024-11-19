@@ -10,6 +10,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -32,6 +33,7 @@ import org.login.quanlydatban.entity.enums.TrangThaiHoaDon;
 import org.login.quanlydatban.entity.keygenerator.CTHDCompositeKey;
 import org.login.quanlydatban.hibernate.HibernateUtils;
 import org.login.quanlydatban.notification.Notification;
+import org.login.quanlydatban.utilities.NumberFormatter;
 
 import java.io.IOException;
 import java.net.URL;
@@ -47,9 +49,6 @@ public class DatMonController implements Initializable {
 
     @FXML
     private ScrollPane scrollPane;
-
-    @FXML
-    private AnchorPane anchorPane;
 
     @FXML
     private TextField banID;
@@ -73,6 +72,12 @@ public class DatMonController implements Initializable {
 
     @FXML
     private TextField tienTraLai;
+
+    @FXML
+    private TextField sdt;
+
+    @FXML
+    private TextField tenKhachHang;
 
     @FXML
     private TextField phuThu;
@@ -107,6 +112,18 @@ public class DatMonController implements Initializable {
     @FXML
     private TableColumn<Object[], Void> tang;
 
+    @FXML
+    private TextField timTheoGiaTD;
+
+    @FXML
+    private TextField timTheoGiaTT;
+
+    @FXML
+    private TextField timTheoLoai;
+
+    @FXML
+    private TextField timTheoTen;
+
     private ObservableList<Object[]> objectsObservableList;
 
     private Ban ban;
@@ -121,6 +138,26 @@ public class DatMonController implements Initializable {
     private Stage chuyenBanStage;
     private double tkd = 0.0;
     private double pt = 0.0;
+
+//    private static Parent root;
+//    private static DatMonController instance;
+//
+//    public static DatMonController getInstance() throws IOException {
+//        if(instance == null)
+//            instance = loadTrangDatMon();
+//        return instance;
+//    }
+//
+//    private static DatMonController loadTrangDatMon() throws IOException {
+//        FXMLLoader loader = new FXMLLoader(ChonBanController.class.getResource("/org/login/quanlydatban/views/TrangDatMon.fxml"));
+//        root = loader.load();
+//        return loader.getController();
+//    }
+//
+//    public Parent getRoot() {
+//        return root;
+//    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
@@ -177,7 +214,7 @@ public class DatMonController implements Initializable {
 
                 Popup popup = new Popup();
                 Pane widgetPane = new VBox(10); // Using VBox to organize the layout
-                widgetPane.setStyle("-fx-background-color: lightgrey; -fx-padding: 10px; -fx-border-color: grey; -fx-border-width: 1px;");
+                widgetPane.setStyle("-fx-alignment: center;-fx-background-color: lightgrey; -fx-padding: 10px; -fx-border-color: grey; -fx-border-width: 1px;");
 
                 // Add a TextArea to the widget pane
                 TextArea textArea = new TextArea();
@@ -229,6 +266,7 @@ public class DatMonController implements Initializable {
                     }
                 });
 
+                button.setStyle("-fx-background-color: #F1EB90;");
                 pane.getChildren().add(button);
                 pane.setStyle("-fx-alignment: center;"); // Center the button within the StackPane
             }
@@ -259,7 +297,7 @@ public class DatMonController implements Initializable {
                     chiTietHoaDonDAO.deleteChiTietHoaDon(hoaDon.getMaHoaDon(), String.valueOf(objects[0]));
                     getTableView().getItems().remove(getIndex());
                     capNhatTongTien();
-
+                    capNhatTienTraLai();
                 });
 
                 button.setStyle("-fx-background-color: #F3B664");
@@ -299,7 +337,7 @@ public class DatMonController implements Initializable {
                     orderTable.refresh();
 
                     capNhatTongTien();
-
+                    capNhatTienTraLai();
                 });
 
                 button.setStyle("-fx-background-color: #9FBB73");
@@ -341,6 +379,7 @@ public class DatMonController implements Initializable {
                     orderTable.refresh();
 
                     capNhatTongTien();
+                    capNhatTienTraLai();
                 });
 
                 button.setStyle("-fx-background-color: #F3B664");
@@ -397,7 +436,7 @@ public class DatMonController implements Initializable {
     }
 
     public void capNhatTongTien() {
-        tongTienTxt.setText(String.valueOf(hoaDon.tinhTongTien()));
+        tongTienTxt.setText(NumberFormatter.formatPrice(String.valueOf((int) hoaDon.tinhTongTien())));
     }
 
     public void setBan(Ban ban) {
@@ -426,6 +465,9 @@ public class DatMonController implements Initializable {
         return this.ban;
     }
 
+    public void refresh() {
+        orderTable.getItems().clear();
+    }
     public void setHoaDon(HoaDon hoaDon) {
         this.hoaDon = hoaDon;
         chiTietHoaDonDAO.getCTHDfromHD(hoaDon).forEach(
@@ -551,13 +593,15 @@ public class DatMonController implements Initializable {
 
     @FXML
     void back(MouseEvent event) throws IOException {
-        if(anchorPane.getParent() instanceof BorderPane){
-            BorderPane pane = (BorderPane) anchorPane.getParent();
-
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/TrangChonBan.fxml"));
-            AnchorPane anchorPane = loader.load();
-            pane.setCenter(anchorPane);
-        }
+//        if(anchorPane.getParent() instanceof BorderPane){
+//            BorderPane pane = (BorderPane) anchorPane.getParent();
+//
+//            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/TrangChonBan.fxml"));
+//            AnchorPane anchorPane = loader.load();
+//            pane.setCenter(anchorPane);
+//        }
+        ChonBanController.getInstance().refresh();
+        TrangChuController.getBorderPaneStatic().setCenter(ChonBanController.getInstance().getRoot());
     }
 
     public void themChiTietHoaDon(MonAn monAn){//tao 1 lan
@@ -602,34 +646,126 @@ public class DatMonController implements Initializable {
     void tinhTienTraLai(KeyEvent event) {
         if(hoaDon != null){
             if(event.getSource().equals(tienKhachDua)){
-                System.out.println(0);
-                if (tienKhachDua.getText().matches("\\d+"))
-                    tkd = Double.parseDouble(tienKhachDua.getText());
+                if(tienKhachDua.getText().equals(""))
+                    return;
+                tienKhachDua.setText(NumberFormatter.formatPrice(tienKhachDua.getText()));
+                tienKhachDua.positionCaret(tienKhachDua.getText().length());
+
+                if (tienKhachDua.getText().replace(".", "").matches("\\d+"))
+                    tkd = Double.parseDouble(tienKhachDua.getText().replace(".", ""));
                 else {
                     Notification.thongBao("Chỉ được nhập số", Alert.AlertType.INFORMATION);
                     tienKhachDua.setText(tienKhachDua.getText().substring(0, tienKhachDua.getLength() - 1));
+                    tienKhachDua.setText(NumberFormatter.formatPrice(tienKhachDua.getText()));
                     tienKhachDua.positionCaret(tienKhachDua.getText().length());
+                    capNhatTienTraLai();
                 }
             }
             else {
-                if (phuThu.getText().matches("\\d+"))
-                    pt = Double.parseDouble(phuThu.getText());
+                if (phuThu.getText().equals("")){
+                    pt = 0.0;
+                    capNhatTienTraLai();
+                    return;
+                }
+
+                phuThu.setText(NumberFormatter.formatPrice(phuThu.getText()));
+                phuThu.positionCaret(phuThu.getText().length());
+
+                if (phuThu.getText().replace(".", "").matches("\\d+"))
+                    pt = Double.parseDouble(phuThu.getText().replace(".", ""));
                 else {
-                    System.out.println(phuThu.getText());
                     Notification.thongBao("Chỉ được nhập số", Alert.AlertType.INFORMATION);
                     phuThu.setText(phuThu.getText().substring(0, phuThu.getLength() - 1));
+                    phuThu.setText(NumberFormatter.formatPrice(phuThu.getText()));
                     phuThu.positionCaret(phuThu.getText().length());
+                    capNhatTienTraLai();
                 }
             }
-            System.out.println(tkd);
-            System.out.println(hoaDon.getTongTien() + pt);
 
             if (tkd >= (hoaDon.getTongTien() + pt)){
-                tienTraLai.setText(String.valueOf(tkd - (hoaDon.getTongTien() + pt)));
+                tienTraLai.setText(NumberFormatter.formatPrice(String.valueOf((int) (tkd - (hoaDon.getTongTien() + pt)))));
             }
             else tienTraLai.setText("Tiền khách đưa phải lớn hơn hoặc bằng tổng tiền");
         }
+        else {
+            tienKhachDua.clear();
+            phuThu.clear();
+            Notification.thongBao("Hãy lập hoá đơn trước khi nhập", Alert.AlertType.INFORMATION);
+        }
+    }
+
+    public void capNhatTienTraLai() {
+        if (hoaDon != null) {
+            if (tkd >= (hoaDon.getTongTien() + pt)) {
+                tienTraLai.setText(NumberFormatter.formatPrice(String.valueOf((int) (tkd - (hoaDon.getTongTien() + pt)))));
+            } else tienTraLai.setText("Tiền khách đưa phải lớn hơn hoặc bằng tổng tiền");
+        }
         else Notification.thongBao("Hãy lập hoá đơn trước khi nhập", Alert.AlertType.INFORMATION);
+    }
+
+    @FXML
+    void timKiem(MouseEvent event) {
+        String tenMon = timTheoTen.getText();
+        String loaiMon = timTheoLoai.getText();
+        double giaTT = timTheoGiaTT.getText().isEmpty() ? 0.0 : Double.parseDouble(timTheoGiaTT.getText().replace(".", ""));
+        double giaTD = timTheoGiaTD.getText().isEmpty() ? 0.0 : Double.parseDouble(timTheoGiaTD.getText().replace(".", ""));
+
+        flowPane.getChildren().clear();
+        for (MonAn i : monAnDAO.getMonAnBy(tenMon, giaTT, giaTD, loaiMon)) {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/uicomponents/CardMonAn_TrangDatMon.fxml"));
+            try {
+                AnchorPane pane = loader.load();
+
+                CardMonAnController controller = loader.getController();
+                controller.setMonAn(i, this);
+                controller.setController(this);
+                flowPane.getChildren().add(pane);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    @FXML
+    void refreshSearch(MouseEvent event) {
+        timTheoTen.clear();
+        timTheoLoai.clear();
+        timTheoGiaTT.clear();
+        timTheoGiaTD.clear();
+
+        this.timKiem(event);
+    }
+
+    @FXML
+    void formatGia(KeyEvent event) {
+        if(event.getSource().equals(timTheoGiaTT)){
+            if(timTheoGiaTT.getText().equals(""))
+                return;
+            timTheoGiaTT.setText(NumberFormatter.formatPrice(timTheoGiaTT.getText()));
+            timTheoGiaTT.positionCaret(timTheoGiaTT.getText().length());
+
+            if (!timTheoGiaTT.getText().replace(".", "").matches("\\d+"))
+            {
+                Notification.thongBao("Chỉ được nhập số", Alert.AlertType.INFORMATION);
+                timTheoGiaTT.setText(timTheoGiaTT.getText().substring(0, timTheoGiaTT.getLength() - 1));
+                timTheoGiaTT.setText(NumberFormatter.formatPrice(timTheoGiaTT.getText()));
+                timTheoGiaTT.positionCaret(timTheoGiaTT.getText().length());
+            }
+        }
+        else {
+            if(timTheoGiaTD.getText().equals(""))
+                return;
+            timTheoGiaTD.setText(NumberFormatter.formatPrice(timTheoGiaTD.getText()));
+            timTheoGiaTD.positionCaret(timTheoGiaTD.getText().length());
+
+            if (!timTheoGiaTD.getText().replace(".", "").matches("\\d+"))
+            {
+                Notification.thongBao("Chỉ được nhập số", Alert.AlertType.INFORMATION);
+                timTheoGiaTD.setText(timTheoGiaTD.getText().substring(0, timTheoGiaTD.getLength() - 1));
+                timTheoGiaTD.setText(NumberFormatter.formatPrice(timTheoGiaTD.getText()));
+                timTheoGiaTD.positionCaret(timTheoGiaTD.getText().length());
+            }
+        }
     }
 
     public HoaDon getHoaDon() {

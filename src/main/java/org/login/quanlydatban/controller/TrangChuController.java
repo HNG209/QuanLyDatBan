@@ -58,16 +58,19 @@ public class TrangChuController implements Initializable {
     @FXML
     public void datMon() throws IOException {
         //first go to chonBan -> datMon
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/TrangChonBan.fxml"));
-        AnchorPane anchorPane = loader.load();
+//        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/TrangChonBan.fxml"));
+//        AnchorPane anchorPane = loader.load();
+//
+//        ChonBanController controller = loader.getController();
 
-        ChonBanController controller = loader.getController();
-        System.out.println(taiKhoan.getNhanVien());
+        borderPane.setCenter(ChonBanController.getInstance().getRoot());
 
-        borderPane.setCenter(anchorPane);
+        ChonBanController.getInstance().refresh();
 
-        anchorPane.prefWidthProperty().bind(borderPane.widthProperty());
-        anchorPane.prefHeightProperty().bind(borderPane.heightProperty());
+        AnchorPane pane = (AnchorPane) ChonBanController.getInstance().getRoot();
+
+        pane.prefWidthProperty().bind(borderPane.widthProperty());
+        pane.prefHeightProperty().bind(borderPane.heightProperty());
     }
 
 

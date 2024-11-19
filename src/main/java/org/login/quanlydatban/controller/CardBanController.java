@@ -4,12 +4,16 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import org.login.quanlydatban.dao.HoaDonDAO;
 import org.login.quanlydatban.entity.Ban;
 import org.login.quanlydatban.entity.HoaDon;
@@ -31,6 +35,9 @@ public class CardBanController implements Initializable {
     private Label loaiBan;
 
     @FXML
+    private Button chuyenBan;
+
+    @FXML
     private Label maBan;
 
     @FXML
@@ -43,6 +50,8 @@ public class CardBanController implements Initializable {
     private Label trangThai;
     private Ban ban;
     private HoaDonDAO hoaDonDAO;
+
+    private Stage currentStage;
     @FXML
     void chonBan(ActionEvent event) throws IOException {
         if(ban.getTrangThaiBan() != TrangThaiBan.TAM_NGUNG_PHUC_VU) {
@@ -81,16 +90,19 @@ public class CardBanController implements Initializable {
             case BAN_TRONG:
                 img = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/org/login/quanlydatban/icons/bantrong.png")));
                 this.image.setImage(img);
+                this.chuyenBan.setDisable(true);
                 this.anchorPane.getStyleClass().add("sage-green");
                 break;
             case DANG_PHUC_VU:
                 img = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/org/login/quanlydatban/icons/bandangphucvu.png")));
                 this.image.setImage(img);
+                this.chuyenBan.setDisable(false);
                 this.anchorPane.getStyleClass().add("pale-lemon");
                 break;
             case TAM_NGUNG_PHUC_VU:
                 img = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/org/login/quanlydatban/icons/banhong.png")));
                 this.image.setImage(img);
+                this.chuyenBan.setDisable(true);
                 this.anchorPane.getStyleClass().add("light-coral");
                 break;
             default:
@@ -101,8 +113,27 @@ public class CardBanController implements Initializable {
         }
     }
     @FXML
-    void chuyenBan(ActionEvent event) {
-        System.out.println("chuyen");
+    void chuyenBan(ActionEvent event) throws IOException {
+        if(ban.getTrangThaiBan() == TrangThaiBan.DANG_PHUC_VU){
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/TrangChuyenBan.fxml"));
+            Scene scene = new Scene(loader.load());
+            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/org/login/quanlydatban/stylesheets/style.css")).toExternalForm());
+
+            ChuyenBanController chuyenBanController = loader.getController();
+            chuyenBanController.setBanHienTai(ban);
+            chuyenBanController.setCurrentHD(hoaDonDAO.getHoaDonFromBan(ban).get(0));
+
+            if(currentStage == null){
+                currentStage = new Stage();
+                currentStage.setScene(scene);
+                currentStage.initStyle(StageStyle.UNDECORATED);
+                currentStage.show();
+            }
+            else {
+                currentStage.show();
+                currentStage.toFront();
+            }
+        }
     }
 
     @Override
