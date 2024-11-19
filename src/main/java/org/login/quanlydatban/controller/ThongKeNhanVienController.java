@@ -68,6 +68,7 @@ public class ThongKeNhanVienController {
         capNhatComboBoxNamThongKe(maNV);
         tieuChiThongKeBieuDoCot.getSelectionModel().select("Theo tháng");
         namThongKeBieuDoCot.getSelectionModel().select(0);
+        namThongKeMonAn.getSelectionModel().select(0);
         capNhatDuLieuDoanhThuVaHoaDon(maNV);
         capNhatDuLieuThongKeMonAnVaLoaiMonAn();
         capNhatDuLieuChoBieuDoCot(maNV);
@@ -82,15 +83,35 @@ public class ThongKeNhanVienController {
         namThongKeBieuDoCot.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             capNhatDuLieuChoBieuDoCot(maNV);
         });
+        if ("Tất cả".equals(namThongKeMonAn.getSelectionModel().getSelectedItem())) {
+            quyThongKeMonAn.setVisible(false);
+            thangThongKeMonAn.setVisible(false);
+            thangThongKeMonAn.getSelectionModel().select(0);
+            quyThongKeMonAn.getSelectionModel().select(0);
+        } else {
+            quyThongKeMonAn.setVisible(true);
+            thangThongKeMonAn.setVisible(true);
+        }
         namThongKeMonAn.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if ("Tất cả".equals(newValue)) {
+                quyThongKeMonAn.setVisible(false);
+                thangThongKeMonAn.setVisible(false);
+                thangThongKeMonAn.getSelectionModel().select(0);
+                quyThongKeMonAn.getSelectionModel().select(0);
+            } else {
+                quyThongKeMonAn.setVisible(true);
+                thangThongKeMonAn.setVisible(true);
+            }
             capNhatDuLieuThongKeMonAnVaLoaiMonAn();
         });
         thangThongKeMonAn.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             quyThongKeMonAn.getSelectionModel().select(0);
+            thangThongKeMonAn.getSelectionModel().select(newValue);
             capNhatDuLieuThongKeMonAnVaLoaiMonAn();
         });
         quyThongKeMonAn.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             thangThongKeMonAn.getSelectionModel().select(0);
+            quyThongKeMonAn.getSelectionModel().select(newValue);
             capNhatDuLieuThongKeMonAnVaLoaiMonAn();
         });
     }

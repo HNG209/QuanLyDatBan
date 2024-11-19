@@ -171,6 +171,14 @@ public class TrangChuController implements Initializable {
             e.printStackTrace();
         }
     }
+    @FXML
+    public void khachHang() throws IOException{
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/TrangKhachHang.fxml"));
+        AnchorPane anchorPane = loader.load();
+        borderPane.setCenter(anchorPane);
+        anchorPane.prefWidthProperty().bind(borderPane.widthProperty());
+        anchorPane.prefHeightProperty().bind(borderPane.heightProperty());
+    }
 
     public static void dangXuat() throws IOException {
         FXMLLoader loader = new FXMLLoader(TrangChuController.class.getResource("/org/login/quanlydatban/views/TrangDangNhap.fxml"));

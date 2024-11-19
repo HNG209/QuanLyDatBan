@@ -70,9 +70,11 @@ public class ThongKeQuanLyController {
         capNhatComboBoxNamThongKe();
         tieuChiThongKeBieuDoCot.getSelectionModel().select("Theo tháng");
         namThongKeBieuDoCot.getSelectionModel().select(0);
+        namThongKeBieuDoTron.getSelectionModel().select(0);
         capNhatDuLieuDoanhThuVaHoaDon();
         capNhatDuLieuChoBieuDoCot();
-        capNhatDuLieuBieuDoTron();
+        capNhatDuLieuThongKeLoaiMonAn();
+        capNhatDuLieuThongKeTrangThaiHoaDon();
         tieuChiThongKeBieuDoCot.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if ("Theo tháng".equals(newValue) || "Theo quý".equals(newValue)) {
                 namThongKeBieuDoCot.setVisible(true);
@@ -84,6 +86,41 @@ public class ThongKeQuanLyController {
         namThongKeBieuDoCot.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             capNhatDuLieuChoBieuDoCot();
         });
+        if ("Tất cả".equals(namThongKeBieuDoTron.getSelectionModel().getSelectedItem())) {
+            quyThongKeBieuDoTron.setVisible(false);
+            thangThongKeBieuDoTron.setVisible(false);
+            thangThongKeBieuDoTron.getSelectionModel().select(0);
+            quyThongKeBieuDoTron.getSelectionModel().select(0);
+        } else {
+            quyThongKeBieuDoTron.setVisible(true);
+            thangThongKeBieuDoTron.setVisible(true);
+        }
+        namThongKeBieuDoTron.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if ("Tất cả".equals(newValue)) {
+                quyThongKeBieuDoTron.setVisible(false);
+                thangThongKeBieuDoTron.setVisible(false);
+                thangThongKeBieuDoTron.getSelectionModel().select(0);
+                quyThongKeBieuDoTron.getSelectionModel().select(0);
+            } else {
+                quyThongKeBieuDoTron.setVisible(true);
+                thangThongKeBieuDoTron.setVisible(true);
+            }
+            capNhatDuLieuThongKeTrangThaiHoaDon();
+            capNhatDuLieuThongKeLoaiMonAn();
+        });
+        thangThongKeBieuDoTron.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            quyThongKeBieuDoTron.getSelectionModel().select(0);
+            thangThongKeBieuDoTron.getSelectionModel().select(newValue);
+            capNhatDuLieuThongKeLoaiMonAn();
+            capNhatDuLieuThongKeTrangThaiHoaDon();
+        });
+        quyThongKeBieuDoTron.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            thangThongKeBieuDoTron.getSelectionModel().select(0);
+            quyThongKeBieuDoTron.getSelectionModel().select(newValue);
+            capNhatDuLieuThongKeTrangThaiHoaDon();
+            capNhatDuLieuThongKeLoaiMonAn();
+        });
+
 
     }
 
@@ -230,34 +267,24 @@ public class ThongKeQuanLyController {
         bieuDoCotHoaDon.setVerticalGridLinesVisible(false);
     }
 
-    @FXML
-    private void capNhatDuLieuBieuDoTron() {
+    private void capNhatDuLieuThongKeLoaiMonAn() {
+        List<Object[]> dsMonAn;
         int nam = 0, quy = 0, thang = 0;
         try {
             nam = Integer.parseInt(namThongKeBieuDoTron.getSelectionModel().getSelectedItem());
-            try {
-                thang = Integer.parseInt(thangThongKeBieuDoTron.getSelectionModel().getSelectedItem());
-                quyThongKeBieuDoTron.getSelectionModel().select(0);
-                thangThongKeBieuDoTron.getSelectionModel().select(thang);
-
-            } catch (NumberFormatException e) {
-                thang = 0;
-            }
-            try {
-                quy = Integer.parseInt(quyThongKeBieuDoTron.getSelectionModel().getSelectedItem());
-                thangThongKeBieuDoTron.getSelectionModel().select(0);
-                quyThongKeBieuDoTron.getSelectionModel().select(quy);
-            } catch (NumberFormatException e) {
-                quy = 0;
-            }
         } catch (NumberFormatException e) {
             nam = 0;
         }
-        capNhatDuLieuThongKeLoaiMonAn(nam, thang, quy);
-        capNhatDuLieuThongKeTrangThaiHoaDon(nam, thang, quy);
-    }
-    private void capNhatDuLieuThongKeLoaiMonAn(int nam, int thang, int quy) {
-        List<Object[]> dsMonAn;
+        try {
+            thang = Integer.parseInt(thangThongKeBieuDoTron.getSelectionModel().getSelectedItem());
+        } catch (NumberFormatException e) {
+            thang = 0;
+        }
+        try {
+            quy = Integer.parseInt(quyThongKeBieuDoTron.getSelectionModel().getSelectedItem());
+        } catch (NumberFormatException e) {
+            quy = 0;
+        }
         dsMonAn = hoaDonDAO.layDoanhThuTheoLoaiMonAn(nam, quy, thang);
         bieuDoTronMonAn.getData().clear();
         double tongDoanhThu = 0;
@@ -285,7 +312,23 @@ public class ThongKeQuanLyController {
         }
         bieuDoTronMonAn.setLabelsVisible(false);
     }
-    private void capNhatDuLieuThongKeTrangThaiHoaDon(int nam, int thang, int quy) {
+    private void capNhatDuLieuThongKeTrangThaiHoaDon() {
+        int nam = 0, quy = 0, thang = 0;
+        try {
+            nam = Integer.parseInt(namThongKeBieuDoTron.getSelectionModel().getSelectedItem());
+        } catch (NumberFormatException e) {
+            nam = 0;
+        }
+        try {
+            thang = Integer.parseInt(thangThongKeBieuDoTron.getSelectionModel().getSelectedItem());
+        } catch (NumberFormatException e) {
+            thang = 0;
+        }
+        try {
+            quy = Integer.parseInt(quyThongKeBieuDoTron.getSelectionModel().getSelectedItem());
+        } catch (NumberFormatException e) {
+            quy = 0;
+        }
         List<Object[]> dsTrangThai = hoaDonDAO.laySoHoaDonTheoTrangThaiHoaDon(null, nam, quy, thang);
         bieuDoTronTrangThaiHoaDon.getData().clear();
 
