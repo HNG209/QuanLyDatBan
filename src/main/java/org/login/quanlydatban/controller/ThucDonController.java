@@ -30,6 +30,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class ThucDonController implements Initializable {
@@ -265,7 +266,11 @@ public class ThucDonController implements Initializable {
         if (source == btnThemMon) {
             try {
                 if (txtTenMonAn.getText() == null || txtDonViTinh.getText() == null || txtGia.getText() == null ||
-                    cbloaiMonAn.getValue() == null){
+                    cbloaiMonAn.getValue() == null ||
+                        Objects.equals(txtTenMonAn.getText(), "") ||
+                        Objects.equals(txtDonViTinh.getText(), "") ||
+                        Objects.equals(txtGia.getText(), "") ||
+                        Objects.equals(cbloaiMonAn.getValue(), "")){
                     showWarn("Bạn cần nhập đầy đủ thông tin!");
                 }
                 else if (!regexGia()) {
