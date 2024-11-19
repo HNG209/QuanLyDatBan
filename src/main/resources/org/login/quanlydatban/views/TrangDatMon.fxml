@@ -84,7 +84,7 @@
                         </Label>
                      </children>
                   </AnchorPane>
-                  <TextField fx:id="sdt" editable="false" layoutX="156.0" layoutY="127.0" prefHeight="26.0" prefWidth="363.0" promptText="Nếu có" styleClass="underlined-style" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                  <TextField fx:id="sdt" layoutX="156.0" layoutY="127.0" onKeyTyped="#sdtEnter" prefHeight="26.0" prefWidth="363.0" promptText="Nếu có" styleClass="underlined-style" GridPane.columnIndex="1" GridPane.rowIndex="6" />
                   <Label layoutX="10.0" layoutY="127.0" prefHeight="24.0" prefWidth="127.0" text="SDT khách hàng:" GridPane.rowIndex="6">
                      <font>
                         <Font size="15.0" />

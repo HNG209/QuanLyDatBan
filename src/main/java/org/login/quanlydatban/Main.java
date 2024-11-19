@@ -8,6 +8,7 @@ import javafx.stage.StageStyle;
 import org.hibernate.Session;
 
 import org.hibernate.SessionFactory;
+import org.login.quanlydatban.dao.KhachHangDAO;
 import org.login.quanlydatban.dao.MonAnDAO;
 import org.login.quanlydatban.encryptionUtils.EncryptionUtils;
 import org.login.quanlydatban.entity.*;
@@ -25,6 +26,12 @@ public class Main extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/org/login/quanlydatban/views/TrangDangNhap.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
 
+//        KhachHang khachHang = new KhachHang();
+//        khachHang.setTenKhachHang("Tran Phuc Hung");
+//        khachHang.setSdt("0355227249");
+//
+//        KhachHangDAO khachHangDAO = new KhachHangDAO();
+//        khachHangDAO.themKhachHang(khachHang);
         //test ne bay
         Session session = HibernateUtils.getFactory().openSession();
         String s = EncryptionUtils.encrypt("12345", System.getenv("ENCRYPTION_KEY"));

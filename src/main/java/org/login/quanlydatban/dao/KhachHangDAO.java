@@ -5,6 +5,7 @@ import org.hibernate.Transaction;
 import org.login.quanlydatban.entity.KhachHang;
 import org.login.quanlydatban.hibernate.HibernateUtils;
 
+import javax.persistence.NoResultException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
@@ -50,6 +51,21 @@ public class KhachHangDAO {
         session.close();
         return khachHang;
     }
+
+    public KhachHang getKHBySDT(String sdt) {
+        Session session = HibernateUtils.getFactory().openSession();
+        session.getTransaction().begin();
+
+        KhachHang khachHang = session.createNativeQuery("SELECT * FROM khachHang WHERE sdt LIKE :sdt", KhachHang.class)
+                .setParameter("sdt", sdt)
+                .getSingleResult();
+
+        session.getTransaction().commit();
+        session.close();
+
+        return khachHang;
+    }
+
     public boolean suaKhachHang(KhachHang khachHang) {
         Session session = HibernateUtils.getFactory().openSession();
         Transaction transaction = null;
