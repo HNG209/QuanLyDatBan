@@ -374,6 +374,7 @@ public class ThucDonController implements Initializable {
             txtTenMonAn.requestFocus();
             txtTenMonAn.setText("");
             cbloaiMonAn.getSelectionModel().clearSelection();
+            cbloaiMonAn.setValue("");
             cbtrangThaiMon.getSelectionModel().selectFirst();
             txtDonViTinh.setText("");
             txtGia.setText("");
@@ -388,8 +389,7 @@ public class ThucDonController implements Initializable {
         String selectedType = cbTimLoaiMon.getValue();
         Integer sortOption = cbSapXep.getSelectionModel().getSelectedIndex();
 
-        if (cbTimLoaiMon.getSelectionModel().isEmpty() && keyword.isEmpty() || keyword == ""
-                && cbSapXep.getSelectionModel().isEmpty()) {
+        if (cbTimLoaiMon.getValue() == null && keyword.isEmpty() && cbSapXep.getSelectionModel().isEmpty()) {
             showWarn("Bạn cần nhập/chọn một trong các cách tìm trước khi tiến hành tìm kiếm");
         }
         else {
@@ -410,12 +410,10 @@ public class ThucDonController implements Initializable {
                     .collect(Collectors.toList());
 
             // Sort items if a sort option is selected
-            if (sortOption != null) {
-                if (sortOption == 0) {
-                    filteredItems.sort(Comparator.comparing(MonAn::getDonGia).thenComparing(MonAn::getTenMonAn));
-                } else {
-                    filteredItems.sort(Comparator.comparing(MonAn::getDonGia).reversed().thenComparing(MonAn::getTenMonAn));
-                }
+            if (sortOption == 0) {
+                filteredItems.sort(Comparator.comparing(MonAn::getDonGia).thenComparing(MonAn::getTenMonAn));
+            } else {
+                filteredItems.sort(Comparator.comparing(MonAn::getDonGia).reversed().thenComparing(MonAn::getTenMonAn));
             }
 
             // Display items
@@ -425,8 +423,8 @@ public class ThucDonController implements Initializable {
             if (filteredItems.isEmpty()) {
                 showWarn("Không tìm thấy món ăn phù hợp với tiêu chí tìm kiếm!");
             }
+      }
 
-        }
 
 //        else if (cbTimLoaiMon.getSelectionModel().getSelectedIndex() == 0) {
 //            if (txtTimKiem.getText().trim().isEmpty()) {
@@ -532,6 +530,7 @@ public class ThucDonController implements Initializable {
         if (source == btnRefresh || source == btnThemMon || source == btnCapNhat) {
             txtTimKiem.clear();
             cbTimLoaiMon.getSelectionModel().clearSelection();
+            cbTimLoaiMon.setValue("");
             cbSapXep.getSelectionModel().clearSelection();
             flowPane.getChildren().clear(); // Clear existing items
 
