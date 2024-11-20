@@ -97,18 +97,12 @@ public class CardBanController implements Initializable {
                 img = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/org/login/quanlydatban/icons/bandangphucvu.png")));
                 this.image.setImage(img);
                 this.chuyenBan.setDisable(false);
-                this.anchorPane.getStyleClass().add("pale-lemon");
-                break;
-            case TAM_NGUNG_PHUC_VU:
-                img = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/org/login/quanlydatban/icons/banhong.png")));
-                this.image.setImage(img);
-                this.chuyenBan.setDisable(true);
-                this.anchorPane.getStyleClass().add("light-coral");
+                this.anchorPane.getStyleClass().add("sunset-orange");
                 break;
             default:
-                img = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/org/login/quanlydatban/icons/bandattruoc.png")));
+                img = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/org/login/quanlydatban/icons/banhong.png")));
                 this.image.setImage(img);
-                this.anchorPane.getStyleClass().add("sunset-orange");
+                this.anchorPane.getStyleClass().add("pale-lemon");
                 break;
         }
     }

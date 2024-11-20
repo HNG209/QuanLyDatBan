@@ -86,26 +86,6 @@ public class ChonBanController implements Initializable {
     }
 
     @FXML
-    void showBanDaDat(MouseEvent event) {
-        selectedLoaiBan.setText(TrangThaiBan.DA_DAT.toString());
-        flowPane.getChildren().clear();
-
-        for (Ban i : banDAO.readByStatus(TrangThaiBan.DA_DAT)){
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/uicomponents/CardBan_TrangChonBan.fxml"));
-            try {
-                AnchorPane pane = loader.load();
-                CardBanController controller = loader.getController();
-
-                controller.setBan(i);
-
-                flowPane.getChildren().add(pane);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }
-
-    @FXML
     void showBanDangPhucVu(MouseEvent event) {
         selectedLoaiBan.setText(TrangThaiBan.DANG_PHUC_VU.toString());
         flowPane.getChildren().clear();

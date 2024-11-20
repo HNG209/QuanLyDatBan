@@ -142,6 +142,8 @@ public class DatMonController implements Initializable {
     private double tkd = 0.0;
     private double pt = 0.0;
 
+    private DatLichController datLichController;
+
 //    private static Parent root;
 //    private static DatMonController instance;
 //
@@ -470,6 +472,10 @@ public class DatMonController implements Initializable {
         tongTienTxt.setText(NumberFormatter.formatPrice(String.valueOf((int) hoaDon.tinhTongTien())));
     }
 
+    public void setDatLichController(DatLichController datLichController) {
+        this.datLichController = datLichController;
+    }
+
     public void setBan(Ban ban) {
         this.ban = ban;
         this.banID.setText(ban.getMaBan());
@@ -638,8 +644,13 @@ public class DatMonController implements Initializable {
 //            AnchorPane anchorPane = loader.load();
 //            pane.setCenter(anchorPane);
 //        }
-        ChonBanController.getInstance().refresh();
-        TrangChuController.getBorderPaneStatic().setCenter(ChonBanController.getInstance().getRoot());
+        if(datLichController == null){
+            ChonBanController.getInstance().refresh();
+            TrangChuController.getBorderPaneStatic().setCenter(ChonBanController.getInstance().getRoot());
+        }
+        else {
+            datLichController.loadDatLich();
+        }
     }
 
     public void themChiTietHoaDon(MonAn monAn){//tao 1 lan

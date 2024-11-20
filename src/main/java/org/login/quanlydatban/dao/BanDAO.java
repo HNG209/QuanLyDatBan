@@ -46,7 +46,6 @@ public class BanDAO {
         switch (trangThaiBan) {
             case BAN_TRONG -> p1 = builder.like(root.get("trangThaiBan").as(String.class), "BAN_TRONG");
             case DANG_PHUC_VU -> p1 = builder.like(root.get("trangThaiBan").as(String.class), "DANG_PHUC_VU");
-            case DA_DAT -> p1 = builder.like(root.get("trangThaiBan").as(String.class), "DA_DAT");
             default -> p1 = builder.like(root.get("trangThaiBan").as(String.class), "TAM_NGUNG_PHUC_VU");
         }
 

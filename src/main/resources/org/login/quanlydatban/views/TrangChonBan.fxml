@@ -30,7 +30,6 @@
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
         </columnConstraints>
         <rowConstraints>
@@ -47,31 +46,23 @@
             </Pane>
             <Pane onMouseClicked="#showBanDangPhucVu" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <styleClass>
-                  <String fx:value="pale-lemon" />
-                  <String fx:value="image-hover-effect" />
-                  <String fx:value="round-box" />
-               </styleClass>
-            </Pane>
-            <Pane onMouseClicked="#showBanDaDat" prefHeight="200.0" prefWidth="131.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
-               <styleClass>
                   <String fx:value="sunset-orange" />
                   <String fx:value="image-hover-effect" />
                   <String fx:value="round-box" />
                </styleClass>
             </Pane>
-            <Pane onMouseClicked="#showBanHong" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="3" GridPane.rowIndex="1">
+            <Pane onMouseClicked="#showBanHong" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
                <styleClass>
-                  <String fx:value="light-coral" />
+                  <String fx:value="pale-lemon" />
                   <String fx:value="image-hover-effect" />
                   <String fx:value="round-box" />
                </styleClass>
             </Pane>
             <Label alignment="CENTER" prefHeight="18.0" prefWidth="202.0" text="Bàn trống" />
             <Label alignment="CENTER" prefHeight="18.0" prefWidth="194.0" text="Bàn đang phục vụ" GridPane.columnIndex="1" />
-            <Label alignment="CENTER" prefHeight="18.0" prefWidth="261.0" text="Bàn đã đặt" GridPane.columnIndex="2" />
-            <Label alignment="CENTER" prefHeight="18.0" prefWidth="286.0" text="Bàn tạm ngưng phục vụ" GridPane.columnIndex="3" />
-            <Label alignment="CENTER" prefHeight="18.0" prefWidth="110.0" text="Tất cả bàn" GridPane.columnIndex="4" />
-            <Pane prefHeight="33.0" prefWidth="118.0" GridPane.columnIndex="4" GridPane.rowIndex="1">
+            <Label alignment="CENTER" prefHeight="18.0" prefWidth="286.0" text="Bàn tạm ngưng phục vụ" GridPane.columnIndex="2" />
+            <Label alignment="CENTER" prefHeight="18.0" prefWidth="110.0" text="Tất cả bàn" GridPane.columnIndex="3" />
+            <Pane prefHeight="33.0" prefWidth="118.0" GridPane.columnIndex="3" GridPane.rowIndex="1">
                <children>
                   <ImageView fitHeight="43.0" fitWidth="58.0" layoutX="34.0" layoutY="-7.0" onMouseClicked="#showAll" pickOnBounds="true" preserveRatio="true" styleClass="image-hover-effect">
                      <image>

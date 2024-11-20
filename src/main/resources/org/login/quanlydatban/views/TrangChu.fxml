@@ -79,7 +79,7 @@
                 </Menu>
                   <Menu mnemonicParsing="false" text="Lịch đặt">
                      <items>
-                        <MenuItem mnemonicParsing="false" text="Đặt lịch trước" />
+                        <MenuItem mnemonicParsing="false" onAction="#datLich" text="Đặt lịch trước" />
                      </items>
                      <graphic>
                         <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">

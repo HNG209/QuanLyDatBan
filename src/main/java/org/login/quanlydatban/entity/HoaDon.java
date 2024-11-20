@@ -43,7 +43,7 @@ public class HoaDon implements Serializable {
     @Column
     private double phuThu;
 
-    @Transient
+    @Column
     private double tongTien;
 
     @Transient

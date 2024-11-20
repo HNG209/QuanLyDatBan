@@ -2,7 +2,6 @@ package org.login.quanlydatban.entity.enums;
 
 public enum TrangThaiBan {
     DANG_PHUC_VU("ĐANG PHỤC VỤ"),
-    DA_DAT("ĐÃ ĐẶT"),
     TAM_NGUNG_PHUC_VU("TẠM NGƯNG PHỤC VỤ"),
     BAN_TRONG("BÀN TRỐNG");
 
