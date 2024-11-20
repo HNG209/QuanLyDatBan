@@ -25,10 +25,8 @@ public class KhachHang implements Serializable {
     @Column(nullable = false)
     private String cccd;
 
-    @Column(nullable = false)
     private String diaChi;
 
-    @Column(nullable = false)
     private String email;
 
     private int diemTichLuy = 0;

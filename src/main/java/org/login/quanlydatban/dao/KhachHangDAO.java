@@ -8,12 +8,10 @@ import org.login.quanlydatban.hibernate.HibernateUtils;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 public class KhachHangDAO {
-    private List<Object[]> dsKhachHang;
     public List<Object[]> layDSKhachHang() {
         List<Object[]> resultList = new ArrayList<>();
         Session session = HibernateUtils.getFactory().openSession();
@@ -27,9 +25,9 @@ public class KhachHangDAO {
                     rootKH.get("maKhachHang"),
                     rootKH.get("tenKhachHang"),
                     rootKH.get("sdt"),
-                    rootKH.get("email"),
-                    rootKH.get("diaChi"),
                     rootKH.get("cccd"),
+                    rootKH.get("diaChi"),
+                    rootKH.get("email"),
                     rootKH.get("diemTichLuy")
             );
 
@@ -69,28 +67,20 @@ public class KhachHangDAO {
             session.close();
         }
     }
-    public KhachHang layKhachHangDauTienTheoNam() {
+    public KhachHang timKhachHangTheoSDT(String sdt) {
         Session session = HibernateUtils.getFactory().openSession();
-        int year = LocalDate.now().getYear();
-        KhachHang khachHang = null;
 
         try {
-            String yearPattern = "%" + year + "%";
-
             CriteriaBuilder builder = session.getCriteriaBuilder();
             CriteriaQuery<KhachHang> query = builder.createQuery(KhachHang.class);
+
             Root<KhachHang> root = query.from(KhachHang.class);
+            query.select(root).where(builder.equal(root.get("sdt"), sdt));
 
-            query.select(root)
-                    .where(builder.like(root.get("maKhachHang"), yearPattern))
-                    .orderBy(builder.desc(root.get("maKhachHang")));
+            List<KhachHang> resultList = session.createQuery(query).getResultList();
 
-            List<KhachHang> result = session.createQuery(query)
-                    .setMaxResults(1)
-                    .getResultList();
-
-            if (!result.isEmpty()) {
-                khachHang = result.get(0);
+            if (!resultList.isEmpty()) {
+                return resultList.get(0);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -98,8 +88,9 @@ public class KhachHangDAO {
             session.close();
         }
 
-        return khachHang;
+        return null;
     }
+
 
 
 

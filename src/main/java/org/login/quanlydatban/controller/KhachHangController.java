@@ -3,36 +3,17 @@ package org.login.quanlydatban.controller;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import org.apache.poi.hpsf.Decimal;
 import org.login.quanlydatban.dao.KhachHangDAO;
 import org.login.quanlydatban.entity.KhachHang;
+import org.login.quanlydatban.notification.Notification;
 
 import javax.swing.*;
 import java.text.DecimalFormat;
-import java.time.LocalDate;
 import java.util.List;
 
 public class KhachHangController {
-
-    @FXML
-    private Button BtnReset;
-
-    @FXML
-    private Button btnLamMoi;
-
-    @FXML
-    private Button btnSuaTT;
-
-    @FXML
-    private Button btnThem;
-
-    @FXML
-    private Button btnTimKiem;
 
     @FXML
     private TableColumn<?, ?> colCCCD;
@@ -99,7 +80,6 @@ public class KhachHangController {
         colDiaChi.setCellValueFactory(new PropertyValueFactory<>("diaChi"));
         colCCCD.setCellValueFactory(new PropertyValueFactory<>("cccd"));
         colDTL.setCellValueFactory(new PropertyValueFactory<>("diemTichLuy"));
-
         tableKhachHang.setItems(data);
         themDuLieuVaoBangKhachHang();
     }
@@ -126,10 +106,7 @@ public class KhachHangController {
         ObservableList<KhachHang> khachHangList = tableKhachHang.getItems();
         boolean timThay = false;
         if(maKH.isEmpty() && sdt.isEmpty()) {
-            JOptionPane.showMessageDialog(null,
-                    "Vui lòng nhập thông tin khách hàng cần tìm",
-                    "Thông báo",
-                    JOptionPane.INFORMATION_MESSAGE);
+            Notification.thongBao("Vui lòng nhập thông tin khách hàng cần tìm", Alert.AlertType.INFORMATION);
             return;
         }
         for (KhachHang kh : khachHangList) {
@@ -146,7 +123,7 @@ public class KhachHangController {
         }
 
         if (!timThay) {
-            JOptionPane.showMessageDialog(null, "Không tìm thấy khách hàng với thông tin đã nhập.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+            Notification.thongBao("Không tìm thấy khách hàng với thông tin đã nhập", Alert.AlertType.INFORMATION);
             tableKhachHang.getSelectionModel().clearSelection();
         }
     }
@@ -158,11 +135,20 @@ public class KhachHangController {
             KhachHang khachHang = tableKhachHang.getSelectionModel().getSelectedItem();
 
             if (khachHang != null) {
+                String sdt = txtSDT.getText().trim();
                 khachHang.setTenKhachHang(txtTenKH.getText().trim());
-                khachHang.setSdt(txtSDT.getText().trim());
+                if(khachHangDAO.timKhachHangTheoSDT(sdt) == null) {
+                    khachHang.setSdt(sdt);
+                }
+                else {
+                    Notification.thongBao("Số điện thoại đã đăng kí thành viên", Alert.AlertType.INFORMATION);
+                    return;
+                }
+
                 khachHang.setEmail(txtEmail.getText().trim());
                 khachHang.setDiaChi(txtDiaChi.getText().trim());
                 khachHang.setCccd(txtCCCD.getText().trim());
+
 
 
                 boolean kq = khachHangDAO.suaKhachHang(khachHang);
@@ -171,27 +157,22 @@ public class KhachHangController {
 
                     themDuLieuVaoBangKhachHang();
                     lamMoi();
-                    JOptionPane.showMessageDialog(null, "Sửa thông tin khách hàng thành công.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+                    Notification.thongBao("Sửa thông tin khách hàng thành công", Alert.AlertType.INFORMATION);
                 } else {
-                    JOptionPane.showMessageDialog(null, "Sửa thông tin khách hàng thất bại.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                    Notification.thongBao("Sửa thông tin khách hàng thất bại", Alert.AlertType.INFORMATION);
                 }
             } else {
-                JOptionPane.showMessageDialog(null, "Vui lòng chọn khách hàng để sửa.", "Thông báo", JOptionPane.WARNING_MESSAGE);
+                Notification.thongBao("Vui lòng chọn khách hàng để sửa", Alert.AlertType.INFORMATION);
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Có lỗi xảy ra khi sửa thông tin khách hàng.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            Notification.thongBao("Có lỗi xảy ra khi sửa thông tin khách hàng", Alert.AlertType.ERROR);
         }
     }
 
     @FXML
     public void themKhachHang() {
-        // Check if ID is already populated (should be empty for new customers)
-        if (!txtMaKH.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(null,
-                    "Vui lòng nhấn 'Làm mới' và nhập thông tin khách hàng để thêm mới.",
-                    "Cảnh báo",
-                    JOptionPane.WARNING_MESSAGE);
+        if (!tableKhachHang.getSelectionModel().isEmpty()) {
+            Notification.thongBao("Vui lòng nhấn 'Làm mới' và nhập thông tin khách hàng để thêm mới", Alert.AlertType.INFORMATION);
             return;
         }
 
@@ -213,10 +194,10 @@ public class KhachHangController {
             if (kh != null) {
                 themDuLieuVaoBangKhachHang();
                 lamMoi();
-                JOptionPane.showMessageDialog(null, "Thêm khách hàng thành công", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+                Notification.thongBao("Thêm khách hàng thành công", Alert.AlertType.INFORMATION);
             }
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Có lỗi xảy ra khi thêm khách hàng.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            Notification.thongBao("Có lỗi xảy ra khi thêm khách hàng", Alert.AlertType.ERROR);
         }
     }
 
@@ -227,25 +208,34 @@ public class KhachHangController {
         String cccdRegex = "^\\d{3}[0-9][0-9]\\d{7}$";
         String tenRegex = "^[A-Z][a-zA-Z]*( [A-Z][a-zA-Z]*)*$";
         String diaChiRegex = "^[A-Z0-9][a-zA-Z0-9/]*( [A-Z0-9][a-zA-Z0-9/]*)*$";
+        if(txtTenKH.getText().isEmpty() && txtSDT.getText().isEmpty() && txtCCCD.getText().isEmpty()) {
+            Notification.thongBao("Vui lòng nhập thông tin khách hàng", Alert.AlertType.INFORMATION);
+            return false;
+        }
 
         if (!txtTenKH.getText().matches(tenRegex)) {
-            JOptionPane.showMessageDialog(null, "Tên khách hàng không hợp lệ.", "Lỗi nhập liệu", JOptionPane.ERROR_MESSAGE);
+            Notification.thongBao("Tên khách hàng không hợp lệ", Alert.AlertType.ERROR);
             return false;
         }
         if (!txtSDT.getText().matches(sdtRegex)) {
-            JOptionPane.showMessageDialog(null, "Số điện thoại không hợp lệ.", "Lỗi nhập liệu", JOptionPane.ERROR_MESSAGE);
+            Notification.thongBao("Số điện thoại không hợp lệ", Alert.AlertType.ERROR);
+            return false;
+        }
+        if(khachHangDAO.timKhachHangTheoSDT(txtSDT.getText()) != null) {
+            Notification.thongBao("Số điện thoại đã đăng kí thành viên", Alert.AlertType.INFORMATION);
             return false;
         }
         if (!txtEmail.getText().equalsIgnoreCase("")&&!txtEmail.getText().matches(emailRegex)) {
-            JOptionPane.showMessageDialog(null, "Email không hợp lệ.", "Lỗi nhập liệu", JOptionPane.ERROR_MESSAGE);
+            Notification.thongBao("Email không hợp lệ", Alert.AlertType.ERROR);
             return false;
         }
-        if (!txtCCCD.getText().matches(cccdRegex)) {
-            JOptionPane.showMessageDialog(null, "CCCD không hợp lệ.", "Lỗi nhập liệu", JOptionPane.ERROR_MESSAGE);
+
+        if (!txtCCCD.getText().equalsIgnoreCase("")&&!txtCCCD.getText().matches(cccdRegex)) {
+            Notification.thongBao("CCCD không hợp lệ", Alert.AlertType.ERROR);
             return false;
         }
         if (!txtDiaChi.getText().equalsIgnoreCase("")&&!txtDiaChi.getText().matches(diaChiRegex)) {
-            JOptionPane.showMessageDialog(null, "Địa chỉ nhập không hợp lệ.", "Lỗi nhập liệu", JOptionPane.ERROR_MESSAGE);
+            Notification.thongBao("Địa chỉ nhập không hợp lệ", Alert.AlertType.ERROR);
             return false;
         }
         return true;
@@ -263,9 +253,9 @@ public class KhachHangController {
                     row[0].toString(),
                     row[1].toString(),
                     row[2].toString(),
-                    row[5].toString(),
-                    row[4].toString(),
                     row[3].toString(),
+                    row[4].toString(),
+                    row[5].toString(),
                     Integer.parseInt(row[6].toString())
             );
 
@@ -281,6 +271,7 @@ public class KhachHangController {
         txtDiaChi.clear();
         txtCCCD.clear();
         txtDTL.clear();
+        tableKhachHang.getSelectionModel().clearSelection();
 
         themDuLieuVaoBangKhachHang();
     }
