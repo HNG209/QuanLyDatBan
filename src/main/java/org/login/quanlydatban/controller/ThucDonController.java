@@ -34,6 +34,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 public class ThucDonController implements Initializable {
     @FXML
@@ -212,20 +213,6 @@ public class ThucDonController implements Initializable {
             }
         });
 
-//        btnXoaRong.setOnAction(new EventHandler<ActionEvent>() {
-//            @Override
-//            public void handle(ActionEvent event) {
-//                txtTenMonAn.requestFocus();
-//                txtTenMonAn.setText("");
-//                cbloaiMonAn.getSelectionModel().selectFirst();
-//                cbtrangThaiMon.getSelectionModel().selectFirst();
-//                txtDonViTinh.setText("");
-//                txtGia.setText("");
-//                anhMon.setImage(null);
-//                txfMoTa.setText("");
-//            }
-//        });
-
         monAnDAO.getAllMonAn();
         flowPane.prefHeightProperty().bind(scrollPane.heightProperty());
         flowPane.prefWidthProperty().bind(scrollPane.widthProperty());
@@ -399,37 +386,48 @@ public class ThucDonController implements Initializable {
     void btnTimKiem(MouseEvent event) {
         String keyword = txtTimKiem.getText().trim();
         String selectedType = cbTimLoaiMon.getValue();
-        boolean found = false;
+        Integer sortOption = cbSapXep.getSelectionModel().getSelectedIndex();
 
-        flowPane.getChildren().clear(); // Clear previous results
-        flowPane.prefHeightProperty().bind(scrollPane.heightProperty());
-        flowPane.prefWidthProperty().bind(scrollPane.widthProperty());
-
-        // Search by name
-        if (!keyword.isEmpty()) {
-            timKiemTheoTen(keyword);
-            found = !flowPane.getChildren().isEmpty();
+        if (cbTimLoaiMon.getSelectionModel().isEmpty() && keyword.isEmpty() || keyword == ""
+                && cbSapXep.getSelectionModel().isEmpty()) {
+            showWarn("Bạn cần nhập/chọn một trong các cách tìm trước khi tiến hành tìm kiếm");
         }
+        else {
+            // Clear the previous list
+            flowPane.getChildren().clear();
+            flowPane.prefHeightProperty().bind(scrollPane.heightProperty());
+            flowPane.prefWidthProperty().bind(scrollPane.widthProperty());
 
-        // Search by type
-        if (!found && selectedType != null && !selectedType.isEmpty()) {
-            timKiemTheoLoai(selectedType);
-            found = !flowPane.getChildren().isEmpty();
-        }
+            // Fetch all items
+            List<MonAn> allItems = monAnDAO.getAllMonAn();
 
-        // Sorting (if search results exist)
-        if (found && !cbSapXep.getSelectionModel().isEmpty()) {
-            if (cbSapXep.getSelectionModel().getSelectedIndex() == 0) {
-                ascendingSorting();
-            } else {
-                descendingSorting();
+            // Filter items based on criteria
+            List<MonAn> filteredItems = allItems.stream()
+                    .filter(item ->
+                            (keyword.isEmpty() || item.getTenMonAn().toLowerCase().contains(keyword.toLowerCase())) &&
+                                    (selectedType == null || item.getLoaiMonAn().getTenLoaiMonAn().toLowerCase().contains(selectedType.toLowerCase()))
+                    )
+                    .collect(Collectors.toList());
+
+            // Sort items if a sort option is selected
+            if (sortOption != null) {
+                if (sortOption == 0) {
+                    filteredItems.sort(Comparator.comparing(MonAn::getDonGia).thenComparing(MonAn::getTenMonAn));
+                } else {
+                    filteredItems.sort(Comparator.comparing(MonAn::getDonGia).reversed().thenComparing(MonAn::getTenMonAn));
+                }
             }
+
+            // Display items
+            filteredItems.forEach(this::addItemToFlowPane);
+
+            // Show warning if no items are found
+            if (filteredItems.isEmpty()) {
+                showWarn("Không tìm thấy món ăn phù hợp với tiêu chí tìm kiếm!");
+            }
+
         }
 
-        // Show warning if no results are found
-        if (!found) {
-            showWarn("Không tìm thấy kết quả phù hợp!");
-        }
 //        else if (cbTimLoaiMon.getSelectionModel().getSelectedIndex() == 0) {
 //            if (txtTimKiem.getText().trim().isEmpty()) {
 //                showWarn("Vui lòng điền tên muốn tìm");
@@ -460,59 +458,59 @@ public class ThucDonController implements Initializable {
 
 }
 
-    //FINDING
-    void timKiemTheoTen (String tenMonAn) {
-        monAnDAO.getAllMonAn();
-            for (MonAn i : monAnDAO.getAllMonAn()){
-                if (i.getTenMonAn().toLowerCase().contains(tenMonAn.toLowerCase())) {
-                    addItemToFlowPane(i);
-                }
-            }
-
-    }
-
-    void timKiemTheoLoai(String loaiMonAn) {
-        List<MonAn> allItems = monAnDAO.getAllMonAn(); // Fetch all items once
-        for (MonAn item : allItems) {
-            if (item.getLoaiMonAn() != null
-                    && item.getLoaiMonAn().getTenLoaiMonAn().toLowerCase().contains(loaiMonAn.toLowerCase())) {
-                addItemToFlowPane(item);
-            }
-        }
-    }
-
-
-    void ascendingSorting () {
-        List<MonAn> sapXepMon = monAnDAO.getAllMonAn();
-//        flowPane.getChildren().clear();
-//        flowPane.prefHeightProperty().bind(scrollPane.heightProperty());
-//        flowPane.prefWidthProperty().bind(scrollPane.widthProperty());
-
-        sapXepMon.sort(Comparator.comparing(MonAn::getDonGia).thenComparing(MonAn::getTenMonAn))  ;
-
-        for (MonAn i : sapXepMon){
-            addItemToFlowPane(i);
-        }
-//        if (flowPane.getChildren().isEmpty()) {
-//            showWarn("Không tìm thấy danh sách!");
+//    //FINDING
+//    void timKiemTheoTen (String tenMonAn) {
+//        monAnDAO.getAllMonAn();
+//            for (MonAn i : monAnDAO.getAllMonAn()){
+//                if (i.getTenMonAn().toLowerCase().contains(tenMonAn.toLowerCase())) {
+//                    addItemToFlowPane(i);
+//                }
+//            }
+//
+//    }
+//
+//    void timKiemTheoLoai(String loaiMonAn) {
+//        List<MonAn> allItems = monAnDAO.getAllMonAn(); // Fetch all items once
+//        for (MonAn item : allItems) {
+//            if (item.getLoaiMonAn() != null
+//                    && item.getLoaiMonAn().getTenLoaiMonAn().toLowerCase().contains(loaiMonAn.toLowerCase())) {
+//                addItemToFlowPane(item);
+//            }
 //        }
-    }
-
-    void descendingSorting () {
-        List<MonAn> sapXepMon = monAnDAO.getAllMonAn();
-//        flowPane.getChildren().clear();
-//        flowPane.prefHeightProperty().bind(scrollPane.heightProperty());
-//        flowPane.prefWidthProperty().bind(scrollPane.widthProperty());
-
-        sapXepMon.sort(Comparator.comparing(MonAn::getDonGia).reversed().thenComparing(MonAn::getTenMonAn))  ;
-
-        for (MonAn i : sapXepMon){
-            addItemToFlowPane(i);
-        }
-//        if (flowPane.getChildren().isEmpty()) {
-//            showWarn("Không tìm thấy danh sách!");
+//    }
+//
+//
+//    void ascendingSorting () {
+//        List<MonAn> sapXepMon = monAnDAO.getAllMonAn();
+////        flowPane.getChildren().clear();
+////        flowPane.prefHeightProperty().bind(scrollPane.heightProperty());
+////        flowPane.prefWidthProperty().bind(scrollPane.widthProperty());
+//
+//        sapXepMon.sort(Comparator.comparing(MonAn::getDonGia).thenComparing(MonAn::getTenMonAn))  ;
+//
+//        for (MonAn i : sapXepMon){
+//            addItemToFlowPane(i);
 //        }
-    }
+////        if (flowPane.getChildren().isEmpty()) {
+////            showWarn("Không tìm thấy danh sách!");
+////        }
+//    }
+//
+//    void descendingSorting () {
+//        List<MonAn> sapXepMon = monAnDAO.getAllMonAn();
+////        flowPane.getChildren().clear();
+////        flowPane.prefHeightProperty().bind(scrollPane.heightProperty());
+////        flowPane.prefWidthProperty().bind(scrollPane.widthProperty());
+//
+//        sapXepMon.sort(Comparator.comparing(MonAn::getDonGia).reversed().thenComparing(MonAn::getTenMonAn))  ;
+//
+//        for (MonAn i : sapXepMon){
+//            addItemToFlowPane(i);
+//        }
+////        if (flowPane.getChildren().isEmpty()) {
+////            showWarn("Không tìm thấy danh sách!");
+////        }
+//    }
 
     private void addItemToFlowPane(MonAn monAn) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/uicomponents/CardMonAn_TrangThucDon.fxml"));
@@ -532,6 +530,9 @@ public class ThucDonController implements Initializable {
     void refreshControl(Event event) {
         Object source = event.getSource();
         if (source == btnRefresh || source == btnThemMon || source == btnCapNhat) {
+            txtTimKiem.clear();
+            cbTimLoaiMon.getSelectionModel().clearSelection();
+            cbSapXep.getSelectionModel().clearSelection();
             flowPane.getChildren().clear(); // Clear existing items
 
             List<MonAn> monAnList = monAnDAO.getAllMonAn(); // Retrieve the latest data from the database
