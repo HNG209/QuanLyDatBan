@@ -1,5 +1,7 @@
 package org.login.quanlydatban.entity;
 
+import org.login.quanlydatban.dao.HoaDonDAO;
+import org.login.quanlydatban.dao.LichDatDAO;
 import org.login.quanlydatban.entity.enums.LoaiTiec;
 
 import javax.persistence.*;
@@ -7,6 +9,8 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
 
 @Entity
 @Table
@@ -19,7 +23,7 @@ public class LichDat implements Serializable {
 
     @Column(nullable = false)
     private LocalDateTime thoiGianNhanBan;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "maKhachHang")
     private KhachHang khachHang;
 
@@ -31,14 +35,14 @@ public class LichDat implements Serializable {
     private int soLuongNguoi;
 
     @OneToOne
-    private Ban ban;
-
-    @OneToOne
     private HoaDon hoaDon;
 
     @Column
     @Enumerated(EnumType.STRING)
     private LoaiTiec loaiTiec;
+
+    @Transient
+    private LichDatDAO lichDatDAO;
 
     @PrePersist
     public void generateId() {
@@ -55,14 +59,13 @@ public class LichDat implements Serializable {
 
         return prefix + dateTimeSeries;
     }
-    public LichDat() {}
+    public LichDat() {
+        lichDatDAO = new LichDatDAO();
+    }
+
 
     public String getMaLichDat() {
         return maLichDat;
-    }
-
-    public void setMaLichDat(String maLichDat) {
-        this.maLichDat = maLichDat;
     }
 
     public LocalDateTime getThoiGianDat() {
@@ -78,6 +81,13 @@ public class LichDat implements Serializable {
     }
 
     public void setThoiGianNhanBan(LocalDateTime thoiGianNhanBan) {
+        List<LichDat> list = lichDatDAO.getDSLichDat();
+        for (LichDat i : list) {
+            if (i.getHoaDon().getBan().getMaBan().equals(this.getHoaDon().getBan().getMaBan())) {
+                if (Math.abs(ChronoUnit.MINUTES.between(thoiGianNhanBan.toLocalTime(), i.getThoiGianNhanBan().toLocalTime())) < 180)
+                    throw new IllegalArgumentException("Khoảng cách cho các lần đặt khác nhau trong cùng 1 bàn phải trên 3 giờ");
+            }
+        }
         this.thoiGianNhanBan = thoiGianNhanBan;
     }
 
@@ -103,14 +113,6 @@ public class LichDat implements Serializable {
 
     public void setSoLuongNguoi(int soLuongNguoi) {
         this.soLuongNguoi = soLuongNguoi;
-    }
-
-    public Ban getBan() {
-        return ban;
-    }
-
-    public void setBan(Ban ban) {
-        this.ban = ban;
     }
 
     public HoaDon getHoaDon() {

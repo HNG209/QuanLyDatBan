@@ -59,7 +59,7 @@ public class ChonBanController implements Initializable {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/uicomponents/CardBan_TrangChonBan.fxml"));
             try {
                 AnchorPane pane = loader.load();
-                CardBanController controller = loader.getController();
+                CardBanChonBanController controller = loader.getController();
                 controller.setBan(i);
 
                 flowPane.getChildren().add(pane);
@@ -75,7 +75,7 @@ public class ChonBanController implements Initializable {
             FXMLLoader loader = new FXMLLoader(ChonBanController.class.getResource("/org/login/quanlydatban/uicomponents/CardBan_TrangChonBan.fxml"));
             try {
                 AnchorPane pane = loader.load();
-                CardBanController controller = loader.getController();
+                CardBanChonBanController controller = loader.getController();
                 controller.setBan(i);
 
                 flowPane.getChildren().add(pane);
@@ -94,7 +94,7 @@ public class ChonBanController implements Initializable {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/uicomponents/CardBan_TrangChonBan.fxml"));
             try {
                 AnchorPane pane = loader.load();
-                CardBanController controller = loader.getController();
+                CardBanChonBanController controller = loader.getController();
 
                 controller.setBan(i);
 
@@ -114,7 +114,7 @@ public class ChonBanController implements Initializable {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/uicomponents/CardBan_TrangChonBan.fxml"));
             try {
                 AnchorPane pane = loader.load();
-                CardBanController controller = loader.getController();
+                CardBanChonBanController controller = loader.getController();
 
                 controller.setBan(i);
 
@@ -135,7 +135,7 @@ public class ChonBanController implements Initializable {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/uicomponents/CardBan_TrangChonBan.fxml"));
             try {
                 AnchorPane pane = loader.load();
-                CardBanController controller = loader.getController();
+                CardBanChonBanController controller = loader.getController();
 
                 controller.setBan(i);
 
@@ -155,7 +155,7 @@ public class ChonBanController implements Initializable {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/uicomponents/CardBan_TrangChonBan.fxml"));
             try {
                 AnchorPane pane = loader.load();
-                CardBanController controller = loader.getController();
+                CardBanChonBanController controller = loader.getController();
 
                 controller.setBan(i);
 

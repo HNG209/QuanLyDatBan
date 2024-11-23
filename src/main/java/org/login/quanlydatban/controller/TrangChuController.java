@@ -198,9 +198,9 @@ public class TrangChuController implements Initializable {
 
     @FXML
     void datLich(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/TrangDatLich.fxml"));
-        TabPane pane = loader.load();
-        borderPane.setCenter(pane);
+//        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/TrangDatLich.fxml"));
+//        TabPane pane = loader.load();
+        borderPane.setCenter(DatLichController.getInstance().getRoot());
     }
 
     @Override

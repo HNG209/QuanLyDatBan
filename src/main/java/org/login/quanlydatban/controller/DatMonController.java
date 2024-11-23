@@ -24,6 +24,7 @@ import javafx.stage.Popup;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.login.quanlydatban.dao.*;
 import org.login.quanlydatban.entity.*;
 import org.login.quanlydatban.entity.enums.TrangThaiBan;
@@ -141,7 +142,7 @@ public class DatMonController implements Initializable {
     private Stage chuyenBanStage;
     private double tkd = 0.0;
     private double pt = 0.0;
-
+    private int pageSelected;
     private DatLichController datLichController;
 
 //    private static Parent root;
@@ -476,6 +477,10 @@ public class DatMonController implements Initializable {
         this.datLichController = datLichController;
     }
 
+    public void setPageSelected(int i) {
+        this.pageSelected = i;
+    }
+
     public void setBan(Ban ban) {
         this.ban = ban;
         this.banID.setText(ban.getMaBan());
@@ -644,12 +649,12 @@ public class DatMonController implements Initializable {
 //            AnchorPane anchorPane = loader.load();
 //            pane.setCenter(anchorPane);
 //        }
-        if(datLichController == null){
+        if(pageSelected == 0){
             ChonBanController.getInstance().refresh();
             TrangChuController.getBorderPaneStatic().setCenter(ChonBanController.getInstance().getRoot());
         }
         else {
-            datLichController.loadDatLich();
+            TrangChuController.getBorderPaneStatic().setCenter(DatLichController.getInstance().getRoot());
         }
     }
 

@@ -11,15 +11,12 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.login.quanlydatban.dao.HoaDonDAO;
 import org.login.quanlydatban.entity.Ban;
 import org.login.quanlydatban.entity.HoaDon;
-import org.login.quanlydatban.entity.NhanVien;
 import org.login.quanlydatban.entity.enums.TrangThaiBan;
-import org.login.quanlydatban.entity.enums.TrangThaiHoaDon;
 
 import java.io.IOException;
 import java.net.URL;
@@ -27,7 +24,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
-public class CardBanController implements Initializable {
+public class CardBanChonBanController implements Initializable {
     @FXML
     private Label khuVuc;
 
@@ -60,6 +57,7 @@ public class CardBanController implements Initializable {
             DatMonController controller = loader.getController();
 
             controller.setBan(ban);
+            controller.setPageSelected(0);
 
             List<HoaDon> list = hoaDonDAO.getHoaDonFromBan(ban);
 
