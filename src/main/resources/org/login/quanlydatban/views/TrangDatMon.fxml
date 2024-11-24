@@ -99,9 +99,9 @@
                </children>
             </GridPane>
             <Button fx:id="btnHuy" layoutX="33.0" layoutY="247.0" mnemonicParsing="false" onAction="#huyBan" prefHeight="26.0" prefWidth="254.0" styleClass="sunset-orange" text="Huỷ" AnchorPane.bottomAnchor="41.60000000000003" />
-            <Button layoutX="33.0" layoutY="280.0" mnemonicParsing="false" onAction="#thanhToan" prefHeight="26.0" prefWidth="540.0" styleClass="sage-green" text="Xác nhận thanh toán" AnchorPane.bottomAnchor="8.600000000000001" />
+            <Button fx:id="btnXacNhan" layoutX="33.0" layoutY="280.0" mnemonicParsing="false" onAction="#thanhToan" prefHeight="26.0" prefWidth="540.0" styleClass="sage-green" text="Xác nhận thanh toán" AnchorPane.bottomAnchor="8.600000000000001" />
             <Button fx:id="btnGiuBan" layoutX="33.0" layoutY="247.0" mnemonicParsing="false" onAction="#giuBan" prefHeight="26.0" prefWidth="254.0" styleClass="sunset-orange" text="Giữ bàn" AnchorPane.bottomAnchor="41.6" />
-            <Button layoutX="294.0" layoutY="246.0" mnemonicParsing="false" onAction="#chuyenBan" prefHeight="26.0" prefWidth="278.0" styleClass="pale-lemon" text="Chuyển bàn" AnchorPane.bottomAnchor="42.6" />
+            <Button fx:id="btnChuyenBan" layoutX="294.0" layoutY="246.0" mnemonicParsing="false" onAction="#chuyenBan" prefHeight="26.0" prefWidth="278.0" styleClass="pale-lemon" text="Chuyển bàn" AnchorPane.bottomAnchor="42.6" />
          </children>
       </AnchorPane>
       <TableView fx:id="orderTable" layoutX="714.0" layoutY="19.0" prefHeight="269.0" prefWidth="598.0" styleClass="rounded-pane" AnchorPane.rightAnchor="19.0">

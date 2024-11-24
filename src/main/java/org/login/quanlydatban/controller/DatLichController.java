@@ -37,9 +37,6 @@ import java.util.ResourceBundle;
 public class DatLichController implements Initializable {
 
     @FXML
-    private Tab tabDatLich;
-
-    @FXML
     private ComboBox<LoaiBan> cbLoaiBan;
 
     @FXML
@@ -56,8 +53,6 @@ public class DatLichController implements Initializable {
     private LichDatDAO lichDatDAO;
 
     private BanDAO banDAO;
-
-    private Ban ban;
 
     @FXML
     private ComboBox<KhuVuc> khuVuc;
@@ -107,11 +102,22 @@ public class DatLichController implements Initializable {
     @FXML
     private TextField banTextField;
 
+    @FXML
+    private Button btnChonMon;
+
+    @FXML
+    private Button btnNhanBan;
+
+    @FXML
+    private Button btnHuyLich;
+
     private String prevSdt;
 
     private KhachHangDAO khachHangDAO;
 
     private HoaDon hoaDon;
+
+    private Ban ban;
 
     private static DatLichController instance;
 
@@ -237,11 +243,22 @@ public class DatLichController implements Initializable {
                 i.getHoaDon().getTrangThaiHoaDon().toString()}));
     }
 
-    public void loadDatLich() throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/TrangDatLich.fxml"));
-        TabPane pane = loader.load();
+    public void refeshTextFieldsAndButtons() {
+        btnChonMon.setDisable(true);
+        btnHuyLich.setDisable(true);
+        btnNhanBan.setDisable(true);
 
-        TrangChuController.getBorderPaneStatic().setCenter(pane);
+        tgNhanBan.setValue(null);
+        cbGio.getSelectionModel().clearSelection();
+        cbPhut.getSelectionModel().clearSelection();
+        sdt.clear();
+        banTextField.clear();
+        tenKhachHang.clear();
+        soLuongNguoi.clear();
+        coc.clear();
+
+        hoaDon = null;
+        ban = null;
     }
 
     @FXML
@@ -249,6 +266,10 @@ public class DatLichController implements Initializable {
         try {
             if(bookingTable.getSelectionModel().getSelectedIndex() != -1){
                 Ban b = hoaDon.getBan();
+                LichDat lichDat = lichDatDAO.getLichDat((String) bookingTable.getSelectionModel().getSelectedItem()[0]);
+
+                if(lichDat.getThoiGianNhanBan().isAfter(LocalDateTime.now()))
+                    throw new IllegalArgumentException("Chưa đến thời gian để nhận bàn");
 
                 //check if there're any served table at the time
                 for(Ban i : banDAO.readByStatus(TrangThaiBan.DANG_PHUC_VU)){
@@ -256,12 +277,16 @@ public class DatLichController implements Initializable {
                         throw new IllegalArgumentException("Không thể nhận bàn, vui lòng thanh toán bàn hiện tại trước khi nhận bàn");
                 }
 
-                b.setTrangThaiBan(TrangThaiBan.DANG_PHUC_VU);
-                banDAO.updateBan(b);
+                if(Notification.xacNhan("Nhận bàn?")){
+                    b.setTrangThaiBan(TrangThaiBan.DANG_PHUC_VU);
+                    banDAO.updateBan(b);
 
-                hoaDon.setTrangThaiHoaDon(TrangThaiHoaDon.CHUA_THANH_TOAN);
-                hoaDonDAO.updateHoaDon(hoaDon);
-                System.out.println(hoaDon);
+                    hoaDon.setTrangThaiHoaDon(TrangThaiHoaDon.CHUA_THANH_TOAN);
+                    hoaDonDAO.updateHoaDon(hoaDon);
+                    refreshBang();
+                    refreshViewBan();
+                    refeshTextFieldsAndButtons();
+                }
             }
             else throw new IllegalArgumentException("Vui lòng chọn 1 dòng");
         }
@@ -307,6 +332,16 @@ public class DatLichController implements Initializable {
         ban = lichDat.getHoaDon().getBan();
         banTextField.setText(ban.getMaBan());
         hoaDon = lichDat.getHoaDon();
+        if(hoaDon.getTrangThaiHoaDon() != TrangThaiHoaDon.DA_DAT){
+            btnChonMon.setDisable(true);
+            btnHuyLich.setDisable(true);
+            btnNhanBan.setDisable(true);
+        }
+        else{
+            btnNhanBan.setDisable(false);
+            btnChonMon.setDisable(false);
+            btnHuyLich.setDisable(false);
+        }
     }
 
     @FXML
@@ -332,25 +367,44 @@ public class DatLichController implements Initializable {
             HoaDon hoaDon = new HoaDon();
             hoaDon.setNgayLap(LocalDate.now());
             hoaDon.setTrangThaiHoaDon(TrangThaiHoaDon.DA_DAT);
+            hoaDon.setKhachHang(khachHangDAO.getKHBySDT(prevSdt));
             if (ban != null)
                 hoaDon.setBan(ban);
             else throw new IllegalArgumentException("Vui lòng chọn bàn");
-            hoaDon.setMaHoaDon(date);
-
-            lichDat.setHoaDon(hoaDon);
 
             if (tgNhanBan.getValue() != null) {
                 if (cbGio.getValue() != null && cbPhut.getValue() != null)
-                    lichDat.setThoiGianNhanBan(LocalDateTime.of(tgNhanBan.getValue(), LocalTime.of(cbGio.getValue(), cbPhut.getValue())));
+                    lichDat.setThoiGianNhanBan(LocalDateTime.of(tgNhanBan.getValue(), LocalTime.of(cbGio.getValue(), cbPhut.getValue())), ban);
                 else throw new IllegalArgumentException("Vui lòng chọn giờ");
             } else throw new IllegalArgumentException("Vui lòng chọn thời gian nhận bàn");
 
+            hoaDon.setMaHoaDon(date);
+            lichDat.setHoaDon(hoaDon);
 
             hoaDonDAO.lapHoaDon(hoaDon);
             lichDatDAO.taoLichDat(lichDat);
 
+            Notification.thongBao("Đặt lịch thành công, mã lịch đặt: " + lichDat.getMaLichDat(), Alert.AlertType.INFORMATION);
             refreshBang();
         } catch (Exception e) {
+            Notification.thongBao(e.getMessage(), Alert.AlertType.WARNING);
+        }
+    }
+
+    @FXML
+    void huyLich(ActionEvent event) {
+        try{
+            if(hoaDon != null) {
+                if(Notification.xacNhan("Xác nhận huỷ lịch này?, không thể hoàn tác")){
+                    hoaDon.setTrangThaiHoaDon(TrangThaiHoaDon.DA_HUY);
+                    hoaDonDAO.updateHoaDon(hoaDon);
+
+                    refreshBang();
+                    refeshTextFieldsAndButtons();
+                }
+            }
+        }
+        catch (Exception e) {
             Notification.thongBao(e.getMessage(), Alert.AlertType.WARNING);
         }
     }

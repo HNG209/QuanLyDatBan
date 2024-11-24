@@ -113,7 +113,7 @@ public class HoaDon implements Serializable {
     public HoaDon() {}
 
     public void setMaHoaDon(LocalDate date) {
-        if(date.isAfter(LocalDate.now())){
+        if(date.isAfter(LocalDate.now()) || date.isEqual(LocalDate.now())){
             if(ChronoUnit.DAYS.between(LocalDate.now(), date) <= 7) {
                 this.maHoaDon = generateCustomIdFuture(date);
             }

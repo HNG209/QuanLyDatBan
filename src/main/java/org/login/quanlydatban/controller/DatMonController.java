@@ -60,10 +60,17 @@ public class DatMonController implements Initializable {
     private TextField tongTienTxt;
 
     @FXML
+    private Button btnChuyenBan;
+
+    @FXML
     private Button btnGiuBan;
 
     @FXML
     private Button btnHuy;
+
+    @FXML
+    private Button btnXacNhan;
+
     private MonAnDAO monAnDAO;
     private BanDAO banDAO;
 
@@ -479,20 +486,38 @@ public class DatMonController implements Initializable {
 
     public void setPageSelected(int i) {
         this.pageSelected = i;
+        switch (pageSelected){
+            case 1:
+                btnGiuBan.setDisable(true);
+                btnHuy.setDisable(true);
+                btnChuyenBan.setDisable(true);
+                btnXacNhan.setDisable(true);
+                tienKhachDua.setEditable(false);
+                phuThu.setEditable(false);
+                break;
+            default:
+                break;
+        }
     }
 
     public void setBan(Ban ban) {
         this.ban = ban;
         this.banID.setText(ban.getMaBan());
-        this.trangThaiBanText.setText(ban.getTrangThaiBan().toString());
 
-        if(ban.getTrangThaiBan().equals(TrangThaiBan.BAN_TRONG)) {
-            this.btnHuy.setVisible(false);
-            this.btnGiuBan.setVisible(true);
+        if(pageSelected == 0) {
+            this.trangThaiBanText.setText(ban.getTrangThaiBan().toString());
+
+            if(ban.getTrangThaiBan().equals(TrangThaiBan.BAN_TRONG)) {
+                this.btnHuy.setVisible(false);
+                this.btnGiuBan.setVisible(true);
+            }
+            else {
+                this.btnHuy.setVisible(true);
+                this.btnGiuBan.setVisible(false);
+            }
         }
         else {
-            this.btnHuy.setVisible(true);
-            this.btnGiuBan.setVisible(false);
+            this.trangThaiBanText.setText(ban.getTrangThaiBan().toString() + " (ĐÃ ĐẶT TRƯỚC)");
         }
     }
 
@@ -562,7 +587,8 @@ public class DatMonController implements Initializable {
             this.btnGiuBan.setVisible(true);
 
             if(hoaDon != null) {
-                hoaDonDAO.xoaHoaDon(hoaDon);
+                hoaDon.setTrangThaiHoaDon(TrangThaiHoaDon.DA_HUY);
+                hoaDonDAO.updateHoaDon(hoaDon);
                 hoaDon = null;
             }
         }

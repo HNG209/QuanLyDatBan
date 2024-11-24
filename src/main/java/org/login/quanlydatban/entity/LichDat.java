@@ -3,6 +3,7 @@ package org.login.quanlydatban.entity;
 import org.login.quanlydatban.dao.HoaDonDAO;
 import org.login.quanlydatban.dao.LichDatDAO;
 import org.login.quanlydatban.entity.enums.LoaiTiec;
+import org.login.quanlydatban.entity.enums.TrangThaiHoaDon;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -40,6 +41,9 @@ public class LichDat implements Serializable {
     @Column
     @Enumerated(EnumType.STRING)
     private LoaiTiec loaiTiec;
+
+    @Column
+    private double tienCoc;
 
     @Transient
     private LichDatDAO lichDatDAO;
@@ -80,12 +84,14 @@ public class LichDat implements Serializable {
         return thoiGianNhanBan;
     }
 
-    public void setThoiGianNhanBan(LocalDateTime thoiGianNhanBan) {
-        List<LichDat> list = lichDatDAO.getDSLichDat();
+    public void setThoiGianNhanBan(LocalDateTime thoiGianNhanBan, Ban ban) {
+        List<LichDat> list = lichDatDAO.getDSLichDatByStatus(TrangThaiHoaDon.DA_DAT);
         for (LichDat i : list) {
-            if (i.getHoaDon().getBan().getMaBan().equals(this.getHoaDon().getBan().getMaBan())) {
-                if (Math.abs(ChronoUnit.MINUTES.between(thoiGianNhanBan.toLocalTime(), i.getThoiGianNhanBan().toLocalTime())) < 180)
-                    throw new IllegalArgumentException("Khoảng cách cho các lần đặt khác nhau trong cùng 1 bàn phải trên 3 giờ");
+            if (i.getHoaDon().getBan().getMaBan().equals(ban.getMaBan())) {
+                if(i.getThoiGianNhanBan().toLocalDate().isEqual(thoiGianNhanBan.toLocalDate())){
+                    if (Math.abs(ChronoUnit.MINUTES.between(thoiGianNhanBan.toLocalTime(), i.getThoiGianNhanBan().toLocalTime())) < 180)
+                        throw new IllegalArgumentException("Khoảng cách cho các lần đặt khác nhau trong cùng 1 bàn phải trên 3 giờ");
+                }
             }
         }
         this.thoiGianNhanBan = thoiGianNhanBan;

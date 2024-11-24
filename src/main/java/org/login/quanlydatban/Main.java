@@ -18,6 +18,8 @@ import org.login.quanlydatban.hibernate.HibernateUtils;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Objects;
 
 public class Main extends Application {
@@ -34,8 +36,8 @@ public class Main extends Application {
 //        khachHangDAO.themKhachHang(khachHang);
         //test ne bay
         Session session = HibernateUtils.getFactory().openSession();
-        String s = EncryptionUtils.encrypt("12345", System.getenv("ENCRYPTION_KEY"));
-        System.out.println(s);
+//        String s = EncryptionUtils.encrypt("12345", System.getenv("ENCRYPTION_KEY"));
+//        System.out.println(s);
         //        LoaiMonDAO lm = new LoaiMonDAO();
 //        lm.themLoaiMonAn(new LoaiMonAn("LM02", "Chie", "asadsa"));
 //        session.getTransaction().begin();
