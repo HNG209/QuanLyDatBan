@@ -14,6 +14,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.InputMethodEvent;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -23,10 +24,8 @@ import javafx.stage.Popup;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.hibernate.Session;
-import org.login.quanlydatban.dao.BanDAO;
-import org.login.quanlydatban.dao.ChiTietHoaDonDAO;
-import org.login.quanlydatban.dao.HoaDonDAO;
-import org.login.quanlydatban.dao.MonAnDAO;
+import org.hibernate.Transaction;
+import org.login.quanlydatban.dao.*;
 import org.login.quanlydatban.entity.*;
 import org.login.quanlydatban.entity.enums.TrangThaiBan;
 import org.login.quanlydatban.entity.enums.TrangThaiHoaDon;
@@ -35,6 +34,7 @@ import org.login.quanlydatban.hibernate.HibernateUtils;
 import org.login.quanlydatban.notification.Notification;
 import org.login.quanlydatban.utilities.NumberFormatter;
 
+import javax.persistence.NoResultException;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
@@ -60,10 +60,17 @@ public class DatMonController implements Initializable {
     private TextField tongTienTxt;
 
     @FXML
+    private Button btnChuyenBan;
+
+    @FXML
     private Button btnGiuBan;
 
     @FXML
     private Button btnHuy;
+
+    @FXML
+    private Button btnXacNhan;
+
     private MonAnDAO monAnDAO;
     private BanDAO banDAO;
 
@@ -132,12 +139,18 @@ public class DatMonController implements Initializable {
 
     private HoaDonDAO hoaDonDAO;
 
+    private KhachHangDAO khachHangDAO;
+
     private ChiTietHoaDonDAO chiTietHoaDonDAO;
     private HoaDon hoaDon;
+
+    private KhachHang khachHang;
 
     private Stage chuyenBanStage;
     private double tkd = 0.0;
     private double pt = 0.0;
+    private int pageSelected;
+    private DatLichController datLichController;
 
 //    private static Parent root;
 //    private static DatMonController instance;
@@ -165,6 +178,34 @@ public class DatMonController implements Initializable {
         banDAO = new BanDAO();
         hoaDonDAO = new HoaDonDAO();
         chiTietHoaDonDAO = new ChiTietHoaDonDAO();
+        khachHangDAO = new KhachHangDAO();
+
+        tenKhachHang.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue) { // If newValue is false, the TextField has lost focus
+                if(Notification.xacNhan("Lưu khách hàng này?")){
+                    KhachHang khachHang = new KhachHang();
+                    khachHang.setSdt(sdt.getText());
+                    khachHang.setTenKhachHang(tenKhachHang.getText());
+
+                    khachHangDAO.themKhachHang(khachHang);
+                    this.khachHang = khachHang;
+
+                    hoaDon.setKhachHang(khachHang);
+                    hoaDonDAO.updateHoaDon(hoaDon);
+                }
+            }
+        });
+
+        sdt.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue && khachHang != null) { // If newValue is false, the TextField has lost focus
+                if(Notification.xacNhan("Khách hàng sẽ được thêm vào hoá đơn")) {
+                    KhachHang khachHang = khachHangDAO.getKHBySDT(sdt.getText());
+
+                    hoaDon.setKhachHang(khachHang);
+                    hoaDonDAO.updateHoaDon(hoaDon);
+                }
+            }
+        });
 
         objectsObservableList = FXCollections.observableArrayList();
 
@@ -439,18 +480,44 @@ public class DatMonController implements Initializable {
         tongTienTxt.setText(NumberFormatter.formatPrice(String.valueOf((int) hoaDon.tinhTongTien())));
     }
 
+    public void setDatLichController(DatLichController datLichController) {
+        this.datLichController = datLichController;
+    }
+
+    public void setPageSelected(int i) {
+        this.pageSelected = i;
+        switch (pageSelected){
+            case 1:
+                btnGiuBan.setDisable(true);
+                btnHuy.setDisable(true);
+                btnChuyenBan.setDisable(true);
+                btnXacNhan.setDisable(true);
+                tienKhachDua.setEditable(false);
+                phuThu.setEditable(false);
+                break;
+            default:
+                break;
+        }
+    }
+
     public void setBan(Ban ban) {
         this.ban = ban;
         this.banID.setText(ban.getMaBan());
-        this.trangThaiBanText.setText(ban.getTrangThaiBan().toString());
 
-        if(ban.getTrangThaiBan().equals(TrangThaiBan.BAN_TRONG)) {
-            this.btnHuy.setVisible(false);
-            this.btnGiuBan.setVisible(true);
+        if(pageSelected == 0) {
+            this.trangThaiBanText.setText(ban.getTrangThaiBan().toString());
+
+            if(ban.getTrangThaiBan().equals(TrangThaiBan.BAN_TRONG)) {
+                this.btnHuy.setVisible(false);
+                this.btnGiuBan.setVisible(true);
+            }
+            else {
+                this.btnHuy.setVisible(true);
+                this.btnGiuBan.setVisible(false);
+            }
         }
         else {
-            this.btnHuy.setVisible(true);
-            this.btnGiuBan.setVisible(false);
+            this.trangThaiBanText.setText(ban.getTrangThaiBan().toString() + " (ĐÃ ĐẶT TRƯỚC)");
         }
     }
 
@@ -470,6 +537,13 @@ public class DatMonController implements Initializable {
     }
     public void setHoaDon(HoaDon hoaDon) {
         this.hoaDon = hoaDon;
+        if(hoaDon != null){
+            if(hoaDon.getKhachHang() != null){
+                khachHang = hoaDon.getKhachHang();
+                sdt.setText(khachHang.getSdt());
+                tenKhachHang.setText(khachHang.getTenKhachHang());
+            }
+        }
         chiTietHoaDonDAO.getCTHDfromHD(hoaDon).forEach(
                 i -> loadBang(new Object[] {i.getMonAn().getMaMonAn(),
                         i.getMonAn().getTenMonAn(),
@@ -513,7 +587,8 @@ public class DatMonController implements Initializable {
             this.btnGiuBan.setVisible(true);
 
             if(hoaDon != null) {
-                hoaDonDAO.xoaHoaDon(hoaDon);
+                hoaDon.setTrangThaiHoaDon(TrangThaiHoaDon.DA_HUY);
+                hoaDonDAO.updateHoaDon(hoaDon);
                 hoaDon = null;
             }
         }
@@ -600,8 +675,13 @@ public class DatMonController implements Initializable {
 //            AnchorPane anchorPane = loader.load();
 //            pane.setCenter(anchorPane);
 //        }
-        ChonBanController.getInstance().refresh();
-        TrangChuController.getBorderPaneStatic().setCenter(ChonBanController.getInstance().getRoot());
+        if(pageSelected == 0){
+            ChonBanController.getInstance().refresh();
+            TrangChuController.getBorderPaneStatic().setCenter(ChonBanController.getInstance().getRoot());
+        }
+        else {
+            TrangChuController.getBorderPaneStatic().setCenter(DatLichController.getInstance().getRoot());
+        }
     }
 
     public void themChiTietHoaDon(MonAn monAn){//tao 1 lan
@@ -766,6 +846,25 @@ public class DatMonController implements Initializable {
                 timTheoGiaTD.positionCaret(timTheoGiaTD.getText().length());
             }
         }
+    }
+
+    @FXML
+    void sdtEnter(KeyEvent event) {
+        if(sdt.getText().length() == 10) {
+            try {
+                KhachHang khachHang = khachHangDAO.getKHBySDT(sdt.getText());
+                tenKhachHang.setText(khachHang.getTenKhachHang());
+                this.khachHang = khachHang;
+            }
+            catch (NoResultException e) {
+                khachHang = null;
+                if(Notification.xacNhan("Số điện thoại mới, bạn có muốn tạo khách hàng này?")){
+                    tenKhachHang.requestFocus();
+                    tenKhachHang.setEditable(true);
+                }
+            }
+        }
+        else tenKhachHang.setEditable(false);
     }
 
     public HoaDon getHoaDon() {

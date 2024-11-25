@@ -10,6 +10,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Set;
 
@@ -43,7 +44,7 @@ public class HoaDon implements Serializable {
     @Column
     private double phuThu;
 
-    @Transient
+    @Column
     private double tongTien;
 
     @Transient
@@ -52,18 +53,30 @@ public class HoaDon implements Serializable {
     @PreUpdate
     public void generateId() {
         if (this.maHoaDon == null) {
+            System.out.println("2");
             this.maHoaDon = generateCustomId();
         }
         tongTien = tinhTongTien();
     }
 
-    private String generateCustomId() {
+    private String generateCustomId() {//generate HoaDon id when create(auto)
         String prefix = "HD";
         LocalDate today = LocalDate.now();
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("ddMMyyyy");
         String datePart = today.format(dateFormatter);
 
         int counterValue = getAndUpdateDailyCounter(today);
+
+        // Combine prefix, date part, and zero-padded counter (e.g., HD01102024001)
+        return prefix + datePart + String.format("%03d", counterValue);
+    }
+
+    public String generateCustomIdFuture(LocalDate date) {//generate HoaDon id when needed(manual), use for future booking
+        String prefix = "HD";
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("ddMMyyyy");
+        String datePart = date.format(dateFormatter);
+
+        int counterValue = getAndUpdateDailyCounter(date);
 
         // Combine prefix, date part, and zero-padded counter (e.g., HD01102024001)
         return prefix + datePart + String.format("%03d", counterValue);
@@ -99,8 +112,14 @@ public class HoaDon implements Serializable {
 
     public HoaDon() {}
 
-    public void setMaHoaDon(String maHoaDon) {
-        this.maHoaDon = maHoaDon;
+    public void setMaHoaDon(LocalDate date) {
+        if(date.isAfter(LocalDate.now()) || date.isEqual(LocalDate.now())){
+            if(ChronoUnit.DAYS.between(LocalDate.now(), date) <= 7) {
+                this.maHoaDon = generateCustomIdFuture(date);
+            }
+            else throw new IllegalArgumentException("Ngày đặt không được quá 7 ngày");
+        }
+        else throw new IllegalArgumentException("Ngày đặt phải từ ngày hiện tại");
     }
 
     public void setNgayLap(LocalDate ngayLap) {

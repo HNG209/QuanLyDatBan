@@ -26,9 +26,9 @@
                </padding></FlowPane>
          </content>
       </ScrollPane>
-      <AnchorPane layoutX="714.0" layoutY="311.0" prefHeight="300.0" prefWidth="597.0" style="-fx-background-color: white;" styleClass="rounded-pane" AnchorPane.bottomAnchor="24.0" AnchorPane.rightAnchor="19.0" AnchorPane.topAnchor="311.0">
+      <AnchorPane layoutX="714.0" layoutY="296.0" prefHeight="315.0" prefWidth="598.0" style="-fx-background-color: white;" styleClass="rounded-pane-simple" AnchorPane.bottomAnchor="24.0" AnchorPane.rightAnchor="19.0" AnchorPane.topAnchor="296.0">
          <children>
-            <GridPane layoutX="33.0" layoutY="-3.0" prefHeight="198.0" prefWidth="538.0" AnchorPane.bottomAnchor="92.6" AnchorPane.topAnchor="-3.0">
+            <GridPane layoutX="33.0" layoutY="4.8" prefHeight="225.0" prefWidth="534.0" AnchorPane.bottomAnchor="86.0" AnchorPane.topAnchor="4.0">
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="267.5333251953125" minWidth="10.0" prefWidth="125.86669464111328" />
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="477.6666946411133" minWidth="10.0" prefWidth="373.3333053588867" />
@@ -84,7 +84,7 @@
                         </Label>
                      </children>
                   </AnchorPane>
-                  <TextField fx:id="sdt" editable="false" layoutX="156.0" layoutY="127.0" prefHeight="26.0" prefWidth="363.0" promptText="Nếu có" styleClass="underlined-style" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                  <TextField fx:id="sdt" layoutX="156.0" layoutY="127.0" onKeyTyped="#sdtEnter" prefHeight="26.0" prefWidth="363.0" promptText="Nếu có" styleClass="underlined-style" GridPane.columnIndex="1" GridPane.rowIndex="6" />
                   <Label layoutX="10.0" layoutY="127.0" prefHeight="24.0" prefWidth="127.0" text="SDT khách hàng:" GridPane.rowIndex="6">
                      <font>
                         <Font size="15.0" />
@@ -98,13 +98,13 @@
                   <TextField fx:id="tenKhachHang" editable="false" layoutX="156.0" layoutY="150.0" prefHeight="26.0" prefWidth="363.0" styleClass="underlined-style" GridPane.columnIndex="1" GridPane.rowIndex="7" />
                </children>
             </GridPane>
-            <Button fx:id="btnHuy" layoutX="33.0" layoutY="222.0" mnemonicParsing="false" onAction="#huyBan" prefHeight="26.0" prefWidth="254.0" styleClass="sunset-orange" text="Huỷ" AnchorPane.bottomAnchor="52.0" />
-            <Button layoutX="33.0" layoutY="261.0" mnemonicParsing="false" onAction="#thanhToan" prefHeight="26.0" prefWidth="540.0" styleClass="sage-green" text="Xác nhận thanh toán" AnchorPane.bottomAnchor="13.0" />
-            <Button fx:id="btnGiuBan" layoutX="33.0" layoutY="209.0" mnemonicParsing="false" onAction="#giuBan" prefHeight="26.0" prefWidth="254.0" styleClass="sunset-orange" text="Giữ bàn" AnchorPane.bottomAnchor="52.0" />
-            <Button layoutX="294.0" layoutY="209.0" mnemonicParsing="false" onAction="#chuyenBan" prefHeight="26.0" prefWidth="278.0" styleClass="pale-lemon" text="Chuyển bàn" AnchorPane.bottomAnchor="52.0" />
+            <Button fx:id="btnHuy" layoutX="33.0" layoutY="247.0" mnemonicParsing="false" onAction="#huyBan" prefHeight="26.0" prefWidth="254.0" styleClass="sunset-orange" text="Huỷ" AnchorPane.bottomAnchor="41.60000000000003" />
+            <Button fx:id="btnXacNhan" layoutX="33.0" layoutY="280.0" mnemonicParsing="false" onAction="#thanhToan" prefHeight="26.0" prefWidth="540.0" styleClass="sage-green" text="Xác nhận thanh toán" AnchorPane.bottomAnchor="8.600000000000001" />
+            <Button fx:id="btnGiuBan" layoutX="33.0" layoutY="247.0" mnemonicParsing="false" onAction="#giuBan" prefHeight="26.0" prefWidth="254.0" styleClass="sunset-orange" text="Giữ bàn" AnchorPane.bottomAnchor="41.6" />
+            <Button fx:id="btnChuyenBan" layoutX="294.0" layoutY="246.0" mnemonicParsing="false" onAction="#chuyenBan" prefHeight="26.0" prefWidth="278.0" styleClass="pale-lemon" text="Chuyển bàn" AnchorPane.bottomAnchor="42.6" />
          </children>
       </AnchorPane>
-      <TableView fx:id="orderTable" layoutX="714.0" layoutY="19.0" prefHeight="287.0" prefWidth="597.0" styleClass="rounded-pane" AnchorPane.rightAnchor="19.0">
+      <TableView fx:id="orderTable" layoutX="714.0" layoutY="19.0" prefHeight="269.0" prefWidth="598.0" styleClass="rounded-pane" AnchorPane.rightAnchor="19.0">
         <columns>
           <TableColumn fx:id="maBan" prefWidth="59.999937534332275" text="Mã" />
           <TableColumn fx:id="tenMon" prefWidth="167.2000732421875" text="Tên món" />

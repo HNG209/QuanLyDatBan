@@ -62,11 +62,27 @@
     -fx-background-color: -fx-shadow-highlight-color, -fx-outer-border, -fx-inner-border, -fx-body-color;
 }
 
+.top-left-rounded {
+    -fx-background-radius: 20 0 0 0; /* Top-left corner rounded, others sharp */
+    -fx-border-radius: 20 0 0 0;
+}
+
+.top-right-rounded {
+    -fx-background-radius: 0 20 0 0; /* Top-left corner rounded, others sharp */
+    -fx-border-radius: 0 20 0 0;
+}
+
+.rounded-pane-simple {
+    -fx-background-radius: 20 20 20 20; /* Top-left corner rounded, others sharp */
+    -fx-border-radius: 20 20 20 20;
+    -fx-border-color: black;
+}
+
 .rounded-pane {
     -fx-background-radius: 25;     /* Radius for background */
 
     -fx-border-color: #000000;     /* Border color */
-    -fx-border-width: 2;           /* Border width */
+    -fx-border-width: 1;           /* Border width */
     -fx-border-radius: 25;         /* Radius for border */
 
     -fx-padding: 10;               /* Padding inside the pane */

@@ -1,14 +1,12 @@
 package org.login.quanlydatban.controller;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Bounds;
 import javafx.scene.Scene;
-import javafx.scene.control.ContextMenu;
-import javafx.scene.control.Label;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.SeparatorMenuItem;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.AnchorPane;
@@ -198,6 +196,12 @@ public class TrangChuController implements Initializable {
         }
     }
 
+    @FXML
+    void datLich(ActionEvent event) throws IOException {
+        DatLichController.getInstance().refreshBang();
+        DatLichController.getInstance().refreshViewBan();
+        borderPane.setCenter(DatLichController.getInstance().getRoot());
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {

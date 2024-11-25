@@ -22,7 +22,6 @@ public class KhachHang implements Serializable {
     @Column(nullable = false)
     private String sdt;
 
-    @Column(nullable = false)
     private String cccd;
 
     private String diaChi;
