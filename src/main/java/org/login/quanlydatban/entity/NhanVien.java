@@ -1,16 +1,21 @@
 package org.login.quanlydatban.entity;
 
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.login.quanlydatban.entity.enums.ChucVu;
 import org.login.quanlydatban.entity.enums.TrangThaiNhanVien;
+import org.login.quanlydatban.hibernate.HibernateUtils;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 
 @Entity
 @Table
 public class NhanVien implements Serializable {
+
 
     @Id
     private String maNhanVien;
@@ -49,6 +54,51 @@ public class NhanVien implements Serializable {
     public NhanVien(){
 
     }
+
+    @PrePersist
+    public  void generateID(){
+        if(this.maNhanVien == null){
+            this.maNhanVien = generateMaNhanVien(getChucVuNhanVien().toString());
+        }
+    }
+
+    private String generateMaNhanVien(String chucVu) {
+        // Xác định tiền tố dựa trên chức vụ đã chọn
+        String prefix = chucVu.equals("Nhân viên") ? "NV" : "QL";
+        Long maxId = getMaxIdFromDatabase(prefix);
+        Long newIdNumber = (maxId == null) ? 1 : maxId + 1; // Tăng mã lên 1
+        return prefix + String.format("%04d", newIdNumber); // Định dạng mã
+    }
+
+
+    public Long getMaxIdFromDatabase(String prefix) {
+        Session session = HibernateUtils.getFactory().openSession();
+        Transaction transaction = null;
+        Long maxId = null;
+
+        try {
+            transaction = session.beginTransaction();
+
+            String query = "SELECT maNhanVien FROM NhanVien WHERE maNhanVien LIKE :prefix";
+            List<String> maNhanViens = session.createQuery(query)
+                    .setParameter("prefix", prefix + "%")
+                    .getResultList();
+
+            maxId = maNhanViens.stream()
+                    .map(ma -> Long.parseLong(ma.substring(prefix.length())))
+                    .max(Long::compare)
+                    .orElse(0L);
+
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) transaction.rollback();
+            e.printStackTrace();
+        } finally {
+            // Không cần phải đóng session ở đây, sẽ tự động quản lý
+        }
+        return maxId;
+    }
+
 
     public String getTenTaiKhoan() {
         return tenTaiKhoan;

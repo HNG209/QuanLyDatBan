@@ -9,8 +9,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.login.quanlydatban.dao.NhanVienDAO;
 import org.login.quanlydatban.dao.TaiKhoanDAO;
 import org.login.quanlydatban.encryptionUtils.EncryptionUtils;
@@ -198,43 +196,6 @@ public class TrangThemNhanVienController implements Initializable {
         alert.setContentText(message);
         alert.showAndWait();
     }
-    // ma nhan vien tang dan
-    private String generateMaNhanVien(String chucVu) {
-        // Xác định tiền tố dựa trên chức vụ đã chọn
-        String prefix = chucVu.equals("Nhân viên") ? "NV" : "QL";
-
-        Long maxId = getMaxIdFromDatabase(prefix);
-        Long newIdNumber = (maxId == null) ? 1 : maxId + 1; // Tăng mã lên 1
-        return prefix + String.format("%04d", newIdNumber); // Định dạng mã
-    }
-
-    public Long getMaxIdFromDatabase(String prefix) {
-        Session session = HibernateUtils.getFactory().openSession();
-        Transaction transaction = null;
-        Long maxId = null;
-
-        try {
-            transaction = session.beginTransaction();
-
-            String query = "SELECT maNhanVien FROM NhanVien WHERE maNhanVien LIKE :prefix";
-            List<String> maNhanViens = session.createQuery(query)
-                    .setParameter("prefix", prefix + "%")
-                    .getResultList();
-
-             maxId = maNhanViens.stream()
-                    .map(ma -> Long.parseLong(ma.substring(prefix.length())))
-                    .max(Long::compare)
-                    .orElse(0L);
-
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction != null) transaction.rollback();
-            e.printStackTrace();
-        } finally {
-            // Không cần phải đóng session ở đây, sẽ tự động quản lý
-        }
-        return maxId;
-    }
 
     public String getTenNhanVien() {
         return tenNhanVien;
@@ -279,15 +240,6 @@ public class TrangThemNhanVienController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
            maNhanVien.setEditable(false);
-           chucVu.setOnAction(new EventHandler<ActionEvent>() {
-               @Override
-               public void handle(ActionEvent event) {
-                   String selectedChucVu = chucVu.getValue();
-                   String maNhanVien1 = generateMaNhanVien(selectedChucVu);
-                   maNhanVien.setText(maNhanVien1);
-               }
-           });
-
            btnLuu.setOnAction(new EventHandler<ActionEvent>() {
                @Override
                public void handle(ActionEvent event) {
@@ -351,13 +303,25 @@ public class TrangThemNhanVienController implements Initializable {
         }else if(chucVu.getValue().equals("Quản Lý")){
             cv = ChucVu.QUAN_LY;
         }
-         NhanVien nv = new NhanVien(maNhanVien.getText().toString(),hoTen.getText().toString(),dienThoai.getText().toString(),cccd.getText().toString(),diaChi.getText().toString(),gt,ngaySinh.getValue(),duongdan,tt,cv);
-         NhanVienDAO nvd = new NhanVienDAO();
-         nvd.addNhanVien(nv);
-         String tenTaiKhoan = hoTen.getText().toString().replaceAll("\\s+","");
-         String matKhau = EncryptionUtils.encrypt("1111", System.getenv("ENCRYPTION_KEY"));
-         TaiKhoan takKhoan = new TaiKhoan(tenTaiKhoan,matKhau, nvd.getNhanVien(nv.getMaNhanVien().toString()));
-         taiKhoanDAO.addNhanVien(takKhoan);
+
+
+
+
+        //NhanVien nv = new NhanVien(maNhanVien.getText().toString(),hoTen.getText().toString(),dienThoai.getText().toString(),cccd.getText().toString(),diaChi.getText().toString(),gt,ngaySinh.getValue(),duongdan,tt,cv);
+        NhanVien nv = new NhanVien();
+        nv.setTenNhanVien(hoTen.getText());
+        nv.setCccd(cccd.getText());
+        nv.setSdt(dienThoai.getText());
+        nv.setChucVuNhanVien(cv);
+        nv.setTrangThaiNhanVien(tt);
+        nv.setDiaChi(diaChi.getText());
+        nv.setHinhAnh(duongdan);
+        nv.setNgaySinh(ngaySinh.getValue());
+        NhanVienDAO nvd = new NhanVienDAO();
+        nvd.addNhanVien(nv);
+        String tenTaiKhoan = hoTen.getText().toString().replaceAll("\\s+","");
+        TaiKhoan takKhoan = new TaiKhoan(tenTaiKhoan,"1111", nvd.getNhanVien(nv.getMaNhanVien().toString()));
+        taiKhoanDAO.addNhanVien(takKhoan);
     }
 }
 
