@@ -111,6 +111,7 @@
                      <items>
                         <MenuItem mnemonicParsing="false" onAction="#thongKe" text="Thống kê" />
                         <MenuItem mnemonicParsing="false" onAction="#ketCa" text="Kết ca" />
+                        <MenuItem mnemonicParsing="false" onAction="#thongKe" text="Vào ca" />
                      </items>
                      <graphic>
                         <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
