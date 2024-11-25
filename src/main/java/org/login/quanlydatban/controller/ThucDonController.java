@@ -748,8 +748,16 @@ public class ThucDonController implements Initializable {
         // Generate ID for the new MonAn
         String maMonAn = generateMaMonAn(cbloaiMonAn.getValue());
 
-        // Assuming duongDanAnh is a field that holds the path of the selected image
-        String duongDanAnh = this.duongDanAnh; // replace with actual image path
+        String duongDanAnh = null;
+        String imageUrl = anhMon.getImage().getUrl(); // Get the URL of the image
+        if (imageUrl != null && imageUrl.startsWith("file:")) {
+            if (imageUrl.endsWith("restaurant.png")) {
+                duongDanAnh = "/org/login/quanlydatban/icons/empty.png";
+            } else {
+                duongDanAnh = imageUrl.substring(5); // Remove "file:" prefix to get the file path
+            }
+
+        }
 
         // Create the new MonAn object
         MonAn monAn = new MonAn(maMonAn, loaiMon, tenMonAn, gia, donViTinh, duongDanAnh, ttMonAn);
@@ -818,7 +826,7 @@ public class ThucDonController implements Initializable {
             txtGia.setText(String.valueOf(monAn.getDonGia()));
 
             String imagePath = monAn.getHinhAnh();
-            String imageDefaultPath = "/org/login/quanlydatban/icons/empty.png";
+            String imageDefaultPath = "/org/login/quanlydatban/icons/restaurant.png";
             if (imagePath != null && !imagePath.isEmpty()) {
                 anhMon.setImage(new Image(new File(imagePath).toURI().toString()));
             } else {
