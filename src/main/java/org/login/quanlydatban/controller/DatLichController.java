@@ -170,9 +170,9 @@ public class DatLichController implements Initializable {
                     khachHang.setSdt(sdt.getText());
                     khachHang.setTenKhachHang(tenKhachHang.getText());
 
-                    khachHangDAO.themKhachHang(khachHang);
+                    prevSdt = sdt.getText();
 
-//                    hoaDonDAO.updateHoaDon(hoaDon);
+                    khachHangDAO.themKhachHang(khachHang);
                     tenKhachHang.setEditable(false);
                 }
             }
