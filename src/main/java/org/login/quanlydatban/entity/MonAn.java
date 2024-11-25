@@ -100,7 +100,11 @@ public class MonAn implements Serializable {
     }
 
     public void setDonGia(double donGia) {
-        this.donGia = donGia;
+        if (donGia > 0) {
+            this.donGia = donGia;
+        } else {
+            throw new IllegalArgumentException("Giá phải lớn hơn 0");
+        }
     }
 
     public void setDonViTinh(String donViTinh) {

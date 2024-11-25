@@ -55,7 +55,7 @@
                <font>
                   <Font size="15.0" />
                </font></Label>
-            <ComboBox fx:id="cbloaiMonAn" editable="true" layoutX="128.0" layoutY="65.0" prefHeight="26.0" prefWidth="398.0" styleClass="round-box">
+            <ComboBox fx:id="cbloaiMonAn" editable="true" layoutX="128.0" layoutY="65.0" prefHeight="26.0" prefWidth="398.0" style="-fx-border-color: #F3B664; -fx-background-color: white;" styleClass="round-box">
 <!--               <items>-->
 <!--                  <FXCollections fx:factory="observableArrayList">-->
 <!--                     <String fx:value="TRANG_MIENG" />-->
@@ -72,7 +72,7 @@
                <font>
                   <Font size="15.0" />
                </font></Label>
-            <ComboBox fx:id="cbtrangThaiMon" layoutX="128.0" layoutY="112.0" prefHeight="26.0" prefWidth="398.0" styleClass="round-box">
+            <ComboBox fx:id="cbtrangThaiMon" layoutX="128.0" layoutY="112.0" prefHeight="26.0" prefWidth="398.0" style="-fx-background-color: white; -fx-border-color: #F3B664;" styleClass="round-box">
                <items>
                   <FXCollections fx:factory="observableArrayList">
                      <String fx:value="Có sẵn" />

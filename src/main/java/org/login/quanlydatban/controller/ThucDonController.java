@@ -30,10 +30,7 @@ import java.net.URI;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ThucDonController implements Initializable {
@@ -386,7 +383,7 @@ public class ThucDonController implements Initializable {
     @FXML
     void btnTimKiem(MouseEvent event) {
         String keyword = txtTimKiem.getText().trim();
-        String selectedType = cbTimLoaiMon.getValue();
+        String selectedType = cbTimLoaiMon.isEditable() ? cbTimLoaiMon.getEditor().getText().trim() : cbTimLoaiMon.getValue();
         Integer sortOption = cbSapXep.getSelectionModel().getSelectedIndex();
 
         if (cbTimLoaiMon.getValue() == null && keyword.isEmpty() && cbSapXep.getSelectionModel().isEmpty()) {
@@ -529,7 +526,7 @@ public class ThucDonController implements Initializable {
         Object source = event.getSource();
         if (source == btnRefresh || source == btnThemMon || source == btnCapNhat) {
             txtTimKiem.clear();
-            cbTimLoaiMon.getSelectionModel().clearSelection();
+            cbTimLoaiMon.getEditor().clear();
             cbTimLoaiMon.setValue("");
             cbSapXep.getSelectionModel().clearSelection();
             flowPane.getChildren().clear(); // Clear existing items
@@ -568,13 +565,15 @@ public class ThucDonController implements Initializable {
         }
     }
 
-    private String generateLoaiMonAn() {
-        Long maxId = getMaLoaiFromDatabase();
-        Long newIdNumber = (maxId == null) ? 1 : maxId + 1; // Tăng mã lên 1
-        return String.format("%02d", newIdNumber); // Định dạng mã
+    private String generateLoaiMonAn(String itemName) {
+        String prefix = generatePrefixFromName(itemName); // Generate the "XX" part from the item name
+        Long maxId = getMaLoaiFromDatabase(prefix); // Get the maximum "YY" part for the given prefix
+        Long newIdNumber = (maxId == null) ? 1 : maxId + 1; // Increment the ID number
+        return prefix + String.format("%02d", newIdNumber); // Combine "XX" and "YY" into the final format
     }
 
-    public Long getMaLoaiFromDatabase() {
+    // Method to retrieve the maximum "YY" part for a specific prefix from the database
+    public Long getMaLoaiFromDatabase(String prefix) {
         Session session = HibernateUtils.getFactory().openSession();
         Transaction transaction = null;
         Long maLoaiMon = null;
@@ -582,14 +581,18 @@ public class ThucDonController implements Initializable {
         try {
             transaction = session.beginTransaction();
 
-            String query = "SELECT maLoaiMonAn FROM LoaiMonAn ";
+            // Query to fetch IDs starting with the given prefix
+            String query = "SELECT maLoaiMonAn FROM LoaiMonAn WHERE maLoaiMonAn LIKE :prefix";
             List<String> maMonAns = session.createQuery(query, String.class)
+                    .setParameter("prefix", prefix + "%") // Match IDs with the given prefix
                     .getResultList();
 
+            // Extract the "YY" part, convert to a number, and find the maximum
             maLoaiMon = maMonAns.stream()
-                    .filter(ma -> ma.matches("\\d{2}")) // Ensure only 4-digit numbers are processed
-                    .map(Long::parseLong)
-                    .max(Long::compare)
+                    .map(id -> id.substring(prefix.length())) // Extract "YY" part
+                    .filter(yy -> yy.matches("\\d+"))         // Ensure it is numeric
+                    .map(Long::parseLong)                    // Convert to Long
+                    .max(Long::compare)                      // Find the maximum
                     .orElse(0L);
 
             transaction.commit();
@@ -602,6 +605,17 @@ public class ThucDonController implements Initializable {
             }
         }
         return maLoaiMon;
+    }
+
+    // Helper method to generate the "XX" part from the item name
+    private String generatePrefixFromName(String name) {
+        // Split the name into words, take the first character of each word, and convert to uppercase
+        return Arrays.stream(name.split("\\s+"))
+                .filter(word -> !word.isEmpty())       // Ensure non-empty words
+                .map(word -> word.substring(0, 1))    // Take the first letter of each word
+                .map(String::toUpperCase)             // Convert to uppercase
+                .limit(2)                             // Take only the first 2 letters
+                .reduce("", String::concat);         // Combine into a single string
     }
 
 //    private String generateLoaiMonAn(String prefix) {
@@ -636,28 +650,39 @@ public class ThucDonController implements Initializable {
 //        return maLoai;
 //    }
 
-    private String generateMaMonAn() {
-        Long maxId = getMaMonFromDatabase();
-        Long newIdNumber = (maxId == null) ? 1 : maxId + 1; // Tăng mã lên 1
-        return String.format("%04d", newIdNumber); // Định dạng mã
+    private String generateMaMonAn(String itemName) {
+        // Generate the "XXXX" part using the logic for XXYY
+        String prefix = generateLoaiMonAn(itemName); // Assume this generates the XXYY format
+
+        // Fetch the maximum "YYYY" part for the given "XXXX" prefix and increment it
+        Long maxSuffix = getMaMonFromDatabase(prefix);
+        Long newSuffix = (maxSuffix == null) ? 1 : maxSuffix + 1;
+
+        // Combine "XXXX" (from XXYY) and "YYYY" into the final format
+        return prefix + String.format("%04d", newSuffix); // Ensure "YYYY" is 4 digits
     }
 
-    public Long getMaMonFromDatabase() {
+    // Method to retrieve the maximum "YYYY" value for a specific "XXXX" prefix
+    public Long getMaMonFromDatabase(String prefix) {
         Session session = HibernateUtils.getFactory().openSession();
         Transaction transaction = null;
-        Long maMon = null;
+        Long maxSuffix = null;
 
         try {
             transaction = session.beginTransaction();
 
-            String query = "SELECT maMonAn FROM MonAn";
+            // Query to fetch IDs starting with the given "XXXX" prefix
+            String query = "SELECT maMonAn FROM MonAn WHERE maMonAn LIKE :prefix";
             List<String> maMonAns = session.createQuery(query, String.class)
+                    .setParameter("prefix", prefix + "%") // Match IDs with the given prefix
                     .getResultList();
 
-            maMon = maMonAns.stream()
-                    .filter(ma -> ma.matches("\\d{4}")) // Ensure only 4-digit numbers are processed
-                    .map(Long::parseLong)
-                    .max(Long::compare)
+            // Extract the "YYYY" part, convert to a number, and find the maximum
+            maxSuffix = maMonAns.stream()
+                    .map(id -> id.substring(prefix.length())) // Extract "YYYY" part
+                    .filter(yy -> yy.matches("\\d+"))         // Ensure it is numeric
+                    .map(Long::parseLong)                    // Convert to Long
+                    .max(Long::compare)                      // Find the maximum
                     .orElse(0L);
 
             transaction.commit();
@@ -669,7 +694,7 @@ public class ThucDonController implements Initializable {
                 session.close(); // Ensure the session is closed properly
             }
         }
-        return maMon;
+        return maxSuffix;
     }
 
 
@@ -721,7 +746,7 @@ public class ThucDonController implements Initializable {
         String donViTinh = txtDonViTinh.getText();
 
         // Generate ID for the new MonAn
-        String maMonAn = generateMaMonAn();
+        String maMonAn = generateMaMonAn(cbloaiMonAn.getValue());
 
         // Assuming duongDanAnh is a field that holds the path of the selected image
         String duongDanAnh = this.duongDanAnh; // replace with actual image path
@@ -735,7 +760,7 @@ public class ThucDonController implements Initializable {
 
     public void themLoaiMon () {
         LoaiMonDAO loaiMonDAO = new LoaiMonDAO();
-        String maLoai = generateLoaiMonAn();
+        String maLoai = generateLoaiMonAn(cbloaiMonAn.getValue());
         String tenLoai = cbloaiMonAn.getValue();
         String moTa = txfMoTa.getText();
 
