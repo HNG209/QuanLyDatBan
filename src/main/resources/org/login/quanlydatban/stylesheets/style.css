@@ -38,8 +38,8 @@
 /*end defining theme*/
 
 .round-box {
-    -fx-background-radius: 10;
-    -fx-border-radius: 10;
+    -fx-background-radius: 20;
+    -fx-border-radius: 20;
 }
 
 
