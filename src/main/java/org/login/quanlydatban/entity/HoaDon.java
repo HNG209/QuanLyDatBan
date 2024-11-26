@@ -113,13 +113,7 @@ public class HoaDon implements Serializable {
     public HoaDon() {}
 
     public void setMaHoaDon(LocalDate date) {
-        if(date.isAfter(LocalDate.now()) || date.isEqual(LocalDate.now())){
-            if(ChronoUnit.DAYS.between(LocalDate.now(), date) <= 7) {
-                this.maHoaDon = generateCustomIdFuture(date);
-            }
-            else throw new IllegalArgumentException("Ngày đặt không được quá 7 ngày");
-        }
-        else throw new IllegalArgumentException("Ngày đặt phải từ ngày hiện tại");
+        this.maHoaDon = generateCustomIdFuture(date);
     }
 
     public void setNgayLap(LocalDate ngayLap) {

@@ -72,6 +72,7 @@ public class DatMonController implements Initializable {
     private Button btnXacNhan;
 
     private MonAnDAO monAnDAO;
+
     private BanDAO banDAO;
 
     @FXML
@@ -142,34 +143,18 @@ public class DatMonController implements Initializable {
     private KhachHangDAO khachHangDAO;
 
     private ChiTietHoaDonDAO chiTietHoaDonDAO;
+
     private HoaDon hoaDon;
 
     private KhachHang khachHang;
 
     private Stage chuyenBanStage;
-    private double tkd = 0.0;
-    private double pt = 0.0;
-    private int pageSelected;
-    private DatLichController datLichController;
 
-//    private static Parent root;
-//    private static DatMonController instance;
-//
-//    public static DatMonController getInstance() throws IOException {
-//        if(instance == null)
-//            instance = loadTrangDatMon();
-//        return instance;
-//    }
-//
-//    private static DatMonController loadTrangDatMon() throws IOException {
-//        FXMLLoader loader = new FXMLLoader(ChonBanController.class.getResource("/org/login/quanlydatban/views/TrangDatMon.fxml"));
-//        root = loader.load();
-//        return loader.getController();
-//    }
-//
-//    public Parent getRoot() {
-//        return root;
-//    }
+    private double tkd = 0.0;
+
+    private double pt = 0.0;
+
+    private int pageSelected;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -179,6 +164,8 @@ public class DatMonController implements Initializable {
         hoaDonDAO = new HoaDonDAO();
         chiTietHoaDonDAO = new ChiTietHoaDonDAO();
         khachHangDAO = new KhachHangDAO();
+
+        sdt.setEditable(false);
 
         tenKhachHang.focusedProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue) { // If newValue is false, the TextField has lost focus
@@ -480,10 +467,6 @@ public class DatMonController implements Initializable {
         tongTienTxt.setText(NumberFormatter.formatPrice(String.valueOf((int) hoaDon.tinhTongTien())));
     }
 
-    public void setDatLichController(DatLichController datLichController) {
-        this.datLichController = datLichController;
-    }
-
     public void setPageSelected(int i) {
         this.pageSelected = i;
         switch (pageSelected){
@@ -524,6 +507,7 @@ public class DatMonController implements Initializable {
     public boolean daLapHoaDon() {
         return hoaDon != null;
     }
+
     public void setNhanVien(NhanVien nhanVien) {
         this.nhanVien = nhanVien;
     }
@@ -535,9 +519,11 @@ public class DatMonController implements Initializable {
     public void refresh() {
         orderTable.getItems().clear();
     }
+
     public void setHoaDon(HoaDon hoaDon) {
         this.hoaDon = hoaDon;
         if(hoaDon != null){
+            sdt.setEditable(true);
             if(hoaDon.getKhachHang() != null){
                 khachHang = hoaDon.getKhachHang();
                 sdt.setText(khachHang.getSdt());
@@ -629,7 +615,6 @@ public class DatMonController implements Initializable {
             chuyenBanStage.toFront();
         }
     }
-
 
     @FXML
     void thanhToan(ActionEvent event) {

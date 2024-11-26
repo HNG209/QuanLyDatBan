@@ -85,16 +85,19 @@ public class LichDat implements Serializable {
     }
 
     public void setThoiGianNhanBan(LocalDateTime thoiGianNhanBan, Ban ban) {
-        List<LichDat> list = lichDatDAO.getDSLichDatByStatus(TrangThaiHoaDon.DA_DAT);
-        for (LichDat i : list) {
-            if (i.getHoaDon().getBan().getMaBan().equals(ban.getMaBan())) {
-                if(i.getThoiGianNhanBan().toLocalDate().isEqual(thoiGianNhanBan.toLocalDate())){
-                    if (Math.abs(ChronoUnit.MINUTES.between(thoiGianNhanBan.toLocalTime(), i.getThoiGianNhanBan().toLocalTime())) < 180)
-                        throw new IllegalArgumentException("Khoảng cách cho các lần đặt khác nhau trong cùng 1 bàn phải trên 3 giờ");
+        if(thoiGianNhanBan.isAfter(LocalDateTime.now()) || thoiGianNhanBan.isEqual(LocalDateTime.now())){
+            List<LichDat> list = lichDatDAO.getDSLichDatByStatus(TrangThaiHoaDon.DA_DAT);
+            for (LichDat i : list) {
+                if (i.getHoaDon().getBan().getMaBan().equals(ban.getMaBan())) {
+                    if(i.getThoiGianNhanBan().toLocalDate().isEqual(thoiGianNhanBan.toLocalDate())){
+                        if (Math.abs(ChronoUnit.MINUTES.between(thoiGianNhanBan.toLocalTime(), i.getThoiGianNhanBan().toLocalTime())) < 180)
+                            throw new IllegalArgumentException("Khoảng cách cho các lần đặt khác nhau trong cùng 1 bàn phải trên 3 giờ");
+                    }
                 }
             }
+            this.thoiGianNhanBan = thoiGianNhanBan;
         }
-        this.thoiGianNhanBan = thoiGianNhanBan;
+        else throw new IllegalArgumentException("Thời gian nhận bàn phải từ ngày giờ hiện tại");
     }
 
     public KhachHang getKhachHang() {
