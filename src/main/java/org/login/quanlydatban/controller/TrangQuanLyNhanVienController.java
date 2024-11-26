@@ -40,7 +40,6 @@ public class TrangQuanLyNhanVienController implements Initializable {
     private Button btnTaiAnh1;
     @FXML
     private ImageView image1;
-    private String duongdan;
     @FXML
     private Button btnHuyBo; // btn huy bo
     @FXML
