@@ -1,6 +1,7 @@
 package org.login.quanlydatban.controller;
 
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -8,6 +9,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.FileChooser;
@@ -22,7 +24,10 @@ import org.login.quanlydatban.hibernate.HibernateUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Comparator;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -39,6 +44,9 @@ public class ThucDonController implements Initializable {
 
     @FXML
     private TableView<?> orderTable;
+
+    @FXML
+    private ImageView btnRefresh;
 
     @FXML
     private TextField txtTenMonAn;
@@ -73,8 +81,8 @@ public class ThucDonController implements Initializable {
     @FXML
     private Button btnThemMon;
 
-    @FXML
-    private Button btnXoaMon;
+//    @FXML
+//    private Button btnXoaMon;
 
     @FXML
     private Button btnCapNhat;
@@ -83,11 +91,11 @@ public class ThucDonController implements Initializable {
     @FXML
     private Button btnXoaRong;
 
-    @FXML
-    private Button btnTimKiem;
-
-    @FXML
-    private Button btnRefresh;
+//    @FXML
+//    private Button btnTimKiem;
+//
+//    @FXML
+//    private Button btnRefresh;
 
 
     private MonAn monAn;
@@ -124,7 +132,7 @@ public class ThucDonController implements Initializable {
                 System.out.println("Nhan nut tai anh");
                 FileChooser fileChooser = new FileChooser();
 
-                fileChooser.setInitialDirectory(new File("../QuanLyDatBan/src/main/resources/org/login/quanlydatban/Image"));
+                fileChooser.setInitialDirectory(new File("../QuanLyDatBan/src/main/resources/org/login/quanlydatban/ImageFood"));
                 fileChooser.setTitle("Mở file");
 
                 // Thiết lập bộ lọc file nếu cần
@@ -135,7 +143,7 @@ public class ThucDonController implements Initializable {
                 System.out.println("Nhấn nút tải ảnh");
 
                 if (file != null) {
-                    duongDanAnh = file.getAbsolutePath();
+                    //duongDanAnh = file.getAbsolutePath();
                     duongDanAnh = file.getAbsolutePath(); // Cập nhật đường dẫn
                     // Cập nhật ImageView với ảnh mới
                     Image image = new Image(file.toURI().toString());
@@ -144,43 +152,43 @@ public class ThucDonController implements Initializable {
             }
         });
 
-        btnTimKiem.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                String s = txtTimKiem.getText().trim();
-                if (cbChiMuc.getSelectionModel().isEmpty()) {
-                    showWarn("Bạn cần chọn một chỉ mục trước khi tìm kiếm");
-                }
-                else if (cbChiMuc.getSelectionModel().getSelectedIndex() == 0) {
-                    if (txtTimKiem.getText().trim().isEmpty()) {
-                        showWarn("Vui lòng điền tên muốn tìm");
-                    } else {
-                        timKiemTheoTen(s);
-                    }
-                }
-                else if (cbChiMuc.getSelectionModel().getSelectedIndex() == 1) {
-                    if (txtTimKiem.getText().trim().isEmpty()) {
-                        showWarn("Vui lòng điền tên muốn tìm");
-                    } else {
-                        timKiemTheoLoai(s);
-                    }
-                }
-                else if (cbChiMuc.getSelectionModel().getSelectedIndex() == 2) {
-                    if (cbSapXep.getSelectionModel().isEmpty()){
-                        showWarn("Vui lòng chọn cách sắp xếp");
-                    }
-                    else {
-                        if (cbSapXep.getSelectionModel().getSelectedIndex() == 0) {
-                            ascendingSorting();
-                        }
-                        else {
-                            descendingSorting();
-                        }
-                    }
-                }
-
-            }
-        });
+//        btnTimKiem.setOnAction(new EventHandler<ActionEvent>() {
+//            @Override
+//            public void handle(ActionEvent actionEvent) {
+//                String s = txtTimKiem.getText().trim();
+//                if (cbChiMuc.getSelectionModel().isEmpty()) {
+//                    showWarn("Bạn cần chọn một chỉ mục trước khi tìm kiếm");
+//                }
+//                else if (cbChiMuc.getSelectionModel().getSelectedIndex() == 0) {
+//                    if (txtTimKiem.getText().trim().isEmpty()) {
+//                        showWarn("Vui lòng điền tên muốn tìm");
+//                    } else {
+//                        timKiemTheoTen(s);
+//                    }
+//                }
+//                else if (cbChiMuc.getSelectionModel().getSelectedIndex() == 1) {
+//                    if (txtTimKiem.getText().trim().isEmpty()) {
+//                        showWarn("Vui lòng điền tên muốn tìm");
+//                    } else {
+//                        timKiemTheoLoai(s);
+//                    }
+//                }
+//                else if (cbChiMuc.getSelectionModel().getSelectedIndex() == 2) {
+//                    if (cbSapXep.getSelectionModel().isEmpty()){
+//                        showWarn("Vui lòng chọn cách sắp xếp");
+//                    }
+//                    else {
+//                        if (cbSapXep.getSelectionModel().getSelectedIndex() == 0) {
+//                            ascendingSorting();
+//                        }
+//                        else {
+//                            descendingSorting();
+//                        }
+//                    }
+//                }
+//
+//            }
+//        });
 
         cbloaiMonAn.getEditor().setOnAction(actionEvent -> {
             String newValue = cbloaiMonAn.getEditor().getText();
@@ -232,6 +240,7 @@ public class ThucDonController implements Initializable {
                 throw new RuntimeException(e);
             }
         }
+
         //monAnDAO.getListMonAn();
 //        scrollPane.vvalueProperty().addListener((obs, oldValue, newValue) -> {
 //            if(newValue.doubleValue() == 1.0){
@@ -278,37 +287,37 @@ public class ThucDonController implements Initializable {
         }
     }
 
-    @FXML
-    void xoaControl(ActionEvent event) {
-        Object source = event.getSource();
-        if (source == btnXoaMon) {
-            try{
-                if (monAn == null) {
-                    showWarn("Bạn cần chọn một món để xóa!");
-                }
-                else {
-                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                    alert.setTitle("XÁC NHẬN XÓA");
-                    alert.setHeaderText("Bạn có chắc chắn muốn xóa món này?");
-
-                    ButtonType result = alert.showAndWait().orElse(ButtonType.CANCEL);
-                    if (result == ButtonType.OK) {
-                        monAnDAO.xoaMonAn(monAn.getMaMonAn());
-                        showWarn("Đã xóa thành công!");
-                        refreshControl(event);
-                        xoaRongControl(event);
-                    }
-                    else {
-                        System.out.println("Delete cancel");
-                    }
-
-                }
-            } catch (Exception e) {
-                System.out.println(e);
-            }
-
-        }
-    }
+//    @FXML
+//    void xoaControl(ActionEvent event) {
+//        Object source = event.getSource();
+//        if (source == btnXoaMon) {
+//            try{
+//                if (monAn == null) {
+//                    showWarn("Bạn cần chọn một món để xóa!");
+//                }
+//                else {
+//                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+//                    alert.setTitle("XÁC NHẬN XÓA");
+//                    alert.setHeaderText("Bạn có chắc chắn muốn xóa món này?");
+//
+//                    ButtonType result = alert.showAndWait().orElse(ButtonType.CANCEL);
+//                    if (result == ButtonType.OK) {
+//                        monAnDAO.xoaMonAn(monAn.getMaMonAn());
+//                        showWarn("Đã xóa thành công!");
+//                        refreshControl(event);
+//                        xoaRongControl(event);
+//                    }
+//                    else {
+//                        System.out.println("Delete cancel");
+//                    }
+//
+//                }
+//            } catch (Exception e) {
+//                System.out.println(e);
+//            }
+//
+//        }
+//    }
 
     @FXML
     void capNhatControl(ActionEvent event) {
@@ -325,8 +334,14 @@ public class ThucDonController implements Initializable {
                     String donViMoi = txtDonViTinh.getText();
                     double giaMoi = Double.parseDouble(txtGia.getText());
                     TrangThaiMonAn trangThaiMoi = comboTTValue();
-                    String loaiMonMoiName = cbloaiMonAn.getValue();
 
+                    String anhMoi = anhMon.getImage().getUrl();
+                    if (anhMoi.startsWith("file:")) {
+                        Path path = Paths.get(URI.create(anhMoi)); // Convert the URI to a Path
+                        anhMoi = path.toString(); // Get the standard file path
+                    }
+
+                    String loaiMonMoiName = cbloaiMonAn.getValue();
                     LoaiMonAn loaiMonMoi = loaiMonDAO.getLoaiMonByName(loaiMonMoiName);
 
                     // If LoaiMonAn doesn't exist, add it
@@ -342,7 +357,7 @@ public class ThucDonController implements Initializable {
                     ButtonType result = alert.showAndWait().orElse(ButtonType.CANCEL);
 
                     if (result == ButtonType.OK) {
-                        monMoi = new MonAn(monAn.getMaMonAn(), loaiMonMoi, tenMonMoi, giaMoi, donViMoi, duongDanAnh, trangThaiMoi);
+                        monMoi = new MonAn(monAn.getMaMonAn(), loaiMonMoi, tenMonMoi, giaMoi, donViMoi, anhMoi, trangThaiMoi);
                         monAnDAO.capNhatMonAn(monAn, monMoi);
                         showWarn("Đã cập nhật thành công!");
                         refreshControl(event);
@@ -365,7 +380,7 @@ public class ThucDonController implements Initializable {
         Image imageXoaRong = new Image(getClass().getResource("/org/login/quanlydatban/icons/restaurant.png").toExternalForm());
 
         Object source = event.getSource();
-        if (source == btnXoaRong || source == btnXoaMon) {
+        if (source == btnXoaRong) {
             setMonAn(null);
             txtTenMonAn.requestFocus();
             txtTenMonAn.setText("");
@@ -377,6 +392,43 @@ public class ThucDonController implements Initializable {
             txfMoTa.setText("");
         }
     }
+
+    @FXML
+    void btnTimKiem(MouseEvent event) {
+        String s = txtTimKiem.getText().trim();
+        if (cbChiMuc.getSelectionModel().isEmpty()) {
+            showWarn("Bạn cần chọn một chỉ mục trước khi tìm kiếm");
+        }
+        else if (cbChiMuc.getSelectionModel().getSelectedIndex() == 0) {
+            if (txtTimKiem.getText().trim().isEmpty()) {
+                showWarn("Vui lòng điền tên muốn tìm");
+            } else {
+                timKiemTheoTen(s);
+            }
+        }
+        else if (cbChiMuc.getSelectionModel().getSelectedIndex() == 1) {
+            if (txtTimKiem.getText().trim().isEmpty()) {
+                showWarn("Vui lòng điền tên muốn tìm");
+            } else {
+                timKiemTheoLoai(s);
+            }
+        }
+        else if (cbChiMuc.getSelectionModel().getSelectedIndex() == 2) {
+            if (cbSapXep.getSelectionModel().isEmpty()){
+                showWarn("Vui lòng chọn cách sắp xếp");
+            }
+            else {
+                if (cbSapXep.getSelectionModel().getSelectedIndex() == 0) {
+                    ascendingSorting();
+                }
+                else {
+                    descendingSorting();
+                }
+            }
+        }
+
+    }
+
 
     //FINDING
     void timKiemTheoTen (String tenMonAn) {
@@ -485,9 +537,9 @@ public class ThucDonController implements Initializable {
     }
 
     @FXML
-    void refreshControl(ActionEvent event) {
+    void refreshControl(Event event) {
         Object source = event.getSource();
-        if (source == btnRefresh || source == btnThemMon || source == btnXoaMon || source == btnCapNhat) {
+        if (source == btnRefresh || source == btnThemMon || source == btnCapNhat) {
             flowPane.getChildren().clear(); // Clear existing items
 
             List<MonAn> monAnList = monAnDAO.getAllMonAn(); // Retrieve the latest data from the database
@@ -598,15 +650,6 @@ public class ThucDonController implements Initializable {
         return String.format("%04d", newIdNumber); // Định dạng mã
     }
 
-//    private void generateMaMonAn1() {
-//        int countRecord = 10;
-//        for(int i = 0; i < 10; i++) {
-//            String ma = "MA" +  String.format("%04d", i);
-//            System.out.println();
-//        }
-//    }
-
-    //
     public Long getMaMonFromDatabase() {
         Session session = HibernateUtils.getFactory().openSession();
         Transaction transaction = null;
@@ -675,7 +718,7 @@ public class ThucDonController implements Initializable {
             loaiMon = loaiMonDAO.getLoaiMonByName(selectedLoaiMon); // Retrieve the newly added LoaiMonAn
         }
 
-        System.out.println(loaiMon.getMaLoaiMonAn());
+        //System.out.println(loaiMon.getMaLoaiMonAn());
 
         TrangThaiMonAn ttMonAn = comboTTValue();
 
@@ -689,7 +732,7 @@ public class ThucDonController implements Initializable {
         String maMonAn = generateMaMonAn();
 
         // Assuming duongDanAnh is a field that holds the path of the selected image
-        String duongDanAnh = "path_to_image"; // replace with actual image path
+        String duongDanAnh = this.duongDanAnh; // replace with actual image path
 
         // Create the new MonAn object
         MonAn monAn = new MonAn(maMonAn, loaiMon, tenMonAn, gia, donViTinh, duongDanAnh, ttMonAn);
@@ -756,6 +799,15 @@ public class ThucDonController implements Initializable {
             cbtrangThaiMon.setValue(String.valueOf(monAn.getTrangThaiMonAn()));
             txtDonViTinh.setText(monAn.getDonViTinh());
             txtGia.setText(String.valueOf(monAn.getDonGia()));
+
+            String imagePath = monAn.getHinhAnh();
+            String imageDefaultPath = "/org/login/quanlydatban/icons/empty.png";
+            if (imagePath != null && !imagePath.isEmpty()) {
+                anhMon.setImage(new Image(new File(imagePath).toURI().toString()));
+            } else {
+                anhMon.setImage(new Image(getClass().getResource(imageDefaultPath).toString()));
+            }
+
             txfMoTa.setText(loaiMon.getMoTaLoaiMonAn());
         }
 
