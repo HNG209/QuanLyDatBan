@@ -1,10 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" styleClass="gradient1" stylesheets="@../stylesheets/style.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.login.quanlydatban.controller.TrangChuController">
+<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" styleClass="gradient1" stylesheets="@../stylesheets/style.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.login.quanlydatban.controller.TrangChuController">
    <top>
       <VBox>
          <children>
@@ -12,7 +20,7 @@
                <children>
                   <Pane prefHeight="52.0" prefWidth="1273.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="6.400000000000091">
                      <children>
-                        <ImageView blendMode="MULTIPLY" fitHeight="54.0" fitWidth="105.0" layoutX="21.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView blendMode="MULTIPLY" fitHeight="79.0" fitWidth="104.0" layoutX="21.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../icons/logo-text.jpg" />
                            </image>
@@ -24,20 +32,25 @@
                         </ImageView>
                      </children>
                   </Pane>
-                  <Pane prefHeight="45.0" prefWidth="190.0" AnchorPane.rightAnchor="10.0">
+                  <Pane prefHeight="46.0" prefWidth="401.0" AnchorPane.rightAnchor="10.0">
                      <children>
-                        <ImageView fitHeight="40.0" fitWidth="40.0" layoutX="105.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="avatar" fitHeight="40.0" fitWidth="40.0" layoutX="303.0" layoutY="3.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../icons/user.png" />
                            </image>
                         </ImageView>
-                        <ImageView fx:id="setting" fitHeight="30.0" fitWidth="30.0" layoutX="154.0" layoutY="11.0" pickOnBounds="true" preserveRatio="true" styleClass="image-hover-effect">
+                        <ImageView fx:id="setting" fitHeight="30.0" fitWidth="30.0" layoutX="353.0" layoutY="8.0" pickOnBounds="true" preserveRatio="true" styleClass="image-hover-effect">
                            <image>
                               <Image url="@../icons/cogwheel.png" />
                            </image>
                         </ImageView>
-                        <Label fx:id="tenNhanVien" alignment="BASELINE_RIGHT" layoutX="-51.0" layoutY="11.0" prefHeight="17.0" prefWidth="147.0" text="Chưa có nhân viên đăng ký" />
-                        <Label fx:id="chucVu" alignment="CENTER_RIGHT" layoutX="14.0" layoutY="26.0" prefHeight="17.0" prefWidth="81.0" text="Chức vụ" />
+                        <Label fx:id="tenNhanVien" alignment="BASELINE_RIGHT" layoutX="147.0" layoutY="8.0" prefHeight="17.0" prefWidth="147.0" text="Chưa có nhân viên đăng ký" />
+                        <Label fx:id="chucVu" alignment="CENTER_RIGHT" layoutX="212.0" layoutY="23.0" prefHeight="17.0" prefWidth="81.0" text="Chức vụ" />
+                        <Label fx:id="time" layoutX="2.0" prefHeight="50.0" prefWidth="184.0">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
                      </children>
                   </Pane>
                </children>

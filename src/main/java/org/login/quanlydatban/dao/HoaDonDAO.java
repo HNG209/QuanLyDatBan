@@ -18,7 +18,7 @@ public class HoaDonDAO {
 
     public Object[] layDoanhThuVaSoHoaDon(String maNhanVien, LocalDate ngay) {
         Session session = HibernateUtils.getFactory().openSession();
-        Object[] result = new Object[0];  // Initialize result as an empty array
+        Object[] result = new Object[0];
 
         try {
             CriteriaBuilder builder = session.getCriteriaBuilder();

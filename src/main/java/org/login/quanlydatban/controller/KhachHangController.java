@@ -253,9 +253,9 @@ public class KhachHangController {
                     row[0].toString(),
                     row[1].toString(),
                     row[2].toString(),
-                    row[3].toString(),
-                    row[4].toString(),
-                    row[5].toString(),
+                    row[3] == null ? null :row[3].toString(),
+                    row[4] == null ? null :row[4].toString(),
+                    row[5] == null ? null :row[5].toString(),
                     Integer.parseInt(row[6].toString())
             );
 

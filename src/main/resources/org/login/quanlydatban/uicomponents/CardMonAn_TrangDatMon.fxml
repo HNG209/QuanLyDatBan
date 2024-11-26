@@ -30,7 +30,7 @@
             <Font size="10.0" />
          </font>
       </Label>
-      <Button layoutX="8.0" layoutY="203.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="133.0" styleClass="sunset-orange" text="Chi tiết" />
+      <Button layoutX="8.0" layoutY="203.0" mnemonicParsing="false" onAction="#xemChiTietMonAn" prefHeight="26.0" prefWidth="133.0" styleClass="sunset-orange" text="Chi tiết" />
       <Button layoutX="8.0" layoutY="236.0" mnemonicParsing="false" onAction="#them" prefHeight="26.0" prefWidth="134.0" styleClass="sage-green" text="Thêm" />
    </children>
    <styleClass>

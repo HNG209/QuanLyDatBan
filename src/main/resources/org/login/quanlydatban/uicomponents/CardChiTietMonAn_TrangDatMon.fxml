@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="389.0" prefWidth="352.0" style="-fx-border-color: black;" styleClass="gradient2" stylesheets="@../stylesheets/style.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.login.quanlydatban.controller.CardChiTietMonAnController">
+   <children>
+      <StackPane layoutX="120.0" layoutY="22.0" styleClass="bottom-border">
+         <children>
+            <ImageView fitHeight="129.0" fitWidth="127.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../Image/test.png" />
+               </image>
+            </ImageView>
+         </children>
+      </StackPane>
+      <GridPane layoutX="21.6" layoutY="165.0" prefHeight="173.0" prefWidth="309.0" AnchorPane.leftAnchor="21.0" AnchorPane.rightAnchor="22.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="155.20001220703125" minWidth="10.0" prefWidth="133.5999755859375" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="186.4000244140625" minWidth="10.0" prefWidth="186.4000244140625" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Label prefHeight="18.0" prefWidth="174.0" text="Tên món ăn:">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Label>
+            <Label prefHeight="18.0" prefWidth="208.0" text="Đơn giá:" GridPane.rowIndex="1">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Label>
+            <Label prefHeight="18.0" prefWidth="173.0" text="Tên loại món ăn:" GridPane.rowIndex="2">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Label>
+            <Label prefHeight="18.0" prefWidth="177.0" text="Trạng thái món ăn:" GridPane.rowIndex="3">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Label>
+            <TextField fx:id="tenMonAn" disable="true" styleClass="underlined-style" GridPane.columnIndex="1" />
+            <TextField fx:id="donGia" disable="true" styleClass="underlined-style" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <TextField fx:id="tenLoaiMonAn" disable="true" styleClass="underlined-style" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <TextField fx:id="trangThai" disable="true" styleClass="underlined-style" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+         </children>
+      </GridPane>
+      <Button layoutX="80.0" layoutY="348.0" mnemonicParsing="false" onAction="#thoat" prefHeight="26.0" prefWidth="208.0" styleClass="exit-button" text="Đóng" textFill="WHITE" />
+   </children>
+</AnchorPane>

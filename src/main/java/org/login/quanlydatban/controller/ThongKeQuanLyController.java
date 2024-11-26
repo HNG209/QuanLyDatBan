@@ -134,8 +134,9 @@ public class ThongKeQuanLyController {
             doanhThuTrongNgay.setText(df.format(0));
             soHDTrongNgay.setText("0");
         }
-        if (tongDoanhThuVaHoaDon != null && tongDoanhThuVaHoaDon.length >= 2) {
-            tongDoanhThu.setText(df.format(tongDoanhThuVaHoaDon[0]));
+        if (tongDoanhThuVaHoaDon[0] != null && tongDoanhThuVaHoaDon[1] != null) {
+            System.out.println(tongDoanhThuVaHoaDon[0]);
+            tongDoanhThu.setText(df.format(Double.parseDouble(tongDoanhThuVaHoaDon[0].toString())));
             tongHoaDon.setText(String.valueOf(tongDoanhThuVaHoaDon[1]));
         } else {
             tongDoanhThu.setText(df.format(0));

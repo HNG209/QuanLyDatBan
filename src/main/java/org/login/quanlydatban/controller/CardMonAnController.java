@@ -1,15 +1,21 @@
 package org.login.quanlydatban.controller;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import org.login.quanlydatban.dao.ChiTietHoaDonDAO;
-import org.login.quanlydatban.entity.ChiTietHoaDon;
 import org.login.quanlydatban.entity.MonAn;
 import org.login.quanlydatban.notification.Notification;
 import org.login.quanlydatban.utilities.NumberFormatter;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -25,6 +31,7 @@ public class CardMonAnController implements Initializable {
     private DatMonController controller;
 
     private ChiTietHoaDonDAO chiTietHoaDonDAO;
+    private Stage chiTiet;
 
     public DatMonController getController() {
         return controller;
@@ -47,6 +54,28 @@ public class CardMonAnController implements Initializable {
             else Notification.thongBao("Hãy xác nhận giữ bàn trước khi thêm món ăn", Alert.AlertType.INFORMATION);
         }
     }
+    @FXML
+    public void xemChiTietMonAn() throws IOException {
+        if (chiTiet == null || !chiTiet.isShowing()) {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/uicomponents/CardChiTietMonAn_TrangDatMon.fxml"));
+            AnchorPane anchorPane = loader.load();
+            CardChiTietMonAnController card = loader.getController();
+            card.setMonAn(monAn);
+
+            Scene scene = new Scene(anchorPane);
+            chiTiet = new Stage();
+            chiTiet.setScene(scene);
+            chiTiet.setTitle("Chi tiết món ăn");
+            chiTiet.setOnCloseRequest(e -> chiTiet = null);
+            chiTiet.setResizable(false);
+            chiTiet.initModality(Modality.APPLICATION_MODAL);
+            chiTiet.initStyle(StageStyle.UNDECORATED);
+            chiTiet.showAndWait();
+        } else {
+            chiTiet.toFront();
+        }
+    }
+
 
     public void setMonAn(MonAn monAn, DatMonController controller) {
         this.monAn = monAn;

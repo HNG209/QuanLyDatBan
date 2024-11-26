@@ -15,6 +15,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.login.quanlydatban.entity.TaiKhoan;
 import org.login.quanlydatban.entity.enums.ChucVu;
+import org.login.quanlydatban.utilities.Clock;
 
 import java.io.IOException;
 import java.net.URL;
@@ -29,6 +30,13 @@ public class TrangChuController implements Initializable {
     private Label chucVu;
 
     public static TaiKhoan taiKhoan;
+
+    @FXML
+    private Label time;
+
+
+    @FXML
+    private ImageView avatar;
 
     @FXML
     private BorderPane borderPane;
@@ -48,6 +56,9 @@ public class TrangChuController implements Initializable {
                     case NHAN_VIEN -> chucVu.setText("Nhân viên");
                     default -> chucVu.setText("Quản lý");
                 }
+                Clock clock = new Clock();
+                clock.startClock(time);
+//                showTooltipForAvatar();
             }
 
         }
@@ -207,8 +218,6 @@ public class TrangChuController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         ContextMenu contextMenu = new ContextMenu();
         setBorderPaneStatic(borderPane);
-
-        // Add MenuItems to the ContextMenu
         MenuItem itemTaiKhoan = new MenuItem("Tài khoản");
         itemTaiKhoan.setOnAction(event -> {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/TrangThongTinCaNhan.fxml"));
@@ -241,6 +250,7 @@ public class TrangChuController implements Initializable {
                 contextMenu.show(setting, boundsInScreen.getMinX() - 30, boundsInScreen.getMaxY() + 5);
             }
         });
+
     }
 
     public static TaiKhoan getTaiKhoan() {
@@ -269,4 +279,21 @@ public class TrangChuController implements Initializable {
             e.printStackTrace();
         }
     }
+//    @FXML
+//    public void showTooltipForAvatar() {
+//        Tooltip tooltip = new Tooltip();
+//        if (taiKhoan != null && taiKhoan.getNhanVien() != null) {
+//            String url = taiKhoan.getNhanVien().getHinhAnh();
+//            avatar.setImage(new Image(getClass().getResource(url).toExternalForm()));
+//            String ten = taiKhoan.getNhanVien().getTenNhanVien();
+//            String chucVuText = taiKhoan.getNhanVien().getChucVuNhanVien() == ChucVu.NHAN_VIEN ? "Nhân viên" : "Quản lý";
+//            tooltip.setText("Tên: " + ten + "\nChức vụ: " + chucVuText);
+//        } else {
+//            tooltip.setText("Không có thông tin nhân viên");
+//        }
+//        Tooltip.install(avatar, tooltip);
+//        avatar.setOnMouseEntered(event -> tooltip.show(avatar, event.getScreenX(), event.getScreenY() + 15));
+//        avatar.setOnMouseExited(event -> tooltip.hide());
+//    }
+
 }

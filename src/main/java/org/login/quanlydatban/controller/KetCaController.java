@@ -14,6 +14,7 @@ import javafx.stage.Window;
 import javafx.util.Duration;
 import org.login.quanlydatban.dao.HoaDonDAO;
 import org.login.quanlydatban.entity.TaiKhoan;
+import org.login.quanlydatban.utilities.Clock;
 
 import javax.swing.*;
 import java.io.BufferedWriter;
@@ -100,7 +101,8 @@ public class KetCaController {
 
     @FXML
     public void initialize() {
-        startClock();
+        Clock clock = new Clock();
+        clock.startClock(thoiGianHienTai);
         hoaDonDAO = new HoaDonDAO();
         loadDuLieu();
         menhGia1K.textProperty().addListener((observable, oldValue, newValue) -> tinhTongMenhGia());
@@ -127,14 +129,6 @@ public class KetCaController {
             tongDoanhThu.setText(doanhThuVaSoHD[0].toString());
             tongSoHoaDon.setText(doanhThuVaSoHD[1].toString());
         }
-    }
-    private void startClock() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
-        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
-            thoiGianHienTai.setText(LocalDateTime.now().format(formatter));
-        }));
-        timeline.setCycleCount(Timeline.INDEFINITE);
-        timeline.play();
     }
     @FXML
     private void tinhTongMenhGia() {
