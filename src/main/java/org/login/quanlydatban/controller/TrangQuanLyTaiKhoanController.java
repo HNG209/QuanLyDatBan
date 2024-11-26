@@ -42,7 +42,7 @@ public class TrangQuanLyTaiKhoanController implements Initializable {
     private PasswordField password;
     @FXML
     private TextField tim;
-    private   String hienthi;
+    private String hienthi;
     @FXML
     private TableColumn<NhanVien, String> tableMaNhanVien; // 0 Cột ID
     @FXML
@@ -51,9 +51,6 @@ public class TrangQuanLyTaiKhoanController implements Initializable {
     private TableColumn<NhanVien, String> tableTenTaiKhoan; // 2
     private NhanVienDAO nhanVienDAO;
     private String matKhauHien;
-    @FXML
-    private TextField nhapLaiMatKhau;
-
     public TrangQuanLyTaiKhoanController() throws Exception {
     }
 
