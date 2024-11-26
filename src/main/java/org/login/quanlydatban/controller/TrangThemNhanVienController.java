@@ -9,10 +9,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.login.quanlydatban.dao.NhanVienDAO;
 import org.login.quanlydatban.dao.TaiKhoanDAO;
+import org.login.quanlydatban.encryptionUtils.EncryptionUtils;
 import org.login.quanlydatban.entity.NhanVien;
 import org.login.quanlydatban.entity.TaiKhoan;
 import org.login.quanlydatban.entity.enums.ChucVu;
@@ -35,7 +34,6 @@ import java.util.ResourceBundle;
 public class TrangThemNhanVienController implements Initializable {
     @FXML
     private Button btnTaiAnh;
-    private static final String ALGORITHM = "AES";
     @FXML
     private ImageView image1;
     private String duongdananh;
@@ -66,8 +64,6 @@ public class TrangThemNhanVienController implements Initializable {
     private TaiKhoanDAO taiKhoanDAO;
     private String duongdan;// duong dan cua anh
     private TrangQuanLyNhanVienController trangQuanLyNhanVien;
-    private SecretKey key  = generateKey();
-
     public TrangThemNhanVienController() throws Exception {
 
     }
@@ -118,26 +114,25 @@ public class TrangThemNhanVienController implements Initializable {
             }
         });
     }
-    // them nhan vien
-    public void ThemNhanVien(String tenNhanVien){
-        NhanVienDAO nvdao = new NhanVienDAO();
-        NhanVien nv = nvdao.getNhanVien(tenNhanVien);
-
-    }
-
-
     // bat regex cho ten
     public boolean tencheck(TextField hoTen){
         if(!hoTen.getText().matches("^([A-Z][a-z]*)( [A-Z][a-z]*)*$")){
-            showWarn("Ten khong hop le");
+            showWarn("Ten bạn nhập không hợp lệ, có thể do tên chưa kí tự số, kí tự đặc biệt");
+            return false;
+        }else if(hoTen.equals("") || hoTen == null){
+            showWarn("Bạn vui lòng nhập tên của nhân viên không!!");
+            return false;
         }
         return true;
     }
 
-    // cccd, 11 so
+    // cccd, 12 so
     public boolean cancuoccongdancheck(TextField cccd){
         if(!cccd.getText().matches("^[0-9]{12}$")){
-            showWarn("Can cuoc cong dan khong hop le");
+            showWarn("Can cuoc cong dan phải là kí tự số và có 12 kí tự");
+            return false;
+        }else if(cccd.equals("") || cccd == null){
+            showWarn("Bạn vui lòng nhập căn cước công dân của nhân viên!!");
             return false;
         }
         return true;
@@ -146,8 +141,11 @@ public class TrangThemNhanVienController implements Initializable {
     // so dien thoai
     public boolean sdtcheck(TextField dienThoai){
         if(!dienThoai.getText().matches("^0[0-9]{9}$")){
-           showWarn("So dien thoai khong hop le");
+           showWarn("So dien thoai bạn nhập không hợp lệ và phải có đủ 10 kí tự");
            return false;
+        }else if(dienThoai.equals("") || dienThoai == null){
+            showWarn("Bạn vui loòng nhập số điện thoại của nhân viên!!");
+            return false;
         }
         return true;
     }
@@ -177,14 +175,11 @@ public class TrangThemNhanVienController implements Initializable {
         }
         return true;
     }
-
-
    // rang buoc cho tuoi
     private int calculateAge(LocalDate birthDate) {
         LocalDate currentDate = LocalDate.now();
         return Period.between(birthDate, currentDate).getYears();
     }
-
 
     public boolean gioiTinhCheck(ComboBox<String> gioiTinh){
         if (gioiTinh.getValue() == null || gioiTinh.getValue().isEmpty()) {
@@ -194,8 +189,6 @@ public class TrangThemNhanVienController implements Initializable {
         }
         return true;
     }
-
-
     private void showWarn(String message) {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle("Kết Quả");
@@ -203,47 +196,6 @@ public class TrangThemNhanVienController implements Initializable {
         alert.setContentText(message);
         alert.showAndWait();
     }
-    // ma nhan vien tang dan
-    private String generateMaNhanVien(String chucVu) {
-        // Xác định tiền tố dựa trên chức vụ đã chọn
-        String prefix = chucVu.equals("Nhân viên") ? "NV" : "QL";
-
-        Long maxId = getMaxIdFromDatabase(prefix);
-        Long newIdNumber = (maxId == null) ? 1 : maxId + 1; // Tăng mã lên 1
-        return prefix + String.format("%04d", newIdNumber); // Định dạng mã
-    }
-
-
-
-    public Long getMaxIdFromDatabase(String prefix) {
-        Session session = HibernateUtils.getFactory().openSession();
-        Transaction transaction = null;
-        Long maxId = null;
-
-        try {
-            transaction = session.beginTransaction();
-
-            String query = "SELECT maNhanVien FROM NhanVien WHERE maNhanVien LIKE :prefix";
-            List<String> maNhanViens = session.createQuery(query)
-                    .setParameter("prefix", prefix + "%")
-                    .getResultList();
-
-             maxId = maNhanViens.stream()
-                    .map(ma -> Long.parseLong(ma.substring(prefix.length())))
-                    .max(Long::compare)
-                    .orElse(0L);
-
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction != null) transaction.rollback();
-            e.printStackTrace();
-        } finally {
-            // Không cần phải đóng session ở đây, sẽ tự động quản lý
-        }
-        return maxId;
-    }
-
-    // ham sua nhan vien
 
     public String getTenNhanVien() {
         return tenNhanVien;
@@ -285,81 +237,41 @@ public class TrangThemNhanVienController implements Initializable {
         alert.showAndWait();
     }
 
-    public SecretKey getKey() {
-        return key;
-    }
-
-    public void setKey(SecretKey key) {
-        this.key = key;
-    }
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-            maNhanVien.setEditable(false);
-//            hoTen.focusedProperty().addListener((obs, oldVal, newVal) ->{
-//                if(!newVal){
-//                    tencheck(hoTen);
-//                }
-//            });
-//
-//            ngaySinh.focusedProperty().addListener((obs, oldVal, newVal) ->{
-//                if(!newVal){
-//                   LocalDate l = ngaySinh.getValue();
-//                   if(l != null){
-//                      int tuoi = calculateAge(l);
-//                      if(tuoi <= 15){
-//                          showAlert("Tuoi khong hop le");
-//                      }
-//                   }
-//                }
-//            });
-//            cccd.focusedProperty().addListener((obs, oldVal, newVal) ->{
-//                if(!newVal){
-//                    cancuoccongdancheck(cccd);
-//                }
-//            });
-//            diaChi.focusedProperty().addListener((obs,oldVal,newVal)->{
-//                if(!newVal){
-//                    diaChicheck(diaChi);
-//                }
-//            });
-//
-//           dienThoai.focusedProperty().addListener((obs, oldVal, newVal) ->{
-//                if(!newVal){
-//                    sdtcheck(dienThoai);
-//                }
-//           });
-
-           chucVu.setOnAction(new EventHandler<ActionEvent>() {
-               @Override
-               public void handle(ActionEvent event) {
-                   String selectedChucVu = chucVu.getValue();
-                   String maNhanVien1 = generateMaNhanVien(selectedChucVu);
-                   maNhanVien.setText(maNhanVien1);
-               }
-           });
-
+           maNhanVien.setEditable(false);
            btnLuu.setOnAction(new EventHandler<ActionEvent>() {
                @Override
                public void handle(ActionEvent event) {
-                   if(tencheck(hoTen) && cancuoccongdancheck(cccd) && sdtcheck(dienThoai) && diaChicheck(diaChi)){
-                       if(chucvuCheck(chucVu) && trangThaiCheck(trangThaiLamViec) && gioiTinhCheck(gioiTinh)) {
-                           if (duongdan!= null) {
-                               try {
-                                   ThemNhanVien();
-                                   showAlert("Thêm nhân viên thành công");
-                                   Stage stage = (Stage) btnLuu.getScene().getWindow();
-                                   stage.close();
-                               } catch (Exception e) {
-                                   throw new RuntimeException(e);
+                   if(gioiTinhCheck(gioiTinh)){
+                       if(tencheck(hoTen)){
+                           if(diaChicheck(diaChi)){
+                               if(cancuoccongdancheck(cccd)){
+                                   if(sdtcheck(dienThoai)){
+                                       if(trangThaiCheck(trangThaiLamViec)){
+                                           if(duongdan!= null){
+                                               int tuoi = calculateAge(ngaySinh.getValue());
+                                               if(tuoi < 15){
+                                                   showWarn("Tuổi nhân viên phải lớn hơn 15");
+                                               }else {
+                                                   try {
+                                                      ThemNhanVien();
+                                                      showAlert("Thêm nhân viên thành công");
+                                                      Stage stage = (Stage) btnLuu.getScene().getWindow();
+                                                      stage.close();
+                                                   } catch (Exception e) {
+                                                      throw new RuntimeException(e);
+                                                   }
+                                                trangQuanLyNhanVien.xetLaiduLieuChoBang();
+                                               }
+                                           }else{
+                                               showAlert("Bạn phải chọn ảnh của nhân viên");
+                                           }
+                                       }
+                                   }
                                }
-                               trangQuanLyNhanVien.xetLaiduLieuChoBang();
-                           }else{
-                               showAlert("Bạn phải chọn ảnh của nhân viên");
                            }
                        }
-                   }else{
-                       showWarn("Ban can nhap day du thong tin");
                    }
                }
            });
@@ -373,26 +285,6 @@ public class TrangThemNhanVienController implements Initializable {
            });
     }
 
-    public  String encrypt(String data, SecretKey secretKey) throws Exception {
-        Cipher cipher = Cipher.getInstance(ALGORITHM);
-        cipher.init(Cipher.ENCRYPT_MODE, secretKey);
-        byte[] encryptedData = cipher.doFinal(data.getBytes());
-        return Base64.getEncoder().encodeToString(encryptedData);
-    }
-
-    public SecretKey generateKey() throws Exception {
-        KeyGenerator keyGen = KeyGenerator.getInstance(ALGORITHM);
-        keyGen.init(128); // You can choose 192 or 256 bits
-        return keyGen.generateKey();
-    }
-
-    public String decrypt(String encryptedData, SecretKey secretKey) throws Exception {
-        Cipher cipher = Cipher.getInstance(ALGORITHM);
-        cipher.init(Cipher.DECRYPT_MODE, secretKey);
-        byte[] decodedData = Base64.getDecoder().decode(encryptedData);
-        byte[] originalData = cipher.doFinal(decodedData);
-        return new String(originalData);
-    }
     public void ThemNhanVien() throws Exception {
          Boolean gt = gioiTinh.getValue().equals("NAM") ? false : true;
          taiKhoanDAO = new TaiKhoanDAO();
@@ -411,18 +303,25 @@ public class TrangThemNhanVienController implements Initializable {
         }else if(chucVu.getValue().equals("Quản Lý")){
             cv = ChucVu.QUAN_LY;
         }
-         NhanVien nv = new NhanVien(maNhanVien.getText().toString(),hoTen.getText().toString(),dienThoai.getText().toString(),cccd.getText().toString(),diaChi.getText().toString(),gt,ngaySinh.getValue(),duongdan,tt,cv);
-         NhanVienDAO nvd = new NhanVienDAO();
-         nvd.addNhanVien(nv);
-         String tenTaiKhoan = hoTen.getText().toString().replaceAll("\\s+","");
-         String matKhau = "1111";
-         String mkMaHoaVeKiTu = encrypt(matKhau,key);
-         String bienDoibth = decrypt(mkMaHoaVeKiTu,key);
-         System.out.println("Mat khau o dang ki tu " + mkMaHoaVeKiTu);
-         System.out.println("Mat khau sau khi bien tu chuoi" + bienDoibth);
 
-         TaiKhoan takKhoan = new TaiKhoan(tenTaiKhoan,mkMaHoaVeKiTu, nvd.getNhanVien(nv.getMaNhanVien().toString()));
-         taiKhoanDAO.addNhanVien(takKhoan);
+
+
+
+        //NhanVien nv = new NhanVien(maNhanVien.getText().toString(),hoTen.getText().toString(),dienThoai.getText().toString(),cccd.getText().toString(),diaChi.getText().toString(),gt,ngaySinh.getValue(),duongdan,tt,cv);
+        NhanVien nv = new NhanVien();
+        nv.setTenNhanVien(hoTen.getText());
+        nv.setCccd(cccd.getText());
+        nv.setSdt(dienThoai.getText());
+        nv.setChucVuNhanVien(cv);
+        nv.setTrangThaiNhanVien(tt);
+        nv.setDiaChi(diaChi.getText());
+        nv.setHinhAnh(duongdan);
+        nv.setNgaySinh(ngaySinh.getValue());
+        NhanVienDAO nvd = new NhanVienDAO();
+        nvd.addNhanVien(nv);
+        String tenTaiKhoan = hoTen.getText().toString().replaceAll("\\s+","");
+        TaiKhoan takKhoan = new TaiKhoan(tenTaiKhoan,"1111", nvd.getNhanVien(nv.getMaNhanVien().toString()));
+        taiKhoanDAO.addNhanVien(takKhoan);
     }
 }
 

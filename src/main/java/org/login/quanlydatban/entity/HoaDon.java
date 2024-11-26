@@ -90,7 +90,6 @@ public class HoaDon implements Serializable {
         DailyCounter dailyCounter = session.find(DailyCounter.class, today);
 
         int counterValue;
-
         if (dailyCounter != null) {
             // Entry exists; increment the counter
             counterValue = dailyCounter.getCounterValue() + 1;

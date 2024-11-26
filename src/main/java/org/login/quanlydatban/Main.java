@@ -69,7 +69,6 @@ public class Main extends Application {
 //        session.getTransaction().commit();
         session.close();
         //chay roi mo database len coi bang hoadon
-
         stage.setTitle("Đăng nhập");
         stage.setScene(scene);
         stage.initStyle(StageStyle.UNDECORATED);
