@@ -203,6 +203,11 @@ public class TrangChuController implements Initializable {
         borderPane.setCenter(DatLichController.getInstance().getRoot());
     }
 
+    @FXML
+    void xemLich(ActionEvent event) throws IOException {
+        borderPane.setCenter(XemLichDatController.getInstance().getRoot());
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         ContextMenu contextMenu = new ContextMenu();
