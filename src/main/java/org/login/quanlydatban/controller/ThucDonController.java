@@ -210,6 +210,10 @@ public class ThucDonController implements Initializable {
             }
         });
 
+        cbTimLoaiMon.getEditor().textProperty().addListener((observable, oldValue, newValue) -> {
+            cbTimLoaiMon.setValue(newValue);
+        });
+
         monAnDAO.getAllMonAn();
         flowPane.prefHeightProperty().bind(scrollPane.heightProperty());
         flowPane.prefWidthProperty().bind(scrollPane.widthProperty());
@@ -383,10 +387,10 @@ public class ThucDonController implements Initializable {
     @FXML
     void btnTimKiem(MouseEvent event) {
         String keyword = txtTimKiem.getText().trim();
-        String selectedType = cbTimLoaiMon.isEditable() ? cbTimLoaiMon.getEditor().getText().trim() : cbTimLoaiMon.getValue();
-        Integer sortOption = cbSapXep.getSelectionModel().getSelectedIndex();
+        String selectedType = cbTimLoaiMon.getValue();
+        int sortOption = cbSapXep.getSelectionModel().getSelectedIndex();
 
-        if (cbTimLoaiMon.getValue() == null && keyword.isEmpty() && cbSapXep.getSelectionModel().isEmpty()) {
+        if (cbTimLoaiMon.getValue() == null && keyword.isEmpty() && sortOption == -1) {
             showWarn("Bạn cần nhập/chọn một trong các cách tìm trước khi tiến hành tìm kiếm");
         }
         else {
