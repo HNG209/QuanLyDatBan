@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+
+
+<AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Pane layoutX="100.0" layoutY="-1.0" prefHeight="101.0" prefWidth="100.0" style="-fx-background-color: white;" />
+      <Label alignment="CENTER" contentDisplay="CENTER" layoutY="4.0" prefHeight="18.0" prefWidth="100.0" text="Trạng thái" />
+      <Label fx:id="labeltrangThai" alignment="CENTER" contentDisplay="CENTER" layoutY="73.0" prefHeight="18.0" prefWidth="100.0" />
+   </children>
+   <styleClass>
+      <String fx:value="sage-green" />
+      <String fx:value="image-hover-effect" />
+   </styleClass>
+</AnchorPane>

@@ -124,7 +124,7 @@ public class MonAnDAO {
         try {
             transaction = session.beginTransaction();
 
-            monAnMoi.setHinhAnh("haha");
+            //monAnMoi.setHinhAnh("haha");
             session.update(monAnMoi);
 
             transaction.commit();

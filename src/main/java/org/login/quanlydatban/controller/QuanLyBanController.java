@@ -53,11 +53,11 @@ public class QuanLyBanController implements Initializable {
     private CheckBox checkTamNgungPV;
 
     @FXML
-    private ComboBox<KhuVuc> locKhuVuc;
+    private ComboBox<Object> locKhuVuc;
     @FXML
-    private ComboBox<LoaiBan> locLoaiBan;
+    private ComboBox<Object> locLoaiBan;
     @FXML
-    private ComboBox<TrangThaiBan> locTrangThai;
+    private ComboBox<Object> locTrangThai;
 
     @FXML
     private TableColumn<Ban, String> colMaBan;
@@ -107,9 +107,18 @@ public class QuanLyBanController implements Initializable {
         textKhuVuc.getItems().setAll(KhuVuc.values());
         textLoaiBan.getItems().setAll(LoaiBan.values());
 
-        locKhuVuc.getItems().setAll(KhuVuc.values());
-        locLoaiBan.getItems().setAll(LoaiBan.values());
-        locTrangThai.getItems().setAll(TrangThaiBan.values());
+        ObservableList<Object> khuVucList = FXCollections.observableArrayList("Tất cả");
+        khuVucList.addAll(KhuVuc.values());
+        locKhuVuc.getItems().setAll(khuVucList);
+
+        ObservableList<Object> loaiBanList = FXCollections.observableArrayList("Tất cả");
+        loaiBanList.addAll(LoaiBan.values());
+        locLoaiBan.getItems().setAll(loaiBanList);
+
+        ObservableList<Object> trangThaiList = FXCollections.observableArrayList("Tất cả");
+        trangThaiList.addAll(TrangThaiBan.values());
+        locTrangThai.getItems().setAll(trangThaiList);
+
         checkTamNgungPV.setDisable(true);
         textMaBan.setDisable(true);
 
@@ -158,7 +167,21 @@ public class QuanLyBanController implements Initializable {
             showAlert("Vui lòng nhập đầy đủ thông tin!");
             return;
         }
-
+        for (Ban ban : tableBan.getItems()) {
+            if (ban.getMaBan().equals(maBan)) {
+                String LB;
+                if (loaiBan == LoaiBan.BAN_2_NGUOI) {
+                    LB="02";
+                } else if (loaiBan == LoaiBan.BAN_5_NGUOI) {
+                    LB="05";
+                } else {
+                    LB="10";
+                }
+                maBan = generateMaBan(khuVuc,LB);
+                showAlert("Mã bàn đã tồn tại! Hệ thống đã tự động tạo mã mới!");
+            }
+        }
+        System.out.println(maBan);
         Ban newBan = new Ban(maBan,loaiBan, trangThai,khuVuc);
         List<Ban> banList = banDAO.readAll();
         banDAO.themBan(newBan);
@@ -168,6 +191,7 @@ public class QuanLyBanController implements Initializable {
         checkTamNgungPV.setSelected(false);
         onClickReset();
         isEditing = false;
+
     }
 
     @FXML
@@ -184,20 +208,7 @@ public class QuanLyBanController implements Initializable {
         checkTamNgungPV.setDisable(true);
         isEditing = false;
     }
-    @FXML
-    private void handleXoaBan() {
-        Ban selectedBan = tableBan.getSelectionModel().getSelectedItem();
-        List<Ban> banList = banDAO.readAll();
-        if (selectedBan != null) {
-            banDAO.deleteBan(selectedBan.getMaBan());
-            banList.remove(selectedBan);
-            clearForm();
-        } else {
-            showAlert("Vui lòng chọn bàn cần xóa!");
-        }
-        checkTamNgungPV.setDisable(true);
-        onClickReset();
-    }
+
     @FXML
     private void handleSuaBan() {
         Ban selectedBan = tableBan.getSelectionModel().getSelectedItem();
@@ -205,6 +216,7 @@ public class QuanLyBanController implements Initializable {
             showAlert("Vui lòng chọn bàn cần chỉnh sửa!");
             return;
         }
+
 
 
         selectedBan.setKhuVuc(textKhuVuc.getSelectionModel().getSelectedItem());
@@ -229,24 +241,31 @@ public class QuanLyBanController implements Initializable {
         alert.showAndWait();
     }
     public void locBan() {
-        KhuVuc selectedKhuVuc = locKhuVuc.getSelectionModel().getSelectedItem();
-        LoaiBan selectedLoaiBan =locLoaiBan.getSelectionModel().getSelectedItem();
-        TrangThaiBan selectedTrangThai = locTrangThai.getSelectionModel().getSelectedItem();
+        // Lấy giá trị từ ComboBox
+        Object selectedKhuVuc = locKhuVuc.getSelectionModel().getSelectedItem();
+        Object selectedLoaiBan = locLoaiBan.getSelectionModel().getSelectedItem();
+        Object selectedTrangThai = locTrangThai.getSelectionModel().getSelectedItem();
 
+        // Lọc danh sách
         ObservableList<Ban> filteredList = FXCollections.observableArrayList();
-        List<Ban> danhSachBan = banDAO.readAll();
-        for (Ban ban : danhSachBan) {
-            boolean matchKhuVuc = selectedKhuVuc.equals("Tất cả") || ban.getKhuVuc().equals(selectedKhuVuc);
-            boolean matchLoaiBan = selectedLoaiBan.equals("Tất cả") || ban.getLoaiBan().equals(selectedLoaiBan);
-            boolean matchTrangThai = selectedTrangThai.equals("Tất cả") || ban.getTrangThaiBan().equals(selectedTrangThai);
+        List<Ban> danhSachBan = banDAO.readAll(); // Lấy toàn bộ danh sách bàn từ cơ sở dữ liệu
 
+        for (Ban ban : danhSachBan) {
+            // Bỏ qua tiêu chí nếu không được chọn hoặc chọn "Tất cả"
+            boolean matchKhuVuc = (selectedKhuVuc == null || selectedKhuVuc.equals("Tất cả") || ban.getKhuVuc().equals(selectedKhuVuc));
+            boolean matchLoaiBan = (selectedLoaiBan == null || selectedLoaiBan.equals("Tất cả") || ban.getLoaiBan().equals(selectedLoaiBan));
+            boolean matchTrangThai = (selectedTrangThai == null || selectedTrangThai.equals("Tất cả") || ban.getTrangThaiBan().equals(selectedTrangThai));
+
+            // Thêm bàn vào danh sách nếu phù hợp với tất cả tiêu chí
             if (matchKhuVuc && matchLoaiBan && matchTrangThai) {
                 filteredList.add(ban);
             }
         }
 
+        // Cập nhật bảng
         tableBan.setItems(filteredList);
     }
+
     public void onClickReset() {
         banDAO = new BanDAO();
         List<Ban> banList = banDAO.readAll();
@@ -254,6 +273,14 @@ public class QuanLyBanController implements Initializable {
         tableBan.setItems(banObservableList);
         demTongBan(banList);
         demSoLuongTheoTrangThai(banList);
+        locKhuVuc.setValue("Tất cả");
+        locLoaiBan.setValue("Tất cả");
+        locTrangThai.setValue("Tất cả");
+
+
+
+
+
     }
     @FXML
     private void hienThiThongTinBan() {
@@ -266,8 +293,11 @@ public class QuanLyBanController implements Initializable {
             textMaBan.setText(selectedBan.getMaBan());
             textKhuVuc.getSelectionModel().select(selectedBan.getKhuVuc());
             textLoaiBan.getSelectionModel().select(selectedBan.getLoaiBan());
-
-            checkTamNgungPV.setDisable(false);
+//            if(selectedBan.getTrangThaiBan() == TrangThaiBan.DANG_PHUC_VU || selectedBan.getTrangThaiBan() == TrangThaiBan.DA_DAT) {
+//                checkTamNgungPV.setDisable(true);
+//            } else {
+//                checkTamNgungPV.setDisable(false);
+//            }
 
             if (selectedBan.getTrangThaiBan() == TrangThaiBan.TAM_NGUNG_PHUC_VU) {
                 checkTamNgungPV.setSelected(true);
