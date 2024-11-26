@@ -752,7 +752,8 @@ public class ThucDonController implements Initializable {
         String imageUrl = anhMon.getImage().getUrl(); // Get the URL of the image
         if (imageUrl != null && imageUrl.startsWith("file:")) {
             if (imageUrl.endsWith("restaurant.png")) {
-                duongDanAnh = "/org/login/quanlydatban/icons/empty.png";
+                File defaultImageFile = new File(getClass().getResource("/org/login/quanlydatban/icons/empty.png").getPath());
+                duongDanAnh = defaultImageFile.getAbsolutePath();
             } else {
                 duongDanAnh = imageUrl.substring(5); // Remove "file:" prefix to get the file path
             }
