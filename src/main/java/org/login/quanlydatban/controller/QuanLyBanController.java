@@ -293,11 +293,11 @@ public class QuanLyBanController implements Initializable {
             textMaBan.setText(selectedBan.getMaBan());
             textKhuVuc.getSelectionModel().select(selectedBan.getKhuVuc());
             textLoaiBan.getSelectionModel().select(selectedBan.getLoaiBan());
-            if(selectedBan.getTrangThaiBan() == TrangThaiBan.DANG_PHUC_VU || selectedBan.getTrangThaiBan() == TrangThaiBan.DA_DAT) {
-                checkTamNgungPV.setDisable(true);
-            } else {
-                checkTamNgungPV.setDisable(false);
-            }
+//            if(selectedBan.getTrangThaiBan() == TrangThaiBan.DANG_PHUC_VU || selectedBan.getTrangThaiBan() == TrangThaiBan.DA_DAT) {
+//                checkTamNgungPV.setDisable(true);
+//            } else {
+//                checkTamNgungPV.setDisable(false);
+//            }
 
             if (selectedBan.getTrangThaiBan() == TrangThaiBan.TAM_NGUNG_PHUC_VU) {
                 checkTamNgungPV.setSelected(true);
