@@ -305,8 +305,6 @@ public class TrangThemNhanVienController implements Initializable {
         }
 
 
-
-
         //NhanVien nv = new NhanVien(maNhanVien.getText().toString(),hoTen.getText().toString(),dienThoai.getText().toString(),cccd.getText().toString(),diaChi.getText().toString(),gt,ngaySinh.getValue(),duongdan,tt,cv);
         NhanVien nv = new NhanVien();
         nv.setTenNhanVien(hoTen.getText());

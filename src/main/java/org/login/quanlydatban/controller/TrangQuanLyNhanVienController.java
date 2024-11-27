@@ -389,7 +389,6 @@ public class TrangQuanLyNhanVienController implements Initializable {
         }
 
         NhanVien nv = new NhanVien(getMaNhanVien,hoTen.getText().toString(),dienThoai.getText().toString(),cccd.getText().toString(),diaChi.getText().toString(),gt,ngaySinh.getValue(),image1.toString(),tt,cv);
-        System.out.println("Nhan vien moi" + nv.getHinhAnh());
         NhanVienDAO nvd = new NhanVienDAO();
         nvd.updateNhanVien(nv1.getMaNhanVien().toString(),nv);
     }
@@ -445,13 +444,13 @@ public class TrangQuanLyNhanVienController implements Initializable {
                             if(cancuoccongdancheck(cccd)){
                                 if(sdtcheck(dienThoai)){
                                     if(trangThaiCheck(trangThaiLamViec)){
-                                        if(image1.toString()!= null){
+                                        if(image1!= null){
                                             int tuoi = calculateAge(ngaySinh.getValue());
                                             if(tuoi < 15){
                                                 showWarn("Tuổi nhân viên phải lớn hơn 15");
                                             }else {
                                                     chinhSuaNhanVien(cellValue);
-                                                    showAlert("Thêm nhân viên thành công");
+                                                    showAlert("Cập nhật nhân viên thành công");
                                                     xetLaiduLieuChoBang();
                                             }
                                         }else{
