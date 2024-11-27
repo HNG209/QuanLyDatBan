@@ -355,7 +355,7 @@ public class ThucDonController implements Initializable {
                         refreshControl(event);
 
                     } else {
-                        System.out.println("Update cancel");
+                        showWarn("Đã hủy cập nhật!");
                     }
 
                 }
