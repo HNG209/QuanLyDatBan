@@ -23,6 +23,7 @@ import org.login.quanlydatban.entity.LoaiMonAn;
 import org.login.quanlydatban.entity.MonAn;
 import org.login.quanlydatban.entity.enums.TrangThaiMonAn;
 import org.login.quanlydatban.hibernate.HibernateUtils;
+import org.login.quanlydatban.notification.Notification;
 
 import java.io.File;
 import java.io.IOException;
@@ -262,10 +263,10 @@ public class ThucDonController implements Initializable {
                         Objects.equals(txtGia.getText(), "") ||
                         Objects.equals(cbloaiMonAn.getValue(), "")) {
                     showWarn("Bạn cần nhập đầy đủ thông tin!");
-                } else if (!regexGia()) {
-                    showWarn("Bạn cần nhập đúng thông tin!");
-                } else {
-
+                }
+//                else if (!regexGia()) {
+//                    showWarn("Bạn cần nhập đúng thông tin!");}
+                else {
                     themMon();
                     refreshControl(event);
                     loadLoaiMonAnComboBox();
@@ -273,7 +274,7 @@ public class ThucDonController implements Initializable {
                 }
 
             } catch (Exception e) {
-                System.out.println(e);
+                Notification.thongBao(e.getMessage(), Alert.AlertType.WARNING);
             }
 
         }
@@ -704,19 +705,19 @@ public class ThucDonController implements Initializable {
 
 
     //REGEX
-    public boolean regexGia(){
-        String rgia = txtGia.getText();
-        try {
-            double gia = Double.parseDouble(rgia);
-            if (gia > 0) {
-                return true;
-            } else {
-                return false;
-            }
-        } catch (NumberFormatException e) {
-            return false;
-        }
-    }
+//    public boolean regexGia(){
+//        String rgia = txtGia.getText();
+//        try {
+//            double gia = Double.parseDouble(rgia);
+//            if (gia > 0) {
+//                return true;
+//            } else {
+//                return false;
+//            }
+//        } catch (NumberFormatException e) {
+//            return false;
+//        }
+//    }
 
     private void showWarn(String message) {
         Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -729,7 +730,7 @@ public class ThucDonController implements Initializable {
     //CRUD
     public void themMon() {
         MonAnDAO monAnDAO = new MonAnDAO(); // DAO for MonAn
-
+        MonAn monAn = new MonAn();
         String selectedLoaiMon = cbloaiMonAn.getValue(); // Get the selected or entered value
         LoaiMonAn loaiMon = loaiMonDAO.getLoaiMonByName(selectedLoaiMon);
 
@@ -745,9 +746,9 @@ public class ThucDonController implements Initializable {
 
         // Get other input values from UI components
 
-        double gia = Double.parseDouble(txtGia.getText());
-        String tenMonAn = txtTenMonAn.getText();
-        String donViTinh = txtDonViTinh.getText();
+        double gia = Double.parseDouble(txtGia.getText().trim());
+        String tenMonAn = txtTenMonAn.getText().trim();
+        String donViTinh = txtDonViTinh.getText().trim();
 
         // Generate ID for the new MonAn
         String maMonAn = generateMaMonAn(cbloaiMonAn.getValue());
@@ -765,7 +766,14 @@ public class ThucDonController implements Initializable {
         }
 
         // Create the new MonAn object
-        MonAn monAn = new MonAn(maMonAn, loaiMon, tenMonAn, gia, donViTinh, duongDanAnh, ttMonAn);
+        monAn.setMaMonAn(maMonAn);
+        monAn.setLoaiMonAn(loaiMon);
+        monAn.setTenMonAn(tenMonAn);
+        monAn.setDonGia(gia);
+        monAn.setDonViTinh(donViTinh);
+        monAn.setHinhAnh(duongDanAnh);
+        monAn.setTrangThaiMonAn(ttMonAn);
+//        MonAn monAn = new MonAn(maMonAn, loaiMon, tenMonAn, gia, donViTinh, duongDanAnh, ttMonAn);
 
         // Save MonAn to the database
         monAnDAO.themMonAn(monAn);
