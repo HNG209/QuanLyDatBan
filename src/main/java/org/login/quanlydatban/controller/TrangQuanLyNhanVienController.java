@@ -140,7 +140,6 @@ public class TrangQuanLyNhanVienController implements Initializable {
         });
     }
 
-
     // xet lai du lieu cho bang nhan vien
     public void xetLaiduLieuChoBang(){
         try {
@@ -389,7 +388,7 @@ public class TrangQuanLyNhanVienController implements Initializable {
             cv = ChucVu.QUAN_LY;
         }
 
-        NhanVien nv = new NhanVien(getMaNhanVien,hoTen.getText().toString(),dienThoai.getText().toString(),cccd.getText().toString(),diaChi.getText().toString(),gt,ngaySinh.getValue(),duongdananh.toString(),tt,cv);
+        NhanVien nv = new NhanVien(getMaNhanVien,hoTen.getText().toString(),dienThoai.getText().toString(),cccd.getText().toString(),diaChi.getText().toString(),gt,ngaySinh.getValue(),image1.toString(),tt,cv);
         System.out.println("Nhan vien moi" + nv.getHinhAnh());
         NhanVienDAO nvd = new NhanVienDAO();
         nvd.updateNhanVien(nv1.getMaNhanVien().toString(),nv);
@@ -446,7 +445,7 @@ public class TrangQuanLyNhanVienController implements Initializable {
                             if(cancuoccongdancheck(cccd)){
                                 if(sdtcheck(dienThoai)){
                                     if(trangThaiCheck(trangThaiLamViec)){
-                                        if(duongdananh!= null){
+                                        if(image1.toString()!= null){
                                             int tuoi = calculateAge(ngaySinh.getValue());
                                             if(tuoi < 15){
                                                 showWarn("Tuổi nhân viên phải lớn hơn 15");
