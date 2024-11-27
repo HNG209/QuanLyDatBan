@@ -343,7 +343,6 @@ public class TrangQuanLyNhanVienController implements Initializable {
         }else{
             chucVu.setValue("Quản Lý");
         }
-
         // gioi tinh
         if(nhanVien.isGioiTinh() == false){
             gioiTinh1.setValue("NAM");
@@ -387,6 +386,8 @@ public class TrangQuanLyNhanVienController implements Initializable {
         }else if(chucVu.getValue().equals("Quản Lý")){
             cv = ChucVu.QUAN_LY;
         }
+
+
 
         NhanVien nv = new NhanVien(getMaNhanVien,hoTen.getText().toString(),dienThoai.getText().toString(),cccd.getText().toString(),diaChi.getText().toString(),gt,ngaySinh.getValue(),image1.toString(),tt,cv);
         NhanVienDAO nvd = new NhanVienDAO();
