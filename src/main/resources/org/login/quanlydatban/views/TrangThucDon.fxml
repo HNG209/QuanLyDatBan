@@ -95,20 +95,18 @@
                </padding></FlowPane>
          </content>
       </ScrollPane>
-      <AnchorPane layoutX="19.2" layoutY="17.0" prefHeight="27.0" prefWidth="694.0" AnchorPane.leftAnchor="47.79999999999984" AnchorPane.rightAnchor="575.0">
+      <GridPane alignment="CENTER" hgap="10.0" layoutX="48.0" layoutY="17.0" prefHeight="27.0" prefWidth="597.0" AnchorPane.leftAnchor="48.0" AnchorPane.rightAnchor="644.0">
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+         </rowConstraints>
          <children>
-            <GridPane alignment="CENTER" hgap="10.0">
-               <columnConstraints>
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
-               </columnConstraints>
-               <rowConstraints>
-                  <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-               </rowConstraints>
-               <children>
-                  <TextField fx:id="txtTimKiem" prefHeight="27.0" prefWidth="191.0" promptText="Tìm kiếm tên món..." style="-fx-border-color: #F3B664;" styleClass="round-box" />
-                  <ComboBox fx:id="cbTimLoaiMon" editable="true" prefHeight="27.0" prefWidth="189.0" promptText="Nhập hoặc chọn loại món" styleClass="round-box" GridPane.columnIndex="1">
+            <TextField fx:id="txtTimKiem" prefHeight="27.0" prefWidth="919.0" promptText="Tìm kiếm tên món..." style="-fx-border-color: #F3B664;" styleClass="round-box" />
+            <ComboBox fx:id="cbTimLoaiMon" editable="true" prefHeight="27.0" prefWidth="498.0" promptText="Nhập hoặc chọn loại món" styleClass="round-box" GridPane.columnIndex="1">
 <!--         <items>-->
 <!--            <FXCollections fx:factory="observableArrayList">-->
 <!--               <String fx:value="Tìm theo tên món" />-->
@@ -117,29 +115,27 @@
 <!--            </FXCollections>-->
 <!--         </items>-->
       </ComboBox>
-                  <ComboBox fx:id="cbSapXep" prefHeight="27.0" prefWidth="192.0" promptText="Chọn cách sắp xếp" styleClass="round-box" GridPane.columnIndex="2">
-                     <items>
-                        <FXCollections fx:factory="observableArrayList">
-                           <String fx:value="Sắp xếp giá tăng dần" />
-                           <String fx:value="Sắp xếp giá giảm dần" />
-                        </FXCollections>
-                     </items>
-                  </ComboBox>
-               </children>
-            </GridPane>
+            <ComboBox fx:id="cbSapXep" prefHeight="27.0" prefWidth="678.0" promptText="Chọn cách sắp xếp" styleClass="round-box" GridPane.columnIndex="2">
+               <items>
+                  <FXCollections fx:factory="observableArrayList">
+                     <String fx:value="Sắp xếp giá tăng dần" />
+                     <String fx:value="Sắp xếp giá giảm dần" />
+                  </FXCollections>
+               </items>
+            </ComboBox>
          </children>
-      </AnchorPane>
+      </GridPane>
       <ImageView fitHeight="29.0" fitWidth="29.0" layoutX="19.0" layoutY="16.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="19.0">
          <image>
             <Image url="@../icons/filter.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="27.0" fitWidth="29.0" layoutX="650.0" layoutY="17.0" onMouseClicked="#btnTimKiem" pickOnBounds="true" preserveRatio="true" styleClass="image-hover-effect" AnchorPane.leftAnchor="650.0" AnchorPane.rightAnchor="611.0">
+      <ImageView fitHeight="27.0" fitWidth="29.0" layoutX="650.0" layoutY="17.0" onMouseClicked="#btnTimKiem" pickOnBounds="true" preserveRatio="true" styleClass="image-hover-effect" AnchorPane.rightAnchor="611.0">
          <image>
             <Image url="@../icons/find.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="btnRefresh" fitHeight="27.0" fitWidth="27.0" layoutX="686.0" layoutY="17.0" onMouseClicked="#refreshControl" pickOnBounds="true" preserveRatio="true" styleClass="image-hover-effect" AnchorPane.leftAnchor="686.0" AnchorPane.rightAnchor="575.0">
+      <ImageView fx:id="btnRefresh" fitHeight="27.0" fitWidth="27.0" layoutX="686.0" layoutY="17.0" onMouseClicked="#refreshControl" pickOnBounds="true" preserveRatio="true" styleClass="image-hover-effect" AnchorPane.rightAnchor="575.0">
          <image>
             <Image url="@../icons/refresh.png" />
          </image>
