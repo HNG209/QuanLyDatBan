@@ -183,9 +183,7 @@ public class HoaDonController implements Initializable {
         ObservableList<String> trangThaiList = FXCollections.observableArrayList(
                 "Trạng thái",
                 "Đã thanh toán",
-                "Chưa thanh toán",
-                "Đã đặt",
-                "Đã huỷ"
+                "Chưa thanh toán"
         );
 
         // Đặt danh sách vào ComboBox
@@ -252,10 +250,6 @@ public class HoaDonController implements Initializable {
             return TrangThaiHoaDon.DA_THANH_TOAN;
         } else if ("Chưa thanh toán".equalsIgnoreCase(trangThai)) {
             return TrangThaiHoaDon.CHUA_THANH_TOAN;
-        } else if ("Đã đặt".equalsIgnoreCase(trangThai)) {
-            return TrangThaiHoaDon.DA_DAT;
-        } else if ("Đã huỷ".equalsIgnoreCase(trangThai)) {
-            return TrangThaiHoaDon.DA_HUY;
         }
         return null;
     }
