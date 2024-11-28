@@ -367,7 +367,8 @@ public class TrangThemNhanVienController implements Initializable {
         NhanVienDAO nvd = new NhanVienDAO();
         nvd.addNhanVien(nv);
         String tenTaiKhoan = hoTen.getText().toString().replaceAll("\\s+","");
-        TaiKhoan takKhoan = new TaiKhoan(tenTaiKhoan,"1111", nvd.getNhanVien(nv.getMaNhanVien().toString()));
+        String mk= EncryptionUtils.encrypt("1111", System.getenv("ENCRYPTION_KEY"));
+        TaiKhoan takKhoan = new TaiKhoan(tenTaiKhoan,mk, nvd.getNhanVien(nv.getMaNhanVien().toString()));
         taiKhoanDAO.addNhanVien(takKhoan);
     }
 }
