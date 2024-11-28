@@ -183,7 +183,9 @@ public class HoaDonController implements Initializable {
         ObservableList<String> trangThaiList = FXCollections.observableArrayList(
                 "Trạng thái",
                 "Đã thanh toán",
-                "Chưa thanh toán"
+                "Chưa thanh toán",
+                "Đã đặt",
+                "Đã huỷ"
         );
 
         // Đặt danh sách vào ComboBox
@@ -208,7 +210,7 @@ public class HoaDonController implements Initializable {
         // Lọc danh sách dựa trên các tiêu chí
         List<HoaDon> ketQuaLoc = danhSachGoc.stream()
                 .filter(hoaDon -> maHoaDon.isEmpty() || hoaDon.getMaHoaDon().contains(maHoaDon))
-                .filter(hoaDon -> tenKhachHang.isEmpty() || hoaDon.getKhachHang().getTenKhachHang().contains(tenKhachHang))
+                .filter(hoaDon -> tenKhachHang.isEmpty() ||  (hoaDon.getKhachHang() != null && hoaDon.getKhachHang().getMaKhachHang().contains(tenKhachHang)))
                 .filter(hoaDon -> {
                     TrangThaiHoaDon trangThaiEnum = convertStringToEnum(trangThai);
                     TrangThaiHoaDon trangThaiHoaDonEnum = hoaDon.getTrangThaiHoaDon();
@@ -222,7 +224,7 @@ public class HoaDonController implements Initializable {
         tabTatCa.getItems().setAll(ketQuaLoc);
     }
     public void onResetClicked() {
-        // 1. Xóa hết thông tin trong các TextField
+
         tfMaHoaDon.clear();
         tfTenKhachHang.clear();
         cbTrangThai.getSelectionModel().select("Trạng thái");
@@ -238,7 +240,7 @@ public class HoaDonController implements Initializable {
         textTrangThaiNV.clear();
 
         tableCTHD.getItems().clear();
-        //Cập nhật lại bảng với tất cả các hóa đơn
+        //Cập nhật lại bảng
         HoaDonDAO hoaDonDAO = new HoaDonDAO();
         List<HoaDon> danhSachGoc = hoaDonDAO.getAllHoaDon();
 
@@ -250,6 +252,10 @@ public class HoaDonController implements Initializable {
             return TrangThaiHoaDon.DA_THANH_TOAN;
         } else if ("Chưa thanh toán".equalsIgnoreCase(trangThai)) {
             return TrangThaiHoaDon.CHUA_THANH_TOAN;
+        } else if ("Đã đặt".equalsIgnoreCase(trangThai)) {
+            return TrangThaiHoaDon.DA_DAT;
+        } else if ("Đã huỷ".equalsIgnoreCase(trangThai)) {
+            return TrangThaiHoaDon.DA_HUY;
         }
         return null;
     }
@@ -259,11 +265,9 @@ public class HoaDonController implements Initializable {
         // Lấy danh sách các chi tiết hóa đơn cho hóa đơn hiện tại
         List<ChiTietHoaDon> chiTietList = chiTietHoaDonDAO.getChiTietHoaDonByMaHoaDon(String.valueOf(this.colMaHoaDon));
 
-        // Kiểm tra danh sách chi tiết hóa đơn có hợp lệ không
         if (chiTietList == null || chiTietList.isEmpty()) {
             return 0.0;
         }
-
         return chiTietList.stream()
                 .mapToDouble(chiTiet -> chiTiet.tinhTongCTHD())
                 .sum();

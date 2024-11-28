@@ -16,10 +16,7 @@ import org.login.quanlydatban.entity.enums.TrangThaiBan;
 
 import java.net.URL;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.ResourceBundle;
+import java.util.*;
 
 
 public class QuanLyBanController implements Initializable {
@@ -73,8 +70,6 @@ public class QuanLyBanController implements Initializable {
 
     @FXML
     private TableView<Ban> tableBan;
-
-
 
 
     private BanDAO banDAO;
@@ -181,16 +176,26 @@ public class QuanLyBanController implements Initializable {
                 showAlert("Mã bàn đã tồn tại! Hệ thống đã tự động tạo mã mới!");
             }
         }
-        System.out.println(maBan);
-        Ban newBan = new Ban(maBan,loaiBan, trangThai,khuVuc);
-        List<Ban> banList = banDAO.readAll();
-        banDAO.themBan(newBan);
-        banList.add(newBan);
-        clearForm();
-        checkTamNgungPV.setDisable(true);
-        checkTamNgungPV.setSelected(false);
-        onClickReset();
-        isEditing = false;
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Xác nhận thêm bàn");
+        alert.setHeaderText("Bạn có chắc chắn muốn thêm bàn mới không?");
+        alert.setContentText("Mã bàn: " + maBan + "\nKhu vực: " + khuVuc + "\nLoại bàn: " + loaiBan);
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+
+            Ban newBan = new Ban(maBan, loaiBan, trangThai, khuVuc);
+            banDAO.themBan(newBan);
+            tableBan.getItems().add(newBan);
+            clearForm();
+            checkTamNgungPV.setDisable(true);
+            checkTamNgungPV.setSelected(false);
+            onClickReset();
+            isEditing = false;
+        }
+        else {
+            rollbackMaBanCounter(khuVuc);
+        }
 
     }
 
@@ -217,20 +222,28 @@ public class QuanLyBanController implements Initializable {
             return;
         }
 
-
-
         selectedBan.setKhuVuc(textKhuVuc.getSelectionModel().getSelectedItem());
         selectedBan.setLoaiBan(textLoaiBan.getSelectionModel().getSelectedItem());
         selectedBan.setTrangThaiBan(checkTamNgungPV.isSelected() ? TrangThaiBan.TAM_NGUNG_PHUC_VU : TrangThaiBan.BAN_TRONG);
 
-        banDAO.capnhatBan(selectedBan);
-        tableBan.refresh();
-        List<Ban> banList = banDAO.readAll();
-        ObservableList<Ban> banObservableList = FXCollections.observableArrayList(banList);
-        tableBan.setItems(banObservableList);
-        clearForm();
-        checkTamNgungPV.setDisable(false);
-        onClickReset();
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Xác nhận sửa bàn");
+        alert.setHeaderText("Bạn có chắc chắn muốn sửa bàn không?");
+
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+
+            banDAO.capnhatBan(selectedBan);
+            tableBan.refresh();
+            List<Ban> banList = banDAO.readAll();
+            ObservableList<Ban> banObservableList = FXCollections.observableArrayList(banList);
+            tableBan.setItems(banObservableList);
+            clearForm();
+            checkTamNgungPV.setDisable(false);
+            onClickReset();
+
+        }
 
     }
     private void showAlert(String message) {
@@ -241,28 +254,25 @@ public class QuanLyBanController implements Initializable {
         alert.showAndWait();
     }
     public void locBan() {
-        // Lấy giá trị từ ComboBox
+
         Object selectedKhuVuc = locKhuVuc.getSelectionModel().getSelectedItem();
         Object selectedLoaiBan = locLoaiBan.getSelectionModel().getSelectedItem();
         Object selectedTrangThai = locTrangThai.getSelectionModel().getSelectedItem();
 
-        // Lọc danh sách
         ObservableList<Ban> filteredList = FXCollections.observableArrayList();
-        List<Ban> danhSachBan = banDAO.readAll(); // Lấy toàn bộ danh sách bàn từ cơ sở dữ liệu
+        List<Ban> danhSachBan = banDAO.readAll();
 
         for (Ban ban : danhSachBan) {
-            // Bỏ qua tiêu chí nếu không được chọn hoặc chọn "Tất cả"
+
             boolean matchKhuVuc = (selectedKhuVuc == null || selectedKhuVuc.equals("Tất cả") || ban.getKhuVuc().equals(selectedKhuVuc));
             boolean matchLoaiBan = (selectedLoaiBan == null || selectedLoaiBan.equals("Tất cả") || ban.getLoaiBan().equals(selectedLoaiBan));
             boolean matchTrangThai = (selectedTrangThai == null || selectedTrangThai.equals("Tất cả") || ban.getTrangThaiBan().equals(selectedTrangThai));
 
-            // Thêm bàn vào danh sách nếu phù hợp với tất cả tiêu chí
+
             if (matchKhuVuc && matchLoaiBan && matchTrangThai) {
                 filteredList.add(ban);
             }
         }
-
-        // Cập nhật bảng
         tableBan.setItems(filteredList);
     }
 
@@ -273,31 +283,61 @@ public class QuanLyBanController implements Initializable {
         tableBan.setItems(banObservableList);
         demTongBan(banList);
         demSoLuongTheoTrangThai(banList);
-        locKhuVuc.setValue("Tất cả");
-        locLoaiBan.setValue("Tất cả");
-        locTrangThai.setValue("Tất cả");
 
+        locKhuVuc.getSelectionModel().clearSelection();
+        locLoaiBan.getSelectionModel().clearSelection();
+        locTrangThai.getSelectionModel().clearSelection();
 
-
-
-
+          locKhuVuc.setButtonCell(new ListCell<>() {
+            @Override
+            protected void updateItem(Object item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText("Chọn khu vực"); // PromptText của locKhuVuc
+                } else {
+                    setText(item.toString());
+                }
+            }
+        });
+        locLoaiBan.setButtonCell(new ListCell<>() {
+            @Override
+            protected void updateItem(Object item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText("Chọn loại bàn");
+                } else {
+                    setText(item.toString());
+                }
+            }
+        });
+        locTrangThai.setButtonCell(new ListCell<>() {
+            @Override
+            protected void updateItem(Object item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText("Chọn trạng thái");
+                } else {
+                    setText(item.toString());
+                }
+            }
+        });
     }
     @FXML
     private void hienThiThongTinBan() {
         Ban selectedBan = tableBan.getSelectionModel().getSelectedItem();
 
         if (selectedBan != null) {
-            // Hiển thị thông tin của bàn vào các trường tương ứng
+
             isEditing = true;
 
             textMaBan.setText(selectedBan.getMaBan());
             textKhuVuc.getSelectionModel().select(selectedBan.getKhuVuc());
             textLoaiBan.getSelectionModel().select(selectedBan.getLoaiBan());
-//            if(selectedBan.getTrangThaiBan() == TrangThaiBan.DANG_PHUC_VU || selectedBan.getTrangThaiBan() == TrangThaiBan.DA_DAT) {
-//                checkTamNgungPV.setDisable(true);
-//            } else {
-//                checkTamNgungPV.setDisable(false);
-//            }
+            if(selectedBan.getTrangThaiBan() == TrangThaiBan.DANG_PHUC_VU ) {
+                checkTamNgungPV.setDisable(true);
+            } else {
+                checkTamNgungPV.setDisable(false);
+            }
 
             if (selectedBan.getTrangThaiBan() == TrangThaiBan.TAM_NGUNG_PHUC_VU) {
                 checkTamNgungPV.setSelected(true);
@@ -320,7 +360,6 @@ public class QuanLyBanController implements Initializable {
         // Kiểm tra nếu đã chọn đủ khu vực và loại bàn
         if (selectedKhuVuc != null && sucChua != null) {
 
-
             String maBan = generateMaBan(selectedKhuVuc, sucChua);
             textMaBan.setText(maBan);
 
@@ -331,10 +370,8 @@ public class QuanLyBanController implements Initializable {
 
         // Khởi tạo số thứ tự nếu khu vực chưa có mã bàn nào
         khuVucCounter.putIfAbsent(khuVuc, 1);
-
         // Lấy ký tự đầu của khu vực làm mã X
         String x = khuVuc.toString().substring(0, 1).toUpperCase();
-
 
         String zzz;
         while (true) {
@@ -349,7 +386,11 @@ public class QuanLyBanController implements Initializable {
             khuVucCounter.put(khuVuc, khuVucCounter.get(khuVuc) + 1);
         }
 
-
+    }
+    private void rollbackMaBanCounter(KhuVuc khuVuc) {
+        if (khuVucCounter.containsKey(khuVuc)) {
+            khuVucCounter.put(khuVuc, khuVucCounter.get(khuVuc) - 1);
+        }
     }
 
 

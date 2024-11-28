@@ -151,12 +151,12 @@
                   <Font size="13.0" />
                </font>
             </Button>
-            <Button fx:id="BtnChinhSua" layoutX="222.0" layoutY="477.0" mnemonicParsing="false" onAction="#handleSuaBan" prefHeight="30.0" prefWidth="183.0" styleClass="pale-lemon" text="Chỉnh sửa " AnchorPane.leftAnchor="220.66666666666666" AnchorPane.rightAnchor="20.666666666666657">
+            <Button fx:id="BtnChinhSua" layoutX="227.0" layoutY="477.0" mnemonicParsing="false" onAction="#handleSuaBan" prefHeight="30.0" prefWidth="179.0" styleClass="pale-lemon" text="Chỉnh sửa " AnchorPane.bottomAnchor="91.0" AnchorPane.leftAnchor="227.0" AnchorPane.rightAnchor="25.66666666666663">
                <font>
                   <Font size="13.0" />
                </font>
             </Button>
-            <Button fx:id="BtnClear" layoutX="21.0" layoutY="477.0" mnemonicParsing="false" onAction="#handleClear" prefHeight="30.0" prefWidth="183.0" styleClass="sunset-orange" text="Làm sạch" AnchorPane.leftAnchor="24.0" AnchorPane.rightAnchor="221.3333333333333">
+            <Button fx:id="BtnClear" layoutX="24.0" layoutY="478.0" mnemonicParsing="false" onAction="#handleClear" prefHeight="30.0" prefWidth="186.0" styleClass="sunset-orange" text="Làm sạch" AnchorPane.bottomAnchor="90.0" AnchorPane.leftAnchor="24.0" AnchorPane.rightAnchor="219.3333333333333">
                <font>
                   <Font size="13.0" />
                </font>
