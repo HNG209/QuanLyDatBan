@@ -34,6 +34,7 @@ public class LoaiMonAn implements Serializable {
     public void onPrePersist() {
         if (tenLoaiMonAn != null) {
             this.maLoaiMonAn = generateLoaiMonAn(tenLoaiMonAn);
+            System.out.println("1");
         } else {
             throw new IllegalArgumentException("tenLoaiMonAn is null");
         }

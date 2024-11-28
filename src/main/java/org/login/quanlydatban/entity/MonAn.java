@@ -133,9 +133,9 @@ public class MonAn implements Serializable {
     }
 
     private String generateMaMonAn(String itemName) {
-        LoaiMonDAO loaiMonDAO = new LoaiMonDAO();
+        //LoaiMonDAO loaiMonDAO = new LoaiMonDAO();
         // Generate the "XXXX" part using the logic for XXYY
-        loaiMonDAO.themLoaiMonAn(loaiMonAn); // Assume this generates the XXYY format
+        //loaiMonDAO.themLoaiMonAn(loaiMonAn); // Assume this generates the XXYY format
         String prefix = loaiMonAn.getMaLoaiMonAn();
         // Fetch the maximum "YYYY" part for the given "XXXX" prefix and increment it
         Long maxSuffix = getMaMonFromDatabase(prefix);
