@@ -24,4 +24,13 @@ public class Notification {
 
         alert.showAndWait();
     }
+
+    public static void thongBao(String text, String content, Alert.AlertType alertType) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle("Thông báo");
+        alert.setHeaderText(text);
+        alert.setContentText(content);
+
+        alert.showAndWait();
+    }
 }

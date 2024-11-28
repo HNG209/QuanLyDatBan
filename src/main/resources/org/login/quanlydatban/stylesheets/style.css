@@ -72,6 +72,11 @@
     -fx-border-radius: 0 20 0 0;
 }
 
+.bottom-left-rounded {
+    -fx-background-radius: 0 0 0 20; /* Top-left corner rounded, others sharp */
+    -fx-border-radius: 0 0 0 20;
+}
+
 .rounded-pane-simple {
     -fx-background-radius: 20 20 20 20; /* Top-left corner rounded, others sharp */
     -fx-border-radius: 20 20 20 20;

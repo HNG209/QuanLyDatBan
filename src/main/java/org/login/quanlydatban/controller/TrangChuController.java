@@ -205,6 +205,7 @@ public class TrangChuController implements Initializable {
 
     @FXML
     void xemLich(ActionEvent event) throws IOException {
+        XemLichDatController.getInstance().loadLichDatFromCurrentWeek();
         borderPane.setCenter(XemLichDatController.getInstance().getRoot());
     }
 

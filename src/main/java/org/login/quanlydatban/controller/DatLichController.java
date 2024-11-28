@@ -24,6 +24,7 @@ import org.login.quanlydatban.entity.KhachHang;
 import org.login.quanlydatban.entity.LichDat;
 import org.login.quanlydatban.entity.enums.*;
 import org.login.quanlydatban.notification.Notification;
+import org.login.quanlydatban.utilities.NumberFormatter;
 
 import javax.persistence.NoResultException;
 import java.io.IOException;
@@ -91,6 +92,9 @@ public class DatLichController implements Initializable {
     private TextField coc;
 
     @FXML
+    private TextField cocKD;
+
+    @FXML
     private TextField soLuongNguoi;
 
     @FXML
@@ -111,7 +115,20 @@ public class DatLichController implements Initializable {
     @FXML
     private Button btnHuyLich;
 
+    @FXML
+    private TextArea txtGhiChu;
+
+    @FXML
+    private TextField tienTraLai;
+
+    @FXML
+    private Button btnDatLich;
+
     private String prevSdt;
+
+    double c = 0.0;
+
+    double ckd = 0.0;
 
     private KhachHangDAO khachHangDAO;
 
@@ -164,7 +181,7 @@ public class DatLichController implements Initializable {
             cbPhut.getItems().add(i);
 
         tenKhachHang.focusedProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue) { // If newValue is false, the TextField has lost focus
+            if (!newValue && tenKhachHang.isEditable()) { // If newValue is false, the TextField has lost focus
                 if(Notification.xacNhan("Lưu khách hàng này?")){
                     KhachHang khachHang = new KhachHang();
                     khachHang.setSdt(sdt.getText());
@@ -247,6 +264,8 @@ public class DatLichController implements Initializable {
         btnChonMon.setDisable(true);
         btnHuyLich.setDisable(true);
         btnNhanBan.setDisable(true);
+        btnDatLich.setDisable(false);
+        tenKhachHang.setEditable(false);
 
         tgNhanBan.setValue(null);
         cbGio.getSelectionModel().clearSelection();
@@ -255,8 +274,10 @@ public class DatLichController implements Initializable {
         banTextField.clear();
         tenKhachHang.clear();
         soLuongNguoi.clear();
+        txtGhiChu.clear();
         coc.clear();
 
+        prevSdt = null;
         hoaDon = null;
         ban = null;
     }
@@ -332,12 +353,29 @@ public class DatLichController implements Initializable {
         ban = lichDat.getHoaDon().getBan();
         banTextField.setText(ban.getMaBan());
         hoaDon = lichDat.getHoaDon();
+        txtGhiChu.setText(lichDat.getGhiChu());
+        tenKhachHang.setEditable(false);
+
         if(hoaDon.getTrangThaiHoaDon() != TrangThaiHoaDon.DA_DAT){
+            sdt.setEditable(false);
+            soLuongNguoi.setEditable(false);
+            cbGio.setEditable(false);
+            cbPhut.setEditable(false);
+            tgNhanBan.setEditable(false);
+
+            btnDatLich.setDisable(false);
             btnChonMon.setDisable(true);
             btnHuyLich.setDisable(true);
             btnNhanBan.setDisable(true);
         }
         else{
+            sdt.setEditable(true);
+            soLuongNguoi.setEditable(true);
+            cbGio.setEditable(true);
+            cbPhut.setEditable(true);
+            tgNhanBan.setEditable(true);
+
+            btnDatLich.setDisable(true);
             btnNhanBan.setDisable(false);
             btnChonMon.setDisable(false);
             btnHuyLich.setDisable(false);
@@ -353,7 +391,9 @@ public class DatLichController implements Initializable {
 
             lichDat.setNhanVien(TrangChuController.getTaiKhoan().getNhanVien());
 
-            if (!prevSdt.isEmpty())
+            lichDat.setGhiChu(txtGhiChu.getText());
+
+            if (prevSdt != null && !prevSdt.isEmpty())
                 lichDat.setKhachHang(khachHangDAO.getKHBySDT(prevSdt));
             else throw new IllegalArgumentException("Vui lòng nhập số điện thoại của khách hàng");
 
@@ -378,6 +418,8 @@ public class DatLichController implements Initializable {
                 else throw new IllegalArgumentException("Vui lòng chọn giờ");
             } else throw new IllegalArgumentException("Vui lòng chọn thời gian nhận bàn");
 
+            lichDat.setTienCoc(c);
+
             hoaDon.setMaHoaDon(date);
             lichDat.setHoaDon(hoaDon);
 
@@ -387,8 +429,57 @@ public class DatLichController implements Initializable {
             Notification.thongBao("Đặt lịch thành công, mã lịch đặt: " + lichDat.getMaLichDat(), Alert.AlertType.INFORMATION);
             refreshBang();
         } catch (Exception e) {
-            Notification.thongBao(e.getMessage(), Alert.AlertType.WARNING);
+            Notification.thongBao(e.getMessage(), e.getStackTrace().clone()[0].toString(), Alert.AlertType.WARNING);
         }
+    }
+
+    @FXML
+    void cocEnter(KeyEvent event) {
+        if(event.getSource().equals(coc)){
+            if(coc.getText().equals(""))
+                return;
+            coc.setText(NumberFormatter.formatPrice(coc.getText()));
+            coc.positionCaret(coc.getText().length());
+
+            if (coc.getText().replace(".", "").matches("\\d+"))
+                c = Double.parseDouble(coc.getText().replace(".", ""));
+            else {
+                Notification.thongBao("Chỉ được nhập số", Alert.AlertType.INFORMATION);
+                coc.setText(coc.getText().substring(0, coc.getLength() - 1));
+                coc.setText(NumberFormatter.formatPrice(coc.getText()));
+                coc.positionCaret(coc.getText().length());
+            }
+            capNhatTienTraLai();
+        }
+        else {
+            if (cocKD.getText().equals("")){
+                ckd = 0.0;
+                capNhatTienTraLai();
+                return;
+            }
+
+            cocKD.setText(NumberFormatter.formatPrice(cocKD.getText()));
+            cocKD.positionCaret(cocKD.getText().length());
+
+            if (cocKD.getText().replace(".", "").matches("\\d+"))
+                ckd = Double.parseDouble(cocKD.getText().replace(".", ""));
+            else {
+                Notification.thongBao("Chỉ được nhập số", Alert.AlertType.INFORMATION);
+                cocKD.setText(cocKD.getText().substring(0, cocKD.getLength() - 1));
+                cocKD.setText(NumberFormatter.formatPrice(cocKD.getText()));
+                cocKD.positionCaret(cocKD.getText().length());
+            }
+            capNhatTienTraLai();
+        }
+    }
+
+    public void capNhatTienTraLai() {
+        tienTraLai.setText(NumberFormatter.formatPrice(String.valueOf((int) (c - ckd))));
+    }
+
+    @FXML
+    void refreshInput(MouseEvent event) {
+        refeshTextFieldsAndButtons();
     }
 
     @FXML
