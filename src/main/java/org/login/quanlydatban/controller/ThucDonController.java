@@ -570,137 +570,137 @@ public class ThucDonController implements Initializable {
         }
     }
 
-    private String generateLoaiMonAn(String itemName) {
-        String prefix = generatePrefixFromName(itemName); // Generate the "XX" part from the item name
-        Long maxId = getMaLoaiFromDatabase(prefix); // Get the maximum "YY" part for the given prefix
-        Long newIdNumber = (maxId == null) ? 1 : maxId + 1; // Increment the ID number
-        return prefix + String.format("%02d", newIdNumber); // Combine "XX" and "YY" into the final format
-    }
-
-    // Method to retrieve the maximum "YY" part for a specific prefix from the database
-    public Long getMaLoaiFromDatabase(String prefix) {
-        Session session = HibernateUtils.getFactory().openSession();
-        Transaction transaction = null;
-        Long maLoaiMon = null;
-
-        try {
-            transaction = session.beginTransaction();
-
-            // Query to fetch IDs starting with the given prefix
-            String query = "SELECT maLoaiMonAn FROM LoaiMonAn WHERE maLoaiMonAn LIKE :prefix";
-            List<String> maMonAns = session.createQuery(query, String.class)
-                    .setParameter("prefix", prefix + "%") // Match IDs with the given prefix
-                    .getResultList();
-
-            // Extract the "YY" part, convert to a number, and find the maximum
-            maLoaiMon = maMonAns.stream()
-                    .map(id -> id.substring(prefix.length())) // Extract "YY" part
-                    .filter(yy -> yy.matches("\\d+"))         // Ensure it is numeric
-                    .map(Long::parseLong)                    // Convert to Long
-                    .max(Long::compare)                      // Find the maximum
-                    .orElse(0L);
-
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction != null) transaction.rollback();
-            e.printStackTrace(); // Consider using a logger for better error handling
-        } finally {
-            if (session != null) {
-                session.close(); // Ensure the session is closed properly
-            }
-        }
-        return maLoaiMon;
-    }
-
-    // Helper method to generate the "XX" part from the item name
-    private String generatePrefixFromName(String name) {
-        // Split the name into words, take the first character of each word, and convert to uppercase
-        return Arrays.stream(name.split("\\s+"))
-                .filter(word -> !word.isEmpty())       // Ensure non-empty words
-                .map(word -> word.substring(0, 1))    // Take the first letter of each word
-                .map(String::toUpperCase)             // Convert to uppercase
-                .limit(2)                             // Take only the first 2 letters
-                .reduce("", String::concat);         // Combine into a single string
-    }
-
-//    private String generateLoaiMonAn(String prefix) {
-//        Long maxId = getMaLoaiFromDatabase(prefix);
-//        Long newIdNumber = (maxId == null) ? 1 : maxId + 1; // Increment ID by 1
-//        return prefix + String.format("%02d", newIdNumber); // Combine prefix with formatted number
+//    private String generateLoaiMonAn(String itemName) {
+//        String prefix = generatePrefixFromName(itemName); // Generate the "XX" part from the item name
+//        Long maxId = getMaLoaiFromDatabase(prefix); // Get the maximum "YY" part for the given prefix
+//        Long newIdNumber = (maxId == null) ? 1 : maxId + 1; // Increment the ID number
+//        return prefix + String.format("%02d", newIdNumber); // Combine "XX" and "YY" into the final format
 //    }
 //
+//    // Method to retrieve the maximum "YY" part for a specific prefix from the database
 //    public Long getMaLoaiFromDatabase(String prefix) {
 //        Session session = HibernateUtils.getFactory().openSession();
-//        Long maLoai = null;
+//        Transaction transaction = null;
+//        Long maLoaiMon = null;
 //
 //        try {
-//            String query = "SELECT loaiMonAn FROM MonAn WHERE loaiMonAn.maLoaiMonAn LIKE :prefix";
-//            List<String> loaiMonAns = session.createQuery(query, String.class)
-//                    .setParameter("prefix", prefix + "%")
+//            transaction = session.beginTransaction();
+//
+//            // Query to fetch IDs starting with the given prefix
+//            String query = "SELECT maLoaiMonAn FROM LoaiMonAn WHERE maLoaiMonAn LIKE :prefix";
+//            List<String> maMonAns = session.createQuery(query, String.class)
+//                    .setParameter("prefix", prefix + "%") // Match IDs with the given prefix
 //                    .getResultList();
 //
-//            maLoai = loaiMonAns.stream()
-//                    .filter(ma -> ma.matches(prefix + "\\d{2}")) // Ensure it matches the format with the prefix
-//                    .map(ma -> Long.parseLong(ma.substring(prefix.length()))) // Extract and parse the numeric part
-//                    .max(Long::compare)
+//            // Extract the "YY" part, convert to a number, and find the maximum
+//            maLoaiMon = maMonAns.stream()
+//                    .map(id -> id.substring(prefix.length())) // Extract "YY" part
+//                    .filter(yy -> yy.matches("\\d+"))         // Ensure it is numeric
+//                    .map(Long::parseLong)                    // Convert to Long
+//                    .max(Long::compare)                      // Find the maximum
 //                    .orElse(0L);
 //
+//            transaction.commit();
 //        } catch (Exception e) {
-//            e.printStackTrace(); // Replace with logger if needed
+//            if (transaction != null) transaction.rollback();
+//            e.printStackTrace(); // Consider using a logger for better error handling
 //        } finally {
 //            if (session != null) {
 //                session.close(); // Ensure the session is closed properly
 //            }
 //        }
-//        return maLoai;
+//        return maLoaiMon;
 //    }
-
-    private String generateMaMonAn(String itemName) {
-        // Generate the "XXXX" part using the logic for XXYY
-        String prefix = generateLoaiMonAn(itemName); // Assume this generates the XXYY format
-
-        // Fetch the maximum "YYYY" part for the given "XXXX" prefix and increment it
-        Long maxSuffix = getMaMonFromDatabase(prefix);
-        Long newSuffix = (maxSuffix == null) ? 1 : maxSuffix + 1;
-
-        // Combine "XXXX" (from XXYY) and "YYYY" into the final format
-        return prefix + String.format("%04d", newSuffix); // Ensure "YYYY" is 4 digits
-    }
-
-    // Method to retrieve the maximum "YYYY" value for a specific "XXXX" prefix
-    public Long getMaMonFromDatabase(String prefix) {
-        Session session = HibernateUtils.getFactory().openSession();
-        Transaction transaction = null;
-        Long maxSuffix = null;
-
-        try {
-            transaction = session.beginTransaction();
-
-            // Query to fetch IDs starting with the given "XXXX" prefix
-            String query = "SELECT maMonAn FROM MonAn WHERE maMonAn LIKE :prefix";
-            List<String> maMonAns = session.createQuery(query, String.class)
-                    .setParameter("prefix", prefix + "%") // Match IDs with the given prefix
-                    .getResultList();
-
-            // Extract the "YYYY" part, convert to a number, and find the maximum
-            maxSuffix = maMonAns.stream()
-                    .map(id -> id.substring(prefix.length())) // Extract "YYYY" part
-                    .filter(yy -> yy.matches("\\d+"))         // Ensure it is numeric
-                    .map(Long::parseLong)                    // Convert to Long
-                    .max(Long::compare)                      // Find the maximum
-                    .orElse(0L);
-
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction != null) transaction.rollback();
-            e.printStackTrace(); // Consider using a logger for better error handling
-        } finally {
-            if (session != null) {
-                session.close(); // Ensure the session is closed properly
-            }
-        }
-        return maxSuffix;
-    }
+//
+//    // Helper method to generate the "XX" part from the item name
+//    private String generatePrefixFromName(String name) {
+//        // Split the name into words, take the first character of each word, and convert to uppercase
+//        return Arrays.stream(name.split("\\s+"))
+//                .filter(word -> !word.isEmpty())       // Ensure non-empty words
+//                .map(word -> word.substring(0, 1))    // Take the first letter of each word
+//                .map(String::toUpperCase)             // Convert to uppercase
+//                .limit(2)                             // Take only the first 2 letters
+//                .reduce("", String::concat);         // Combine into a single string
+//    }
+//
+////    private String generateLoaiMonAn(String prefix) {
+////        Long maxId = getMaLoaiFromDatabase(prefix);
+////        Long newIdNumber = (maxId == null) ? 1 : maxId + 1; // Increment ID by 1
+////        return prefix + String.format("%02d", newIdNumber); // Combine prefix with formatted number
+////    }
+////
+////    public Long getMaLoaiFromDatabase(String prefix) {
+////        Session session = HibernateUtils.getFactory().openSession();
+////        Long maLoai = null;
+////
+////        try {
+////            String query = "SELECT loaiMonAn FROM MonAn WHERE loaiMonAn.maLoaiMonAn LIKE :prefix";
+////            List<String> loaiMonAns = session.createQuery(query, String.class)
+////                    .setParameter("prefix", prefix + "%")
+////                    .getResultList();
+////
+////            maLoai = loaiMonAns.stream()
+////                    .filter(ma -> ma.matches(prefix + "\\d{2}")) // Ensure it matches the format with the prefix
+////                    .map(ma -> Long.parseLong(ma.substring(prefix.length()))) // Extract and parse the numeric part
+////                    .max(Long::compare)
+////                    .orElse(0L);
+////
+////        } catch (Exception e) {
+////            e.printStackTrace(); // Replace with logger if needed
+////        } finally {
+////            if (session != null) {
+////                session.close(); // Ensure the session is closed properly
+////            }
+////        }
+////        return maLoai;
+////    }
+//
+//    private String generateMaMonAn(String itemName) {
+//        // Generate the "XXXX" part using the logic for XXYY
+//        String prefix = generateLoaiMonAn(itemName); // Assume this generates the XXYY format
+//
+//        // Fetch the maximum "YYYY" part for the given "XXXX" prefix and increment it
+//        Long maxSuffix = getMaMonFromDatabase(prefix);
+//        Long newSuffix = (maxSuffix == null) ? 1 : maxSuffix + 1;
+//
+//        // Combine "XXXX" (from XXYY) and "YYYY" into the final format
+//        return prefix + String.format("%04d", newSuffix); // Ensure "YYYY" is 4 digits
+//    }
+//
+//    // Method to retrieve the maximum "YYYY" value for a specific "XXXX" prefix
+//    public Long getMaMonFromDatabase(String prefix) {
+//        Session session = HibernateUtils.getFactory().openSession();
+//        Transaction transaction = null;
+//        Long maxSuffix = null;
+//
+//        try {
+//            transaction = session.beginTransaction();
+//
+//            // Query to fetch IDs starting with the given "XXXX" prefix
+//            String query = "SELECT maMonAn FROM MonAn WHERE maMonAn LIKE :prefix";
+//            List<String> maMonAns = session.createQuery(query, String.class)
+//                    .setParameter("prefix", prefix + "%") // Match IDs with the given prefix
+//                    .getResultList();
+//
+//            // Extract the "YYYY" part, convert to a number, and find the maximum
+//            maxSuffix = maMonAns.stream()
+//                    .map(id -> id.substring(prefix.length())) // Extract "YYYY" part
+//                    .filter(yy -> yy.matches("\\d+"))         // Ensure it is numeric
+//                    .map(Long::parseLong)                    // Convert to Long
+//                    .max(Long::compare)                      // Find the maximum
+//                    .orElse(0L);
+//
+//            transaction.commit();
+//        } catch (Exception e) {
+//            if (transaction != null) transaction.rollback();
+//            e.printStackTrace(); // Consider using a logger for better error handling
+//        } finally {
+//            if (session != null) {
+//                session.close(); // Ensure the session is closed properly
+//            }
+//        }
+//        return maxSuffix;
+//    }
 
 
 
@@ -751,7 +751,7 @@ public class ThucDonController implements Initializable {
         String donViTinh = txtDonViTinh.getText().trim();
 
         // Generate ID for the new MonAn
-        String maMonAn = generateMaMonAn(cbloaiMonAn.getValue());
+//        String maMonAn = generateMaMonAn(cbloaiMonAn.getValue());
 
         String duongDanAnh = null;
         String imageUrl = anhMon.getImage().getUrl(); // Get the URL of the image
@@ -766,7 +766,7 @@ public class ThucDonController implements Initializable {
         }
 
         // Create the new MonAn object
-        monAn.setMaMonAn(maMonAn);
+//        monAn.setMaMonAn(maMonAn);
         monAn.setLoaiMonAn(loaiMon);
         monAn.setTenMonAn(tenMonAn);
         monAn.setDonGia(gia);
@@ -781,11 +781,11 @@ public class ThucDonController implements Initializable {
 
     public void themLoaiMon () {
         LoaiMonDAO loaiMonDAO = new LoaiMonDAO();
-        String maLoai = generateLoaiMonAn(cbloaiMonAn.getValue());
+//        String maLoai = generateLoaiMonAn(cbloaiMonAn.getValue());
         String tenLoai = cbloaiMonAn.getValue();
         String moTa = txfMoTa.getText();
 
-        LoaiMonAn loaiMonAn = new LoaiMonAn(maLoai, tenLoai, moTa);
+        LoaiMonAn loaiMonAn = new LoaiMonAn(tenLoai, moTa);
         loaiMonDAO.themLoaiMonAn(loaiMonAn);
 
     }
