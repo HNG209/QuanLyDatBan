@@ -116,7 +116,6 @@ public class NhanVienDAO {
                 nhanVienCu.setTrangThaiNhanVien(nhanVienMoi.getTrangThaiNhanVien()); // Cập nhật trạng thái
                 nhanVienCu.setChucVuNhanVien(nhanVienMoi.getChucVuNhanVien());
 
-
                 // Cập nhật tài khoản liên kết
                 TaiKhoan tktim = taiKhoan.getTaiKhoanNhanVien(maNhanVienCu);
                 if (tktim != null) {

@@ -53,7 +53,7 @@ public class TrangChuController implements Initializable {
                 tenNhanVien.setText(taiKhoan.getNhanVien().getTenNhanVien());
                 imageView.setImage(image);
                 imageView.setFitWidth(40); // Chiều rộng
-                imageView.setFitHeight(40); // Chiều cao
+                imageView.setFitHeight(60); // Chiều cao
                 imageView.setPreserveRatio(true);
                 Circle clip = new Circle(20, 20, 20); // Tọa độ và bán kính
                 imageView.setClip(clip);
