@@ -7,14 +7,19 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Bounds;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.shape.Circle;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.stage.Window;
 import org.login.quanlydatban.entity.TaiKhoan;
 import org.login.quanlydatban.entity.enums.ChucVu;
+import org.login.quanlydatban.notification.Notification;
 import org.login.quanlydatban.utilities.Clock;
 
 import java.io.IOException;
@@ -46,22 +51,34 @@ public class TrangChuController implements Initializable {
     @FXML
     private ImageView setting;
 
-    private Stage ketCaStage;
-    public void setTaiKhoan(TaiKhoan taiKhoan){
-        this.taiKhoan = taiKhoan;
-        if(taiKhoan != null){
-            if(taiKhoan.getNhanVien() != null){
-                tenNhanVien.setText(taiKhoan.getNhanVien().getTenNhanVien());
-                switch (taiKhoan.getNhanVien().getChucVuNhanVien()){
-                    case NHAN_VIEN -> chucVu.setText("Nhân viên");
-                    default -> chucVu.setText("Quản lý");
-                }
-                Clock clock = new Clock();
-                clock.startClock(time);
-//                showTooltipForAvatar();
-            }
+    private Stage stage;
 
+    public void setTaiKhoan(TaiKhoan taiKhoan) {
+        TrangChuController.taiKhoan = taiKhoan;
+        showTooltipForAvatar();
+        if (stage == null || !stage.isShowing()) {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/TrangBaoCaoVaoCa.fxml"));
+                AnchorPane anchorPane = loader.load();
+
+                Scene scene = new Scene(anchorPane);
+                stage = new Stage();
+                stage.setScene(scene);
+                stage.setTitle("Báo Cáo Vào Ca");
+                stage.setResizable(false);
+
+                stage.setOnCloseRequest(e -> stage = null);
+                stage.initModality(Modality.APPLICATION_MODAL);
+                stage.initStyle(StageStyle.UNDECORATED);
+                stage.showAndWait();
+            } catch (IOException e) {
+                Notification.thongBao("Hiển thị báo cáo vào ca không thành công", Alert.AlertType.ERROR);
+                e.printStackTrace();
+            }
+        } else {
+            stage.toFront();
         }
+
     }
 
     @FXML
@@ -141,24 +158,41 @@ public class TrangChuController implements Initializable {
     @FXML
     public void ketCa() throws IOException {
 
-        if (ketCaStage == null || !ketCaStage.isShowing()) {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/TrangBaoCaoKetCa.fxml"));
             AnchorPane anchorPane = loader.load();
             KetCaController ketCa = loader.getController();
             ketCa.setTaiKhoan(taiKhoan);
 
             Scene scene = new Scene(anchorPane);
-            ketCaStage = new Stage();
-            ketCaStage.setScene(scene);
-            ketCaStage.setTitle("Báo Cáo Kết Ca");
-            ketCaStage.setOnCloseRequest(e -> ketCaStage = null);
-            ketCaStage.setResizable(false);
-            ketCaStage.show();
-        } else {
-            ketCaStage.toFront();
-        }
-    }
+            stage = new Stage();
+            stage.setScene(scene);
+            stage.setTitle("Báo Cáo Kết Ca");
+            stage.setOnCloseRequest(e -> stage = null);
+            stage.setResizable(false);
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.showAndWait();
 
+    }
+    @FXML
+    public void vaoCa() throws IOException {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/TrangBaoCaoVaoCa.fxml"));
+                AnchorPane anchorPane = loader.load();
+
+                Scene scene = new Scene(anchorPane);
+                stage = new Stage();
+                stage.setScene(scene);
+                stage.setTitle("Báo Cáo Vào Ca");
+                stage.setOnCloseRequest(e -> stage = null);
+                stage.setResizable(false);
+                stage.initModality(Modality.APPLICATION_MODAL);
+                stage.showAndWait();
+            }
+            catch (IOException e) {
+                Notification.thongBao("Hiển thị báo cáo vào ca không thành công", Alert.AlertType.ERROR);
+            }
+
+    }
     @FXML
     public void thucDon() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/TrangThucDon.fxml"));
@@ -193,18 +227,18 @@ public class TrangChuController implements Initializable {
     }
 
     public static void dangXuat() throws IOException {
-        FXMLLoader loader = new FXMLLoader(TrangChuController.class.getResource("/org/login/quanlydatban/views/TrangDangNhap.fxml"));
-        Scene scene = new Scene(loader.load());
-        Stage stage = new Stage();
+            FXMLLoader loader = new FXMLLoader(TrangChuController.class.getResource("/org/login/quanlydatban/views/TrangDangNhap.fxml"));
+            Scene scene = new Scene(loader.load());
+            Stage stage = new Stage();
 
-        if (stage != null){
-            stage.setTitle("Đăng nhập");
-            stage.setScene(scene);
-            stage.initStyle(StageStyle.UNDECORATED);
-            stage.setScene(scene);
-            scene.getStylesheets().add(Objects.requireNonNull(TrangChuController.class.getResource("/org/login/quanlydatban/stylesheets/style.css")).toExternalForm());
-            stage.show();
-        }
+            if (stage != null){
+                stage.setTitle("Đăng nhập");
+                stage.setScene(scene);
+                stage.initStyle(StageStyle.UNDECORATED);
+                stage.setScene(scene);
+                scene.getStylesheets().add(Objects.requireNonNull(TrangChuController.class.getResource("/org/login/quanlydatban/stylesheets/style.css")).toExternalForm());
+                stage.show();
+            }
     }
 
     @FXML
@@ -221,6 +255,9 @@ public class TrangChuController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        Clock clock = new Clock();
+        clock.startClock(time);
+        showTooltipForAvatar();
         ContextMenu contextMenu = new ContextMenu();
         setBorderPaneStatic(borderPane);
         MenuItem itemTaiKhoan = new MenuItem("Tài khoản");
@@ -237,13 +274,18 @@ public class TrangChuController implements Initializable {
         SeparatorMenuItem separatorMenuItem = new SeparatorMenuItem();
         MenuItem itemDangXuat = new MenuItem("Đăng xuất");
         itemDangXuat.setOnAction(event -> {
-            Stage stage = (Stage) setting.getScene().getWindow();
-            stage.close();
-            try {
-                dangXuat();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+
+            if(KetCaController.isKetCa) {
+                Stage stage = (Stage) setting.getScene().getWindow();
+                stage.close();
+                try {
+                    dangXuat();
+                } catch (IOException e) {
+
+                    throw new RuntimeException(e);
+                }
             }
+            else Notification.thongBao("Bạn chưa làm báo cáo kết ca", Alert.AlertType.INFORMATION);
         });
 
         contextMenu.getItems().addAll(itemTaiKhoan, separatorMenuItem, itemDangXuat);
@@ -255,6 +297,7 @@ public class TrangChuController implements Initializable {
                 contextMenu.show(setting, boundsInScreen.getMinX() - 30, boundsInScreen.getMaxY() + 5);
             }
         });
+
 
     }
 
@@ -284,21 +327,28 @@ public class TrangChuController implements Initializable {
             e.printStackTrace();
         }
     }
-//    @FXML
-//    public void showTooltipForAvatar() {
-//        Tooltip tooltip = new Tooltip();
-//        if (taiKhoan != null && taiKhoan.getNhanVien() != null) {
-//            String url = taiKhoan.getNhanVien().getHinhAnh();
-//            avatar.setImage(new Image(getClass().getResource(url).toExternalForm()));
-//            String ten = taiKhoan.getNhanVien().getTenNhanVien();
-//            String chucVuText = taiKhoan.getNhanVien().getChucVuNhanVien() == ChucVu.NHAN_VIEN ? "Nhân viên" : "Quản lý";
-//            tooltip.setText("Tên: " + ten + "\nChức vụ: " + chucVuText);
-//        } else {
-//            tooltip.setText("Không có thông tin nhân viên");
-//        }
-//        Tooltip.install(avatar, tooltip);
-//        avatar.setOnMouseEntered(event -> tooltip.show(avatar, event.getScreenX(), event.getScreenY() + 15));
-//        avatar.setOnMouseExited(event -> tooltip.hide());
-//    }
+    @FXML
+    public void showTooltipForAvatar() {
+        Tooltip tooltip = new Tooltip();
+
+        if (taiKhoan != null && taiKhoan.getNhanVien() != null) {
+            String url = taiKhoan.getNhanVien().getHinhAnh();
+            avatar.setImage(new Image(getClass().getResource(url).toExternalForm()));
+            avatar.setFitWidth(40); // Chiều rộng
+            avatar.setFitHeight(60); // Chiều cao
+            avatar.setPreserveRatio(true);
+            Circle clip = new Circle(20, 20, 20); // Tọa độ và bán kính
+            avatar.setClip(clip);
+            String ten = taiKhoan.getNhanVien().getTenNhanVien();
+            String chucVuText = taiKhoan.getNhanVien().getChucVuNhanVien() == ChucVu.NHAN_VIEN ? "Nhân viên" : "Quản lý";
+            tooltip.setText(ten + "\n" + chucVuText);
+            tooltip.setStyle("-fx-font-size: 16px; -fx-padding: 10;");
+        } else {
+            tooltip.setText("Không có thông tin nhân viên");
+        }
+        Tooltip.install(avatar, tooltip);
+        avatar.setOnMouseEntered(event -> tooltip.show(avatar, event.getScreenX(), event.getScreenY() + 15));
+        avatar.setOnMouseExited(event -> tooltip.hide());
+    }
 
 }

@@ -32,6 +32,7 @@
         private  TrangChuController trangchuctr;
 
         private TaiKhoanDAO taiKhoanDAO;
+
         @FXML
         public void nhanEnterDeDangNhap(){
              showPasswordField.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -83,12 +84,6 @@
             if(taiKhoan != null){
                 if(password.getText().equals("")) {
                     System.out.println("Vui long nhap mat khau");
-                }
-                else if (taiKhoan.getPassword().equals("1111")){
-                    if (taiKhoan.getPassword().equals(password.getText())){
-                        System.out.println("dang nhap thanh cong");
-                        showTrangChu(taiKhoan);
-                    }
                 }
                 else if(EncryptionUtils.encrypt(password.getText(), System.getenv("ENCRYPTION_KEY")).equals(taiKhoan.getPassword())){
                     System.out.println("dang nhap thanh cong");

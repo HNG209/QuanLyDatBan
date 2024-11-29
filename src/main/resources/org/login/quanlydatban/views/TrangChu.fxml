@@ -32,7 +32,7 @@
                         </ImageView>
                      </children>
                   </Pane>
-                  <Pane prefHeight="46.0" prefWidth="401.0" AnchorPane.rightAnchor="10.0">
+                  <Pane prefHeight="46.0" prefWidth="391.0" AnchorPane.rightAnchor="10.0">
                      <children>
                         <ImageView fx:id="avatar" fitHeight="40.0" fitWidth="40.0" layoutX="303.0" layoutY="3.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -44,9 +44,7 @@
                               <Image url="@../icons/cogwheel.png" />
                            </image>
                         </ImageView>
-                        <Label fx:id="tenNhanVien" alignment="BASELINE_RIGHT" layoutX="147.0" layoutY="8.0" prefHeight="17.0" prefWidth="147.0" text="Chưa có nhân viên đăng ký" />
-                        <Label fx:id="chucVu" alignment="CENTER_RIGHT" layoutX="212.0" layoutY="23.0" prefHeight="17.0" prefWidth="81.0" text="Chức vụ" />
-                        <Label fx:id="time" layoutX="2.0" prefHeight="50.0" prefWidth="184.0">
+                        <Label fx:id="time" layoutX="110.0" prefHeight="50.0" prefWidth="177.0">
                            <font>
                               <Font size="18.0" />
                            </font>
@@ -123,8 +121,6 @@
                   <Menu mnemonicParsing="false" text="Thống kê">
                      <items>
                         <MenuItem mnemonicParsing="false" onAction="#thongKe" text="Thống kê" />
-                        <MenuItem mnemonicParsing="false" onAction="#ketCa" text="Kết ca" />
-                        <MenuItem mnemonicParsing="false" onAction="#thongKe" text="Vào ca" />
                      </items>
                      <graphic>
                         <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
@@ -142,6 +138,19 @@
                         <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../icons/user.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Menu>
+                  <Menu mnemonicParsing="false" text="Báo cáo">
+                     <items>
+                        <MenuItem mnemonicParsing="false" onAction="#vaoCa" text="Vào ca" />
+                        <MenuItem mnemonicParsing="false" onAction="#ketCa" text="Kết ca" />
+                     </items>
+                     <graphic>
+                        <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../icons/report.png" />
                            </image>
                         </ImageView>
                      </graphic>

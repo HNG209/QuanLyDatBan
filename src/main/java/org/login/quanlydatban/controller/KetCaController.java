@@ -32,9 +32,6 @@ public class KetCaController {
     private Label chenhLech;
 
     @FXML
-    private Button huyKetCa;
-
-    @FXML
     private TextField menhGia100K;
 
     @FXML
@@ -62,9 +59,6 @@ public class KetCaController {
     private TextField menhGia5K;
 
     @FXML
-    private Button nutKetCa;
-
-    @FXML
     private Label tenNhanVien;
 
     @FXML
@@ -72,10 +66,6 @@ public class KetCaController {
 
     @FXML
     private Label tienCuoiCa;
-
-
-    @FXML
-    private Button themSo;
 
     @FXML
     private TextField tienVaoCa;
@@ -91,6 +81,7 @@ public class KetCaController {
     private TaiKhoan taiKhoan;
     private HoaDonDAO hoaDonDAO;
     private DecimalFormat df = new DecimalFormat("#,### VND");;
+    public static boolean isKetCa = false;
     public TaiKhoan getTaiKhoan() {
         return taiKhoan;
     }
@@ -105,6 +96,7 @@ public class KetCaController {
         clock.startClock(thoiGianHienTai);
         hoaDonDAO = new HoaDonDAO();
         loadDuLieu();
+        loadTienCuoiCaVaChenhLech();
         menhGia1K.textProperty().addListener((observable, oldValue, newValue) -> tinhTongMenhGia());
         menhGia2K.textProperty().addListener((observable, oldValue, newValue) -> tinhTongMenhGia());
         menhGia5K.textProperty().addListener((observable, oldValue, newValue) -> tinhTongMenhGia());
@@ -122,6 +114,7 @@ public class KetCaController {
         tenNhanVien.setText(TrangChuController.taiKhoan.getNhanVien().getTenNhanVien());
         Object[] doanhThuVaSoHD;
         doanhThuVaSoHD = hoaDonDAO.layDoanhThuVaSoHoaDon(maNV, LocalDate.now());
+        tienVaoCa.setText(VaoCaController.tongTienVaoCa.toString());
         if (doanhThuVaSoHD.length == 0) {
             tongSoHoaDon.setText("0");
             tongDoanhThu.setText("0");
@@ -166,12 +159,12 @@ public class KetCaController {
     private void loadTienCuoiCaVaChenhLech() {
         double tienVao = 0.0;
         try {
-            tienVao = tienVaoCa.getText().isEmpty() ? 0.0 : Double.parseDouble(tienVaoCa.getText());
+            tienVao = tienVaoCa.getText().isEmpty() ? 0.0 : Double.parseDouble(tienVaoCa.getText().replace(" VND", "").replace(",",""));
         } catch (NumberFormatException e) {
             Platform.runLater(() -> tienVaoCa.setText("0"));
             tienVao = 0.0;
         }
-        double doanhThu = tongDoanhThu.getText().isEmpty() ? 0.0 : Double.parseDouble(tongDoanhThu.getText());
+        double doanhThu = tongDoanhThu.getText().isEmpty() ? 0.0 : Double.parseDouble(tongDoanhThu.getText().replace(" VND", "").replace(",",""));
         double tienCuoiCaValue = tienVao + doanhThu;
         double tongMenhGiaTien = tongMenhGia.getText().isEmpty() ? 0.0 : Double.parseDouble(tongMenhGia.getText().replace(" VND", "").replace(",",""));
         double tienChenhLech = tongMenhGiaTien - tienCuoiCaValue;
@@ -188,10 +181,6 @@ public class KetCaController {
         else {
             tienCuoiCa.setText(df.format(tienCuoiCaValue));
         }
-    }
-    @FXML
-    private void capNhatTienVaoCa() {
-        tienVaoCa.setText(tienVaoCa.getText() + "000");
     }
     @FXML
     private void thoat() {
@@ -247,7 +236,7 @@ public class KetCaController {
             JOptionPane.showMessageDialog(null, "Dữ liệu không đầy đủ. Vui lòng kiểm tra lại.");
             return;
         } else {
-            tienVaoCaText = df.format(Double.parseDouble(tienVaoCa.getText()));
+            tienVaoCaText = df.format(Double.parseDouble(tienVaoCa.getText().replace(" VND", "").replace(",","")));
         }
 
         if (chenhLech.getTextFill() == Color.RED) {
@@ -300,13 +289,15 @@ public class KetCaController {
                 writer.newLine();
 
                 JOptionPane.showMessageDialog(null, "Xuất báo cáo kết ca thành công");
-                Stage stage = (Stage) Window.getWindows().stream()
-                        .filter(Window::isFocused)
-                        .findFirst()
-                        .orElse(null);
-                if (stage != null) {
-                    stage.close();
+                isKetCa = true;
+                for (Window window : Window.getWindows()) {
+                    if (window instanceof Stage) {
+                        ((Stage) window).close();
+                    }
                 }
+                Stage currentStage = (Stage) chenhLech.getScene().getWindow();
+                currentStage.close();
+                TrangChuController.dangXuat();
 
             } catch (IOException e) {
                 JOptionPane.showMessageDialog(null, "Xuất báo cáo kết ca không thành công");

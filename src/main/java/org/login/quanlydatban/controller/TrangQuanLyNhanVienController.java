@@ -25,6 +25,7 @@ import org.login.quanlydatban.dao.NhanVienDAO;
 import org.login.quanlydatban.entity.NhanVien;
 import org.login.quanlydatban.entity.enums.ChucVu;
 import org.login.quanlydatban.entity.enums.TrangThaiNhanVien;
+import org.login.quanlydatban.notification.Notification;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -170,26 +171,46 @@ public class TrangQuanLyNhanVienController implements Initializable {
         btnTaiAnh1.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                System.out.println("Nhan nut tai anh");
+                System.out.println("Nhấn nút tải ảnh");
                 FileChooser fileChooser = new FileChooser();
-                fileChooser.setInitialDirectory(new File("E:\\QuanLyDatBanNhom2\\QuanLyDatBan\\src\\main\\resources\\org\\login\\quanlydatban\\Image"));
                 fileChooser.setTitle("Mở file");
 
-                // Thiết lập bộ lọc file nếu cần
+                // Thiết lập thư mục khởi tạo
+                File initialDir = new File("src/main/resources/org/login/quanlydatban/Image");
+                if (initialDir.exists() && initialDir.isDirectory()) {
+                    fileChooser.setInitialDirectory(initialDir);
+                } else {
+                    Notification.thongBao(
+                            "Thư mục khởi tạo không tồn tại hoặc không phải là thư mục: " + initialDir.getAbsolutePath(),
+                            Alert.AlertType.ERROR
+                    );
+                    return; // Kết thúc nếu thư mục khởi tạo không hợp lệ
+                }
+
+                // Thiết lập bộ lọc file
                 FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif");
                 fileChooser.getExtensionFilters().add(extFilter);
 
+                // Hiển thị hộp thoại chọn file
                 File file = fileChooser.showOpenDialog(null);
-                System.out.println("Nhấn nút tải ảnh");
 
                 if (file != null) {
-                    duongdananh = file.getAbsolutePath(); // Cập nhật đường dẫn
+                    // Lấy đường dẫn tương đối từ thư mục gốc dự án
+                    File projectRoot = new File("src/main/resources/org/login/quanlydatban/Image");
+                    duongdananh = projectRoot.toURI().relativize(file.toURI()).getPath();
+
                     // Cập nhật ImageView với ảnh mới
                     Image image = new Image(file.toURI().toString());
                     image1.setImage(image);
-                }
 
+                    // Hiển thị thông báo thành công
+                    Notification.thongBao("Tải ảnh thành công!", Alert.AlertType.INFORMATION);
+                } else {
+                    Notification.thongBao("Không có tệp nào được chọn.", Alert.AlertType.WARNING);
+                }
             }
+
+
         });
     }
 
@@ -328,7 +349,7 @@ public class TrangQuanLyNhanVienController implements Initializable {
     public void loaddulieulenform(NhanVien nhanVien){
         String imageUrl = nhanVien.getHinhAnh();
         // Tạo đối tượng Image từ URL
-        Image image = new Image("file:" + imageUrl);
+        Image image = new Image(getClass().getResource(imageUrl).toString());
         // Tạo ImageView và đặt hình ảnh vào
         image1.setImage(image);
         maNhanVien1.setEditable(false);
