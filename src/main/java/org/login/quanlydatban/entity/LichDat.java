@@ -146,4 +146,20 @@ public class LichDat implements Serializable {
     public void setGhiChu(String ghiChu) {
         this.ghiChu = ghiChu;
     }
+
+    @Override
+    public String toString() {
+        return "LichDat{" +
+                "maLichDat='" + maLichDat + '\'' +
+                ", thoiGianDat=" + thoiGianDat +
+                ", thoiGianNhanBan=" + thoiGianNhanBan +
+                ", khachHang=" + khachHang +
+                ", nhanVien=" + nhanVien +
+                ", soLuongNguoi=" + soLuongNguoi +
+                ", hoaDon=" + hoaDon +
+                ", tienCoc=" + tienCoc +
+                ", ghiChu='" + ghiChu + '\'' +
+                ", lichDatDAO=" + lichDatDAO +
+                '}';
+    }
 }

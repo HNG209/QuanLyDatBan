@@ -33,6 +33,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class DatLichController implements Initializable {
@@ -54,12 +55,6 @@ public class DatLichController implements Initializable {
     private LichDatDAO lichDatDAO;
 
     private BanDAO banDAO;
-
-    @FXML
-    private ComboBox<KhuVuc> khuVuc;
-
-    @FXML
-    private ComboBox<LoaiBan> loaiBan1;
 
     @FXML
     private TableView<Object[]> bookingTable;
@@ -110,6 +105,24 @@ public class DatLichController implements Initializable {
     private Button btnChonMon;
 
     @FXML
+    private TextField tfTKmaLichDat;
+
+    @FXML
+    private DatePicker tKngayNhanBan;
+
+    @FXML
+    private ComboBox<TrangThaiHoaDon> cbTrangThai;
+
+    @FXML
+    private TextField tfTKmaBan;
+
+    @FXML
+    private ComboBox<LoaiBan> cbBanLoaiBan;
+
+    @FXML
+    private ComboBox<KhuVuc> cbKhuVuc;
+
+    @FXML
     private Button btnNhanBan;
 
     @FXML
@@ -158,9 +171,18 @@ public class DatLichController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
+        cbKhuVuc.getItems().add(null);
+        cbKhuVuc.getItems().addAll(KhuVuc.values());
+
+        cbBanLoaiBan.getItems().add(null);
+        cbBanLoaiBan.getItems().addAll(LoaiBan.values());
+
+        cbLoaiBan.getItems().add(null);
         cbLoaiBan.getItems().addAll(LoaiBan.values());
-        khuVuc.getItems().addAll(KhuVuc.values());
-        loaiBan1.getItems().addAll(LoaiBan.values());
+
+        cbTrangThai.getItems().add(null);
+        cbTrangThai.getItems().addAll(TrangThaiHoaDon.values());
 
         hoaDonDAO = new HoaDonDAO();
         lichDatDAO = new LichDatDAO();
@@ -250,9 +272,36 @@ public class DatLichController implements Initializable {
         }
     }
 
+    public void refreshViewBan(List<Ban> list) {
+        listViewBan.getChildren().clear();
+        for (Ban i : list){
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/uicomponents/CardBan_TrangDatLich.fxml"));
+            try {
+                AnchorPane pane = loader.load();
+                CardBanDatLichController controller = loader.getController();
+
+                controller.setBan(i);
+
+                listViewBan.getChildren().add(pane);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
     public void refreshBang() {
         bookingTable.getItems().clear();
         lichDatDAO.getDSLichDat().forEach(i -> loadBang(new Object[] {i.getMaLichDat(),
+                i.getThoiGianDat().format(DateTimeFormatter.ofPattern("dd/MM/yyyy - HH:mm")),
+                i.getThoiGianNhanBan().format(DateTimeFormatter.ofPattern("dd/MM/yyyy - HH:mm")),
+                i.getHoaDon().getBan().getLoaiBan().toString(),
+                i.getSoLuongNguoi(),
+                i.getHoaDon().getTrangThaiHoaDon().toString()}));
+    }
+
+    public void refreshBang(List<LichDat> list) {
+        bookingTable.getItems().clear();
+        list.forEach(i -> loadBang(new Object[] {i.getMaLichDat(),
                 i.getThoiGianDat().format(DateTimeFormatter.ofPattern("dd/MM/yyyy - HH:mm")),
                 i.getThoiGianNhanBan().format(DateTimeFormatter.ofPattern("dd/MM/yyyy - HH:mm")),
                 i.getHoaDon().getBan().getLoaiBan().toString(),
@@ -502,12 +551,36 @@ public class DatLichController implements Initializable {
 
     @FXML
     void resetFilterBan(MouseEvent event) {
-
+        refreshViewBan();
     }
 
     @FXML
     void resetFilterLich(MouseEvent event) {
+        tfTKmaLichDat.clear();
+        tKngayNhanBan.setValue(null);
+        cbTrangThai.setValue(null);
+        cbLoaiBan.setValue(null);
 
+        refreshBang();
+    }
+
+    @FXML
+    void searchLich(MouseEvent event) {
+        String maLD = tfTKmaLichDat.getText();
+        LocalDate ngayNhanBan = tKngayNhanBan.getValue();
+        TrangThaiHoaDon trangThaiHoaDon = cbTrangThai.getSelectionModel().getSelectedItem();
+        LoaiBan loaiBan = cbLoaiBan.getSelectionModel().getSelectedItem();
+
+        refreshBang(lichDatDAO.getDSLichDatBy(maLD, ngayNhanBan, trangThaiHoaDon, loaiBan));
+    }
+
+    @FXML
+    void searchBan(MouseEvent event) {
+        String maBan = tfTKmaBan.getText();
+        LoaiBan loaiBan = cbBanLoaiBan.getSelectionModel().getSelectedItem();
+        KhuVuc khuVuc = cbKhuVuc.getSelectionModel().getSelectedItem();
+
+        refreshViewBan(banDAO.getListBanBy(maBan, loaiBan, khuVuc));
     }
 
     @FXML

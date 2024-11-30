@@ -246,6 +246,21 @@ public class XemLichDatController implements Initializable {
         boxToiCN.getChildren().clear();
     }
 
+    public void refreshTextFields() {
+        tfMaLichDat.clear();
+        tfThoiGianNhanBan.clear();
+        tfBan.clear();
+        tfTrangThai.clear();
+        tfSDT.clear();
+        tfTenKhachHang.clear();
+        tfTienCoc.clear();
+
+        btnNhanBan.setDisable(true);
+        btnHuyLich.setDisable(true);
+
+        selectedLichDat = null;
+    }
+
     public LocalDate getFirstDayOfWeek() {
         return currentDate.minusDays(currentDate.getDayOfWeek().getValue() - 1);
     }
@@ -415,7 +430,23 @@ public class XemLichDatController implements Initializable {
 
     @FXML
     void huyLich(ActionEvent event) {
+        try {
+            if (selectedLichDat != null) {
+                if (Notification.xacNhan("Xác nhận huỷ lịch này?, không thể hoàn tác")) {
+                    HoaDon hoaDon = selectedLichDat.getHoaDon();
+                    hoaDon.setTrangThaiHoaDon(TrangThaiHoaDon.DA_HUY);
+                    hoaDonDAO.updateHoaDon(hoaDon);
 
+                    loadLichDatFromCurrentWeek();
+
+                    Notification.thongBao("Đã huỷ thành công lịch đặt " + selectedLichDat.getMaLichDat(), Alert.AlertType.INFORMATION);
+                    refreshTextFields();
+                }
+            } else throw new IllegalArgumentException("Vui lòng chọn lịch để huỷ");
+        }
+        catch (Exception e){
+            Notification.thongBao(e.getMessage(), Alert.AlertType.WARNING);
+        }
     }
 
     @FXML
@@ -433,7 +464,7 @@ public class XemLichDatController implements Initializable {
             //check if there're any served table at the time
             for(Ban i : banDAO.readByStatus(TrangThaiBan.DANG_PHUC_VU)){
                 if(i.getMaBan().equals(b.getMaBan()))
-                    throw new IllegalArgumentException("Không thể nhận bàn, vui lòng thanh toán bàn hiện tại trước khi nhận bàn");
+                    throw new IllegalArgumentException("Không thể nhận bàn, vui lòng thanh toán bàn " + i.getMaBan() + " trước khi nhận bàn");
             }
 
             if(Notification.xacNhan("Nhận bàn?")){
@@ -444,6 +475,8 @@ public class XemLichDatController implements Initializable {
                 hoaDonDAO.updateHoaDon(hoaDon);
 
                 loadLichDatFromCurrentWeek();
+
+                Notification.thongBao("Nhận bàn thành công, mã bàn: " + b.getMaBan(), Alert.AlertType.INFORMATION);
             }
         }
         catch (Exception e){
