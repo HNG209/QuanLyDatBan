@@ -284,7 +284,7 @@ public class TrangThemNhanVienController implements Initializable {
            chucVu.setOnAction(new EventHandler<ActionEvent>() {
                @Override
                public void handle(ActionEvent event) {
-                   maNhanVientt = generateMaNhanVien(chucVu.getValue());
+                   //maNhanVientt = generateMaNhanVien(chucVu.getValue());
                }
            });
            maNhanVien.setEditable(false);
@@ -355,7 +355,7 @@ public class TrangThemNhanVienController implements Initializable {
 
         //NhanVien nv = new NhanVien(maNhanVien.getText().toString(),hoTen.getText().toString(),dienThoai.getText().toString(),cccd.getText().toString(),diaChi.getText().toString(),gt,ngaySinh.getValue(),duongdan,tt,cv);
         NhanVien nv = new NhanVien();
-        nv.setMaNhanVien(maNhanVientt);
+        //nv.setMaNhanVien(maNhanVientt);
         nv.setTenNhanVien(hoTen.getText());
         nv.setCccd(cccd.getText());
         nv.setSdt(dienThoai.getText());
