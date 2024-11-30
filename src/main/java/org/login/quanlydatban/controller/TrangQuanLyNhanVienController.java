@@ -29,6 +29,7 @@ import org.login.quanlydatban.entity.enums.TrangThaiNhanVien;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.Period;
@@ -69,6 +70,8 @@ public class TrangQuanLyNhanVienController implements Initializable {
     private Button btnthem;
     @FXML
     private TextField searchID;
+    private  String imageUrl;
+    private String image11;
 
     // bien ten nhan vien
     private String nhanvien;
@@ -140,7 +143,6 @@ public class TrangQuanLyNhanVienController implements Initializable {
         });
     }
 
-
     // xet lai du lieu cho bang nhan vien
     public void xetLaiduLieuChoBang(){
         try {
@@ -172,13 +174,23 @@ public class TrangQuanLyNhanVienController implements Initializable {
             public void handle(ActionEvent event) {
                 System.out.println("Nhan nut tai anh");
                 FileChooser fileChooser = new FileChooser();
-                fileChooser.setInitialDirectory(new File("E:\\QuanLyDatBanNhom2\\QuanLyDatBan\\src\\main\\resources\\org\\login\\quanlydatban\\Image"));
+                URL resourceUrl = getClass().getResource("/org/login/quanlydatban/Image/");
+                File initialDirectory = null;
+
+
+                try {
+                    initialDirectory = new File(resourceUrl.toURI());
+                } catch (URISyntaxException e) {
+                    System.out.println("Không tìm thấy thư mục");
+                }
+
+                fileChooser.setInitialDirectory(initialDirectory);
+                fileChooser.setInitialDirectory(initialDirectory);
                 fileChooser.setTitle("Mở file");
 
                 // Thiết lập bộ lọc file nếu cần
                 FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif");
                 fileChooser.getExtensionFilters().add(extFilter);
-
                 File file = fileChooser.showOpenDialog(null);
                 System.out.println("Nhấn nút tải ảnh");
 
@@ -261,6 +273,14 @@ public class TrangQuanLyNhanVienController implements Initializable {
         LocalDate currentDate = LocalDate.now();
         return Period.between(birthDate, currentDate).getYears();
     }
+    private boolean hinhAnh(String imageUrl) {
+        if (imageUrl == null ) {
+            // Tạo một hộp thoại thông báo
+            showWarn("Phai chon trang thai");
+            return  false;
+        }
+        return true;
+    }
 
     public boolean gioiTinhCheck(ComboBox<String> gioiTinh){
         if (gioiTinh.getValue() == null || gioiTinh.getValue().isEmpty()) {
@@ -326,11 +346,15 @@ public class TrangQuanLyNhanVienController implements Initializable {
         }
     }
     public void loaddulieulenform(NhanVien nhanVien){
-        String imageUrl = nhanVien.getHinhAnh();
-        // Tạo đối tượng Image từ URL
-        Image image = new Image("file:" + imageUrl);
-        // Tạo ImageView và đặt hình ảnh vào
-        image1.setImage(image);
+
+        image11 = nhanVien.getHinhAnh();
+        if(image11 != null || image11.isEmpty()){
+            Image image = new Image("file:" + image11);
+            // Tạo ImageView và đặt hình ảnh vào
+            System.out.println("lll"+image11);
+            image1.setImage(image);
+        }
+        duongdananh = image11;
         maNhanVien1.setEditable(false);
         maNhanVien1.setText(nhanVien.getMaNhanVien());
         hoTen.setText(nhanVien.getTenNhanVien());
@@ -338,13 +362,11 @@ public class TrangQuanLyNhanVienController implements Initializable {
         cccd.setText(nhanVien.getCccd());
         dienThoai.setText(nhanVien.getSdt());
         ngaySinh.setValue(nhanVien.getNgaySinh());
-
         if(nhanVien.getChucVuNhanVien().equals(ChucVu.NHAN_VIEN)){
             chucVu.setValue("Nhân viên");
         }else{
             chucVu.setValue("Quản Lý");
         }
-
         // gioi tinh
         if(nhanVien.isGioiTinh() == false){
             gioiTinh1.setValue("NAM");
@@ -389,8 +411,7 @@ public class TrangQuanLyNhanVienController implements Initializable {
             cv = ChucVu.QUAN_LY;
         }
 
-        NhanVien nv = new NhanVien(getMaNhanVien,hoTen.getText().toString(),dienThoai.getText().toString(),cccd.getText().toString(),diaChi.getText().toString(),gt,ngaySinh.getValue(),duongdananh.toString(),tt,cv);
-        System.out.println("Nhan vien moi" + nv.getHinhAnh());
+        NhanVien nv = new NhanVien(getMaNhanVien,hoTen.getText().toString(),dienThoai.getText().toString(),cccd.getText().toString(),diaChi1.getText().toString(),gt,ngaySinh.getValue(),duongdananh,tt,cv);
         NhanVienDAO nvd = new NhanVienDAO();
         nvd.updateNhanVien(nv1.getMaNhanVien().toString(),nv);
     }
@@ -446,17 +467,18 @@ public class TrangQuanLyNhanVienController implements Initializable {
                             if(cancuoccongdancheck(cccd)){
                                 if(sdtcheck(dienThoai)){
                                     if(trangThaiCheck(trangThaiLamViec)){
-                                        if(duongdananh!= null){
+                                        if(image11 != null){
                                             int tuoi = calculateAge(ngaySinh.getValue());
                                             if(tuoi < 15){
                                                 showWarn("Tuổi nhân viên phải lớn hơn 15");
                                             }else {
                                                     chinhSuaNhanVien(cellValue);
-                                                    showAlert("Thêm nhân viên thành công");
+                                                    showAlert("Cập nhật nhân viên thành công");
                                                     xetLaiduLieuChoBang();
                                             }
                                         }else{
-                                            showAlert("Bạn phải chọn ảnh của nhân viên");
+                                            showAlert("Bạn cần phải chọn ảnh");
+
                                         }
                                     }
                                 }
@@ -485,11 +507,10 @@ public class TrangQuanLyNhanVienController implements Initializable {
                         return employee.getCccd() != null && employee.getCccd().contains(lowerCaseFilter);
                     }
                     // Duyệt theo mã nhân viên
-                } else if (lowerCaseFilter.matches("^(QL|NV)\\d{4}$")) {
-                    return employee.getMaNhanVien() != null && employee.getMaNhanVien().contains(lowerCaseFilter);
-                    // Duyệt theo tên
                 } else
-                    return employee.getTenNhanVien() != null && employee.getTenNhanVien().contains(lowerCaseFilter) ||  employee.getDiaChi() != null && employee.getDiaChi().contains(lowerCaseFilter);
+                    return employee.getTenNhanVien() != null && employee.getTenNhanVien().contains(lowerCaseFilter) ||
+                            employee.getDiaChi() != null && employee.getDiaChi().contains(lowerCaseFilter)||
+                            employee.getTrangThaiNhanVien().toString().contains(lowerCaseFilter)||employee.getMaNhanVien().contains(lowerCaseFilter);
                     // Duyệt theo địa chỉ
 
             });

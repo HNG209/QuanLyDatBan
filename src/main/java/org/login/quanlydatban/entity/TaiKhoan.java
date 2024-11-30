@@ -57,12 +57,5 @@ public class TaiKhoan implements Serializable {
         this.nhanVien = nhanVien;
     }
 
-    @Override
-    public String toString() {
-        return "TaiKhoan{" +
-                ", userName='" + userName + '\'' +
-                ", password='" + password + '\'' +
-                ", nhanVien=" + nhanVien +
-                '}';
-    }
+
 }
