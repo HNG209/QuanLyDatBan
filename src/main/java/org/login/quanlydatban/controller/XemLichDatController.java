@@ -1,18 +1,34 @@
 package org.login.quanlydatban.controller;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.util.StringConverter;
+import net.bytebuddy.asm.Advice;
+import org.login.quanlydatban.dao.BanDAO;
+import org.login.quanlydatban.dao.HoaDonDAO;
+import org.login.quanlydatban.dao.LichDatDAO;
+import org.login.quanlydatban.entity.Ban;
+import org.login.quanlydatban.entity.HoaDon;
+import org.login.quanlydatban.entity.LichDat;
+import org.login.quanlydatban.entity.enums.TrangThaiBan;
+import org.login.quanlydatban.entity.enums.TrangThaiHoaDon;
+import org.login.quanlydatban.notification.Notification;
+import org.login.quanlydatban.utilities.NumberFormatter;
 
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class XemLichDatController implements Initializable {
@@ -120,6 +136,45 @@ public class XemLichDatController implements Initializable {
     @FXML
     private Label cnCurrentDate;
 
+    @FXML
+    private DatePicker datePicker;
+
+    @FXML
+    private TextField tfBan;
+
+    @FXML
+    private TextField tfMaLichDat;
+
+    @FXML
+    private TextField tfSDT;
+
+    @FXML
+    private TextField tfTenKhachHang;
+
+    @FXML
+    private TextField tfThoiGianNhanBan;
+
+    @FXML
+    private TextField tfTienCoc;
+
+    @FXML
+    private TextField tfTrangThai;
+
+    @FXML
+    private Button btnHuyLich;
+
+    @FXML
+    private Button btnNhanBan;
+
+    private LocalDate currentDate;
+
+    private LichDatDAO lichDatDAO;
+
+    private BanDAO banDAO;
+
+    private HoaDonDAO hoaDonDAO;
+
+    private LichDat selectedLichDat;
 
     private static XemLichDatController instance;
 
@@ -154,21 +209,167 @@ public class XemLichDatController implements Initializable {
     }
 
     public void refreshCurrentWeek() {
-        LocalDate today = LocalDate.now();
-        assignDateToColumn(today);
+        assignDateToColumn(currentDate);
 
-        for(int i = today.getDayOfWeek().getValue() - 1; i > 0; i--) {
-            assignDateToColumn(today.minusDays(i));
+        for(int i = currentDate.getDayOfWeek().getValue() - 1; i > 0; i--) {
+            assignDateToColumn(currentDate.minusDays(i));
         }
 
-        for(int i = today.getDayOfWeek().getValue() + 1; i < 8; i++) {
-            assignDateToColumn(today.plusDays(i - today.getDayOfWeek().getValue()));
+        for(int i = currentDate.getDayOfWeek().getValue() + 1; i < 8; i++) {
+            assignDateToColumn(currentDate.plusDays(i - currentDate.getDayOfWeek().getValue()));
+        }
+    }
+
+    public void refreshBox() {
+        boxSangT2.getChildren().clear();
+        boxSangT3.getChildren().clear();
+        boxSangT4.getChildren().clear();
+        boxSangT5.getChildren().clear();
+        boxSangT6.getChildren().clear();
+        boxSangT7.getChildren().clear();
+        boxSangCN.getChildren().clear();
+
+        boxChieuT2.getChildren().clear();
+        boxChieuT3.getChildren().clear();
+        boxChieuT4.getChildren().clear();
+        boxChieuT5.getChildren().clear();
+        boxChieuT6.getChildren().clear();
+        boxChieuT7.getChildren().clear();
+        boxChieuCN.getChildren().clear();
+
+        boxToiT2.getChildren().clear();
+        boxToiT3.getChildren().clear();
+        boxToiT4.getChildren().clear();
+        boxToiT5.getChildren().clear();
+        boxToiT6.getChildren().clear();
+        boxToiT7.getChildren().clear();
+        boxToiCN.getChildren().clear();
+    }
+
+    public void refreshTextFields() {
+        tfMaLichDat.clear();
+        tfThoiGianNhanBan.clear();
+        tfBan.clear();
+        tfTrangThai.clear();
+        tfSDT.clear();
+        tfTenKhachHang.clear();
+        tfTienCoc.clear();
+
+        btnNhanBan.setDisable(true);
+        btnHuyLich.setDisable(true);
+
+        selectedLichDat = null;
+    }
+
+    public LocalDate getFirstDayOfWeek() {
+        return currentDate.minusDays(currentDate.getDayOfWeek().getValue() - 1);
+    }
+
+    public LocalDate getLastDayOfWeek() {
+        return getFirstDayOfWeek().plusDays(6);
+    }
+
+    public LichDat getSelectedLichDat() {
+        return selectedLichDat;
+    }
+
+    public void setSelectedLichDat(LichDat selectedLichDat) {
+        this.selectedLichDat = selectedLichDat;
+        tfMaLichDat.setText(selectedLichDat.getMaLichDat());
+        tfThoiGianNhanBan.setText(selectedLichDat.getThoiGianNhanBan().format(DateTimeFormatter.ofPattern("dd/MM/yyyy - HH:mm")));
+        tfBan.setText(selectedLichDat.getHoaDon().getBan().getMaBan());
+        tfTrangThai.setText(selectedLichDat.getHoaDon().getTrangThaiHoaDon().toString());
+        tfSDT.setText(selectedLichDat.getKhachHang().getSdt());
+        tfTenKhachHang.setText(selectedLichDat.getKhachHang().getTenKhachHang());
+        tfTienCoc.setText(NumberFormatter.formatPrice(String.valueOf((int) selectedLichDat.getTienCoc())));
+
+
+        if(selectedLichDat.getHoaDon().getTrangThaiHoaDon() != TrangThaiHoaDon.DA_DAT){
+            btnNhanBan.setDisable(true);
+            btnHuyLich.setDisable(true);
+        }
+        else {
+            btnNhanBan.setDisable(false);
+            btnHuyLich.setDisable(false);
+        }
+    }
+
+    public void loadLichDatFromCurrentWeek() throws IOException {
+        refreshBox();
+        List<LichDat> list = lichDatDAO.getDSLichDatFrom(getFirstDayOfWeek(), getLastDayOfWeek());
+        for(LichDat i : list){
+            LocalDateTime time = i.getThoiGianNhanBan();
+
+            FXMLLoader loader = new FXMLLoader(ChonBanController.class.getResource("/org/login/quanlydatban/uicomponents/CardLich_TrangXemLich.fxml"));
+            AnchorPane pane = loader.load();
+
+            CardLichXemLichController controller = loader.getController();
+            controller.setLichDat(i);
+
+            switch (time.getDayOfWeek()){
+                case MONDAY:
+                    if(time.toLocalTime().isAfter(LocalTime.of(6, 0)) && time.toLocalTime().isBefore(LocalTime.of(12, 0)))
+                        boxSangT2.getChildren().add(pane);
+                    else if (time.toLocalTime().isAfter(LocalTime.of(12, 0)) && time.toLocalTime().isBefore(LocalTime.of(18, 0)))
+                        boxChieuT2.getChildren().add(pane);
+                    else boxToiT2.getChildren().add(pane);
+                    break;
+                case TUESDAY:
+                    if(time.toLocalTime().isAfter(LocalTime.of(6, 0)) && time.toLocalTime().isBefore(LocalTime.of(12, 0)))
+                        boxSangT3.getChildren().add(pane);
+                    else if (time.toLocalTime().isAfter(LocalTime.of(12, 0)) && time.toLocalTime().isBefore(LocalTime.of(18, 0)))
+                        boxChieuT3.getChildren().add(pane);
+                    else boxToiT3.getChildren().add(pane);
+                    break;
+                case WEDNESDAY:
+                    if(time.toLocalTime().isAfter(LocalTime.of(6, 0)) && time.toLocalTime().isBefore(LocalTime.of(12, 0)))
+                        boxSangT4.getChildren().add(pane);
+                    else if (time.toLocalTime().isAfter(LocalTime.of(12, 0)) && time.toLocalTime().isBefore(LocalTime.of(18, 0)))
+                        boxChieuT4.getChildren().add(pane);
+                    else boxToiT4.getChildren().add(pane);
+                    break;
+                case THURSDAY:
+                    if(time.toLocalTime().isAfter(LocalTime.of(6, 0)) && time.toLocalTime().isBefore(LocalTime.of(12, 0)))
+                        boxSangT5.getChildren().add(pane);
+                    else if (time.toLocalTime().isAfter(LocalTime.of(12, 0)) && time.toLocalTime().isBefore(LocalTime.of(18, 0)))
+                        boxChieuT5.getChildren().add(pane);
+                    else boxToiT5.getChildren().add(pane);
+                    break;
+                case FRIDAY:
+                    if(time.toLocalTime().isAfter(LocalTime.of(6, 0)) && time.toLocalTime().isBefore(LocalTime.of(12, 0)))
+                        boxSangT6.getChildren().add(pane);
+                    else if (time.toLocalTime().isAfter(LocalTime.of(12, 0)) && time.toLocalTime().isBefore(LocalTime.of(18, 0)))
+                        boxChieuT6.getChildren().add(pane);
+                    else boxToiT6.getChildren().add(pane);
+                    break;
+                case SATURDAY:
+                    if(time.toLocalTime().isAfter(LocalTime.of(6, 0)) && time.toLocalTime().isBefore(LocalTime.of(12, 0)))
+                        boxSangT7.getChildren().add(pane);
+                    else if (time.toLocalTime().isAfter(LocalTime.of(12, 0)) && time.toLocalTime().isBefore(LocalTime.of(18, 0)))
+                        boxChieuT7.getChildren().add(pane);
+                    else boxToiT7.getChildren().add(pane);
+                    break;
+                default:
+                    if(time.toLocalTime().isAfter(LocalTime.of(6, 0)) && time.toLocalTime().isBefore(LocalTime.of(12, 0)))
+                        boxSangCN.getChildren().add(pane);
+                    else if (time.toLocalTime().isAfter(LocalTime.of(12, 0)) && time.toLocalTime().isBefore(LocalTime.of(18, 0)))
+                        boxChieuCN.getChildren().add(pane);
+                    else boxToiCN.getChildren().add(pane);
+                    break;
+            }
         }
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        lichDatDAO = new LichDatDAO();
+        banDAO = new BanDAO();
+        hoaDonDAO = new HoaDonDAO();
+
+        currentDate = LocalDate.now();
         refreshCurrentWeek();
+
+        datePicker.setValue(LocalDate.now());
 
         VBox.setVgrow(labelSang, Priority.ALWAYS);
         labelSang.prefHeightProperty().bind(boxSang.heightProperty());
@@ -179,14 +380,107 @@ public class XemLichDatController implements Initializable {
         VBox.setVgrow(labelToi, Priority.ALWAYS);
         labelToi.prefHeightProperty().bind(boxToi.heightProperty());
 
-        for (int i = 0; i < 10; i++) {
-            FXMLLoader loader = new FXMLLoader(ChonBanController.class.getResource("/org/login/quanlydatban/uicomponents/CardLich_TrangXemLich.fxml"));
-            try {
-                AnchorPane pane = loader.load();
-                boxSangT2.getChildren().add(pane);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+        datePicker.setConverter(new StringConverter<>() {
+            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            @Override
+            public String toString(LocalDate date) {
+                // Format the LocalDate to the desired string format
+                return date != null ? date.format(dateFormatter) : "";
             }
+
+            @Override
+            public LocalDate fromString(String string) {
+                // Parse the string back to a LocalDate
+                return string != null && !string.isEmpty() ? LocalDate.parse(string, dateFormatter) : null;
+            }
+        });
+
+        try {
+            loadLichDatFromCurrentWeek();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @FXML
+    void dateBack(ActionEvent event) throws IOException {
+        currentDate = currentDate.minusDays(7);
+        refreshCurrentWeek();
+        loadLichDatFromCurrentWeek();
+    }
+
+    @FXML
+    void dateForward(ActionEvent event) throws IOException {
+        currentDate = currentDate.plusDays(7);
+        refreshCurrentWeek();
+        loadLichDatFromCurrentWeek();
+    }
+
+    @FXML
+    void dateChange(ActionEvent event) throws IOException {
+        currentDate = datePicker.getValue();
+        if(currentDate == null){
+            currentDate = LocalDate.now();
+            datePicker.setValue(LocalDate.now());
+        }
+        refreshCurrentWeek();
+        loadLichDatFromCurrentWeek();
+    }
+
+
+    @FXML
+    void huyLich(ActionEvent event) {
+        try {
+            if (selectedLichDat != null) {
+                if (Notification.xacNhan("Xác nhận huỷ lịch này?, không thể hoàn tác")) {
+                    HoaDon hoaDon = selectedLichDat.getHoaDon();
+                    hoaDon.setTrangThaiHoaDon(TrangThaiHoaDon.DA_HUY);
+                    hoaDonDAO.updateHoaDon(hoaDon);
+
+                    loadLichDatFromCurrentWeek();
+
+                    Notification.thongBao("Đã huỷ thành công lịch đặt " + selectedLichDat.getMaLichDat(), Alert.AlertType.INFORMATION);
+                    refreshTextFields();
+                }
+            } else throw new IllegalArgumentException("Vui lòng chọn lịch để huỷ");
+        }
+        catch (Exception e){
+            Notification.thongBao(e.getMessage(), Alert.AlertType.WARNING);
+        }
+    }
+
+    @FXML
+    void nhanBan(ActionEvent event) {
+        try{
+            if(selectedLichDat == null)
+                throw new IllegalArgumentException("Vui lòng chọn lịch để tiếp tục");
+
+            Ban b = selectedLichDat.getHoaDon().getBan();
+            HoaDon hoaDon = selectedLichDat.getHoaDon();
+
+            if(selectedLichDat.getThoiGianNhanBan().isAfter(LocalDateTime.now()))
+                throw new IllegalArgumentException("Chưa đến thời gian để nhận bàn");
+
+            //check if there're any served table at the time
+            for(Ban i : banDAO.readByStatus(TrangThaiBan.DANG_PHUC_VU)){
+                if(i.getMaBan().equals(b.getMaBan()))
+                    throw new IllegalArgumentException("Không thể nhận bàn, vui lòng thanh toán bàn " + i.getMaBan() + " trước khi nhận bàn");
+            }
+
+            if(Notification.xacNhan("Nhận bàn?")){
+                b.setTrangThaiBan(TrangThaiBan.DANG_PHUC_VU);
+                banDAO.updateBan(b);
+
+                hoaDon.setTrangThaiHoaDon(TrangThaiHoaDon.CHUA_THANH_TOAN);
+                hoaDonDAO.updateHoaDon(hoaDon);
+
+                loadLichDatFromCurrentWeek();
+
+                Notification.thongBao("Nhận bàn thành công, mã bàn: " + b.getMaBan(), Alert.AlertType.INFORMATION);
+            }
+        }
+        catch (Exception e){
+            Notification.thongBao(e.getMessage(), Alert.AlertType.WARNING);
         }
     }
 }

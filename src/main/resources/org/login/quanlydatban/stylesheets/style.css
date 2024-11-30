@@ -72,6 +72,11 @@
     -fx-border-radius: 0 20 0 0;
 }
 
+.bottom-left-rounded {
+    -fx-background-radius: 0 0 0 20; /* Top-left corner rounded, others sharp */
+    -fx-border-radius: 0 0 0 20;
+}
+
 .rounded-pane-simple {
     -fx-background-radius: 20 20 20 20; /* Top-left corner rounded, others sharp */
     -fx-border-radius: 20 20 20 20;
@@ -110,6 +115,23 @@
 
 .bottom-border {
     -fx-border-color: transparent transparent black transparent;
-    -fx-border-width: 0 0 2 0;
+    -fx-border-width: 0 0 1 0;
 }
 
+.right-border {
+    -fx-border-color: transparent black transparent transparent;
+    -fx-border-width: 0 1 0 0;
+}
+
+.right-bottom-border {
+    -fx-border-color: transparent darkgray darkgray transparent;
+    -fx-border-width: 0 0.5 0.5 0;
+}
+
+.checkerboard-pattern-background {
+    -fx-background-color:
+        white,
+        lightgray;
+    -fx-background-insets: 0, 10;
+    -fx-background-size: 20 10;
+}
