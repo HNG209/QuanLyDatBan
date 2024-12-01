@@ -136,18 +136,20 @@ public class KhachHangController {
 
             if (khachHang != null) {
                 String sdt = txtSDT.getText().trim();
+                String currentSDT = khachHang.getSdt();
                 khachHang.setTenKhachHang(txtTenKH.getText().trim());
-                if(khachHangDAO.timKhachHangTheoSDT(sdt) == null) {
-                    khachHang.setSdt(sdt);
-                }
-                else {
-                    Notification.thongBao("Số điện thoại đã đăng kí thành viên", Alert.AlertType.INFORMATION);
-                    return;
+                if (!sdt.equals(currentSDT)) {
+                    if (khachHangDAO.timKhachHangTheoSDT(sdt) == null) {
+                        khachHang.setSdt(sdt);
+                    } else {
+                        Notification.thongBao("Số điện thoại đã đăng kí thành viên", Alert.AlertType.INFORMATION);
+                        return;
+                    }
                 }
 
-                khachHang.setEmail(txtEmail.getText().trim());
-                khachHang.setDiaChi(txtDiaChi.getText().trim());
-                khachHang.setCccd(txtCCCD.getText().trim());
+                khachHang.setEmail(txtEmail.getText() == null ? "" : txtEmail.getText().trim());
+                khachHang.setDiaChi(txtDiaChi.getText() == null ? "" : txtDiaChi.getText().trim());
+                khachHang.setCccd(txtCCCD.getText() == null ? "" : txtCCCD.getText().trim());
 
 
 
