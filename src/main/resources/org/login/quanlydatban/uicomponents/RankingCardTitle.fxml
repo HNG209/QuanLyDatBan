@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="40.0" prefWidth="346.0" style="-fx-border-color: black;" stylesheets="@../stylesheets/style.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
+   <styleClass>
+      <String fx:value="round-box" />
+      <String fx:value="gradient1" />
+   </styleClass>
+   <children>
+      <Label alignment="CENTER" prefHeight="26.0" prefWidth="165.0" text="Món ăn" textFill="WHITE" wrapText="true" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="5.0">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Label>
+      <Label prefHeight="39.0" prefWidth="66.0" text="Doanh số" textFill="WHITE" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="270.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="5.0">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Label>
+      <Label prefHeight="29.0" prefWidth="107.0" text="Doanh thu" textFill="WHITE" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="165.0" AnchorPane.topAnchor="5.0">
+         <font>
+            <Font name="Arial Bold" size="14.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>
