@@ -18,7 +18,9 @@
 .gradient3 {
     -fx-background-color: linear-gradient(to bottom right, #F3B664, #EC8F5E);
 }
-
+.gradient4 {
+    -fx-background-color: linear-gradient(to top, #9FBB73, #F1EB90);
+}
 /*color theme*/
 .light-coral {
     -fx-background-color: #EC8F5E;

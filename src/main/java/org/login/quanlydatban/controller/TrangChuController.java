@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Bounds;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -12,11 +13,13 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import javafx.stage.Window;
+import org.login.quanlydatban.dao.HoaDonDAO;
 import org.login.quanlydatban.entity.TaiKhoan;
 import org.login.quanlydatban.entity.enums.ChucVu;
 import org.login.quanlydatban.notification.Notification;
@@ -24,21 +27,25 @@ import org.login.quanlydatban.utilities.Clock;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class TrangChuController implements Initializable {
-    @FXML
-    private Label tenNhanVien;
 
     @FXML
-    private Label chucVu;
+    private ImageView logo;
 
+    @FXML
+    private VBox rankingBoard;
     public static TaiKhoan taiKhoan;
 
     @FXML
     private Label time;
 
+
+    @FXML
+    private FlowPane flowPane;
 
     @FXML
     private ImageView avatar;
@@ -143,10 +150,10 @@ public class TrangChuController implements Initializable {
 
         if (controller instanceof ThongKeNhanVienController) {
             ThongKeNhanVienController thongKeController = (ThongKeNhanVienController) controller;
-            thongKeController.setTaiKhoan(this.taiKhoan);
+            thongKeController.setTaiKhoan(TrangChuController.taiKhoan);
         } else {
             ThongKeQuanLyController thongKeController = (ThongKeQuanLyController) controller;
-            thongKeController.setTaiKhoan(this.taiKhoan);
+            thongKeController.setTaiKhoan(TrangChuController.taiKhoan);
         }
 
         borderPane.setCenter(anchorPane);
@@ -257,6 +264,18 @@ public class TrangChuController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         Clock clock = new Clock();
         clock.startClock(time);
+        logo.setImage(new Image(String.valueOf(getClass().getResource("/org/login/quanlydatban/icons/tobologo.png"))));
+
+        logo.setFitWidth(250); // Chiều rộng
+        logo.setFitHeight(375); // Chiều cao
+        logo.setPreserveRatio(true);
+        Circle clip = new Circle(125, 125, 125); // Tọa độ và bán kính
+        logo.setClip(clip);
+        try {
+            loadRankingBoard();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         showTooltipForAvatar();
         ContextMenu contextMenu = new ContextMenu();
         setBorderPaneStatic(borderPane);
@@ -349,6 +368,36 @@ public class TrangChuController implements Initializable {
         Tooltip.install(avatar, tooltip);
         avatar.setOnMouseEntered(event -> tooltip.show(avatar, event.getScreenX(), event.getScreenY() + 15));
         avatar.setOnMouseExited(event -> tooltip.hide());
+    }
+    @FXML
+    public void trangChu() throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/TrangChu.fxml"));
+        BorderPane newBorderPane = loader.load();
+        borderPane.setCenter(newBorderPane.getCenter());
+        initialize(null, null);    }
+    public void loadRankingBoard() throws IOException {
+        HoaDonDAO hoaDonDAO = new HoaDonDAO();
+
+        List<Object[]> rankingFood = hoaDonDAO.layTop10MonAnTheoDoanhThuVaSoLuongBan();
+        FXMLLoader titleLoader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/uicomponents/RankingCardTitle.fxml"));
+        Node rankingTitleCard = titleLoader.load();
+        flowPane.getChildren().add(rankingTitleCard);
+        flowPane.setHgap(5);
+        flowPane.setVgap(5);
+        int rank = 1;
+        for (Object[] object : rankingFood) {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/uicomponents/RankingCard.fxml"));
+            AnchorPane rankingCard = loader.load();
+            RankingCardController controller = loader.getController();
+            if(rank % 2 != 0) {
+                rankingCard.getStyleClass().remove("gradient1"); // Xóa class cũ
+                rankingCard.getStyleClass().add("gradient4");    // Thêm class mới
+            }
+            controller.setMonAn(rank, object[0].toString(), Double.parseDouble(object[1].toString()), Integer.parseInt(object[2].toString()));
+            flowPane.getChildren().add(rankingCard);
+            rank++;
+        }
+
     }
 
 }

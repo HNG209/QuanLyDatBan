@@ -264,51 +264,47 @@ public class HoaDonDAO {
         return years; // Trả về danh sách các năm đã lập hóa đơn
     }
 
-    public List<Object[]> layBangXepHangMonAnTheoSoLuongBanVaDoanhThu(int nam, int thang, int quy) {
-        Session session = HibernateUtils.getFactory().openSession();
+    public List<Object[]> layTop10MonAnTheoDoanhThuVaSoLuongBan() {
         List<Object[]> result = new ArrayList<>();
+        Session session = HibernateUtils.getFactory().openSession();
+
         try {
+            // Tạo CriteriaBuilder và CriteriaQuery
             CriteriaBuilder builder = session.getCriteriaBuilder();
             CriteriaQuery<Object[]> query = builder.createQuery(Object[].class);
-            Root<HoaDon> rootHD = query.from(HoaDon.class);
 
-            Join<ChiTietHoaDon, HoaDon> joinCTHD = rootHD.join("chiTietHoaDon");
+            // Tạo Root và Join
+            Root<HoaDon> rootHD = query.from(HoaDon.class);
+            Join<HoaDon, ChiTietHoaDon> joinCTHD = rootHD.join("chiTietHoaDon");
             Join<ChiTietHoaDon, MonAn> joinMA = joinCTHD.join("monAn");
 
+            // Lựa chọn các giá trị cần thiết
             query.multiselect(
-                    joinMA.get("tenMonAn"),
-                    builder.sum(builder.prod(joinMA.get("donGia"), joinCTHD.get("soLuong"))),
-                    builder.sum(joinCTHD.get("soLuong"))
+                    joinMA.get("tenMonAn"), // Tên món ăn
+                    builder.sum(builder.prod(joinMA.get("donGia"), joinCTHD.get("soLuong"))), // Tổng doanh thu
+                    builder.sum(joinCTHD.get("soLuong")) // Tổng số lượng bán ra
             );
-            List<Predicate> predicates = new ArrayList<>();
-            if (nam != 0) {
-                predicates.add(builder.equal(builder.function("year", Integer.class, rootHD.get("ngayLap")), nam));
-                if (quy != 0 && thang == 0) {
-                    predicates.add(builder.equal(
-                            builder.function("quarter", Integer.class, rootHD.get("ngayLap")), quy
-                    ));
-                }
-                if (thang != 0) {
-                    predicates.add(builder.equal(builder.function("month", Integer.class, rootHD.get("ngayLap")), thang));
-                }
-            }
-            if (!predicates.isEmpty()) {
-                query.where(predicates.toArray(new Predicate[0]));
-            }
-            query.groupBy(joinMA.get("tenMonAn"));
-            query.orderBy(builder.desc(builder.sum(joinCTHD.get("soLuong"))),builder.desc(builder.sum(builder.prod(joinMA.get("donGia"), joinCTHD.get("soLuong")))));
-            result = session.createQuery(query)
-                    .getResultList();
+
+            // Nhóm theo tên món ăn và hình ảnh
+            query.groupBy(joinMA.get("tenMonAn"), joinMA.get("hinhAnh"));
+
+            // Sắp xếp theo số lượng bán giảm dần, sau đó doanh thu giảm dần
+            query.orderBy(
+                    builder.desc(builder.sum(joinCTHD.get("soLuong"))), // Số lượng bán giảm dần
+                    builder.desc(builder.sum(builder.prod(joinMA.get("donGia"), joinCTHD.get("soLuong")))) // Doanh thu giảm dần
+            );
+
+            // Thực thi truy vấn và lấy kết quả
+            result = session.createQuery(query).setMaxResults(10).getResultList();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
             session.close();
         }
-        session.close();
+
         return result;
-
-
     }
+
     public List<HoaDon> getAllHoaDon() {
         List<HoaDon> listHoaDon = new ArrayList<>(); // Khởi tạo
 

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.String?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
@@ -8,7 +9,9 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
@@ -57,7 +60,7 @@
               <menus>
                 <Menu mnemonicParsing="false" text="Trang chủ">
                   <items>
-                    <MenuItem mnemonicParsing="false" text="Close" />
+                    <MenuItem mnemonicParsing="false" onAction="#trangChu" text="Trang chủ" />
                   </items>
                      <graphic>
                         <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
@@ -161,6 +164,49 @@
       </VBox>
    </top>
    <center>
-      <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+      <AnchorPane prefHeight="200.0" prefWidth="200.0" styleClass="gradient1" BorderPane.alignment="CENTER">
+         <children>
+            <AnchorPane layoutX="6.0" layoutY="-1.0" prefHeight="630.0" prefWidth="818.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="455.6" AnchorPane.topAnchor="0.0">
+               <children>
+                  <StackPane layoutX="312.0" layoutY="23.0" prefHeight="234.0" prefWidth="291.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                     <children>
+                        <ImageView fx:id="logo" fitHeight="249.0" fitWidth="140.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../icons/tobologo.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </StackPane>
+                  <VBox layoutY="274.0" prefHeight="163.0" prefWidth="820.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                     <children>
+                        <Label alignment="CENTER" prefHeight="58.0" prefWidth="918.0" text="TOBO Restaurant" textFill="WHITE">
+                           <font>
+                              <Font name="Verdana Bold" size="48.0" />
+                           </font>
+                        </Label>
+                        <Label alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="78.0" prefWidth="918.0" text="TasteOutstanding Bites Only" textFill="WHITE">
+                           <font>
+                              <Font name="Edwardian Script ITC" size="72.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </VBox>
+               </children>
+            </AnchorPane>
+            <AnchorPane layoutX="844.8" layoutY="33.0" prefHeight="630.0" prefWidth="449.0" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
+               <children>
+                  <FlowPane fx:id="flowPane" layoutX="86.0" layoutY="93.60000000000001" prefHeight="522.0" prefWidth="345.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="45.0" AnchorPane.rightAnchor="45.0" AnchorPane.topAnchor="60.0" />
+                  <Label alignment="CENTER" layoutX="22.4" layoutY="22.4" prefHeight="49.0" prefWidth="408.0" text="Bảng Xếp Hạng Món Ăn" textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <font>
+                        <Font name="Arial Bold" size="24.0" />
+                     </font>
+                  </Label>
+               </children>
+               <styleClass>
+                  <String fx:value="rounded-pane" />
+                  <String fx:value="light-coral" />
+               </styleClass>
+            </AnchorPane>
+         </children></AnchorPane>
    </center>
 </BorderPane>
