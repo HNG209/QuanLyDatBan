@@ -6,6 +6,7 @@ import org.login.quanlydatban.hibernate.HibernateUtils;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.text.Normalizer;
 import java.util.Arrays;
 import java.util.List;
 
@@ -108,8 +109,11 @@ public class LoaiMonAn implements Serializable {
 
     // Helper method to generate the "XX" part from the item name
     private String generatePrefixFromName(String name) {
+        String normalized = Normalizer.normalize(name, Normalizer.Form.NFD);
+        String withoutDiacritics = normalized.replaceAll("\\p{M}", "");
+
         // Split the name into words, take the first character of each word, and convert to uppercase
-        return Arrays.stream(name.split("\\s+"))
+        return Arrays.stream(withoutDiacritics.split("\\s+"))
                 .filter(word -> !word.isEmpty())       // Ensure non-empty words
                 .map(word -> word.substring(0, 1))    // Take the first letter of each word
                 .map(String::toUpperCase)             // Convert to uppercase
