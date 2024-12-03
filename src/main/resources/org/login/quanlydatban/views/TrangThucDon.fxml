@@ -41,12 +41,11 @@
                </image>
             </ImageView>
             <Button fx:id="taiAnh" layoutX="129.0" layoutY="355.0" mnemonicParsing="false" prefHeight="20.0" prefWidth="100.0" text="Tải ảnh" />
-            <TextField fx:id="txtGia" layoutX="129.0" layoutY="199.0" prefHeight="26.0" prefWidth="398.0" promptText="Vui lòng nhập" styleClass="underlined-style" />
+            <TextField fx:id="txtGia" layoutX="129.0" layoutY="199.0" onKeyTyped="#formatGia" prefHeight="26.0" prefWidth="398.0" promptText="Vui lòng nhập" styleClass="underlined-style" />
             <Label layoutX="33.0" layoutY="202.0" prefHeight="18.0" prefWidth="87.0" text="Giá:">
                <font>
                   <Font size="15.0" />
                </font></Label>
-            <TextField fx:id="txtDonViTinh" layoutX="129.0" layoutY="156.0" prefHeight="26.0" prefWidth="398.0" promptText="Vui lòng nhập" styleClass="underlined-style" />
             <Label layoutX="33.0" layoutY="159.0" prefHeight="18.0" prefWidth="87.0" text="Đơn vị tính:">
                <font>
                   <Font size="15.0" />
@@ -85,6 +84,7 @@
             <Button fx:id="btnCapNhat" layoutX="28.0" layoutY="466.0" mnemonicParsing="false" onAction="#capNhatControl" prefHeight="31.0" prefWidth="245.0" styleClass="sunset-orange" text="Chỉnh sửa món" textFill="#0b0b0b" AnchorPane.bottomAnchor="67.3999999999999" AnchorPane.leftAnchor="28.0" AnchorPane.rightAnchor="284.0" />
             <Button fx:id="btnXoaRong" layoutX="279.0" layoutY="466.0" mnemonicParsing="false" onAction="#xoaRongControl" prefHeight="31.0" prefWidth="246.0" styleClass="pale-lemon" text="Làm sạch bảng" textFill="#0b0b0b" AnchorPane.bottomAnchor="67.3999999999999" AnchorPane.leftAnchor="279.0" AnchorPane.rightAnchor="31.99999999999997" />
             <Button fx:id="btnThemMon" layoutX="28.0" layoutY="511.0" mnemonicParsing="false" onAction="#themControl" prefHeight="31.0" prefWidth="498.0" styleClass="sage-green" stylesheets="@../stylesheets/style.css" text="Thêm món ăn" textFill="#0b0b0b" AnchorPane.bottomAnchor="22.39999999999991" AnchorPane.leftAnchor="28.0" AnchorPane.rightAnchor="31.200000000000045" />
+            <ComboBox fx:id="cbDonViTinh" editable="true" layoutX="129.0" layoutY="156.0" prefHeight="26.0" prefWidth="398.0" styleClass="round-box" />
          </children>
       </AnchorPane>
       <ScrollPane fx:id="scrollPane" layoutX="19.2" layoutY="51.2" prefHeight="566.0" prefWidth="686.0" AnchorPane.bottomAnchor="18.0" AnchorPane.leftAnchor="19.0" AnchorPane.rightAnchor="575.0" AnchorPane.topAnchor="51.0">

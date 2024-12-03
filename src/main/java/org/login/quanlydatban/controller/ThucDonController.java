@@ -11,6 +11,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
@@ -24,6 +25,7 @@ import org.login.quanlydatban.entity.MonAn;
 import org.login.quanlydatban.entity.enums.TrangThaiMonAn;
 import org.login.quanlydatban.hibernate.HibernateUtils;
 import org.login.quanlydatban.notification.Notification;
+import org.login.quanlydatban.utilities.NumberFormatter;
 
 import java.io.File;
 import java.io.IOException;
@@ -60,11 +62,10 @@ public class ThucDonController implements Initializable {
     private TextArea txfMoTa;
 
     @FXML
-    private TextField txtDonViTinh;
-
-    @FXML
     private TextField txtTimKiem;
 
+    @FXML
+    private ComboBox<String> cbDonViTinh;
 
     @FXML
     private ComboBox<String> cbTimLoaiMon;
@@ -107,6 +108,7 @@ public class ThucDonController implements Initializable {
     private LoaiMonDAO loaiMonDAO;
 
     private String duongDanAnh;
+    private double donGia = 0.0;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -120,6 +122,7 @@ public class ThucDonController implements Initializable {
         System.out.println(monAnDAO.getAllMonAn());
 
         loadLoaiMonAnComboBox();
+        loadDonViTinhComboBox();
 
         List<MonAn> monAnList = monAnDAO.getAllMonAn();
         if (monAnList == null) {
@@ -215,6 +218,15 @@ public class ThucDonController implements Initializable {
             cbTimLoaiMon.setValue(newValue);
         });
 
+        cbDonViTinh.setOnAction(event -> {
+            String newValue = cbDonViTinh.getEditor().getText().trim();
+
+            if (!newValue.isEmpty() && !cbDonViTinh.getItems().contains(newValue)) {
+                // Add the new value to the combo box
+                cbDonViTinh.getItems().add(newValue);
+            }
+        });
+
         monAnDAO.getAllMonAn();
         flowPane.prefHeightProperty().bind(scrollPane.heightProperty());
         flowPane.prefWidthProperty().bind(scrollPane.widthProperty());
@@ -256,10 +268,10 @@ public class ThucDonController implements Initializable {
 
         if (source == btnThemMon) {
             try {
-                if (txtTenMonAn.getText() == null || txtDonViTinh.getText() == null || txtGia.getText() == null ||
+                if (txtTenMonAn.getText() == null || cbDonViTinh.getValue() == null || txtGia.getText() == null ||
                         cbloaiMonAn.getValue() == null ||
                         Objects.equals(txtTenMonAn.getText(), "") ||
-                        Objects.equals(txtDonViTinh.getText(), "") ||
+                        Objects.equals(cbDonViTinh.getValue(), "") ||
                         Objects.equals(txtGia.getText(), "") ||
                         Objects.equals(cbloaiMonAn.getValue(), "")) {
                     showWarn("Bạn cần nhập đầy đủ thông tin!");
@@ -323,8 +335,8 @@ public class ThucDonController implements Initializable {
                     showWarn("Bạn cần chọn một món để cập nhật!");
                 } else {
                     String tenMonMoi = txtTenMonAn.getText();
-                    String donViMoi = txtDonViTinh.getText();
-                    double giaMoi = Double.parseDouble(txtGia.getText());
+                    String donViMoi = cbDonViTinh.getValue();
+                    double giaMoi = donGia;
                     TrangThaiMonAn trangThaiMoi = comboTTValue();
 
                     String anhMoi = anhMon.getImage().getUrl();
@@ -378,7 +390,7 @@ public class ThucDonController implements Initializable {
             cbloaiMonAn.getSelectionModel().clearSelection();
             cbloaiMonAn.setValue("");
             cbtrangThaiMon.getSelectionModel().selectFirst();
-            txtDonViTinh.setText("");
+            cbDonViTinh.getSelectionModel().clearSelection();
             txtGia.setText("");
             anhMon.setImage(imageXoaRong);
             txfMoTa.setText("");
@@ -570,10 +582,18 @@ public class ThucDonController implements Initializable {
         }
     }
 
+    private void loadDonViTinhComboBox() {
+        cbDonViTinh.getItems().clear();  // Clear current items to avoid duplicates
+        List<String> donViList = monAnDAO.getListDon();
 
-
-
-
+        if (donViList != null) {
+            for (String monan : donViList) {
+                cbDonViTinh.getItems().add(monan);
+            }
+        } else {
+            showWarn("Danh sách DonViTinh rỗng.");
+        }
+    }
 
     private void showWarn(String message) {
         Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -589,7 +609,7 @@ public class ThucDonController implements Initializable {
         MonAn monAn = new MonAn();
         String selectedLoaiMon = cbloaiMonAn.getValue(); // Get the selected or entered value
         LoaiMonAn loaiMon = loaiMonDAO.getLoaiMonByName(selectedLoaiMon);
-
+        //double gia;
          //If it doesn't exist, add it
         if (loaiMon == null) {
             themLoaiMon(); // Adds the new LoaiMonAn
@@ -601,10 +621,9 @@ public class ThucDonController implements Initializable {
         TrangThaiMonAn ttMonAn = comboTTValue();
 
         // Get other input values from UI components
-
-        double gia = Double.parseDouble(txtGia.getText().trim());
+        //double gia = donGia;
         String tenMonAn = txtTenMonAn.getText().trim();
-        String donViTinh = txtDonViTinh.getText().trim();
+        String donViTinh = cbDonViTinh.getValue();
 
         // Generate ID for the new MonAn
 //        String maMonAn = generateMaMonAn(cbloaiMonAn.getValue());
@@ -625,7 +644,7 @@ public class ThucDonController implements Initializable {
 //        monAn.setMaMonAn(maMonAn);
         monAn.setLoaiMonAn(loaiMon);
         monAn.setTenMonAn(tenMonAn);
-        monAn.setDonGia(gia);
+        monAn.setDonGia(donGia);
         monAn.setDonViTinh(donViTinh);
         monAn.setHinhAnh(duongDanAnh);
         monAn.setTrangThaiMonAn(ttMonAn);
@@ -677,6 +696,28 @@ public class ThucDonController implements Initializable {
         return trangThaiMonAn;
     }
 
+    @FXML
+    void formatGia(KeyEvent event) {
+        if(event.getSource().equals(txtGia)){
+            if(txtGia.getText().isEmpty()) {
+                return;
+            }
+            txtGia.setText(NumberFormatter.formatPrice(txtGia.getText()));
+            txtGia.positionCaret(txtGia.getText().length());
+
+            if (!txtGia.getText().replace(".", "").matches("\\d+"))
+            {
+                Notification.thongBao("Chỉ được nhập số", Alert.AlertType.INFORMATION);
+                txtGia.setText(txtGia.getText().substring(0, txtGia.getLength() - 1));
+                txtGia.setText(NumberFormatter.formatPrice(txtGia.getText()));
+                txtGia.positionCaret(txtGia.getText().length());
+            }
+            else {
+                donGia = Double.parseDouble(txtGia.getText().replace(".", "").trim());
+            }
+        }
+    }
+
     public void setMonAn(MonAn monAn) {
         this.monAn = monAn;
 
@@ -691,7 +732,7 @@ public class ThucDonController implements Initializable {
                 cbloaiMonAn.getSelectionModel().clearSelection();
             }
             cbtrangThaiMon.setValue(String.valueOf(monAn.getTrangThaiMonAn()));
-            txtDonViTinh.setText(monAn.getDonViTinh());
+            cbDonViTinh.setValue(String.valueOf(monAn.getDonViTinh()));
             txtGia.setText(String.valueOf(monAn.getDonGia()));
 
             String imagePath = monAn.getHinhAnh();
