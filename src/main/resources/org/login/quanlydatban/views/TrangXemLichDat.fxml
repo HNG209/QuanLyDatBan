@@ -235,12 +235,12 @@
             <Label prefHeight="18.0" prefWidth="224.0" text="Mã lịch đặt:" />
             <Label layoutX="10.0" layoutY="28.0" prefHeight="18.0" prefWidth="224.0" text="Thời gian nhận bàn:" GridPane.rowIndex="1" />
             <Label layoutX="10.0" layoutY="81.0" prefHeight="18.0" prefWidth="224.0" text="Bàn:" GridPane.rowIndex="2" />
-            <Label layoutX="10.0" layoutY="188.0" prefHeight="18.0" prefWidth="224.0" text="SDT khách hàng:" GridPane.columnIndex="2" />
+            <Label layoutX="10.0" layoutY="188.0" prefHeight="18.0" prefWidth="224.0" text="CCCD khách hàng:" GridPane.columnIndex="2" />
             <Label layoutX="402.0" layoutY="28.0" prefHeight="18.0" prefWidth="224.0" text="Tên khách hàng:" GridPane.columnIndex="2" GridPane.rowIndex="1" />
             <TextField fx:id="tfMaLichDat" editable="false" styleClass="underlined-style" GridPane.columnIndex="1" />
             <TextField fx:id="tfThoiGianNhanBan" layoutX="199.0" layoutY="20.0" styleClass="underlined-style" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <TextField fx:id="tfBan" layoutX="199.0" layoutY="64.0" styleClass="underlined-style" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <TextField fx:id="tfSDT" layoutX="199.0" layoutY="109.0" styleClass="underlined-style" GridPane.columnIndex="3" />
+            <TextField fx:id="tfCCCD" layoutX="199.0" layoutY="109.0" styleClass="underlined-style" GridPane.columnIndex="3" />
             <TextField fx:id="tfTenKhachHang" layoutX="577.0" layoutY="20.0" styleClass="underlined-style" GridPane.columnIndex="3" GridPane.rowIndex="1" />
             <TextField fx:id="tfTienCoc" layoutX="577.0" layoutY="64.0" styleClass="underlined-style" GridPane.columnIndex="3" GridPane.rowIndex="2" />
             <Label layoutX="426.0" layoutY="68.0" prefHeight="18.0" prefWidth="224.0" text="Tiền cọc:" GridPane.columnIndex="2" GridPane.rowIndex="2" />

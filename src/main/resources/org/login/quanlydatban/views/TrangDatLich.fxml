@@ -56,8 +56,8 @@
             <DatePicker fx:id="tgNhanBan" prefHeight="26.0" prefWidth="166.0" GridPane.columnIndex="1" />
             <ComboBox fx:id="cbGio" prefWidth="150.0" promptText="Giờ" GridPane.columnIndex="2" />
             <ComboBox fx:id="cbPhut" layoutX="281.0" layoutY="5.0" prefWidth="150.0" promptText="Phút" GridPane.columnIndex="3" />
-            <Label layoutX="10.0" layoutY="9.0" text="SDT khách hàng:" GridPane.rowIndex="1" />
-            <TextField fx:id="sdt" onKeyTyped="#sdtEnter" styleClass="underlined-style" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Label layoutX="10.0" layoutY="9.0" text="CCCD khách hàng:" GridPane.rowIndex="1" />
+            <TextField fx:id="tfCCCD" onKeyTyped="#nhapCCCD" styleClass="underlined-style" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <Label layoutX="10.0" layoutY="47.0" text="Tên khách hàng:" GridPane.rowIndex="2" />
             <TextField fx:id="tenKhachHang" editable="false" layoutX="145.0" layoutY="43.0" styleClass="underlined-style" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             <Label layoutX="255.0" layoutY="50.0" text="Số lượng người:" GridPane.columnIndex="2" GridPane.rowIndex="2" />

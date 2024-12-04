@@ -20,9 +20,9 @@ public class KhachHang implements Serializable {
     private String tenKhachHang;
 
     @Column(nullable = false)
-    private String sdt;
-
     private String cccd;
+
+    private String sdt;
 
     private String diaChi;
 

@@ -1,6 +1,5 @@
 package org.login.quanlydatban.controller;
 
-import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
@@ -81,7 +80,7 @@ public class DatLichController implements Initializable {
     private TextField tenKhachHang;
 
     @FXML
-    private TextField sdt;
+    private TextField tfCCCD;
 
     @FXML
     private TextField coc;
@@ -137,7 +136,7 @@ public class DatLichController implements Initializable {
     @FXML
     private Button btnDatLich;
 
-    private String prevSdt;
+    private String prevCCCD;
 
     double c = 0.0;
 
@@ -206,10 +205,10 @@ public class DatLichController implements Initializable {
             if (!newValue && tenKhachHang.isEditable()) { // If newValue is false, the TextField has lost focus
                 if(Notification.xacNhan("Lưu khách hàng này?")){
                     KhachHang khachHang = new KhachHang();
-                    khachHang.setSdt(sdt.getText());
+                    khachHang.setCccd(tfCCCD.getText());
                     khachHang.setTenKhachHang(tenKhachHang.getText());
 
-                    prevSdt = sdt.getText();
+                    prevCCCD = tfCCCD.getText();
 
                     khachHangDAO.themKhachHang(khachHang);
                     tenKhachHang.setEditable(false);
@@ -217,10 +216,10 @@ public class DatLichController implements Initializable {
             }
         });
 
-        sdt.focusedProperty().addListener((observable, oldValue, newValue) -> {
+        tfCCCD.focusedProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue) { // If newValue is false, the TextField has lost focus
-                if(sdt.getText().length() < 10)
-                    sdt.setText(prevSdt);
+                if(tfCCCD.getText().length() < 10)
+                    tfCCCD.setText(prevCCCD);
             }
         });
 
@@ -315,18 +314,20 @@ public class DatLichController implements Initializable {
         btnNhanBan.setDisable(true);
         btnDatLich.setDisable(false);
         tenKhachHang.setEditable(false);
+        tfCCCD.setEditable(true);
+        soLuongNguoi.setEditable(true);
 
         tgNhanBan.setValue(null);
         cbGio.getSelectionModel().clearSelection();
         cbPhut.getSelectionModel().clearSelection();
-        sdt.clear();
+        tfCCCD.clear();
         banTextField.clear();
         tenKhachHang.clear();
         soLuongNguoi.clear();
         txtGhiChu.clear();
         coc.clear();
 
-        prevSdt = null;
+        prevCCCD = null;
         hoaDon = null;
         ban = null;
     }
@@ -395,8 +396,8 @@ public class DatLichController implements Initializable {
         tgNhanBan.setValue(lichDat.getThoiGianNhanBan().toLocalDate());
         cbGio.getSelectionModel().select((Integer) lichDat.getThoiGianNhanBan().getHour());
         cbPhut.getSelectionModel().select((Integer) lichDat.getThoiGianNhanBan().getMinute());
-        sdt.setText(lichDat.getKhachHang().getSdt());
-        prevSdt = sdt.getText();
+        tfCCCD.setText(lichDat.getKhachHang().getCccd());
+        prevCCCD = tfCCCD.getText();
         tenKhachHang.setText(lichDat.getKhachHang().getTenKhachHang());
         soLuongNguoi.setText(String.valueOf(lichDat.getSoLuongNguoi()));
         ban = lichDat.getHoaDon().getBan();
@@ -404,9 +405,10 @@ public class DatLichController implements Initializable {
         hoaDon = lichDat.getHoaDon();
         txtGhiChu.setText(lichDat.getGhiChu());
         tenKhachHang.setEditable(false);
+        coc.setText(NumberFormatter.formatPrice(String.valueOf((int) lichDat.getTienCoc())));
 
         if(hoaDon.getTrangThaiHoaDon() != TrangThaiHoaDon.DA_DAT){
-            sdt.setEditable(false);
+            tfCCCD.setEditable(false);
             soLuongNguoi.setEditable(false);
             cbGio.setEditable(false);
             cbPhut.setEditable(false);
@@ -418,7 +420,7 @@ public class DatLichController implements Initializable {
             btnNhanBan.setDisable(true);
         }
         else{
-            sdt.setEditable(true);
+            tfCCCD.setEditable(true);
             soLuongNguoi.setEditable(true);
             cbGio.setEditable(true);
             cbPhut.setEditable(true);
@@ -442,9 +444,9 @@ public class DatLichController implements Initializable {
 
             lichDat.setGhiChu(txtGhiChu.getText());
 
-            if (prevSdt != null && !prevSdt.isEmpty())
-                lichDat.setKhachHang(khachHangDAO.getKHBySDT(prevSdt));
-            else throw new IllegalArgumentException("Vui lòng nhập số điện thoại của khách hàng");
+            if (prevCCCD != null && !prevCCCD.isEmpty())
+                lichDat.setKhachHang(khachHangDAO.getKHByCCCD(prevCCCD));
+            else throw new IllegalArgumentException("Vui lòng nhập CCCD của khách hàng");
 
             if (!soLuongNguoi.getText().isEmpty())
                 if (Integer.parseInt(soLuongNguoi.getText()) > 0)
@@ -456,7 +458,7 @@ public class DatLichController implements Initializable {
             HoaDon hoaDon = new HoaDon();
             hoaDon.setNgayLap(LocalDate.now());
             hoaDon.setTrangThaiHoaDon(TrangThaiHoaDon.DA_DAT);
-            hoaDon.setKhachHang(khachHangDAO.getKHBySDT(prevSdt));
+            hoaDon.setKhachHang(khachHangDAO.getKHByCCCD(prevCCCD));
             if (ban != null)
                 hoaDon.setBan(ban);
             else throw new IllegalArgumentException("Vui lòng chọn bàn");
@@ -584,19 +586,19 @@ public class DatLichController implements Initializable {
     }
 
     @FXML
-    void sdtEnter(KeyEvent event) {
-        if(sdt.getText().length() == 10) {
+    void nhapCCCD(KeyEvent event) {
+        if(tfCCCD.getText().length() == 10) {
             try {
-                KhachHang khachHang = khachHangDAO.getKHBySDT(sdt.getText());
+                KhachHang khachHang = khachHangDAO.getKHByCCCD(tfCCCD.getText());
                 tenKhachHang.setText(khachHang.getTenKhachHang());
-                prevSdt = sdt.getText();
+                prevCCCD = tfCCCD.getText();
             }
             catch (NoResultException e) {
-                if(Notification.xacNhan("Số điện thoại mới, bạn có muốn tạo khách hàng này?")){
+                if(Notification.xacNhan("CCCD mới, bạn có muốn tạo khách hàng này?")){
                     tenKhachHang.requestFocus();
                     tenKhachHang.setEditable(true);
                 }
-                else sdt.setText(prevSdt);
+                else tfCCCD.setText(prevCCCD);
             }
         }
         else tenKhachHang.setEditable(false);
