@@ -61,21 +61,21 @@
                      </font></Label>
                   <Label text="Mã khách hàng:" GridPane.rowIndex="1" />
                   <Label text="Tên khách hàng:" GridPane.rowIndex="2" />
-                  <Label text="Số điện thoại:" GridPane.rowIndex="3" />
+                  <Label text="Căn cước công dân:" GridPane.rowIndex="3" />
                   <TextField fx:id="textMaKH" editable="false" prefHeight="26.0" prefWidth="242.0" styleClass="underlined-style" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                   <TextField fx:id="textTenKH" editable="false" prefHeight="25.0" prefWidth="397.0" styleClass="underlined-style" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                  <TextField fx:id="textsdtKH" prefHeight="26.0" prefWidth="242.0" styleClass="underlined-style" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                  <TextField fx:id="textcccdKH" prefHeight="26.0" prefWidth="242.0" styleClass="underlined-style" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                   <Label style="-fx-font-weight: 700;" text="Thông tin nhân viên" GridPane.columnIndex="3">
                      <font>
                         <Font size="16.0" />
                      </font></Label>
                   <Label text="Mã nhân viên:" GridPane.columnIndex="3" GridPane.rowIndex="1" />
                   <Label text="Tên nhân viên:" GridPane.columnIndex="3" GridPane.rowIndex="2" />
-                  <Label text="Số điện thoại:" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+                  <Label text="Căn cước công dân:" GridPane.columnIndex="3" GridPane.rowIndex="3" />
                   <Label text="Trạng thái:" GridPane.columnIndex="3" GridPane.rowIndex="4" />
                   <TextField fx:id="textMaNV" editable="false" prefHeight="26.0" prefWidth="242.0" styleClass="underlined-style" GridPane.columnIndex="4" GridPane.rowIndex="1" />
                   <TextField fx:id="textTenNV" editable="false" prefHeight="25.0" prefWidth="397.0" styleClass="underlined-style" GridPane.columnIndex="4" GridPane.rowIndex="2" />
-                  <TextField fx:id="textsdtNV" editable="false" prefHeight="26.0" prefWidth="242.0" styleClass="underlined-style" GridPane.columnIndex="4" GridPane.rowIndex="3" />
+                  <TextField fx:id="textcccdNV" editable="false" prefHeight="26.0" prefWidth="242.0" styleClass="underlined-style" GridPane.columnIndex="4" GridPane.rowIndex="3" />
                   <TextField fx:id="textTrangThaiNV" editable="false" prefHeight="26.0" prefWidth="242.0" styleClass="underlined-style" GridPane.columnIndex="4" GridPane.rowIndex="4" />
                </children>
                <opaqueInsets>

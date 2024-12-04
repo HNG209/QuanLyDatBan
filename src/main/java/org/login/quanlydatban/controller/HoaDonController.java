@@ -25,13 +25,13 @@ public class HoaDonController implements Initializable {
     @FXML
     private TextField textTenKH;
     @FXML
-    private TextField textsdtKH;
+    private TextField textcccdKH;
     @FXML
     private TextField textMaNV;
     @FXML
     private TextField textTenNV;
     @FXML
-    private TextField textsdtNV;
+    private TextField textcccdNV;
     @FXML
     private TextField textTrangThaiNV;
 
@@ -159,7 +159,7 @@ public class HoaDonController implements Initializable {
                             textMaNV.setText(nhanVien.getMaNhanVien());
 
                             textTenNV.setText(nhanVien.getTenNhanVien());
-                            textsdtNV.setText(nhanVien.getSdt());
+                            textcccdNV.setText(nhanVien.getCccd());
 
                             textTrangThaiNV.setText(nhanVien.getTrangThaiNhanVien().toString());
                         }
@@ -167,11 +167,11 @@ public class HoaDonController implements Initializable {
                         if (khachHang != null) {
                             textMaKH.setText(khachHang.getMaKhachHang());
                             textTenKH.setText(khachHang.getTenKhachHang());
-                            textsdtKH.setText(khachHang.getSdt());
+                            textcccdKH.setText(khachHang.getCccd());
                         }else {
                             textMaKH.setText("");
                             textTenKH.setText("");
-                            textsdtKH.setText("");
+                            textcccdKH.setText("");
                         }
 
                     }
@@ -229,12 +229,12 @@ public class HoaDonController implements Initializable {
         dpNgayLap.setValue(null);
 
         textTenNV.clear();
-        textsdtKH.clear();
+        textcccdKH.clear();
         textTenKH.clear();
         textTenKH.clear();
         textMaKH.clear();
         textMaNV.clear();
-        textsdtNV.clear();
+        textcccdNV.clear();
         textTrangThaiNV.clear();
 
         tableCTHD.getItems().clear();
