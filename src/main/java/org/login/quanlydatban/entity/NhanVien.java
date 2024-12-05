@@ -209,17 +209,4 @@ public class NhanVien implements Serializable {
         this.hinhAnh = hinhAnh;
     }
 
-    @Override
-    public String toString() {
-        return "NhanVien{" +
-                "maNhanVien='" + maNhanVien + '\'' +
-                ", tenNhanVien='" + tenNhanVien + '\'' +
-                ", sdt='" + sdt + '\'' +
-                ", cccd='" + cccd + '\'' +
-                ", diaChi='" + diaChi + '\'' +
-                ", gioiTinh=" + gioiTinh +
-                ", ngaySinh=" + ngaySinh +
-                ", trangThaiNhanVien=" + trangThaiNhanVien +
-                '}';
-    }
 }

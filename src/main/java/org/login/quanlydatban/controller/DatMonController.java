@@ -27,6 +27,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.login.quanlydatban.dao.*;
 import org.login.quanlydatban.entity.*;
+import org.login.quanlydatban.entity.enums.KhuVuc;
 import org.login.quanlydatban.entity.enums.TrangThaiBan;
 import org.login.quanlydatban.entity.enums.TrangThaiHoaDon;
 import org.login.quanlydatban.entity.keygenerator.CTHDCompositeKey;
@@ -82,7 +83,7 @@ public class DatMonController implements Initializable {
     private TextField tienTraLai;
 
     @FXML
-    private TextField sdt;
+    private TextField tfCCCD;
 
     @FXML
     private TextField tenKhachHang;
@@ -132,6 +133,12 @@ public class DatMonController implements Initializable {
     @FXML
     private TextField timTheoTen;
 
+    @FXML
+    private TextField tfDiemTichLuyDung;
+
+    @FXML
+    private TextField tfDiemTichLuyht;
+
     private ObservableList<Object[]> objectsObservableList;
 
     private Ban ban;
@@ -154,317 +161,331 @@ public class DatMonController implements Initializable {
 
     private double pt = 0.0;
 
+    private double tienTL = 0.0;
+
     private int pageSelected;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        try {
+            monAnDAO = new MonAnDAO();
+            banDAO = new BanDAO();
+            hoaDonDAO = new HoaDonDAO();
+            chiTietHoaDonDAO = new ChiTietHoaDonDAO();
+            khachHangDAO = new KhachHangDAO();
 
-        monAnDAO = new MonAnDAO();
-        banDAO = new BanDAO();
-        hoaDonDAO = new HoaDonDAO();
-        chiTietHoaDonDAO = new ChiTietHoaDonDAO();
-        khachHangDAO = new KhachHangDAO();
+            tenKhachHang.focusedProperty().addListener((observable, oldValue, newValue) -> {
+                if (!newValue) { // If newValue is false, the TextField has lost focus
+                    if (Notification.xacNhan("Lưu khách hàng này?")) {
+                        KhachHang khachHang = new KhachHang();
+                        khachHang.setCccd(tfCCCD.getText());
+                        khachHang.setTenKhachHang(tenKhachHang.getText());
 
-        sdt.setEditable(false);
+                        khachHangDAO.themKhachHang(khachHang);
+                        this.khachHang = khachHang;
 
-        tenKhachHang.focusedProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue) { // If newValue is false, the TextField has lost focus
-                if(Notification.xacNhan("Lưu khách hàng này?")){
-                    KhachHang khachHang = new KhachHang();
-                    khachHang.setSdt(sdt.getText());
-                    khachHang.setTenKhachHang(tenKhachHang.getText());
-
-                    khachHangDAO.themKhachHang(khachHang);
-                    this.khachHang = khachHang;
-
-                    hoaDon.setKhachHang(khachHang);
-                    hoaDonDAO.updateHoaDon(hoaDon);
-                }
-            }
-        });
-
-        sdt.focusedProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue && khachHang != null) { // If newValue is false, the TextField has lost focus
-                if(Notification.xacNhan("Khách hàng sẽ được thêm vào hoá đơn")) {
-                    KhachHang khachHang = khachHangDAO.getKHBySDT(sdt.getText());
-
-                    hoaDon.setKhachHang(khachHang);
-                    hoaDonDAO.updateHoaDon(hoaDon);
-                }
-            }
-        });
-
-        objectsObservableList = FXCollections.observableArrayList();
-
-        donGia.setCellValueFactory(data -> new SimpleDoubleProperty((Double)data.getValue()[2]).asObject());
-        soLuong.setCellValueFactory(data -> new SimpleIntegerProperty((Integer) data.getValue()[3]).asObject());
-        soLuong.setCellFactory(column -> new TableCell<Object[], Integer>() {
-            @Override
-            protected void updateItem(Integer item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty || item == null) {
-                    setText(null);
-                    setGraphic(null);
-                } else {
-                    setText(item.toString());
-                    setTextAlignment(TextAlignment.CENTER); // Center the text horizontally
-                    setAlignment(Pos.CENTER);               // Center the text vertically
-                }
-            }
-        });
-
-        maBan.setCellValueFactory(data -> new SimpleStringProperty((String)data.getValue()[0]));
-        tenMon.setCellValueFactory(data -> new SimpleStringProperty((String)data.getValue()[1]));
-        dvt.setCellValueFactory(data -> new SimpleStringProperty((String) data.getValue()[4]));
-
-        dvt.setCellFactory(column -> new TableCell<Object[], String>() {
-            @Override
-            protected void updateItem(String item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty || item == null) {
-                    setText(null);
-                    setGraphic(null);
-                } else {
-                    setText(item);
-                    setTextAlignment(TextAlignment.CENTER); // Center the text horizontally
-                    setAlignment(Pos.CENTER);               // Center the text vertically
-                }
-            }
-        });
-
-        ghiChu.setCellFactory(col -> new TableCell<>() {
-            private final Button button = new Button("...");
-            private final StackPane pane = new StackPane();
-
-            {
-                button.setMaxWidth(Double.MAX_VALUE);  // Allow the button to expand horizontally
-                button.setMaxHeight(Double.MAX_VALUE); // Allow the button to expand vertically
-
-                Popup popup = new Popup();
-                Pane widgetPane = new VBox(10); // Using VBox to organize the layout
-                widgetPane.setStyle("-fx-alignment: center;-fx-background-color: lightgrey; -fx-padding: 10px; -fx-border-color: grey; -fx-border-width: 1px;");
-
-                // Add a TextArea to the widget pane
-                TextArea textArea = new TextArea();
-                textArea.setPromptText("Enter your text here...");
-                textArea.setPrefSize(200, 100); // Set preferred size for the TextArea
-
-                // Add other components to the widget pane if needed
-                Button widgetButton = new Button("Cập nhật ghi chú");
-
-                // Add TextArea and Button to the widget-like Pane
-                widgetPane.getChildren().addAll(textArea, widgetButton);
-
-                popup.getContent().add(widgetPane);
-                popup.setAutoHide(true); // Automatically hide when clicking outside
-
-                widgetButton.setOnAction(event -> {
-                    if (!textArea.getText().equals("")) {
-                        String note = textArea.getText();
-                        Object[] objects = getTableView().getItems().get(getIndex());
-                        ChiTietHoaDon chiTietHoaDon = new ChiTietHoaDon();
-                        CTHDCompositeKey key = new CTHDCompositeKey(hoaDon.getMaHoaDon(), String.valueOf(objects[0]));
-                        chiTietHoaDon.setMaChiTietHoaDon(key);
-
-                        chiTietHoaDon.setGhiChu(note);
-                        chiTietHoaDon.setSoLuong(Integer.parseInt(String.valueOf(objects[3])));
-
-                        chiTietHoaDonDAO.capNhatCTHD(chiTietHoaDon);
-
-                        popup.hide();
+                        hoaDon.setKhachHang(khachHang);
+                        hoaDonDAO.updateHoaDon(hoaDon);
                     }
-                });
+                }
+            });
 
-                button.setOnAction(event -> {
-                    if (!popup.isShowing()) {
-                        // Position the popup near the button
-                        if (getTableView() != null) {// if there are not a row in table
-                            Object[] objects = getTableView().getItems().get(getIndex());
-                            CTHDCompositeKey key = new CTHDCompositeKey(hoaDon.getMaHoaDon(), String.valueOf(objects[0]));
+            tfCCCD.focusedProperty().addListener((observable, oldValue, newValue) -> {
+                if (!newValue && khachHang != null) { // If newValue is false, the TextField has lost focus
+                    if (Notification.xacNhan("Khách hàng sẽ được thêm vào hoá đơn")) {
+                        KhachHang khachHang = khachHangDAO.getKHByCCCD(tfCCCD.getText());
 
-                            ChiTietHoaDon chiTietHoaDon = chiTietHoaDonDAO.getCTHD(key);
+                        hoaDon.setKhachHang(khachHang);
+                        hoaDonDAO.updateHoaDon(hoaDon);
+                    }
+                }
+            });
 
-                            textArea.setText(chiTietHoaDon.getGhiChu());
-                            textArea.positionCaret(textArea.getLength());
+            tfDiemTichLuyDung.focusedProperty().addListener((observable, oldValue, newValue) -> {
+                try {
+                    if (!newValue) { // If newValue is false, the TextField has lost focus
+                        if (tfDiemTichLuyDung.getText().length() > 2) {//111, 1111
+                            int dtl = Integer.parseInt(tfDiemTichLuyDung.getText());
+                            if (dtl <= hoaDon.getKhachHang().getDiemTichLuy())
+                                tienTL = dtl * 10.0;
+                            else throw new IllegalArgumentException("Điểm tích luỹ vượt mức khả dụng");
+                            capNhatTongTien();
+                            capNhatTienTraLai();
                         }
-                        popup.show(button, button.getScene().getWindow().getX() + button.getLayoutX(),
-                                button.getScene().getWindow().getY() + button.getLayoutY() + button.getHeight());
-                    } else {
-                        popup.hide();
                     }
-                });
-
-                button.setStyle("-fx-background-color: #F1EB90;");
-                pane.getChildren().add(button);
-                pane.setStyle("-fx-alignment: center;"); // Center the button within the StackPane
-            }
-
-
-            @Override
-            protected void updateItem(Void item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty) {
-                    setGraphic(null);
-                } else {
-                    setGraphic(pane);
-                    button.prefWidthProperty().bind(pane.widthProperty());  // Bind button width to pane
-                    button.prefHeightProperty().bind(pane.heightProperty()); // Bind button height to pane
-                }
-            }
-        });
-        huyMon.setCellFactory(col -> new TableCell<>() {
-            private final Button button = new Button("x");
-            private final StackPane pane = new StackPane();
-
-            {
-                button.setMaxWidth(Double.MAX_VALUE);  // Allow the button to expand horizontally
-                button.setMaxHeight(Double.MAX_VALUE); // Allow the button to expand vertically
-
-                button.setOnAction(event -> {
-                    Object[] objects = getTableView().getItems().get(getIndex());
-                    chiTietHoaDonDAO.deleteChiTietHoaDon(hoaDon.getMaHoaDon(), String.valueOf(objects[0]));
-                    getTableView().getItems().remove(getIndex());
+                } catch (Exception e) {
+                    Notification.thongBao(e.getMessage(), Alert.AlertType.WARNING);
+                    tfDiemTichLuyDung.clear();
+                    tienTL = 0.0;
                     capNhatTongTien();
                     capNhatTienTraLai();
-                });
+                }
+            });
 
-                button.setStyle("-fx-background-color: #F3B664");
-                pane.getChildren().add(button);
-                pane.setStyle("-fx-alignment: center;"); // Center the button within the StackPane
-            }
 
-            @Override
-            protected void updateItem(Void item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty) {
-                    setGraphic(null);
-                } else {
-                    setGraphic(pane);
-                    button.prefWidthProperty().bind(pane.widthProperty());  // Bind button width to pane
-                    button.prefHeightProperty().bind(pane.heightProperty()); // Bind button height to pane
+            objectsObservableList = FXCollections.observableArrayList();
+
+            donGia.setCellValueFactory(data -> new SimpleDoubleProperty((Double) data.getValue()[2]).asObject());
+            soLuong.setCellValueFactory(data -> new SimpleIntegerProperty((Integer) data.getValue()[3]).asObject());
+            soLuong.setCellFactory(column -> new TableCell<Object[], Integer>() {
+                @Override
+                protected void updateItem(Integer item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty || item == null) {
+                        setText(null);
+                        setGraphic(null);
+                    } else {
+                        setText(item.toString());
+                        setTextAlignment(TextAlignment.CENTER); // Center the text horizontally
+                        setAlignment(Pos.CENTER);               // Center the text vertically
+                    }
+                }
+            });
+
+            maBan.setCellValueFactory(data -> new SimpleStringProperty((String) data.getValue()[0]));
+            tenMon.setCellValueFactory(data -> new SimpleStringProperty((String) data.getValue()[1]));
+            dvt.setCellValueFactory(data -> new SimpleStringProperty((String) data.getValue()[4]));
+
+            dvt.setCellFactory(column -> new TableCell<Object[], String>() {
+                @Override
+                protected void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty || item == null) {
+                        setText(null);
+                        setGraphic(null);
+                    } else {
+                        setText(item);
+                        setTextAlignment(TextAlignment.CENTER); // Center the text horizontally
+                        setAlignment(Pos.CENTER);               // Center the text vertically
+                    }
+                }
+            });
+
+            ghiChu.setCellFactory(col -> new TableCell<>() {
+                private final Button button = new Button("...");
+                private final StackPane pane = new StackPane();
+
+                {
+                    button.setMaxWidth(Double.MAX_VALUE);  // Allow the button to expand horizontally
+                    button.setMaxHeight(Double.MAX_VALUE); // Allow the button to expand vertically
+
+                    Popup popup = new Popup();
+                    Pane widgetPane = new VBox(10); // Using VBox to organize the layout
+                    widgetPane.setStyle("-fx-alignment: center;-fx-background-color: lightgrey; -fx-padding: 10px; -fx-border-color: grey; -fx-border-width: 1px;");
+
+                    // Add a TextArea to the widget pane
+                    TextArea textArea = new TextArea();
+                    textArea.setPromptText("Enter your text here...");
+                    textArea.setPrefSize(200, 100); // Set preferred size for the TextArea
+
+                    // Add other components to the widget pane if needed
+                    Button widgetButton = new Button("Cập nhật ghi chú");
+
+                    // Add TextArea and Button to the widget-like Pane
+                    widgetPane.getChildren().addAll(textArea, widgetButton);
+
+                    popup.getContent().add(widgetPane);
+                    popup.setAutoHide(true); // Automatically hide when clicking outside
+
+                    widgetButton.setOnAction(event -> {
+                        if (!textArea.getText().equals("")) {
+                            String note = textArea.getText();
+                            Object[] objects = getTableView().getItems().get(getIndex());
+                            ChiTietHoaDon chiTietHoaDon = new ChiTietHoaDon();
+                            CTHDCompositeKey key = new CTHDCompositeKey(hoaDon.getMaHoaDon(), String.valueOf(objects[0]));
+                            chiTietHoaDon.setMaChiTietHoaDon(key);
+
+                            chiTietHoaDon.setGhiChu(note);
+                            chiTietHoaDon.setSoLuong(Integer.parseInt(String.valueOf(objects[3])));
+
+                            chiTietHoaDonDAO.capNhatCTHD(chiTietHoaDon);
+
+                            popup.hide();
+                        }
+                    });
+
+                    button.setOnAction(event -> {
+                        if (!popup.isShowing()) {
+                            // Position the popup near the button
+                            if (getTableView() != null) {// if there are not a row in table
+                                Object[] objects = getTableView().getItems().get(getIndex());
+                                CTHDCompositeKey key = new CTHDCompositeKey(hoaDon.getMaHoaDon(), String.valueOf(objects[0]));
+
+                                ChiTietHoaDon chiTietHoaDon = chiTietHoaDonDAO.getCTHD(key);
+
+                                textArea.setText(chiTietHoaDon.getGhiChu());
+                                textArea.positionCaret(textArea.getLength());
+                            }
+                            popup.show(button, button.getScene().getWindow().getX() + button.getLayoutX(),
+                                    button.getScene().getWindow().getY() + button.getLayoutY() + button.getHeight());
+                        } else {
+                            popup.hide();
+                        }
+                    });
+
+                    button.setStyle("-fx-background-color: #F1EB90;");
+                    pane.getChildren().add(button);
+                    pane.setStyle("-fx-alignment: center;"); // Center the button within the StackPane
+                }
+
+
+                @Override
+                protected void updateItem(Void item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty) {
+                        setGraphic(null);
+                    } else {
+                        setGraphic(pane);
+                        button.prefWidthProperty().bind(pane.widthProperty());  // Bind button width to pane
+                        button.prefHeightProperty().bind(pane.heightProperty()); // Bind button height to pane
+                    }
+                }
+            });
+            huyMon.setCellFactory(col -> new TableCell<>() {
+                private final Button button = new Button("x");
+                private final StackPane pane = new StackPane();
+
+                {
+                    button.setMaxWidth(Double.MAX_VALUE);  // Allow the button to expand horizontally
+                    button.setMaxHeight(Double.MAX_VALUE); // Allow the button to expand vertically
+
+                    button.setOnAction(event -> {
+                        Object[] objects = getTableView().getItems().get(getIndex());
+                        chiTietHoaDonDAO.deleteChiTietHoaDon(hoaDon.getMaHoaDon(), String.valueOf(objects[0]));
+                        getTableView().getItems().remove(getIndex());
+                        capNhatTongTien();
+                        capNhatTienTraLai();
+                    });
+
+                    button.setStyle("-fx-background-color: #F3B664");
+                    pane.getChildren().add(button);
+                    pane.setStyle("-fx-alignment: center;"); // Center the button within the StackPane
+                }
+
+                @Override
+                protected void updateItem(Void item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty) {
+                        setGraphic(null);
+                    } else {
+                        setGraphic(pane);
+                        button.prefWidthProperty().bind(pane.widthProperty());  // Bind button width to pane
+                        button.prefHeightProperty().bind(pane.heightProperty()); // Bind button height to pane
+                    }
+                }
+            });
+            tang.setCellFactory(col -> new TableCell<>() {
+                private final Button button = new Button("+");
+                private final StackPane pane = new StackPane();
+
+                {
+                    button.setMaxWidth(Double.MAX_VALUE);  // Allow the button to expand horizontally
+                    button.setMaxHeight(Double.MAX_VALUE); // Allow the button to expand vertically
+
+                    button.setOnAction(event -> {
+                        Object[] objects = getTableView().getItems().get(getIndex());
+                        int sl = Integer.parseInt(String.valueOf(objects[3])) + 1;
+
+                        CTHDCompositeKey key = new CTHDCompositeKey(hoaDon.getMaHoaDon(), String.valueOf(objects[0]));
+
+                        chiTietHoaDonDAO.capNhatSoLuong(key, sl);
+
+                        objects[3] = sl;
+                        orderTable.refresh();
+
+                        capNhatTongTien();
+                        capNhatTienTraLai();
+                    });
+
+                    button.setStyle("-fx-background-color: #9FBB73");
+                    pane.getChildren().add(button);
+                    pane.setStyle("-fx-alignment: center;"); // Center the button within the StackPane
+                }
+
+                @Override
+                protected void updateItem(Void item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty) {
+                        setGraphic(null);
+                    } else {
+                        setGraphic(pane);
+                        button.prefWidthProperty().bind(pane.widthProperty());  // Bind button width to pane
+                        button.prefHeightProperty().bind(pane.heightProperty()); // Bind button height to pane
+                    }
+                }
+            });
+            giam.setCellFactory(col -> new TableCell<>() {
+                private final Button button = new Button("-");
+                private final StackPane pane = new StackPane();
+
+                {
+                    button.setMaxWidth(Double.MAX_VALUE);  // Allow the button to expand horizontally
+                    button.setMaxHeight(Double.MAX_VALUE); // Allow the button to expand vertically
+
+                    button.setOnAction(event -> {
+                        Object[] objects = getTableView().getItems().get(getIndex());
+                        int sl = Integer.parseInt(String.valueOf(objects[3]));
+                        if (Integer.parseInt(String.valueOf(objects[3])) - 1 != 0)
+                            sl = Integer.parseInt(String.valueOf(objects[3])) - 1;
+
+                        CTHDCompositeKey key = new CTHDCompositeKey(hoaDon.getMaHoaDon(), String.valueOf(objects[0]));
+
+                        chiTietHoaDonDAO.capNhatSoLuong(key, sl);
+
+                        objects[3] = sl;
+                        orderTable.refresh();
+
+                        capNhatTongTien();
+                        capNhatTienTraLai();
+                    });
+
+                    button.setStyle("-fx-background-color: #F3B664");
+                    pane.getChildren().add(button);
+                    pane.setStyle("-fx-alignment: center;"); // Center the button within the StackPane
+                }
+
+                @Override
+                protected void updateItem(Void item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty) {
+                        setGraphic(null);
+                    } else {
+                        setGraphic(pane);
+                        button.prefWidthProperty().bind(pane.widthProperty());  // Bind button width to pane
+                        button.prefHeightProperty().bind(pane.heightProperty()); // Bind button height to pane
+                    }
+                }
+            });
+
+            orderTable.setItems(objectsObservableList);
+            monAnDAO.readAll();
+            flowPane.prefHeightProperty().bind(scrollPane.heightProperty());
+            flowPane.prefWidthProperty().bind(scrollPane.widthProperty());
+
+            for (MonAn i : monAnDAO.getListMonAn()) {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/uicomponents/CardMonAn_TrangDatMon.fxml"));
+                try {
+                    AnchorPane pane = loader.load();
+
+                    CardMonAnController controller = loader.getController();
+                    controller.setMonAn(i, this);
+                    controller.setController(this);
+                    flowPane.getChildren().add(pane);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
                 }
             }
-        });
-        tang.setCellFactory(col -> new TableCell<>() {
-            private final Button button = new Button("+");
-            private final StackPane pane = new StackPane();
-
-            {
-                button.setMaxWidth(Double.MAX_VALUE);  // Allow the button to expand horizontally
-                button.setMaxHeight(Double.MAX_VALUE); // Allow the button to expand vertically
-
-                button.setOnAction(event -> {
-                    Object[] objects = getTableView().getItems().get(getIndex());
-                    int sl = Integer.parseInt(String.valueOf(objects[3])) + 1;
-
-                    CTHDCompositeKey key = new CTHDCompositeKey(hoaDon.getMaHoaDon(), String.valueOf(objects[0]));
-
-                    chiTietHoaDonDAO.capNhatSoLuong(key, sl);
-
-                    objects[3] = sl;
-                    orderTable.refresh();
-
-                    capNhatTongTien();
-                    capNhatTienTraLai();
-                });
-
-                button.setStyle("-fx-background-color: #9FBB73");
-                pane.getChildren().add(button);
-                pane.setStyle("-fx-alignment: center;"); // Center the button within the StackPane
-            }
-
-            @Override
-            protected void updateItem(Void item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty) {
-                    setGraphic(null);
-                } else {
-                    setGraphic(pane);
-                    button.prefWidthProperty().bind(pane.widthProperty());  // Bind button width to pane
-                    button.prefHeightProperty().bind(pane.heightProperty()); // Bind button height to pane
-                }
-            }
-        });
-        giam.setCellFactory(col -> new TableCell<>() {
-            private final Button button = new Button("-");
-            private final StackPane pane = new StackPane();
-
-            {
-                button.setMaxWidth(Double.MAX_VALUE);  // Allow the button to expand horizontally
-                button.setMaxHeight(Double.MAX_VALUE); // Allow the button to expand vertically
-
-                button.setOnAction(event -> {
-                    Object[] objects = getTableView().getItems().get(getIndex());
-                    int sl = Integer.parseInt(String.valueOf(objects[3]));
-                    if(Integer.parseInt(String.valueOf(objects[3])) - 1 != 0)
-                        sl = Integer.parseInt(String.valueOf(objects[3])) - 1;
-
-                    CTHDCompositeKey key = new CTHDCompositeKey(hoaDon.getMaHoaDon(), String.valueOf(objects[0]));
-
-                    chiTietHoaDonDAO.capNhatSoLuong(key, sl);
-
-                    objects[3] = sl;
-                    orderTable.refresh();
-
-                    capNhatTongTien();
-                    capNhatTienTraLai();
-                });
-
-                button.setStyle("-fx-background-color: #F3B664");
-                pane.getChildren().add(button);
-                pane.setStyle("-fx-alignment: center;"); // Center the button within the StackPane
-            }
-
-            @Override
-            protected void updateItem(Void item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty) {
-                    setGraphic(null);
-                } else {
-                    setGraphic(pane);
-                    button.prefWidthProperty().bind(pane.widthProperty());  // Bind button width to pane
-                    button.prefHeightProperty().bind(pane.heightProperty()); // Bind button height to pane
-                }
-            }
-        });
-
-        orderTable.setItems(objectsObservableList);
-        monAnDAO.readAll();
-        flowPane.prefHeightProperty().bind(scrollPane.heightProperty());
-        flowPane.prefWidthProperty().bind(scrollPane.widthProperty());
-
-        for (MonAn i : monAnDAO.getListMonAn()){
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/uicomponents/CardMonAn_TrangDatMon.fxml"));
-            try {
-                AnchorPane pane = loader.load();
-
-                CardMonAnController controller = loader.getController();
-                controller.setMonAn(i, this);
-                controller.setController(this);
-                flowPane.getChildren().add(pane);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+            monAnDAO.getListMonAn();
+        } catch (Exception e) {
+            Notification.thongBao(e.getMessage(), Alert.AlertType.WARNING);
         }
-        monAnDAO.getListMonAn();
-//        scrollPane.vvalueProperty().addListener((obs, oldValue, newValue) -> {
-//            if(newValue.doubleValue() == 1.0){
-//                for (int i = 0; i < 20; i++){
-//                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/uicomponents/CardMonAn_TrangDatMon.fxml"));
-//                    try {
-//                        AnchorPane pane = loader.load();
-//                        flowPane.getChildren().add(pane);
-//                    } catch (IOException e) {
-//                        throw new RuntimeException(e);
-//                    }
-//                }
-//
-//            }
-//        });
     }
 
     public void capNhatTongTien() {
-        tongTienTxt.setText(NumberFormatter.formatPrice(String.valueOf((int) hoaDon.tinhTongTien())));
+        if(tienTL > 0.0)
+            tongTienTxt.setText(NumberFormatter.formatPrice(String.valueOf((int) (hoaDon.tinhTongTien() - tienTL))) + " (-" + NumberFormatter.formatPrice(String.valueOf((int) tienTL)) + ")");
+        else
+            tongTienTxt.setText(NumberFormatter.formatPrice(String.valueOf((int) hoaDon.tinhTongTien())));
     }
 
     public void setPageSelected(int i) {
@@ -523,11 +544,15 @@ public class DatMonController implements Initializable {
     public void setHoaDon(HoaDon hoaDon) {
         this.hoaDon = hoaDon;
         if(hoaDon != null){
-            sdt.setEditable(true);
+            tfCCCD.setEditable(true);
             if(hoaDon.getKhachHang() != null){
                 khachHang = hoaDon.getKhachHang();
-                sdt.setText(khachHang.getSdt());
+                tfCCCD.setText(khachHang.getCccd());
                 tenKhachHang.setText(khachHang.getTenKhachHang());
+                tfDiemTichLuyht.setText(String.valueOf(khachHang.getDiemTichLuy()));
+            }
+            else {
+                tfDiemTichLuyDung.setDisable(true);
             }
         }
         chiTietHoaDonDAO.getCTHDfromHD(hoaDon).forEach(
@@ -618,36 +643,45 @@ public class DatMonController implements Initializable {
 
     @FXML
     void thanhToan(ActionEvent event) {
-        if(hoaDon != null){
-            if(!orderTable.getItems().isEmpty()){
-                if (tkd != 0.0) {
-                    if (Notification.xacNhan("Xác nhận thanh toán?")) {
-                        orderTable.getItems().clear();
-                        this.hoaDon.setTrangThaiHoaDon(TrangThaiHoaDon.DA_THANH_TOAN);
-                        this.hoaDon.setNhanVien(TrangChuController.getTaiKhoan().getNhanVien());
+        try {
+            if (hoaDon != null) {
+                if (!orderTable.getItems().isEmpty()) {
+                    if (tkd != 0.0) {
+                        if (Notification.xacNhan("Xác nhận thanh toán?")) {
+                            orderTable.getItems().clear();
+                            this.hoaDon.setTrangThaiHoaDon(TrangThaiHoaDon.DA_THANH_TOAN);
+                            this.hoaDon.setNhanVien(TrangChuController.getTaiKhoan().getNhanVien());
+                            this.hoaDon.setPhuThu(pt);
+                            this.hoaDon.setChietKhau(tienTL);
 
-                        ban.setTrangThaiBan(TrangThaiBan.BAN_TRONG);
-                        trangThaiBanText.setText(TrangThaiBan.BAN_TRONG.toString());
-                        tongTienTxt.setText("0.0");
-                        tienKhachDua.setText("0.0");
-                        phuThu.setText("0.0");
-                        tienTraLai.setText("");
+                            ban.setTrangThaiBan(TrangThaiBan.BAN_TRONG);
+                            trangThaiBanText.setText(TrangThaiBan.BAN_TRONG.toString());
+                            tongTienTxt.clear();
+                            tienKhachDua.clear();
+                            phuThu.clear();
+                            tienTraLai.clear();
+                            tfCCCD.clear();
+                            tenKhachHang.clear();
+                            tfDiemTichLuyht.clear();
+                            tfDiemTichLuyDung.clear();
 
-                        hoaDonDAO.updateHoaDon(hoaDon);
-                        banDAO.updateBan(ban);
+                            hoaDonDAO.updateHoaDon(hoaDon);
+                            banDAO.updateBan(ban);
 
-                        hoaDon = null;
+                            hoaDon = null;
 
-                        this.btnHuy.setVisible(false);
-                        this.btnGiuBan.setVisible(true);
-                    }
-                }
-                else Notification.thongBao("Vui lòng nhập tiền khách đưa trước khi thanh toán", Alert.AlertType.INFORMATION);
-            }
-            else Notification.thongBao("Hoá đơn rỗng, bạn chi có thể huỷ", Alert.AlertType.INFORMATION);
+                            this.btnHuy.setVisible(false);
+                            this.btnGiuBan.setVisible(true);
+                        }
+                    } else
+                        throw new IllegalArgumentException("Vui lòng nhập tiền khách đưa trước khi thanh toán");
+                } else
+                    throw new IllegalArgumentException("Hoá đơn rỗng, bạn chi có thể huỷ");
+            } else
+                throw new IllegalArgumentException("Vui lòng giữ bàn");
         }
-        else {
-            Notification.thongBao("Vui lòng giữ bàn", Alert.AlertType.INFORMATION);
+        catch (Exception e){
+            Notification.thongBao(e.getMessage(), Alert.AlertType.WARNING);
         }
     }
 
@@ -747,8 +781,8 @@ public class DatMonController implements Initializable {
                 }
             }
 
-            if (tkd >= (hoaDon.getTongTien() + pt)){
-                tienTraLai.setText(NumberFormatter.formatPrice(String.valueOf((int) (tkd - (hoaDon.getTongTien() + pt)))));
+            if ((tkd + tienTL) >= (hoaDon.getTongTien() + pt)){
+                tienTraLai.setText(NumberFormatter.formatPrice(String.valueOf((int) ((tkd + tienTL) - (hoaDon.getTongTien() + pt)))));
             }
             else tienTraLai.setText("Tiền khách đưa phải lớn hơn hoặc bằng tổng tiền");
         }
@@ -761,8 +795,8 @@ public class DatMonController implements Initializable {
 
     public void capNhatTienTraLai() {
         if (hoaDon != null) {
-            if (tkd >= (hoaDon.getTongTien() + pt)) {
-                tienTraLai.setText(NumberFormatter.formatPrice(String.valueOf((int) (tkd - (hoaDon.getTongTien() + pt)))));
+            if ((tienTL + tkd) >= (hoaDon.getTongTien() + pt)) {
+                tienTraLai.setText(NumberFormatter.formatPrice(String.valueOf((int) ((tienTL + tkd) - (hoaDon.getTongTien() + pt)))));
             } else tienTraLai.setText("Tiền khách đưa phải lớn hơn hoặc bằng tổng tiền");
         }
         else Notification.thongBao("Hãy lập hoá đơn trước khi nhập", Alert.AlertType.INFORMATION);
@@ -834,23 +868,49 @@ public class DatMonController implements Initializable {
     }
 
     @FXML
-    void sdtEnter(KeyEvent event) {
-        if(sdt.getText().length() == 10) {
-            try {
-                KhachHang khachHang = khachHangDAO.getKHBySDT(sdt.getText());
+    void nhapCCCD(KeyEvent event) {
+        try {
+            if (hoaDon == null) throw new IllegalArgumentException("Hãy lập hoá đơn trước khi nhập");
+
+            if (tfCCCD.getText().length() == 10) {
+                KhachHang khachHang = khachHangDAO.getKHByCCCD(tfCCCD.getText());
                 tenKhachHang.setText(khachHang.getTenKhachHang());
+                tfDiemTichLuyht.setText(String.valueOf(khachHang.getDiemTichLuy()));
                 this.khachHang = khachHang;
+            } else tenKhachHang.setEditable(false);
+
+        } catch (NoResultException e) {
+            khachHang = null;
+            if (Notification.xacNhan("CCCD mới, bạn có muốn tạo khách hàng này?")) {
+                tenKhachHang.requestFocus();
+                tenKhachHang.setEditable(true);
             }
-            catch (NoResultException e) {
-                khachHang = null;
-                if(Notification.xacNhan("Số điện thoại mới, bạn có muốn tạo khách hàng này?")){
-                    tenKhachHang.requestFocus();
-                    tenKhachHang.setEditable(true);
-                }
-            }
+        } catch (Exception e) {
+            Notification.thongBao(e.getMessage(), Alert.AlertType.WARNING);
         }
-        else tenKhachHang.setEditable(false);
+
     }
+
+    @FXML
+    void nhapDTL(KeyEvent event) {
+        try {
+            if(hoaDon == null) throw new IllegalArgumentException("Hãy lập hoá đơn trước khi nhập");
+
+            if (tfDiemTichLuyDung.getText().isEmpty())
+                throw new IllegalArgumentException("Đã huỷ áp dụng điểm tích luỹ");
+
+            if (!tfDiemTichLuyDung.getText().matches("\\d+"))
+                throw new IllegalArgumentException("Vui lòng nhập số");
+        }
+        catch (Exception e){
+            Notification.thongBao(e.getMessage(), Alert.AlertType.WARNING);
+            tfDiemTichLuyDung.clear();
+            tienTL = 0.0;
+            capNhatTongTien();
+            capNhatTienTraLai();
+        }
+    }
+
 
     public HoaDon getHoaDon() {
         return this.hoaDon;

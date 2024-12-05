@@ -7,10 +7,12 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Bounds;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.login.quanlydatban.entity.TaiKhoan;
@@ -29,7 +31,8 @@ public class TrangChuController implements Initializable {
     private Label chucVu;
 
     public static TaiKhoan taiKhoan;
-
+    @FXML
+    private ImageView imageView;
     @FXML
     private BorderPane borderPane;
 
@@ -41,9 +44,19 @@ public class TrangChuController implements Initializable {
     private Stage ketCaStage;
     public void setTaiKhoan(TaiKhoan taiKhoan){
         this.taiKhoan = taiKhoan;
+        String duongdan = taiKhoan.getNhanVien().getHinhAnh();
+        Image image = new Image("file:"+duongdan);
+
+
         if(taiKhoan != null){
             if(taiKhoan.getNhanVien() != null){
                 tenNhanVien.setText(taiKhoan.getNhanVien().getTenNhanVien());
+                imageView.setImage(image);
+                imageView.setFitWidth(40); // Chiều rộng
+                imageView.setFitHeight(60); // Chiều cao
+                imageView.setPreserveRatio(true);
+                Circle clip = new Circle(20, 20, 20); // Tọa độ và bán kính
+                imageView.setClip(clip);
                 switch (taiKhoan.getNhanVien().getChucVuNhanVien()){
                     case NHAN_VIEN -> chucVu.setText("Nhân viên");
                     default -> chucVu.setText("Quản lý");
@@ -205,6 +218,7 @@ public class TrangChuController implements Initializable {
 
     @FXML
     void xemLich(ActionEvent event) throws IOException {
+        XemLichDatController.getInstance().loadLichDatFromCurrentWeek();
         borderPane.setCenter(XemLichDatController.getInstance().getRoot());
     }
 

@@ -2,6 +2,7 @@ package org.login.quanlydatban.entity;
 
 import org.hibernate.Session;
 import org.login.quanlydatban.dao.ChiTietHoaDonDAO;
+import org.login.quanlydatban.dao.KhachHangDAO;
 import org.login.quanlydatban.entity.enums.TrangThaiHoaDon;
 import org.login.quanlydatban.entity.keygenerator.DailyCounter;
 import org.login.quanlydatban.hibernate.HibernateUtils;
@@ -47,16 +48,28 @@ public class HoaDon implements Serializable {
     @Column
     private double tongTien;
 
+    @Column
+    private double chietKhau;
+
     @Transient
     private ChiTietHoaDonDAO chiTietHoaDonDAO;
+
     @PrePersist
     @PreUpdate
     public void generateId() {
         if (this.maHoaDon == null) {
-            System.out.println("2");
             this.maHoaDon = generateCustomId();
         }
-        tongTien = tinhTongTien();
+
+        if(trangThaiHoaDon == TrangThaiHoaDon.DA_THANH_TOAN){
+            tongTien = tinhTongTien() + phuThu - chietKhau;
+            if(khachHang != null){
+                khachHang.setDiemTichLuy(khachHang.getDiemTichLuy() + (int)(tongTien * 1 / 1000.0));
+
+                KhachHangDAO khachHangDAO = new KhachHangDAO();
+                khachHangDAO.suaKhachHang(khachHang);
+            }
+        }
     }
 
     private String generateCustomId() {//generate HoaDon id when create(auto)
@@ -179,6 +192,14 @@ public class HoaDon implements Serializable {
 
     public double getTongTien() {
         return tongTien;
+    }
+
+    public double getChietKhau() {
+        return chietKhau;
+    }
+
+    public void setChietKhau(double chietKhau) {
+        this.chietKhau = chietKhau;
     }
 
     @Override

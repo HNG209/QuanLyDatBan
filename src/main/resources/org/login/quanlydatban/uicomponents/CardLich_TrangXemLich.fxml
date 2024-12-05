@@ -1,19 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.String?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
 
-
-<AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#selectLich" prefHeight="101.0" prefWidth="252.0" style="-fx-border-color: black;" styleClass="image-hover-effect" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.login.quanlydatban.controller.CardLichXemLichController">
    <children>
-      <Pane layoutX="100.0" layoutY="-1.0" prefHeight="101.0" prefWidth="100.0" style="-fx-background-color: white;" />
-      <Label alignment="CENTER" contentDisplay="CENTER" layoutY="4.0" prefHeight="18.0" prefWidth="100.0" text="Trạng thái" />
-      <Label fx:id="labeltrangThai" alignment="CENTER" contentDisplay="CENTER" layoutY="73.0" prefHeight="18.0" prefWidth="100.0" />
+      <Pane layoutX="129.0" layoutY="1.0" prefHeight="99.0" prefWidth="122.0" style="-fx-background-color: white;">
+         <children>
+            <Label fx:id="labelThoiGian" alignment="CENTER" contentDisplay="CENTER" layoutX="-1.0" layoutY="31.0" prefHeight="21.0" prefWidth="124.0" text="Thời gian">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <Label fx:id="labelBan" alignment="CENTER" contentDisplay="CENTER" layoutX="-2.0" layoutY="53.0" prefHeight="21.0" prefWidth="125.0" text="Bàn">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <GridPane fx:id="statusNhanBan" layoutX="4.0" layoutY="8.0" prefHeight="22.0" prefWidth="116.0">
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <ImageView fitHeight="21.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../icons/check.png" />
+                     </image>
+                  </ImageView>
+                  <Label alignment="CENTER" prefHeight="18.0" prefWidth="128.0" text="Có thể nhận bàn" GridPane.columnIndex="1" />
+               </children>
+            </GridPane>
+         </children></Pane>
+      <Label alignment="CENTER" contentDisplay="CENTER" layoutY="4.0" prefHeight="18.0" prefWidth="129.0" text="Trạng thái" />
+      <Label fx:id="labeltrangThai" alignment="CENTER" contentDisplay="CENTER" layoutX="-2.0" layoutY="77.0" prefHeight="22.0" prefWidth="131.0">
+         <font>
+            <Font size="15.0" />
+         </font></Label>
+      <ImageView fx:id="icon" fitHeight="50.0" fitWidth="50.0" layoutX="40.0" layoutY="26.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../icons/cancel.png" />
+         </image>
+      </ImageView>
    </children>
-   <styleClass>
-      <String fx:value="sage-green" />
-      <String fx:value="image-hover-effect" />
-   </styleClass>
 </AnchorPane>

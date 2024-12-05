@@ -39,11 +39,10 @@ public class LichDat implements Serializable {
     private HoaDon hoaDon;
 
     @Column
-    @Enumerated(EnumType.STRING)
-    private LoaiTiec loaiTiec;
+    private double tienCoc;
 
     @Column
-    private double tienCoc;
+    private String ghiChu;
 
     @Transient
     private LichDatDAO lichDatDAO;
@@ -132,11 +131,35 @@ public class LichDat implements Serializable {
         this.hoaDon = hoaDon;
     }
 
-    public LoaiTiec getLoaiTiec() {
-        return loaiTiec;
+    public double getTienCoc() {
+        return tienCoc;
     }
 
-    public void setLoaiTiec(LoaiTiec loaiTiec) {
-        this.loaiTiec = loaiTiec;
+    public void setTienCoc(double tienCoc) {
+        this.tienCoc = tienCoc;
+    }
+
+    public String getGhiChu() {
+        return ghiChu;
+    }
+
+    public void setGhiChu(String ghiChu) {
+        this.ghiChu = ghiChu;
+    }
+
+    @Override
+    public String toString() {
+        return "LichDat{" +
+                "maLichDat='" + maLichDat + '\'' +
+                ", thoiGianDat=" + thoiGianDat +
+                ", thoiGianNhanBan=" + thoiGianNhanBan +
+                ", khachHang=" + khachHang +
+                ", nhanVien=" + nhanVien +
+                ", soLuongNguoi=" + soLuongNguoi +
+                ", hoaDon=" + hoaDon +
+                ", tienCoc=" + tienCoc +
+                ", ghiChu='" + ghiChu + '\'' +
+                ", lichDatDAO=" + lichDatDAO +
+                '}';
     }
 }
