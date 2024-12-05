@@ -61,6 +61,8 @@ public class HoaDonController implements Initializable {
     @FXML
     private TableColumn<HoaDon, String> colTongTien;
     @FXML
+    private TableColumn<HoaDon, String> colChietkhau;
+    @FXML
     private TableColumn<HoaDon, Double> colPhuThu;
 
     @FXML

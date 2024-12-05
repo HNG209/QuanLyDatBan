@@ -20,7 +20,7 @@
 
 <AnchorPane prefHeight="635.0" prefWidth="1280.0" styleClass="gradient1" stylesheets="../stylesheets/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.login.quanlydatban.controller.HoaDonController">
    <children>
-      <TableView fx:id="tableCTHD" layoutX="934.0" layoutY="322.0" prefHeight="304.0" prefWidth="449.0" style="-fx-border-color: green;" styleClass="small-round-box" AnchorPane.bottomAnchor="9.0" AnchorPane.rightAnchor="16.0" AnchorPane.topAnchor="322.0">
+      <TableView fx:id="tableCTHD" layoutX="934.0" layoutY="322.0" prefHeight="304.0" prefWidth="439.0" style="-fx-border-color: green;" styleClass="small-round-box" AnchorPane.bottomAnchor="9.0" AnchorPane.rightAnchor="16.0" AnchorPane.topAnchor="322.0">
          <columns>
             <TableColumn fx:id="colTenMonAn" prefWidth="96.00000262260437" text="Tên món ăn" />
             <TableColumn fx:id="colSoLuong" prefWidth="61.33324432373047" text="Số lượng" />
@@ -87,7 +87,7 @@
             <Insets />
          </opaqueInsets>
       </AnchorPane>
-      <TableView fx:id="tabTatCa" layoutX="8.0" layoutY="322.0" prefHeight="304.0" prefWidth="801.0" style="-fx-border-color: green;" styleClass="small-round-box" AnchorPane.bottomAnchor="9.0" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="471.0" AnchorPane.topAnchor="322.0">
+      <TableView fx:id="tabTatCa" layoutX="8.0" layoutY="322.0" prefHeight="304.0" prefWidth="811.0" style="-fx-border-color: green;" styleClass="small-round-box" AnchorPane.bottomAnchor="9.0" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="461.0" AnchorPane.topAnchor="322.0">
         <columns>
             <TableColumn fx:id="colMaHoaDon" prefWidth="115.33334636688232" text="Mã hóa đơn" />
             <TableColumn fx:id="colNgayLap" prefWidth="120.66667938232422" text="Ngày lập hóa đơn" />
@@ -96,6 +96,7 @@
             <TableColumn fx:id="colMaBan" prefWidth="95.33334350585938" text="Khu vực/ Bàn" />
             <TableColumn fx:id="colMaNhanVien" prefWidth="86.66668701171875" text="Nhân viên" />
             <TableColumn fx:id="colTongTien" prefWidth="98.6666259765625" text="Tổng tiền" />
+            <TableColumn fx:id="colChietkhau" prefWidth="75.0" text="Chiết khấu" />
             <TableColumn fx:id="colPhuThu" prefWidth="78.0" text="Phụ thu" />
         </columns>
          <columnResizePolicy>
