@@ -126,12 +126,12 @@ public class ThucDonController implements Initializable {
 
         List<MonAn> monAnList = monAnDAO.getAllMonAn();
         if (monAnList == null) {
-            showWarn("Danh sach mon an bi trong");
+            Notification.thongBao("Danh sach mon an bi trong", Alert.AlertType.WARNING);
         }
 
         List<LoaiMonAn> loaiMonAnList = loaiMonDAO.getListLoai();
         if (loaiMonAnList == null) {
-            showWarn("Danh sach loai mon an bi trong");
+            Notification.thongBao("Danh sach loai mon an bi trong", Alert.AlertType.WARNING);
         }
 
         taiAnh.setOnAction(new EventHandler<ActionEvent>() {
@@ -274,7 +274,7 @@ public class ThucDonController implements Initializable {
                         Objects.equals(cbDonViTinh.getValue(), "") ||
                         Objects.equals(txtGia.getText(), "") ||
                         Objects.equals(cbloaiMonAn.getValue(), "")) {
-                    showWarn("Bạn cần nhập đầy đủ thông tin!");
+                    Notification.thongBao("Bạn cần nhập đầy đủ thông tin!", Alert.AlertType.WARNING);
                 }
 //                else if (!regexGia()) {
 //                    showWarn("Bạn cần nhập đúng thông tin!");}
@@ -282,7 +282,7 @@ public class ThucDonController implements Initializable {
                     themMon();
                     refreshControl(event);
                     loadLoaiMonAnComboBox();
-                    System.out.println("Thêm dc rồi, yay :D");
+                    Notification.thongBao("Đã thêm thành công!", Alert.AlertType.INFORMATION);
                 }
 
             } catch (Exception e) {
@@ -332,7 +332,7 @@ public class ThucDonController implements Initializable {
         if (source == btnCapNhat) {
             try {
                 if (monAn == null) {
-                    showWarn("Bạn cần chọn một món để cập nhật!");
+                    Notification.thongBao("Bạn cần chọn một món để cập nhật!", Alert.AlertType.WARNING);
                 } else {
                     String tenMonMoi = txtTenMonAn.getText();
                     String donViMoi = cbDonViTinh.getValue();
@@ -363,11 +363,11 @@ public class ThucDonController implements Initializable {
                     if (result == ButtonType.OK) {
                         monMoi = new MonAn(monAn.getMaMonAn(), loaiMonMoi, tenMonMoi, giaMoi, donViMoi, anhMoi, trangThaiMoi);
                         monAnDAO.capNhatMonAn(monAn, monMoi);
-                        showWarn("Đã cập nhật thành công!");
+                        Notification.thongBao("Đã cập nhật thành công!", Alert.AlertType.INFORMATION);
                         refreshControl(event);
 
                     } else {
-                        showWarn("Đã hủy cập nhật!");
+                        Notification.thongBao("Đã hủy cập nhật!", Alert.AlertType.INFORMATION);
                     }
 
                 }
@@ -404,7 +404,7 @@ public class ThucDonController implements Initializable {
         int sortOption = cbSapXep.getSelectionModel().getSelectedIndex();
 
         if (cbTimLoaiMon.getValue() == null && keyword.isEmpty() && sortOption == -1) {
-            showWarn("Bạn cần nhập/chọn một trong các cách tìm trước khi tiến hành tìm kiếm");
+            Notification.thongBao("Bạn cần nhập/chọn một trong các cách tìm trước khi tiến hành tìm kiếm", Alert.AlertType.WARNING);
         }
         else {
             // Clear the previous list
@@ -435,7 +435,7 @@ public class ThucDonController implements Initializable {
 
             // Show warning if no items are found
             if (filteredItems.isEmpty()) {
-                showWarn("Không tìm thấy món ăn phù hợp với tiêu chí tìm kiếm!");
+                Notification.thongBao("Không tìm thấy món ăn phù hợp với tiêu chí tìm kiếm!", Alert.AlertType.WARNING);
             }
       }
 
@@ -578,7 +578,7 @@ public class ThucDonController implements Initializable {
                 cbloaiMonAn.getItems().add(loaiMonAn.getTenLoaiMonAn());
             }
         } else {
-            showWarn("Danh sách LoaiMonAn rỗng.");
+            Notification.thongBao("Danh sách LoaiMonAn rỗng.", Alert.AlertType.WARNING);
         }
     }
 
@@ -591,17 +591,17 @@ public class ThucDonController implements Initializable {
                 cbDonViTinh.getItems().add(monan);
             }
         } else {
-            showWarn("Danh sách DonViTinh rỗng.");
+            Notification.thongBao("Danh sách DonViTinh rỗng.", Alert.AlertType.WARNING);
         }
     }
 
-    private void showWarn(String message) {
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle("Kết Quả");
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
+//    private void showWarn(String message) {
+//        Alert alert = new Alert(Alert.AlertType.WARNING);
+//        alert.setTitle("Kết Quả");
+//        alert.setHeaderText(null);
+//        alert.setContentText(message);
+//        alert.showAndWait();
+//    }
 
     //CRUD
     public void themMon() {
