@@ -733,7 +733,9 @@ public class ThucDonController implements Initializable {
             }
             cbtrangThaiMon.setValue(String.valueOf(monAn.getTrangThaiMonAn()));
             cbDonViTinh.setValue(String.valueOf(monAn.getDonViTinh()));
-            txtGia.setText(String.valueOf(monAn.getDonGia()));
+            String formatGia = NumberFormatter.formatPrice(String.valueOf(monAn.getDonGia()));
+            txtGia.setText(formatGia);
+            donGia = Double.parseDouble(formatGia);
 
             String imagePath = monAn.getHinhAnh();
             String imageDefaultPath = "/org/login/quanlydatban/icons/restaurant.png";
