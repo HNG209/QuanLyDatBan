@@ -148,7 +148,7 @@ public class ThucDonController implements Initializable {
                 fileChooser.getExtensionFilters().add(extFilter);
 
                 File file = fileChooser.showOpenDialog(null);
-                System.out.println("Nhấn nút tải ảnh");
+                //System.out.println("Nhấn nút tải ảnh");
 
                 if (file != null) {
                     //duongDanAnh = file.getAbsolutePath();
@@ -274,7 +274,7 @@ public class ThucDonController implements Initializable {
                         Objects.equals(cbDonViTinh.getValue(), "") ||
                         Objects.equals(txtGia.getText(), "") ||
                         Objects.equals(cbloaiMonAn.getValue(), "")) {
-                    Notification.thongBao("Bạn cần nhập đầy đủ thông tin!", Alert.AlertType.WARNING);
+                    throw new IllegalArgumentException("Bạn cần nhập đầy đủ thông tin!");
                 }
 //                else if (!regexGia()) {
 //                    showWarn("Bạn cần nhập đúng thông tin!");}
@@ -286,7 +286,7 @@ public class ThucDonController implements Initializable {
                 }
 
             } catch (Exception e) {
-                Notification.thongBao(e.getMessage(), Alert.AlertType.WARNING);
+                throw new IllegalArgumentException(e.getMessage());
             }
 
         }
@@ -332,7 +332,7 @@ public class ThucDonController implements Initializable {
         if (source == btnCapNhat) {
             try {
                 if (monAn == null) {
-                    Notification.thongBao("Bạn cần chọn một món để cập nhật!", Alert.AlertType.WARNING);
+                    throw new IllegalArgumentException("Bạn cần chọn một món để cập nhật!");
                 } else {
                     String tenMonMoi = txtTenMonAn.getText();
                     String donViMoi = cbDonViTinh.getValue();
@@ -404,7 +404,7 @@ public class ThucDonController implements Initializable {
         int sortOption = cbSapXep.getSelectionModel().getSelectedIndex();
 
         if (cbTimLoaiMon.getValue() == null && keyword.isEmpty() && sortOption == -1) {
-            Notification.thongBao("Bạn cần nhập/chọn một trong các cách tìm trước khi tiến hành tìm kiếm", Alert.AlertType.WARNING);
+            throw new IllegalArgumentException("Bạn cần nhập/chọn một trong các cách tìm trước khi tiến hành tìm kiếm!");
         }
         else {
             // Clear the previous list
@@ -435,7 +435,7 @@ public class ThucDonController implements Initializable {
 
             // Show warning if no items are found
             if (filteredItems.isEmpty()) {
-                Notification.thongBao("Không tìm thấy món ăn phù hợp với tiêu chí tìm kiếm!", Alert.AlertType.WARNING);
+                throw new IllegalArgumentException("Không tìm thấy món ăn phù hợp với tiêu chí tìm kiếm!");
             }
       }
 
@@ -578,7 +578,7 @@ public class ThucDonController implements Initializable {
                 cbloaiMonAn.getItems().add(loaiMonAn.getTenLoaiMonAn());
             }
         } else {
-            Notification.thongBao("Danh sách LoaiMonAn rỗng.", Alert.AlertType.WARNING);
+            throw new IllegalArgumentException("Danh sách Loai Mon An rỗng.");
         }
     }
 
@@ -591,7 +591,7 @@ public class ThucDonController implements Initializable {
                 cbDonViTinh.getItems().add(monan);
             }
         } else {
-            Notification.thongBao("Danh sách DonViTinh rỗng.", Alert.AlertType.WARNING);
+            throw new IllegalArgumentException("Danh sách Don Vi Tinh rỗng.");
         }
     }
 
