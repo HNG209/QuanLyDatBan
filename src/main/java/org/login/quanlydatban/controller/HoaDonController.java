@@ -90,7 +90,7 @@ public class HoaDonController implements Initializable {
         HoaDonDAO = new HoaDonDAO();
         ChiTietHoaDonDAO chiTietHoaDonDAO = new ChiTietHoaDonDAO();
         List<HoaDon> hoaDonList = HoaDonDAO.getAllHoaDon();
-
+        System.out.println(hoaDonList);
         ObservableList<HoaDon> observableList = FXCollections.observableArrayList(hoaDonList);
 
 
@@ -117,7 +117,7 @@ public class HoaDonController implements Initializable {
                 return new SimpleStringProperty(tongTien);
             });
             colPhuThu.setCellValueFactory(new PropertyValueFactory<>("phuThu"));
-
+            colChietkhau.setCellValueFactory(new PropertyValueFactory<>("chietKhau"));
             tabTatCa.setItems(observableList);
 
             colTenMonAn.setCellValueFactory(cellData -> {
