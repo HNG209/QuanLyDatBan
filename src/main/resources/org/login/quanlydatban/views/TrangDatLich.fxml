@@ -59,13 +59,13 @@
             <Label layoutX="10.0" layoutY="9.0" text="CCCD khách hàng:" GridPane.rowIndex="1" />
             <TextField fx:id="tfCCCD" onKeyTyped="#nhapCCCD" styleClass="underlined-style" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <Label layoutX="10.0" layoutY="47.0" text="Tên khách hàng:" GridPane.rowIndex="2" />
-            <TextField fx:id="tenKhachHang" editable="false" layoutX="145.0" layoutY="43.0" styleClass="underlined-style" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <TextField fx:id="tfTenKhachHang" editable="false" layoutX="145.0" layoutY="43.0" styleClass="underlined-style" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             <Label layoutX="255.0" layoutY="50.0" text="Số lượng người:" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-            <TextField fx:id="soLuongNguoi" layoutX="341.0" layoutY="46.0" styleClass="underlined-style" GridPane.columnIndex="3" GridPane.rowIndex="2" />
-            <TextField fx:id="banTextField" editable="false" layoutX="129.0" layoutY="46.0" styleClass="underlined-style" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+            <TextField fx:id="soLuongNguoi" layoutX="341.0" layoutY="46.0" onKeyTyped="#nhapSLNguoi" styleClass="underlined-style" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+            <TextField fx:id="tfBan" editable="false" layoutX="129.0" layoutY="46.0" styleClass="underlined-style" GridPane.columnIndex="3" GridPane.rowIndex="1" />
             <Label layoutX="249.0" layoutY="93.0" text="Bàn:" GridPane.columnIndex="2" GridPane.rowIndex="1" />
             <Label layoutX="10.0" layoutY="93.0" text="Tiền cọc:" GridPane.rowIndex="3" />
-            <TextField fx:id="coc" layoutX="129.0" layoutY="90.0" onKeyTyped="#cocEnter" styleClass="underlined-style" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <TextField fx:id="tfCoc" layoutX="129.0" layoutY="90.0" onKeyTyped="#cocEnter" styleClass="underlined-style" GridPane.columnIndex="1" GridPane.rowIndex="3" />
             <Label layoutX="10.0" layoutY="136.0" text="Cọc khách đưa:" GridPane.columnIndex="2" GridPane.rowIndex="3" />
             <TextField fx:id="cocKD" layoutX="129.0" layoutY="132.0" onKeyTyped="#cocEnter" styleClass="underlined-style" GridPane.columnIndex="3" GridPane.rowIndex="3" />
             <Label layoutX="249.0" layoutY="136.0" prefHeight="0.0" prefWidth="78.0" text="Tiền trả lại:" GridPane.columnIndex="4" GridPane.rowIndex="3" />
@@ -81,11 +81,11 @@
       <TableView fx:id="bookingTable" layoutX="15.0" layoutY="55.2" onMouseClicked="#chonDong" prefHeight="229.0" prefWidth="831.0" styleClass="rounded-pane" AnchorPane.bottomAnchor="351.0" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="55.0">
         <columns>
           <TableColumn fx:id="maLichDatCol" prefWidth="135.1999807357788" text="Mã lịch đặt" />
-          <TableColumn fx:id="ngayDatCol" prefWidth="159.99996948242188" text="Ngày đặt" />
-            <TableColumn fx:id="ngayNhanBanCol" prefWidth="170.4000244140625" text="Ngày nhận bàn" />
-            <TableColumn fx:id="loaiBanCol" prefWidth="108.0" text="Loại bàn" />
-            <TableColumn fx:id="soLuongNguoiCol" prefWidth="123.199951171875" text="Số lượng người" />
-            <TableColumn fx:id="trangThaiCol" prefWidth="109.5999755859375" text="Trạng thái" />
+          <TableColumn fx:id="ngayDatCol" prefWidth="141.60000610351562" text="Ngày đặt" />
+            <TableColumn fx:id="ngayNhanBanCol" prefWidth="142.4000244140625" text="Ngày nhận bàn" />
+            <TableColumn fx:id="loaiBanCol" prefWidth="121.5999755859375" text="Loại bàn" />
+            <TableColumn fx:id="soLuongNguoiCol" prefWidth="120.0" text="Số lượng người" />
+            <TableColumn fx:id="trangThaiCol" prefWidth="150.4000244140625" text="Trạng thái" />
         </columns>
       </TableView>
       <ScrollPane fx:id="scrollPane" layoutX="868.8" layoutY="55.2" prefHeight="563.0" prefWidth="394.0" AnchorPane.bottomAnchor="17.0" AnchorPane.leftAnchor="869.0" AnchorPane.rightAnchor="17.0" AnchorPane.topAnchor="55.0">

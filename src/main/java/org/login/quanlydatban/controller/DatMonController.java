@@ -576,8 +576,7 @@ public class DatMonController implements Initializable {
 
             //lap hoa don voi trang thai chua thanh toan khi giu ban
             HoaDon hoaDon = new HoaDon();
-            System.out.println(nhanVien);
-            hoaDon.setNhanVien(nhanVien);
+            hoaDon.setNhanVien(TrangChuController.getTaiKhoan().getNhanVien());
             hoaDon.setBan(ban);
             hoaDon.setTrangThaiHoaDon(TrangThaiHoaDon.CHUA_THANH_TOAN);
             hoaDon.setNgayLap(LocalDate.now());
@@ -650,7 +649,6 @@ public class DatMonController implements Initializable {
                         if (Notification.xacNhan("Xác nhận thanh toán?")) {
                             orderTable.getItems().clear();
                             this.hoaDon.setTrangThaiHoaDon(TrangThaiHoaDon.DA_THANH_TOAN);
-                            this.hoaDon.setNhanVien(TrangChuController.getTaiKhoan().getNhanVien());
                             this.hoaDon.setPhuThu(pt);
                             this.hoaDon.setChietKhau(tienTL);
 
@@ -687,13 +685,6 @@ public class DatMonController implements Initializable {
 
     @FXML
     void back(MouseEvent event) throws IOException {
-//        if(anchorPane.getParent() instanceof BorderPane){
-//            BorderPane pane = (BorderPane) anchorPane.getParent();
-//
-//            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/TrangChonBan.fxml"));
-//            AnchorPane anchorPane = loader.load();
-//            pane.setCenter(anchorPane);
-//        }
         if(pageSelected == 0){
             ChonBanController.getInstance().refresh();
             TrangChuController.getBorderPaneStatic().setCenter(ChonBanController.getInstance().getRoot());
@@ -743,25 +734,25 @@ public class DatMonController implements Initializable {
 
     @FXML
     void tinhTienTraLai(KeyEvent event) {
-        if(hoaDon != null){
-            if(event.getSource().equals(tienKhachDua)){
-                if(tienKhachDua.getText().equals(""))
+        try {
+            if (hoaDon != null) {
+                tienKhachDua.clear();
+                phuThu.clear();
+                throw new IllegalArgumentException("Hãy lập hoá đơn trước khi nhập");
+            }
+
+            if (event.getSource().equals(tienKhachDua)) {
+                if (tienKhachDua.getText().equals(""))
                     return;
                 tienKhachDua.setText(NumberFormatter.formatPrice(tienKhachDua.getText()));
                 tienKhachDua.positionCaret(tienKhachDua.getText().length());
 
                 if (tienKhachDua.getText().replace(".", "").matches("\\d+"))
                     tkd = Double.parseDouble(tienKhachDua.getText().replace(".", ""));
-                else {
-                    Notification.thongBao("Chỉ được nhập số", Alert.AlertType.INFORMATION);
-                    tienKhachDua.setText(tienKhachDua.getText().substring(0, tienKhachDua.getLength() - 1));
-                    tienKhachDua.setText(NumberFormatter.formatPrice(tienKhachDua.getText()));
-                    tienKhachDua.positionCaret(tienKhachDua.getText().length());
-                    capNhatTienTraLai();
-                }
-            }
-            else {
-                if (phuThu.getText().equals("")){
+                else throw new IllegalArgumentException("Chỉ được nhập số");
+
+            } else {
+                if (phuThu.getText().equals("")) {
                     pt = 0.0;
                     capNhatTienTraLai();
                     return;
@@ -772,34 +763,39 @@ public class DatMonController implements Initializable {
 
                 if (phuThu.getText().replace(".", "").matches("\\d+"))
                     pt = Double.parseDouble(phuThu.getText().replace(".", ""));
-                else {
-                    Notification.thongBao("Chỉ được nhập số", Alert.AlertType.INFORMATION);
-                    phuThu.setText(phuThu.getText().substring(0, phuThu.getLength() - 1));
-                    phuThu.setText(NumberFormatter.formatPrice(phuThu.getText()));
-                    phuThu.positionCaret(phuThu.getText().length());
-                    capNhatTienTraLai();
-                }
+                else throw new IllegalArgumentException("Chỉ được nhập số");
             }
 
-            if ((tkd + tienTL) >= (hoaDon.getTongTien() + pt)){
+            if ((tkd + tienTL) >= (hoaDon.getTongTien() + pt)) {
                 tienTraLai.setText(NumberFormatter.formatPrice(String.valueOf((int) ((tkd + tienTL) - (hoaDon.getTongTien() + pt)))));
-            }
-            else tienTraLai.setText("Tiền khách đưa phải lớn hơn hoặc bằng tổng tiền");
+            } else tienTraLai.clear();
         }
-        else {
-            tienKhachDua.clear();
-            phuThu.clear();
-            Notification.thongBao("Hãy lập hoá đơn trước khi nhập", Alert.AlertType.INFORMATION);
+        catch (Exception e){
+            Notification.thongBao(e.getMessage(), Alert.AlertType.WARNING);
+
+            if(event.getSource().equals(tienKhachDua)){
+                tienKhachDua.setText(tienKhachDua.getText().substring(0, tienKhachDua.getLength() - 1));
+                tienKhachDua.setText(NumberFormatter.formatPrice(tienKhachDua.getText()));
+                tienKhachDua.positionCaret(tienKhachDua.getText().length());
+            }
+
+            if (event.getSource().equals(phuThu)) {
+                phuThu.setText(phuThu.getText().substring(0, phuThu.getLength() - 1));
+                phuThu.setText(NumberFormatter.formatPrice(phuThu.getText()));
+                phuThu.positionCaret(phuThu.getText().length());
+            }
+
+            capNhatTienTraLai();
         }
     }
 
     public void capNhatTienTraLai() {
-        if (hoaDon != null) {
-            if ((tienTL + tkd) >= (hoaDon.getTongTien() + pt)) {
-                tienTraLai.setText(NumberFormatter.formatPrice(String.valueOf((int) ((tienTL + tkd) - (hoaDon.getTongTien() + pt)))));
-            } else tienTraLai.setText("Tiền khách đưa phải lớn hơn hoặc bằng tổng tiền");
-        }
-        else Notification.thongBao("Hãy lập hoá đơn trước khi nhập", Alert.AlertType.INFORMATION);
+        if (hoaDon == null)
+            throw new IllegalArgumentException("Hãy lập hoá đơn trước khi nhập");
+
+        if ((tienTL + tkd) >= (hoaDon.getTongTien() + pt))
+            tienTraLai.setText(NumberFormatter.formatPrice(String.valueOf((int) ((tienTL + tkd) - (hoaDon.getTongTien() + pt)))));
+        else throw new IllegalArgumentException("Tiền khách đưa phải lớn hơn hoặc bằng tổng tiền");
     }
 
     @FXML
@@ -837,29 +833,34 @@ public class DatMonController implements Initializable {
 
     @FXML
     void formatGia(KeyEvent event) {
-        if(event.getSource().equals(timTheoGiaTT)){
-            if(timTheoGiaTT.getText().equals(""))
-                return;
-            timTheoGiaTT.setText(NumberFormatter.formatPrice(timTheoGiaTT.getText()));
-            timTheoGiaTT.positionCaret(timTheoGiaTT.getText().length());
+        try {
+            if (event.getSource().equals(timTheoGiaTT)) {
+                if (timTheoGiaTT.getText().equals(""))
+                    return;
+                timTheoGiaTT.setText(NumberFormatter.formatPrice(timTheoGiaTT.getText()));
+                timTheoGiaTT.positionCaret(timTheoGiaTT.getText().length());
 
-            if (!timTheoGiaTT.getText().replace(".", "").matches("\\d+"))
-            {
-                Notification.thongBao("Chỉ được nhập số", Alert.AlertType.INFORMATION);
+                if (!timTheoGiaTT.getText().replace(".", "").matches("\\d+"))
+                    throw new IllegalArgumentException("Chỉ được nhập số");
+
+            } else {
+                if (timTheoGiaTD.getText().equals(""))
+                    return;
+                timTheoGiaTD.setText(NumberFormatter.formatPrice(timTheoGiaTD.getText()));
+                timTheoGiaTD.positionCaret(timTheoGiaTD.getText().length());
+
+                if (!timTheoGiaTD.getText().replace(".", "").matches("\\d+"))
+                    throw new IllegalArgumentException("Chỉ được nhập số");
+            }
+        }
+        catch (Exception e){
+            Notification.thongBao(e.getMessage(), Alert.AlertType.WARNING);
+            if(event.getSource().equals(timTheoGiaTT)){
                 timTheoGiaTT.setText(timTheoGiaTT.getText().substring(0, timTheoGiaTT.getLength() - 1));
                 timTheoGiaTT.setText(NumberFormatter.formatPrice(timTheoGiaTT.getText()));
                 timTheoGiaTT.positionCaret(timTheoGiaTT.getText().length());
             }
-        }
-        else {
-            if(timTheoGiaTD.getText().equals(""))
-                return;
-            timTheoGiaTD.setText(NumberFormatter.formatPrice(timTheoGiaTD.getText()));
-            timTheoGiaTD.positionCaret(timTheoGiaTD.getText().length());
-
-            if (!timTheoGiaTD.getText().replace(".", "").matches("\\d+"))
-            {
-                Notification.thongBao("Chỉ được nhập số", Alert.AlertType.INFORMATION);
+            else {
                 timTheoGiaTD.setText(timTheoGiaTD.getText().substring(0, timTheoGiaTD.getLength() - 1));
                 timTheoGiaTD.setText(NumberFormatter.formatPrice(timTheoGiaTD.getText()));
                 timTheoGiaTD.positionCaret(timTheoGiaTD.getText().length());
