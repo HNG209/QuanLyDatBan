@@ -274,7 +274,7 @@ public class ThucDonController implements Initializable {
                         Objects.equals(cbDonViTinh.getValue(), "") ||
                         Objects.equals(txtGia.getText(), "") ||
                         Objects.equals(cbloaiMonAn.getValue(), "")) {
-                    throw new IllegalArgumentException("Bạn cần nhập đầy đủ thông tin!");
+                    Notification.thongBao("Bạn cần nhập đầy đủ thông tin!", Alert.AlertType.WARNING);
                 }
 //                else if (!regexGia()) {
 //                    showWarn("Bạn cần nhập đúng thông tin!");}
@@ -286,7 +286,7 @@ public class ThucDonController implements Initializable {
                 }
 
             } catch (Exception e) {
-                throw new IllegalArgumentException(e.getMessage());
+                Notification.thongBao(e.getMessage(), Alert.AlertType.WARNING);
             }
 
         }
@@ -332,7 +332,7 @@ public class ThucDonController implements Initializable {
         if (source == btnCapNhat) {
             try {
                 if (monAn == null) {
-                    throw new IllegalArgumentException("Bạn cần chọn một món để cập nhật!");
+                    Notification.thongBao("Bạn cần chọn một món để cập nhật!", Alert.AlertType.WARNING);
                 } else {
                     String tenMonMoi = txtTenMonAn.getText();
                     String donViMoi = cbDonViTinh.getValue();
@@ -404,7 +404,7 @@ public class ThucDonController implements Initializable {
         int sortOption = cbSapXep.getSelectionModel().getSelectedIndex();
 
         if (cbTimLoaiMon.getValue() == null && keyword.isEmpty() && sortOption == -1) {
-            throw new IllegalArgumentException("Bạn cần nhập/chọn một trong các cách tìm trước khi tiến hành tìm kiếm!");
+            Notification.thongBao("Bạn cần nhập/chọn một trong các cách tìm trước khi tiến hành tìm kiếm", Alert.AlertType.WARNING);
         }
         else {
             // Clear the previous list
@@ -435,7 +435,7 @@ public class ThucDonController implements Initializable {
 
             // Show warning if no items are found
             if (filteredItems.isEmpty()) {
-                throw new IllegalArgumentException("Không tìm thấy món ăn phù hợp với tiêu chí tìm kiếm!");
+                Notification.thongBao("Không tìm thấy món ăn phù hợp với tiêu chí tìm kiếm!", Alert.AlertType.WARNING);
             }
       }
 
@@ -578,7 +578,7 @@ public class ThucDonController implements Initializable {
                 cbloaiMonAn.getItems().add(loaiMonAn.getTenLoaiMonAn());
             }
         } else {
-            throw new IllegalArgumentException("Danh sách Loai Mon An rỗng.");
+            Notification.thongBao("Danh sách LoaiMonAn rỗng.", Alert.AlertType.WARNING);
         }
     }
 
@@ -591,7 +591,7 @@ public class ThucDonController implements Initializable {
                 cbDonViTinh.getItems().add(monan);
             }
         } else {
-            throw new IllegalArgumentException("Danh sách Don Vi Tinh rỗng.");
+            Notification.thongBao("Danh sách DonViTinh rỗng.", Alert.AlertType.WARNING);
         }
     }
 
