@@ -67,7 +67,6 @@ public class TrangThemNhanVienController implements Initializable {
     private TaiKhoanDAO taiKhoanDAO;
     private String duongdan;// duong dan cua anh
     private TrangQuanLyNhanVienController trangQuanLyNhanVien;
-    private String  maNhanVientt;
     public TrangThemNhanVienController() throws Exception {
 
     }
@@ -288,47 +287,55 @@ public class TrangThemNhanVienController implements Initializable {
            btnLuu.setOnAction(new EventHandler<ActionEvent>() {
                @Override
                public void handle(ActionEvent event) {
-                   if(!gioiTinhCheck(gioiTinh)){
+                   if (!gioiTinhCheck(gioiTinh)) {
                        return;
                    }
-                   if(!tencheck(hoTen)){
+                   if (!tencheck(hoTen)) {
                        return;
                    }
-                   if(!diaChicheck(diaChi)){
+                   if (!diaChicheck(diaChi)) {
                        return;
                    }
-                   if(!cancuoccongdancheck(cccd)){
+                   if (!cancuoccongdancheck(cccd)) {
                        return;
                    }
-                   if(!cancuoccongdancheck(cccd)){
+                   if (!sdtcheck(dienThoai)) {
                        return;
                    }
-                   if(sdtcheck(dienThoai)){
+                   if (!trangThaiCheck(chucVu)) {
                        return;
                    }
-                   if(trangThaiCheck(trangThaiLamViec)){
+                   if (!trangThaiCheck(trangThaiLamViec)) {
                        return;
                    }
-                   if(duongdan == null){
-                       showAlert("Bạn phải chọn ảnh của nhân viên");
+                   if(ngaySinh.getValue() == null){
+                       showWarn("Ban phai nhap ngay sinh");
                        return;
                    }
                    int tuoi = calculateAge(ngaySinh.getValue());
-
                    if(tuoi < 15){
-                       showAlert("Tuổi của nhân viên phải > 15");
+                       showWarn("Tuổi phải lớn hơn 15.");
                        return;
                    }
+                   if(duongdan == null){
+                       showWarn("Ban phai chọn ảnh");
+                       return;
+                   }
+
                    try {
                        ThemNhanVien();
                        showAlert("Thêm nhân viên thành công");
+                       System.out.println("Them thanh cong");
                        Stage stage = (Stage) btnLuu.getScene().getWindow();
                        stage.close();
-                   } catch (Exception e) {
+                       } catch (Exception e) {
                        throw new RuntimeException(e);
-                   }
-                   trangQuanLyNhanVien.xetLaiduLieuChoBang();
-               }
+                       }
+
+
+                   trangQuanLyNhanVien.xetLaiduLieuChoBang();}
+
+
            });
            btnHuyBo.setOnAction(new EventHandler<ActionEvent>() {
                @Override
@@ -378,6 +385,7 @@ public class TrangThemNhanVienController implements Initializable {
         nv.setNgaySinh(ngaySinh.getValue());
         NhanVienDAO nvd = new NhanVienDAO();
         nvd.addNhanVien(nv);
+        showAlert("Thêm nhân viên thành công");
         String tenTaiKhoan = hoTen.getText().toString().replaceAll("\\s+","");
         String mk= EncryptionUtils.encrypt("1111", System.getenv("ENCRYPTION_KEY"));
         TaiKhoan takKhoan = new TaiKhoan(tenTaiKhoan,mk, nvd.getNhanVien(nv.getMaNhanVien().toString()));

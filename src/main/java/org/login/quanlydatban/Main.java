@@ -6,21 +6,9 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.hibernate.Session;
-
-import org.hibernate.SessionFactory;
-import org.login.quanlydatban.dao.KhachHangDAO;
 import org.login.quanlydatban.dao.LichDatDAO;
-import org.login.quanlydatban.dao.MonAnDAO;
-import org.login.quanlydatban.encryptionUtils.EncryptionUtils;
-import org.login.quanlydatban.entity.*;
-import org.login.quanlydatban.entity.enums.TrangThaiHoaDon;
-
 import org.login.quanlydatban.hibernate.HibernateUtils;
-
-import java.io.IOException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.Objects;
 
 public class Main extends Application {

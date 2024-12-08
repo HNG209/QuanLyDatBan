@@ -158,7 +158,7 @@ public class NhanVien implements Serializable {
     public void setTenNhanVien(String tenNhanVien) {
         if(tenNhanVien == null || tenNhanVien.isEmpty()){
             throw new  IllegalArgumentException("Tên nhân viên không được rỗng");
-        }else if(tenNhanVien.matches("^([A-Z][a-z]*)( [A-Z][a-z]*)*$")){
+        }else if(!tenNhanVien.matches("^([A-Z][a-z]*)( [A-Z][a-z]*)*$")){
             throw new  IllegalArgumentException("Tên nhân viên không hợp lệ");
         }
         this.tenNhanVien = tenNhanVien;
@@ -171,7 +171,7 @@ public class NhanVien implements Serializable {
     public void setSdt(String sdt) {
         if(sdt == null || sdt.isEmpty()){
             throw new  IllegalArgumentException("Số điện thoại không được rỗng");
-        }else if(sdt.matches("^(03|07|09)[0-9]{8}$")){
+        }else if(!sdt.matches("^(03|07|09)[0-9]{8}$")){
             throw new  IllegalArgumentException("Số điện thoại phải là số và có 10 kí tư");
         }
         this.sdt = sdt;
@@ -184,7 +184,7 @@ public class NhanVien implements Serializable {
     public void setCccd(String cccd) {
         if(cccd == null || cccd.isEmpty()){
             throw new  IllegalArgumentException("Căn cước công dân không được rỗng");
-        }else if(tenNhanVien.matches("^[0-9]{12}$")){
+        }else if(!cccd.matches("^[0-9]{12}$")){
             throw new  IllegalArgumentException("Căn cước công dân là số và có 12 kí tư");
         }
         this.cccd = cccd;
@@ -245,7 +245,7 @@ public class NhanVien implements Serializable {
 
     public void setHinhAnh(String hinhAnh) {
         if(hinhAnh == null){
-            throw new IllegalArgumentException("Trạng thái nhân viên không được rỗng");
+            throw new IllegalArgumentException("Đường dẫn ảnh nhân viên không được rỗng");
         }
         this.hinhAnh = hinhAnh;
     }

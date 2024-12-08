@@ -70,7 +70,6 @@ public class TrangQuanLyNhanVienController implements Initializable {
     private Button btnthem;
     @FXML
     private TextField searchID;
-    private  String imageUrl;
     private String image11;
 
     // bien ten nhan vien
@@ -415,6 +414,7 @@ public class TrangQuanLyNhanVienController implements Initializable {
         NhanVien nv = new NhanVien();
         //nv.setMaNhanVien(maNhanVientt);
         nv.setTenNhanVien(hoTen.getText());
+        nv.setGioiTinh(gt);
         nv.setCccd(cccd.getText());
         nv.setSdt(dienThoai.getText());
         nv.setChucVuNhanVien(cv);
@@ -486,16 +486,20 @@ public class TrangQuanLyNhanVienController implements Initializable {
                 if(!cancuoccongdancheck(cccd)){
                     return;
                 }
-                if(sdtcheck(dienThoai)){
+                if(!sdtcheck(dienThoai)){
                     return;
                 }
-                if(trangThaiCheck(trangThaiLamViec)){
+                if(!trangThaiCheck(trangThaiLamViec)){
                     return;
                 }
-                int tuoi = calculateAge(ngaySinh.getValue());
+                if(ngaySinh.getValue() == null){
+                    showWarn("Ban phai nhap ngay sinh");
+                    return;
+                }
 
+                int tuoi = calculateAge(ngaySinh.getValue());
                 if(tuoi < 15){
-                    showAlert("Tuổi của nhân viên phải > 15");
+                    showWarn("Tuổi phải lớn hơn 15.");
                     return;
                 }
                 chinhSuaNhanVien(cellValue);
@@ -548,6 +552,7 @@ public class TrangQuanLyNhanVienController implements Initializable {
                 if (mouseEvent.getClickCount() == 1) { // Kiểm tra nhấp chuột đơn,nv.getNgaySinh()
                         int rowIndex = tableNhanVien.getSelectionModel().getSelectedIndex();
                         cellValue = tableNhanVien.getItems().get(rowIndex).getMaNhanVien();
+                        System.out.println(cellValue);
                         NhanVienDAO nvdao = new  NhanVienDAO();
                         NhanVien nvtim = nvdao.getNhanVien(cellValue);
                         loaddulieulenform(nvtim);
