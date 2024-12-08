@@ -411,8 +411,20 @@ public class TrangQuanLyNhanVienController implements Initializable {
             cv = ChucVu.QUAN_LY;
         }
 
-        NhanVien nv = new NhanVien(getMaNhanVien,hoTen.getText().toString(),dienThoai.getText().toString(),cccd.getText().toString(),diaChi1.getText().toString(),gt,ngaySinh.getValue(),duongdananh,tt,cv);
+       // NhanVien nv = new NhanVien(getMaNhanVien,hoTen.getText().toString(),dienThoai.getText().toString(),cccd.getText().toString(),diaChi1.getText().toString(),gt,ngaySinh.getValue(),duongdananh,tt,cv);
+        NhanVien nv = new NhanVien();
+        //nv.setMaNhanVien(maNhanVientt);
+        nv.setTenNhanVien(hoTen.getText());
+        nv.setCccd(cccd.getText());
+        nv.setSdt(dienThoai.getText());
+        nv.setChucVuNhanVien(cv);
+        nv.setTrangThaiNhanVien(tt);
+        nv.setDiaChi(diaChi.getText());
+        nv.setHinhAnh(duongdananh);
+        nv.setNgaySinh(ngaySinh.getValue());
         NhanVienDAO nvd = new NhanVienDAO();
+        nvd.addNhanVien(nv);
+        //NhanVienDAO nvd = new NhanVienDAO();
         nvd.updateNhanVien(nv1.getMaNhanVien().toString(),nv);
     }
     @Override
@@ -461,31 +473,34 @@ public class TrangQuanLyNhanVienController implements Initializable {
         btnLuu.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                if(gioiTinhCheck(gioiTinh1)){
-                    if(tencheck(hoTen)){
-                        if(diaChicheck(diaChi1)){
-                            if(cancuoccongdancheck(cccd)){
-                                if(sdtcheck(dienThoai)){
-                                    if(trangThaiCheck(trangThaiLamViec)){
-                                        if(image11 != null){
-                                            int tuoi = calculateAge(ngaySinh.getValue());
-                                            if(tuoi < 15){
-                                                showWarn("Tuổi nhân viên phải lớn hơn 15");
-                                            }else {
-                                                    chinhSuaNhanVien(cellValue);
-                                                    showAlert("Cập nhật nhân viên thành công");
-                                                    xetLaiduLieuChoBang();
-                                            }
-                                        }else{
-                                            showAlert("Bạn cần phải chọn ảnh");
-
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
+//                if(gioiTinhCheck(gioiTinh1)){
+//                    if(tencheck(hoTen)){
+//                        if(diaChicheck(diaChi1)){
+//                            if(cancuoccongdancheck(cccd)){
+//                                if(sdtcheck(dienThoai)){
+//                                    if(trangThaiCheck(trangThaiLamViec)){
+//                                        if(image11 != null){
+//                                            int tuoi = calculateAge(ngaySinh.getValue());
+//                                            if(tuoi < 15){
+//                                                showWarn("Tuổi nhân viên phải lớn hơn 15");
+//                                            }else {
+//                                                    chinhSuaNhanVien(cellValue);
+//                                                    showAlert("Cập nhật nhân viên thành công");
+//                                                    xetLaiduLieuChoBang();
+//                                            }
+//                                        }else{
+//                                            showAlert("Bạn cần phải chọn ảnh");
+//
+//                                        }
+//                                    }
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+                chinhSuaNhanVien(cellValue);
+                showAlert("Cập nhật nhân viên thành công");
+                xetLaiduLieuChoBang();
             }
 
         });

@@ -9,6 +9,7 @@ import org.login.quanlydatban.hibernate.HibernateUtils;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.Period;
 import java.util.List;
 import java.util.Set;
 
@@ -35,7 +36,7 @@ public class NhanVien implements Serializable {
     private String diaChi;
 
     @Column(nullable = false)
-    private boolean gioiTinh;
+    private Boolean gioiTinh;
 
     @Column(nullable = false)
     private LocalDate ngaySinh;
@@ -109,6 +110,7 @@ public class NhanVien implements Serializable {
     }
 
     public ChucVu getChucVuNhanVien() {
+
         return chucVuNhanVien;
     }
 
@@ -120,7 +122,7 @@ public class NhanVien implements Serializable {
         this.taiKhoan = taiKhoan;
     }
 
-    public NhanVien(String maNhanVien, String tenNhanVien, String sdt, String cccd, String diaChi, boolean gioiTinh, LocalDate ngaySinh, String hinhAnh, TrangThaiNhanVien trangThaiNhanVien, ChucVu chucVuNhanVien) {
+    public NhanVien(String maNhanVien, String tenNhanVien, String sdt, String cccd, String diaChi, Boolean gioiTinh, LocalDate ngaySinh, String hinhAnh, TrangThaiNhanVien trangThaiNhanVien, ChucVu chucVuNhanVien) {
         this.maNhanVien = maNhanVien;
         this.tenNhanVien = tenNhanVien;
         this.sdt = sdt;
@@ -134,6 +136,9 @@ public class NhanVien implements Serializable {
     }
 
     public void setChucVuNhanVien(ChucVu chucVuNhanVien) {
+        if(chucVuNhanVien == null){
+            throw new IllegalArgumentException("Chức vụ nhân viên không được rỗng");
+        }
         this.chucVuNhanVien = chucVuNhanVien;
     }
 
@@ -142,6 +147,7 @@ public class NhanVien implements Serializable {
     }
 
     public void setMaNhanVien(String maNhanVien) {
+
         this.maNhanVien = maNhanVien;
     }
 
@@ -150,6 +156,11 @@ public class NhanVien implements Serializable {
     }
 
     public void setTenNhanVien(String tenNhanVien) {
+        if(tenNhanVien == null || tenNhanVien.isEmpty()){
+            throw new  IllegalArgumentException("Tên nhân viên không được rỗng");
+        }else if(tenNhanVien.matches("^([A-Z][a-z]*)( [A-Z][a-z]*)*$")){
+            throw new  IllegalArgumentException("Tên nhân viên không hợp lệ");
+        }
         this.tenNhanVien = tenNhanVien;
     }
 
@@ -158,6 +169,11 @@ public class NhanVien implements Serializable {
     }
 
     public void setSdt(String sdt) {
+        if(sdt == null || sdt.isEmpty()){
+            throw new  IllegalArgumentException("Số điện thoại không được rỗng");
+        }else if(sdt.matches("^(03|07|09)[0-9]{8}$")){
+            throw new  IllegalArgumentException("Số điện thoại phải là số và có 10 kí tư");
+        }
         this.sdt = sdt;
     }
 
@@ -166,6 +182,11 @@ public class NhanVien implements Serializable {
     }
 
     public void setCccd(String cccd) {
+        if(cccd == null || cccd.isEmpty()){
+            throw new  IllegalArgumentException("Căn cước công dân không được rỗng");
+        }else if(tenNhanVien.matches("^[0-9]{12}$")){
+            throw new  IllegalArgumentException("Căn cước công dân là số và có 12 kí tư");
+        }
         this.cccd = cccd;
     }
 
@@ -174,14 +195,19 @@ public class NhanVien implements Serializable {
     }
 
     public void setDiaChi(String diaChi) {
+        if(diaChi == null || diaChi.isEmpty()){
+            throw new  IllegalArgumentException("Địa chỉ không được rỗng");
+        }
         this.diaChi = diaChi;
     }
 
-    public boolean isGioiTinh() {
+    public Boolean isGioiTinh() {
         return gioiTinh;
     }
 
-    public void setGioiTinh(boolean gioiTinh) {
+    public void setGioiTinh(Boolean gioiTinh) {
+        if(gioiTinh = null )
+            throw new IllegalArgumentException("Giới tính không được rỗng");
         this.gioiTinh = gioiTinh;
     }
 
@@ -190,6 +216,15 @@ public class NhanVien implements Serializable {
     }
 
     public void setNgaySinh(LocalDate ngaySinh) {
+        LocalDate currentDate = LocalDate.now();
+        int tuoi = Period.between(ngaySinh, currentDate).getYears();
+        if(ngaySinh == null){
+            throw  new IllegalArgumentException("Ngày sinh không được rồng");
+        }else if(tuoi< 15){
+
+            throw  new IllegalArgumentException("Tuổi nhân viên phải lớn hơn 15");
+        }
+
         this.ngaySinh = ngaySinh;
     }
 
@@ -198,6 +233,9 @@ public class NhanVien implements Serializable {
     }
 
     public void setTrangThaiNhanVien(TrangThaiNhanVien trangThaiNhanVien) {
+        if(trangThaiNhanVien == null){
+            throw new IllegalArgumentException("Trạng thái nhân viên không được rỗng");
+        }
         this.trangThaiNhanVien = trangThaiNhanVien;
     }
 
@@ -206,6 +244,9 @@ public class NhanVien implements Serializable {
     }
 
     public void setHinhAnh(String hinhAnh) {
+        if(hinhAnh == null){
+            throw new IllegalArgumentException("Trạng thái nhân viên không được rỗng");
+        }
         this.hinhAnh = hinhAnh;
     }
 
