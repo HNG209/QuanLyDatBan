@@ -206,7 +206,7 @@ public class NhanVien implements Serializable {
     }
 
     public void setGioiTinh(Boolean gioiTinh) {
-        if(gioiTinh = null )
+        if(gioiTinh == null )
             throw new IllegalArgumentException("Giới tính không được rỗng");
         this.gioiTinh = gioiTinh;
     }

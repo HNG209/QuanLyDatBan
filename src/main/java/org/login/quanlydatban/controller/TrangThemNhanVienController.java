@@ -273,8 +273,6 @@ public class TrangThemNhanVienController implements Initializable {
         } catch (Exception e) {
             if (transaction != null) transaction.rollback();
             e.printStackTrace();
-        } finally {
-            // Không cần phải đóng session ở đây, sẽ tự động quản lý
         }
         return maxId;
     }
@@ -284,43 +282,52 @@ public class TrangThemNhanVienController implements Initializable {
            chucVu.setOnAction(new EventHandler<ActionEvent>() {
                @Override
                public void handle(ActionEvent event) {
-                   //maNhanVientt = generateMaNhanVien(chucVu.getValue());
                }
            });
            maNhanVien.setEditable(false);
            btnLuu.setOnAction(new EventHandler<ActionEvent>() {
                @Override
                public void handle(ActionEvent event) {
-                   if(gioiTinhCheck(gioiTinh)){
-                       if(tencheck(hoTen)){
-                           if(diaChicheck(diaChi)){
-                               if(cancuoccongdancheck(cccd)){
-                                   if(sdtcheck(dienThoai)){
-                                       if(trangThaiCheck(trangThaiLamViec)){
-                                           if(duongdan!= null){
-                                               int tuoi = calculateAge(ngaySinh.getValue());
-                                               if(tuoi < 15){
-                                                   showWarn("Tuổi nhân viên phải lớn hơn 15");
-                                               }else {
-                                                   try {
-                                                      ThemNhanVien();
-                                                      showAlert("Thêm nhân viên thành công");
-                                                      Stage stage = (Stage) btnLuu.getScene().getWindow();
-                                                      stage.close();
-                                                   } catch (Exception e) {
-                                                      throw new RuntimeException(e);
-                                                   }
-                                                trangQuanLyNhanVien.xetLaiduLieuChoBang();
-                                               }
-                                           }else{
-                                               showAlert("Bạn phải chọn ảnh của nhân viên");
-                                           }
-                                       }
-                                   }
-                               }
-                           }
-                       }
+                   if(!gioiTinhCheck(gioiTinh)){
+                       return;
                    }
+                   if(!tencheck(hoTen)){
+                       return;
+                   }
+                   if(!diaChicheck(diaChi)){
+                       return;
+                   }
+                   if(!cancuoccongdancheck(cccd)){
+                       return;
+                   }
+                   if(!cancuoccongdancheck(cccd)){
+                       return;
+                   }
+                   if(sdtcheck(dienThoai)){
+                       return;
+                   }
+                   if(trangThaiCheck(trangThaiLamViec)){
+                       return;
+                   }
+                   if(duongdan == null){
+                       showAlert("Bạn phải chọn ảnh của nhân viên");
+                       return;
+                   }
+                   int tuoi = calculateAge(ngaySinh.getValue());
+
+                   if(tuoi < 15){
+                       showAlert("Tuổi của nhân viên phải > 15");
+                       return;
+                   }
+                   try {
+                       ThemNhanVien();
+                       showAlert("Thêm nhân viên thành công");
+                       Stage stage = (Stage) btnLuu.getScene().getWindow();
+                       stage.close();
+                   } catch (Exception e) {
+                       throw new RuntimeException(e);
+                   }
+                   trangQuanLyNhanVien.xetLaiduLieuChoBang();
                }
            });
            btnHuyBo.setOnAction(new EventHandler<ActionEvent>() {
@@ -334,7 +341,14 @@ public class TrangThemNhanVienController implements Initializable {
     }
 
     public void ThemNhanVien() throws Exception {
-         Boolean gt = gioiTinh.getValue().equals("NAM") ? false : true;
+         Boolean gt = null;
+         if(gioiTinh.getValue() == null){
+             gt= null;
+         }else if(gioiTinh.getValue().equals("NAM")){
+             gt = false;
+         }else{
+             gt= true;
+         }
          taiKhoanDAO = new TaiKhoanDAO();
          TrangThaiNhanVien tt = null;
          if(trangThaiLamViec.getValue().equals("ĐANG LÀM")){
@@ -344,25 +358,23 @@ public class TrangThemNhanVienController implements Initializable {
          }else if(trangThaiLamViec.getValue().equals("NGHỈ VIỆC")){
             tt = TrangThaiNhanVien.NGHI_VIEC;
          }
-
          ChucVu cv = null;
         if(chucVu.getValue().equals("Nhân viên")){
             cv = ChucVu.NHAN_VIEN;
         }else if(chucVu.getValue().equals("Quản Lý")){
             cv = ChucVu.QUAN_LY;
         }
-
-
         //NhanVien nv = new NhanVien(maNhanVien.getText().toString(),hoTen.getText().toString(),dienThoai.getText().toString(),cccd.getText().toString(),diaChi.getText().toString(),gt,ngaySinh.getValue(),duongdan,tt,cv);
         NhanVien nv = new NhanVien();
         //nv.setMaNhanVien(maNhanVientt);
+        nv.setGioiTinh(gt);
         nv.setTenNhanVien(hoTen.getText());
+        nv.setDiaChi(diaChi.getText());
         nv.setCccd(cccd.getText());
         nv.setSdt(dienThoai.getText());
-        nv.setChucVuNhanVien(cv);
         nv.setTrangThaiNhanVien(tt);
-        nv.setDiaChi(diaChi.getText());
         nv.setHinhAnh(duongdan);
+        nv.setChucVuNhanVien(cv);
         nv.setNgaySinh(ngaySinh.getValue());
         NhanVienDAO nvd = new NhanVienDAO();
         nvd.addNhanVien(nv);

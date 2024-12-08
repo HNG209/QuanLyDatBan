@@ -423,8 +423,6 @@ public class TrangQuanLyNhanVienController implements Initializable {
         nv.setHinhAnh(duongdananh);
         nv.setNgaySinh(ngaySinh.getValue());
         NhanVienDAO nvd = new NhanVienDAO();
-        nvd.addNhanVien(nv);
-        //NhanVienDAO nvd = new NhanVienDAO();
         nvd.updateNhanVien(nv1.getMaNhanVien().toString(),nv);
     }
     @Override
@@ -473,31 +471,33 @@ public class TrangQuanLyNhanVienController implements Initializable {
         btnLuu.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-//                if(gioiTinhCheck(gioiTinh1)){
-//                    if(tencheck(hoTen)){
-//                        if(diaChicheck(diaChi1)){
-//                            if(cancuoccongdancheck(cccd)){
-//                                if(sdtcheck(dienThoai)){
-//                                    if(trangThaiCheck(trangThaiLamViec)){
-//                                        if(image11 != null){
-//                                            int tuoi = calculateAge(ngaySinh.getValue());
-//                                            if(tuoi < 15){
-//                                                showWarn("Tuổi nhân viên phải lớn hơn 15");
-//                                            }else {
-//                                                    chinhSuaNhanVien(cellValue);
-//                                                    showAlert("Cập nhật nhân viên thành công");
-//                                                    xetLaiduLieuChoBang();
-//                                            }
-//                                        }else{
-//                                            showAlert("Bạn cần phải chọn ảnh");
-//
-//                                        }
-//                                    }
-//                                }
-//                            }
-//                        }
-//                    }
-//                }
+                if(!gioiTinhCheck(gioiTinh1)){
+                    return;
+                }
+                if(!tencheck(hoTen)){
+                    return;
+                }
+                if(!diaChicheck(diaChi1)){
+                    return;
+                }
+                if(!cancuoccongdancheck(cccd)){
+                    return;
+                }
+                if(!cancuoccongdancheck(cccd)){
+                    return;
+                }
+                if(sdtcheck(dienThoai)){
+                    return;
+                }
+                if(trangThaiCheck(trangThaiLamViec)){
+                    return;
+                }
+                int tuoi = calculateAge(ngaySinh.getValue());
+
+                if(tuoi < 15){
+                    showAlert("Tuổi của nhân viên phải > 15");
+                    return;
+                }
                 chinhSuaNhanVien(cellValue);
                 showAlert("Cập nhật nhân viên thành công");
                 xetLaiduLieuChoBang();
