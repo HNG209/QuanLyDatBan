@@ -107,6 +107,7 @@ public class TrangThemNhanVienController implements Initializable {
                 System.out.println("Nhấn nút tải ảnh");
 
                 if (file != null) {
+
                     duongdan = file.getAbsolutePath();
                     duongdananh = file.getAbsolutePath(); // Cập nhật đường dẫn
                     // Cập nhật ImageView với ảnh mới
