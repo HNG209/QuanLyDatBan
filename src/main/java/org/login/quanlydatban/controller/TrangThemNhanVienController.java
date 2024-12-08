@@ -19,21 +19,14 @@ import org.login.quanlydatban.entity.TaiKhoan;
 import org.login.quanlydatban.entity.enums.ChucVu;
 import org.login.quanlydatban.entity.enums.TrangThaiNhanVien;
 import org.login.quanlydatban.hibernate.HibernateUtils;
-
-import javax.crypto.Cipher;
-import javax.crypto.KeyGenerator;
-import javax.crypto.SecretKey;
-import javax.persistence.PrePersist;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
-import java.sql.SQLOutput;
 import java.time.LocalDate;
 import java.time.Period;
-import java.util.Base64;
 import java.util.List;
 import java.util.ResourceBundle;
 
