@@ -16,14 +16,11 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.FileChooser;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.login.quanlydatban.dao.LoaiMonDAO;
 import org.login.quanlydatban.dao.MonAnDAO;
 import org.login.quanlydatban.entity.LoaiMonAn;
 import org.login.quanlydatban.entity.MonAn;
 import org.login.quanlydatban.entity.enums.TrangThaiMonAn;
-import org.login.quanlydatban.hibernate.HibernateUtils;
 import org.login.quanlydatban.notification.Notification;
 import org.login.quanlydatban.utilities.NumberFormatter;
 
@@ -380,7 +377,7 @@ public class ThucDonController implements Initializable {
 
     @FXML
     void xoaRongControl(ActionEvent event) {
-        Image imageXoaRong = new Image(getClass().getResource("/org/login/quanlydatban/icons/restaurant.png").toExternalForm());
+        Image imageXoaRong = new Image(getClass().getResource("/org/login/quanlydatban/icons/empty.png").toExternalForm());
 
         Object source = event.getSource();
         if (source == btnXoaRong) {
@@ -578,7 +575,7 @@ public class ThucDonController implements Initializable {
                 cbloaiMonAn.getItems().add(loaiMonAn.getTenLoaiMonAn());
             }
         } else {
-            Notification.thongBao("Danh sách LoaiMonAn rỗng.", Alert.AlertType.WARNING);
+            throw new IllegalArgumentException("Danh sách Loai Mon An rỗng.");
         }
     }
 
@@ -591,7 +588,7 @@ public class ThucDonController implements Initializable {
                 cbDonViTinh.getItems().add(monan);
             }
         } else {
-            Notification.thongBao("Danh sách DonViTinh rỗng.", Alert.AlertType.WARNING);
+            throw new IllegalArgumentException("Danh sách Don Vi Tinh rỗng.");
         }
     }
 
@@ -616,12 +613,9 @@ public class ThucDonController implements Initializable {
             loaiMon = loaiMonDAO.getLoaiMonByName(selectedLoaiMon); // Retrieve the newly added LoaiMonAn
         }
 
-        //System.out.println(loaiMon.getMaLoaiMonAn());
-
         TrangThaiMonAn ttMonAn = comboTTValue();
 
         // Get other input values from UI components
-        //double gia = donGia;
         String tenMonAn = txtTenMonAn.getText().trim();
         String donViTinh = cbDonViTinh.getValue();
 
@@ -631,12 +625,12 @@ public class ThucDonController implements Initializable {
         String duongDanAnh = null;
         String imageUrl = anhMon.getImage().getUrl(); // Get the URL of the image
         if (imageUrl != null && imageUrl.startsWith("file:")) {
-            if (imageUrl.endsWith("restaurant.png")) {
-                File defaultImageFile = new File(getClass().getResource("/org/login/quanlydatban/icons/empty.png").getPath());
-                duongDanAnh = defaultImageFile.getAbsolutePath();
-            } else {
+//            if (imageUrl.endsWith("restaurant.png")) {
+//                File defaultImageFile = new File(getClass().getResource("/org/login/quanlydatban/icons/empty.png").getPath());
+//                duongDanAnh = defaultImageFile.getAbsolutePath();
+//            } else {
                 duongDanAnh = imageUrl.substring(5); // Remove "file:" prefix to get the file path
-            }
+//            }
 
         }
 
@@ -733,9 +727,9 @@ public class ThucDonController implements Initializable {
             }
             cbtrangThaiMon.setValue(String.valueOf(monAn.getTrangThaiMonAn()));
             cbDonViTinh.setValue(String.valueOf(monAn.getDonViTinh()));
-            String formatGia = NumberFormatter.formatPrice(String.valueOf(monAn.getDonGia()));
-            txtGia.setText(formatGia);
-            donGia = Double.parseDouble(formatGia);
+
+            txtGia.setText(NumberFormatter.formatPrice(String.format("%.0f", monAn.getDonGia())));
+            donGia = monAn.getDonGia();
 
             String imagePath = monAn.getHinhAnh();
             String imageDefaultPath = "/org/login/quanlydatban/icons/restaurant.png";

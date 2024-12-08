@@ -6,6 +6,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import org.login.quanlydatban.entity.MonAn;
+import org.login.quanlydatban.utilities.NumberFormatter;
 
 import java.io.File;
 
@@ -49,6 +50,8 @@ public class CardMonAnThucDonController {
         }
 
         tenMon.setText(monAn.getTenMonAn());
-        giaTien.setText(String.valueOf(monAn.getDonGia()));
+        double donGia = monAn.getDonGia(); // Get the raw double value
+        String formattedPrice = NumberFormatter.formatPrice(String.format("%.0f", donGia)); // Format without decimals
+        giaTien.setText(formattedPrice);
     }
 }

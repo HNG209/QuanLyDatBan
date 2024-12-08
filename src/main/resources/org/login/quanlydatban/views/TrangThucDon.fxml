@@ -37,7 +37,7 @@
                </font></Label>
             <ImageView fx:id="anhMon" fitHeight="105.0" fitWidth="106.0" layoutX="126.0" layoutY="244.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../icons/restaurant.png" />
+                  <Image url="@../icons/empty.png" />
                </image>
             </ImageView>
             <Button fx:id="taiAnh" layoutX="129.0" layoutY="355.0" mnemonicParsing="false" prefHeight="20.0" prefWidth="100.0" text="Tải ảnh" />

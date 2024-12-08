@@ -147,7 +147,7 @@ public class MonAnDAO {
         try  {
             transaction = session.beginTransaction();
             // Sử dụng HQL để lấy tất cả mon an
-            org.hibernate.query.Query<String> query = session.createQuery("SELECT m.donViTinh FROM MonAn m", String.class);
+            org.hibernate.query.Query<String> query = session.createQuery("SELECT DISTINCT m.donViTinh FROM MonAn m", String.class);
             listDon  = query.list(); // Nhớ lưu kết quả vào danh sách
             transaction.commit();
         } catch (Exception e) {
