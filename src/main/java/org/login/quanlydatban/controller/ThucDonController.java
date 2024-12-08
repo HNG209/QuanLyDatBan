@@ -145,7 +145,7 @@ public class ThucDonController implements Initializable {
                 fileChooser.getExtensionFilters().add(extFilter);
 
                 File file = fileChooser.showOpenDialog(null);
-                System.out.println("Nhấn nút tải ảnh");
+                //System.out.println("Nhấn nút tải ảnh");
 
                 if (file != null) {
                     //duongDanAnh = file.getAbsolutePath();
