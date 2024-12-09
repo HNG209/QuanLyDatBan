@@ -585,7 +585,9 @@ public class DatLichController implements Initializable {
     }
 
     public void capNhatTienTraLai() {
-        tienTraLai.setText(NumberFormatter.formatPrice(String.valueOf((int) (c - ckd))));
+        if(ckd - c >= 0)
+            tienTraLai.setText(NumberFormatter.formatPrice(String.valueOf((int) (ckd - c))));
+        else tienTraLai.clear();
     }
 
     @FXML

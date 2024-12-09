@@ -666,7 +666,18 @@ public class DatMonController implements Initializable {
                             hoaDonDAO.updateHoaDon(hoaDon);
                             banDAO.updateBan(ban);
 
+                            if (Notification.xacNhan("Thanh toán thành công, in hoá đơn?")){
+                                FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/org/login/quanlydatban/views/TrangXuatHoaDon.fxml")));
+                                AnchorPane pane = loader.load();
+                                XuatHoaDonController controller = loader.getController();
+                                controller.setHoaDon(hoaDon);
+
+                                Stage stage = new Stage();
+                                stage.setScene(new Scene(pane));
+                                stage.show();
+                            }
                             hoaDon = null;
+                            khachHang = null;
 
                             this.btnHuy.setVisible(false);
                             this.btnGiuBan.setVisible(true);
@@ -735,7 +746,7 @@ public class DatMonController implements Initializable {
     @FXML
     void tinhTienTraLai(KeyEvent event) {
         try {
-            if (hoaDon != null) {
+            if (hoaDon == null) {
                 tienKhachDua.clear();
                 phuThu.clear();
                 throw new IllegalArgumentException("Hãy lập hoá đơn trước khi nhập");
@@ -795,7 +806,6 @@ public class DatMonController implements Initializable {
 
         if ((tienTL + tkd) >= (hoaDon.getTongTien() + pt))
             tienTraLai.setText(NumberFormatter.formatPrice(String.valueOf((int) ((tienTL + tkd) - (hoaDon.getTongTien() + pt)))));
-        else throw new IllegalArgumentException("Tiền khách đưa phải lớn hơn hoặc bằng tổng tiền");
     }
 
     @FXML
