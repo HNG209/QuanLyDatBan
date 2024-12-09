@@ -113,7 +113,7 @@ public class HoaDonController implements Initializable {
 
             colTongTien.setCellValueFactory(cellData -> {
                 HoaDon hoaDon = cellData.getValue();
-                String tongTien = String.valueOf(hoaDon.tinhTongTien()+ hoaDon.getPhuThu());
+                String tongTien = String.valueOf(hoaDon.getTongTien());
                 return new SimpleStringProperty(tongTien);
             });
             colPhuThu.setCellValueFactory(new PropertyValueFactory<>("phuThu"));
