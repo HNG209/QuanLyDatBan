@@ -19,16 +19,16 @@ public class LoaiMonAn implements Serializable {
     @Column
     private String tenLoaiMonAn;
 
-    @Column
-    private String moTaLoaiMonAn;
+//    @Column
+//    private String moTaLoaiMonAn;
 
 
     public LoaiMonAn() {
     }
 
-    public LoaiMonAn(String tenLoai, String moTa) {
+    public LoaiMonAn(String tenLoai) {
         this.tenLoaiMonAn = tenLoai;
-        this.moTaLoaiMonAn = moTa;
+       // this.moTaLoaiMonAn = moTa;
     }
 
     @PrePersist
@@ -50,9 +50,9 @@ public class LoaiMonAn implements Serializable {
         return tenLoaiMonAn;
     }
 
-    public String getMoTaLoaiMonAn() {
-        return moTaLoaiMonAn;
-    }
+//    public String getMoTaLoaiMonAn() {
+//        return moTaLoaiMonAn;
+//    }
 
     public void setMaLoaiMonAn(String maLoaiMonAn) {
         this.maLoaiMonAn = maLoaiMonAn;
@@ -62,9 +62,9 @@ public class LoaiMonAn implements Serializable {
         this.tenLoaiMonAn = tenLoaiMonAn;
     }
 
-    public void setMoTaLoaiMonAn(String moTaLoaiMonAn) {
-        this.moTaLoaiMonAn = moTaLoaiMonAn;
-    }
+//    public void setMoTaLoaiMonAn(String moTaLoaiMonAn) {
+//        this.moTaLoaiMonAn = moTaLoaiMonAn;
+//    }
 
     private String generateLoaiMonAn(String itemName) {
         String prefix = generatePrefixFromName(itemName); // Generate the "XX" part from the item name
@@ -126,7 +126,7 @@ public class LoaiMonAn implements Serializable {
         return "LoaiMonAn{" +
                 "maLoaiMonAn='" + maLoaiMonAn + '\'' +
                 ", tenLoaiMonAn='" + tenLoaiMonAn + '\'' +
-                ", moTaLoaiMonAn='" + moTaLoaiMonAn + '\'' +
+                //", moTaLoaiMonAn='" + moTaLoaiMonAn + '\'' +
                 '}';
     }
 }

@@ -351,6 +351,8 @@ public class ThucDonController implements Initializable {
                         loaiMonMoi = loaiMonDAO.getLoaiMonByName(loaiMonMoiName); // Retrieve the newly added LoaiMonAn
                     }
 
+                    String moTa = txfMoTa.getText();
+
                     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                     alert.setTitle("XÁC NHẬN CẬP NHẬT");
                     alert.setHeaderText("Bạn có chắc chắn muốn cập nhật món này?");
@@ -358,7 +360,7 @@ public class ThucDonController implements Initializable {
                     ButtonType result = alert.showAndWait().orElse(ButtonType.CANCEL);
 
                     if (result == ButtonType.OK) {
-                        monMoi = new MonAn(monAn.getMaMonAn(), loaiMonMoi, tenMonMoi, giaMoi, donViMoi, anhMoi, trangThaiMoi);
+                        monMoi = new MonAn(monAn.getMaMonAn(), loaiMonMoi, tenMonMoi, giaMoi, donViMoi, anhMoi, trangThaiMoi, moTa);
                         monAnDAO.capNhatMonAn(monAn, monMoi);
                         Notification.thongBao("Đã cập nhật thành công!", Alert.AlertType.INFORMATION);
                         refreshControl(event);
@@ -618,6 +620,7 @@ public class ThucDonController implements Initializable {
         // Get other input values from UI components
         String tenMonAn = txtTenMonAn.getText().trim();
         String donViTinh = cbDonViTinh.getValue();
+        String moTaMonAn = txfMoTa.getText();
 
         // Generate ID for the new MonAn
 //        String maMonAn = generateMaMonAn(cbloaiMonAn.getValue());
@@ -642,6 +645,7 @@ public class ThucDonController implements Initializable {
         monAn.setDonViTinh(donViTinh);
         monAn.setHinhAnh(duongDanAnh);
         monAn.setTrangThaiMonAn(ttMonAn);
+        monAn.setMoTaMonAn(moTaMonAn);
 //        MonAn monAn = new MonAn(maMonAn, loaiMon, tenMonAn, gia, donViTinh, duongDanAnh, ttMonAn);
 
         // Save MonAn to the database
@@ -652,9 +656,9 @@ public class ThucDonController implements Initializable {
         LoaiMonDAO loaiMonDAO = new LoaiMonDAO();
 //        String maLoai = generateLoaiMonAn(cbloaiMonAn.getValue());
         String tenLoai = cbloaiMonAn.getValue();
-        String moTa = txfMoTa.getText();
+        //String moTa = txfMoTa.getText();
 
-        LoaiMonAn loaiMonAn = new LoaiMonAn(tenLoai, moTa);
+        LoaiMonAn loaiMonAn = new LoaiMonAn(tenLoai);
         loaiMonDAO.themLoaiMonAn(loaiMonAn);
 
     }
@@ -739,7 +743,7 @@ public class ThucDonController implements Initializable {
                 anhMon.setImage(new Image(getClass().getResource(imageDefaultPath).toString()));
             }
 
-            txfMoTa.setText(loaiMon.getMoTaLoaiMonAn());
+            txfMoTa.setText(monAn.getMoTaMonAn());
         }
 
     }

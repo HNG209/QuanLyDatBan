@@ -37,6 +37,9 @@ public class MonAn implements Serializable {
     @Enumerated(EnumType.STRING)
     private TrangThaiMonAn trangThaiMonAn;
 
+    @Column
+    private String moTaMonAn;
+
     public MonAn() {}
 
     @Override
@@ -49,11 +52,11 @@ public class MonAn implements Serializable {
                 ", donViTinh='" + donViTinh + '\'' +
                 ", hinhAnh='" + hinhAnh + '\'' +
                 ", trangThaiMonAn=" + trangThaiMonAn +
+                ", moTa='" + moTaMonAn + '\'' +
                 '}';
     }
 
-
-    public MonAn(String maMonAn, LoaiMonAn loaiMonAn, String tenMonAn, double donGia, String donViTinh, String hinhAnh, TrangThaiMonAn trangThaiMonAn) {
+    public MonAn(String maMonAn, LoaiMonAn loaiMonAn, String tenMonAn, double donGia, String donViTinh, String hinhAnh, TrangThaiMonAn trangThaiMonAn, String moTaMonAn) {
         this.maMonAn = maMonAn;
         this.loaiMonAn = loaiMonAn;
         this.tenMonAn = tenMonAn;
@@ -61,6 +64,7 @@ public class MonAn implements Serializable {
         this.donViTinh = donViTinh;
         this.hinhAnh = hinhAnh;
         this.trangThaiMonAn = trangThaiMonAn;
+        this.moTaMonAn = moTaMonAn;
     }
 
     @PrePersist
@@ -100,6 +104,10 @@ public class MonAn implements Serializable {
         return trangThaiMonAn;
     }
 
+    public String getMoTaMonAn() {
+        return moTaMonAn;
+    }
+
     public void setMaMonAn(String maMonAn) {
         this.maMonAn = maMonAn;
     }
@@ -130,6 +138,10 @@ public class MonAn implements Serializable {
 
     public void setTrangThaiMonAn(TrangThaiMonAn trangThaiMonAn) {
         this.trangThaiMonAn = trangThaiMonAn;
+    }
+
+    public void setMoTaMonAn(String moTaMonAn) {
+        this.moTaMonAn = moTaMonAn;
     }
 
     private String generateMaMonAn(String itemName) {
