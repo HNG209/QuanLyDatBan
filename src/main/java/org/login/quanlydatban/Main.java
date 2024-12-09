@@ -18,6 +18,7 @@ public class Main extends Application {
         Scene scene = new Scene(fxmlLoader.load());
 
         Session session = HibernateUtils.getFactory().openSession();
+
         session.close();
 
         LichDatDAO lichDatDAO = new LichDatDAO();

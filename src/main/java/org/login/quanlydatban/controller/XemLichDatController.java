@@ -146,7 +146,7 @@ public class XemLichDatController implements Initializable {
     private TextField tfMaLichDat;
 
     @FXML
-    private TextField tfSDT;
+    private TextField tfCCCD;
 
     @FXML
     private TextField tfTenKhachHang;
@@ -251,7 +251,7 @@ public class XemLichDatController implements Initializable {
         tfThoiGianNhanBan.clear();
         tfBan.clear();
         tfTrangThai.clear();
-        tfSDT.clear();
+        tfCCCD.clear();
         tfTenKhachHang.clear();
         tfTienCoc.clear();
 
@@ -279,7 +279,7 @@ public class XemLichDatController implements Initializable {
         tfThoiGianNhanBan.setText(selectedLichDat.getThoiGianNhanBan().format(DateTimeFormatter.ofPattern("dd/MM/yyyy - HH:mm")));
         tfBan.setText(selectedLichDat.getHoaDon().getBan().getMaBan());
         tfTrangThai.setText(selectedLichDat.getHoaDon().getTrangThaiHoaDon().toString());
-        tfSDT.setText(selectedLichDat.getKhachHang().getSdt());
+        tfCCCD.setText(selectedLichDat.getKhachHang().getCccd());
         tfTenKhachHang.setText(selectedLichDat.getKhachHang().getTenKhachHang());
         tfTienCoc.setText(NumberFormatter.formatPrice(String.valueOf((int) selectedLichDat.getTienCoc())));
 
