@@ -11,18 +11,18 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.FileChooser;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.login.quanlydatban.dao.LoaiMonDAO;
 import org.login.quanlydatban.dao.MonAnDAO;
 import org.login.quanlydatban.entity.LoaiMonAn;
 import org.login.quanlydatban.entity.MonAn;
 import org.login.quanlydatban.entity.enums.TrangThaiMonAn;
-import org.login.quanlydatban.hibernate.HibernateUtils;
+import org.login.quanlydatban.notification.Notification;
+import org.login.quanlydatban.utilities.NumberFormatter;
 
 import java.io.File;
 import java.io.IOException;
@@ -59,11 +59,10 @@ public class ThucDonController implements Initializable {
     private TextArea txfMoTa;
 
     @FXML
-    private TextField txtDonViTinh;
-
-    @FXML
     private TextField txtTimKiem;
 
+    @FXML
+    private ComboBox<String> cbDonViTinh;
 
     @FXML
     private ComboBox<String> cbTimLoaiMon;
@@ -106,6 +105,7 @@ public class ThucDonController implements Initializable {
     private LoaiMonDAO loaiMonDAO;
 
     private String duongDanAnh;
+    private double donGia = 0.0;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -119,15 +119,16 @@ public class ThucDonController implements Initializable {
         System.out.println(monAnDAO.getAllMonAn());
 
         loadLoaiMonAnComboBox();
+        loadDonViTinhComboBox();
 
         List<MonAn> monAnList = monAnDAO.getAllMonAn();
         if (monAnList == null) {
-            showWarn("Danh sach mon an bi trong");
+            Notification.thongBao("Danh sach mon an bi trong", Alert.AlertType.WARNING);
         }
 
         List<LoaiMonAn> loaiMonAnList = loaiMonDAO.getListLoai();
         if (loaiMonAnList == null) {
-            showWarn("Danh sach loai mon an bi trong");
+            Notification.thongBao("Danh sach loai mon an bi trong", Alert.AlertType.WARNING);
         }
 
         taiAnh.setOnAction(new EventHandler<ActionEvent>() {
@@ -144,7 +145,7 @@ public class ThucDonController implements Initializable {
                 fileChooser.getExtensionFilters().add(extFilter);
 
                 File file = fileChooser.showOpenDialog(null);
-                System.out.println("Nhấn nút tải ảnh");
+                //System.out.println("Nhấn nút tải ảnh");
 
                 if (file != null) {
                     //duongDanAnh = file.getAbsolutePath();
@@ -214,6 +215,15 @@ public class ThucDonController implements Initializable {
             cbTimLoaiMon.setValue(newValue);
         });
 
+        cbDonViTinh.setOnAction(event -> {
+            String newValue = cbDonViTinh.getEditor().getText().trim();
+
+            if (!newValue.isEmpty() && !cbDonViTinh.getItems().contains(newValue)) {
+                // Add the new value to the combo box
+                cbDonViTinh.getItems().add(newValue);
+            }
+        });
+
         monAnDAO.getAllMonAn();
         flowPane.prefHeightProperty().bind(scrollPane.heightProperty());
         flowPane.prefWidthProperty().bind(scrollPane.widthProperty());
@@ -255,25 +265,25 @@ public class ThucDonController implements Initializable {
 
         if (source == btnThemMon) {
             try {
-                if (txtTenMonAn.getText() == null || txtDonViTinh.getText() == null || txtGia.getText() == null ||
+                if (txtTenMonAn.getText() == null || cbDonViTinh.getValue() == null || txtGia.getText() == null ||
                         cbloaiMonAn.getValue() == null ||
                         Objects.equals(txtTenMonAn.getText(), "") ||
-                        Objects.equals(txtDonViTinh.getText(), "") ||
+                        Objects.equals(cbDonViTinh.getValue(), "") ||
                         Objects.equals(txtGia.getText(), "") ||
                         Objects.equals(cbloaiMonAn.getValue(), "")) {
-                    showWarn("Bạn cần nhập đầy đủ thông tin!");
-                } else if (!regexGia()) {
-                    showWarn("Bạn cần nhập đúng thông tin!");
-                } else {
-
+                    Notification.thongBao("Bạn cần nhập đầy đủ thông tin!", Alert.AlertType.WARNING);
+                }
+//                else if (!regexGia()) {
+//                    showWarn("Bạn cần nhập đúng thông tin!");}
+                else {
                     themMon();
                     refreshControl(event);
                     loadLoaiMonAnComboBox();
-                    System.out.println("Thêm dc rồi, yay :D");
+                    Notification.thongBao("Đã thêm thành công!", Alert.AlertType.INFORMATION);
                 }
 
             } catch (Exception e) {
-                System.out.println(e);
+                Notification.thongBao(e.getMessage(), Alert.AlertType.WARNING);
             }
 
         }
@@ -319,11 +329,11 @@ public class ThucDonController implements Initializable {
         if (source == btnCapNhat) {
             try {
                 if (monAn == null) {
-                    showWarn("Bạn cần chọn một món để cập nhật!");
+                    Notification.thongBao("Bạn cần chọn một món để cập nhật!", Alert.AlertType.WARNING);
                 } else {
                     String tenMonMoi = txtTenMonAn.getText();
-                    String donViMoi = txtDonViTinh.getText();
-                    double giaMoi = Double.parseDouble(txtGia.getText());
+                    String donViMoi = cbDonViTinh.getValue();
+                    double giaMoi = donGia;
                     TrangThaiMonAn trangThaiMoi = comboTTValue();
 
                     String anhMoi = anhMon.getImage().getUrl();
@@ -350,11 +360,11 @@ public class ThucDonController implements Initializable {
                     if (result == ButtonType.OK) {
                         monMoi = new MonAn(monAn.getMaMonAn(), loaiMonMoi, tenMonMoi, giaMoi, donViMoi, anhMoi, trangThaiMoi);
                         monAnDAO.capNhatMonAn(monAn, monMoi);
-                        showWarn("Đã cập nhật thành công!");
+                        Notification.thongBao("Đã cập nhật thành công!", Alert.AlertType.INFORMATION);
                         refreshControl(event);
 
                     } else {
-                        System.out.println("Update cancel");
+                        Notification.thongBao("Đã hủy cập nhật!", Alert.AlertType.INFORMATION);
                     }
 
                 }
@@ -367,7 +377,7 @@ public class ThucDonController implements Initializable {
 
     @FXML
     void xoaRongControl(ActionEvent event) {
-        Image imageXoaRong = new Image(getClass().getResource("/org/login/quanlydatban/icons/restaurant.png").toExternalForm());
+        Image imageXoaRong = new Image(getClass().getResource("/org/login/quanlydatban/icons/empty.png").toExternalForm());
 
         Object source = event.getSource();
         if (source == btnXoaRong) {
@@ -377,7 +387,7 @@ public class ThucDonController implements Initializable {
             cbloaiMonAn.getSelectionModel().clearSelection();
             cbloaiMonAn.setValue("");
             cbtrangThaiMon.getSelectionModel().selectFirst();
-            txtDonViTinh.setText("");
+            cbDonViTinh.getSelectionModel().clearSelection();
             txtGia.setText("");
             anhMon.setImage(imageXoaRong);
             txfMoTa.setText("");
@@ -391,7 +401,7 @@ public class ThucDonController implements Initializable {
         int sortOption = cbSapXep.getSelectionModel().getSelectedIndex();
 
         if (cbTimLoaiMon.getValue() == null && keyword.isEmpty() && sortOption == -1) {
-            showWarn("Bạn cần nhập/chọn một trong các cách tìm trước khi tiến hành tìm kiếm");
+            Notification.thongBao("Bạn cần nhập/chọn một trong các cách tìm trước khi tiến hành tìm kiếm", Alert.AlertType.WARNING);
         }
         else {
             // Clear the previous list
@@ -422,7 +432,7 @@ public class ThucDonController implements Initializable {
 
             // Show warning if no items are found
             if (filteredItems.isEmpty()) {
-                showWarn("Không tìm thấy món ăn phù hợp với tiêu chí tìm kiếm!");
+                Notification.thongBao("Không tìm thấy món ăn phù hợp với tiêu chí tìm kiếm!", Alert.AlertType.WARNING);
             }
       }
 
@@ -565,207 +575,74 @@ public class ThucDonController implements Initializable {
                 cbloaiMonAn.getItems().add(loaiMonAn.getTenLoaiMonAn());
             }
         } else {
-            showWarn("Danh sách LoaiMonAn rỗng.");
+            throw new IllegalArgumentException("Danh sách Loai Mon An rỗng.");
         }
     }
 
-    private String generateLoaiMonAn(String itemName) {
-        String prefix = generatePrefixFromName(itemName); // Generate the "XX" part from the item name
-        Long maxId = getMaLoaiFromDatabase(prefix); // Get the maximum "YY" part for the given prefix
-        Long newIdNumber = (maxId == null) ? 1 : maxId + 1; // Increment the ID number
-        return prefix + String.format("%02d", newIdNumber); // Combine "XX" and "YY" into the final format
-    }
+    private void loadDonViTinhComboBox() {
+        cbDonViTinh.getItems().clear();  // Clear current items to avoid duplicates
+        List<String> donViList = monAnDAO.getListDon();
 
-    // Method to retrieve the maximum "YY" part for a specific prefix from the database
-    public Long getMaLoaiFromDatabase(String prefix) {
-        Session session = HibernateUtils.getFactory().openSession();
-        Transaction transaction = null;
-        Long maLoaiMon = null;
-
-        try {
-            transaction = session.beginTransaction();
-
-            // Query to fetch IDs starting with the given prefix
-            String query = "SELECT maLoaiMonAn FROM LoaiMonAn WHERE maLoaiMonAn LIKE :prefix";
-            List<String> maMonAns = session.createQuery(query, String.class)
-                    .setParameter("prefix", prefix + "%") // Match IDs with the given prefix
-                    .getResultList();
-
-            // Extract the "YY" part, convert to a number, and find the maximum
-            maLoaiMon = maMonAns.stream()
-                    .map(id -> id.substring(prefix.length())) // Extract "YY" part
-                    .filter(yy -> yy.matches("\\d+"))         // Ensure it is numeric
-                    .map(Long::parseLong)                    // Convert to Long
-                    .max(Long::compare)                      // Find the maximum
-                    .orElse(0L);
-
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction != null) transaction.rollback();
-            e.printStackTrace(); // Consider using a logger for better error handling
-        } finally {
-            if (session != null) {
-                session.close(); // Ensure the session is closed properly
+        if (donViList != null) {
+            for (String monan : donViList) {
+                cbDonViTinh.getItems().add(monan);
             }
+        } else {
+            throw new IllegalArgumentException("Danh sách Don Vi Tinh rỗng.");
         }
-        return maLoaiMon;
     }
 
-    // Helper method to generate the "XX" part from the item name
-    private String generatePrefixFromName(String name) {
-        // Split the name into words, take the first character of each word, and convert to uppercase
-        return Arrays.stream(name.split("\\s+"))
-                .filter(word -> !word.isEmpty())       // Ensure non-empty words
-                .map(word -> word.substring(0, 1))    // Take the first letter of each word
-                .map(String::toUpperCase)             // Convert to uppercase
-                .limit(2)                             // Take only the first 2 letters
-                .reduce("", String::concat);         // Combine into a single string
-    }
-
-//    private String generateLoaiMonAn(String prefix) {
-//        Long maxId = getMaLoaiFromDatabase(prefix);
-//        Long newIdNumber = (maxId == null) ? 1 : maxId + 1; // Increment ID by 1
-//        return prefix + String.format("%02d", newIdNumber); // Combine prefix with formatted number
+//    private void showWarn(String message) {
+//        Alert alert = new Alert(Alert.AlertType.WARNING);
+//        alert.setTitle("Kết Quả");
+//        alert.setHeaderText(null);
+//        alert.setContentText(message);
+//        alert.showAndWait();
 //    }
-//
-//    public Long getMaLoaiFromDatabase(String prefix) {
-//        Session session = HibernateUtils.getFactory().openSession();
-//        Long maLoai = null;
-//
-//        try {
-//            String query = "SELECT loaiMonAn FROM MonAn WHERE loaiMonAn.maLoaiMonAn LIKE :prefix";
-//            List<String> loaiMonAns = session.createQuery(query, String.class)
-//                    .setParameter("prefix", prefix + "%")
-//                    .getResultList();
-//
-//            maLoai = loaiMonAns.stream()
-//                    .filter(ma -> ma.matches(prefix + "\\d{2}")) // Ensure it matches the format with the prefix
-//                    .map(ma -> Long.parseLong(ma.substring(prefix.length()))) // Extract and parse the numeric part
-//                    .max(Long::compare)
-//                    .orElse(0L);
-//
-//        } catch (Exception e) {
-//            e.printStackTrace(); // Replace with logger if needed
-//        } finally {
-//            if (session != null) {
-//                session.close(); // Ensure the session is closed properly
-//            }
-//        }
-//        return maLoai;
-//    }
-
-    private String generateMaMonAn(String itemName) {
-        // Generate the "XXXX" part using the logic for XXYY
-        String prefix = generateLoaiMonAn(itemName); // Assume this generates the XXYY format
-
-        // Fetch the maximum "YYYY" part for the given "XXXX" prefix and increment it
-        Long maxSuffix = getMaMonFromDatabase(prefix);
-        Long newSuffix = (maxSuffix == null) ? 1 : maxSuffix + 1;
-
-        // Combine "XXXX" (from XXYY) and "YYYY" into the final format
-        return prefix + String.format("%04d", newSuffix); // Ensure "YYYY" is 4 digits
-    }
-
-    // Method to retrieve the maximum "YYYY" value for a specific "XXXX" prefix
-    public Long getMaMonFromDatabase(String prefix) {
-        Session session = HibernateUtils.getFactory().openSession();
-        Transaction transaction = null;
-        Long maxSuffix = null;
-
-        try {
-            transaction = session.beginTransaction();
-
-            // Query to fetch IDs starting with the given "XXXX" prefix
-            String query = "SELECT maMonAn FROM MonAn WHERE maMonAn LIKE :prefix";
-            List<String> maMonAns = session.createQuery(query, String.class)
-                    .setParameter("prefix", prefix + "%") // Match IDs with the given prefix
-                    .getResultList();
-
-            // Extract the "YYYY" part, convert to a number, and find the maximum
-            maxSuffix = maMonAns.stream()
-                    .map(id -> id.substring(prefix.length())) // Extract "YYYY" part
-                    .filter(yy -> yy.matches("\\d+"))         // Ensure it is numeric
-                    .map(Long::parseLong)                    // Convert to Long
-                    .max(Long::compare)                      // Find the maximum
-                    .orElse(0L);
-
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction != null) transaction.rollback();
-            e.printStackTrace(); // Consider using a logger for better error handling
-        } finally {
-            if (session != null) {
-                session.close(); // Ensure the session is closed properly
-            }
-        }
-        return maxSuffix;
-    }
-
-
-
-    //REGEX
-    public boolean regexGia(){
-        String rgia = txtGia.getText();
-        try {
-            double gia = Double.parseDouble(rgia);
-            if (gia > 0) {
-                return true;
-            } else {
-                return false;
-            }
-        } catch (NumberFormatException e) {
-            return false;
-        }
-    }
-
-    private void showWarn(String message) {
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle("Kết Quả");
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
 
     //CRUD
     public void themMon() {
         MonAnDAO monAnDAO = new MonAnDAO(); // DAO for MonAn
-
+        MonAn monAn = new MonAn();
         String selectedLoaiMon = cbloaiMonAn.getValue(); // Get the selected or entered value
         LoaiMonAn loaiMon = loaiMonDAO.getLoaiMonByName(selectedLoaiMon);
-
+        //double gia;
          //If it doesn't exist, add it
         if (loaiMon == null) {
             themLoaiMon(); // Adds the new LoaiMonAn
             loaiMon = loaiMonDAO.getLoaiMonByName(selectedLoaiMon); // Retrieve the newly added LoaiMonAn
         }
 
-        //System.out.println(loaiMon.getMaLoaiMonAn());
-
         TrangThaiMonAn ttMonAn = comboTTValue();
 
         // Get other input values from UI components
-
-        double gia = Double.parseDouble(txtGia.getText());
-        String tenMonAn = txtTenMonAn.getText();
-        String donViTinh = txtDonViTinh.getText();
+        String tenMonAn = txtTenMonAn.getText().trim();
+        String donViTinh = cbDonViTinh.getValue();
 
         // Generate ID for the new MonAn
-        String maMonAn = generateMaMonAn(cbloaiMonAn.getValue());
+//        String maMonAn = generateMaMonAn(cbloaiMonAn.getValue());
 
         String duongDanAnh = null;
         String imageUrl = anhMon.getImage().getUrl(); // Get the URL of the image
         if (imageUrl != null && imageUrl.startsWith("file:")) {
-            if (imageUrl.endsWith("restaurant.png")) {
-                File defaultImageFile = new File(getClass().getResource("/org/login/quanlydatban/icons/empty.png").getPath());
-                duongDanAnh = defaultImageFile.getAbsolutePath();
-            } else {
+//            if (imageUrl.endsWith("restaurant.png")) {
+//                File defaultImageFile = new File(getClass().getResource("/org/login/quanlydatban/icons/empty.png").getPath());
+//                duongDanAnh = defaultImageFile.getAbsolutePath();
+//            } else {
                 duongDanAnh = imageUrl.substring(5); // Remove "file:" prefix to get the file path
-            }
+//            }
 
         }
 
         // Create the new MonAn object
-        MonAn monAn = new MonAn(maMonAn, loaiMon, tenMonAn, gia, donViTinh, duongDanAnh, ttMonAn);
+//        monAn.setMaMonAn(maMonAn);
+        monAn.setLoaiMonAn(loaiMon);
+        monAn.setTenMonAn(tenMonAn);
+        monAn.setDonGia(donGia);
+        monAn.setDonViTinh(donViTinh);
+        monAn.setHinhAnh(duongDanAnh);
+        monAn.setTrangThaiMonAn(ttMonAn);
+//        MonAn monAn = new MonAn(maMonAn, loaiMon, tenMonAn, gia, donViTinh, duongDanAnh, ttMonAn);
 
         // Save MonAn to the database
         monAnDAO.themMonAn(monAn);
@@ -773,11 +650,11 @@ public class ThucDonController implements Initializable {
 
     public void themLoaiMon () {
         LoaiMonDAO loaiMonDAO = new LoaiMonDAO();
-        String maLoai = generateLoaiMonAn(cbloaiMonAn.getValue());
+//        String maLoai = generateLoaiMonAn(cbloaiMonAn.getValue());
         String tenLoai = cbloaiMonAn.getValue();
         String moTa = txfMoTa.getText();
 
-        LoaiMonAn loaiMonAn = new LoaiMonAn(maLoai, tenLoai, moTa);
+        LoaiMonAn loaiMonAn = new LoaiMonAn(tenLoai, moTa);
         loaiMonDAO.themLoaiMonAn(loaiMonAn);
 
     }
@@ -813,6 +690,28 @@ public class ThucDonController implements Initializable {
         return trangThaiMonAn;
     }
 
+    @FXML
+    void formatGia(KeyEvent event) {
+        if(event.getSource().equals(txtGia)){
+            if(txtGia.getText().isEmpty()) {
+                return;
+            }
+            txtGia.setText(NumberFormatter.formatPrice(txtGia.getText()));
+            txtGia.positionCaret(txtGia.getText().length());
+
+            if (!txtGia.getText().replace(".", "").matches("\\d+"))
+            {
+                Notification.thongBao("Chỉ được nhập số", Alert.AlertType.INFORMATION);
+                txtGia.setText(txtGia.getText().substring(0, txtGia.getLength() - 1));
+                txtGia.setText(NumberFormatter.formatPrice(txtGia.getText()));
+                txtGia.positionCaret(txtGia.getText().length());
+            }
+            else {
+                donGia = Double.parseDouble(txtGia.getText().replace(".", "").trim());
+            }
+        }
+    }
+
     public void setMonAn(MonAn monAn) {
         this.monAn = monAn;
 
@@ -827,8 +726,10 @@ public class ThucDonController implements Initializable {
                 cbloaiMonAn.getSelectionModel().clearSelection();
             }
             cbtrangThaiMon.setValue(String.valueOf(monAn.getTrangThaiMonAn()));
-            txtDonViTinh.setText(monAn.getDonViTinh());
-            txtGia.setText(String.valueOf(monAn.getDonGia()));
+            cbDonViTinh.setValue(String.valueOf(monAn.getDonViTinh()));
+
+            txtGia.setText(NumberFormatter.formatPrice(String.format("%.0f", monAn.getDonGia())));
+            donGia = monAn.getDonGia();
 
             String imagePath = monAn.getHinhAnh();
             String imageDefaultPath = "/org/login/quanlydatban/icons/restaurant.png";
