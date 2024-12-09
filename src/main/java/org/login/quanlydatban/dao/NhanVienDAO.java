@@ -14,6 +14,8 @@ import java.util.List;
 public class NhanVienDAO {
     private NhanVien nhanVien;
     private TaiKhoanDAO taiKhoan;
+
+
     public List<NhanVien> getAllTaiKhoan() {
         List<NhanVien> taiKhoanList = null;
         Session session = HibernateUtils.getFactory().openSession();

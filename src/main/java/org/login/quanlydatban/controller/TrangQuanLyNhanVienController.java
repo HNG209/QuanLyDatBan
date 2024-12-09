@@ -365,13 +365,15 @@ public class TrangQuanLyNhanVienController implements Initializable {
     public void loaddulieulenform(NhanVien nhanVien){
 
         image11 = nhanVien.getHinhAnh();
-        if(image11 != null || image11.isEmpty()){
-            Image image = new Image("file:" + image11);
-            // Tạo ImageView và đặt hình ảnh vào
-            System.out.println("lll"+image11);
-            image1.setImage(image);
-        }
+//        if(image11 != null || image11.isEmpty()){
+//            Image image = new Image("file:" + image11);
+//            // Tạo ImageView và đặt hình ảnh vào
+//            System.out.println("lll"+image11);
+//
+//        }
         duongdananh = image11;
+        Image image = new Image(getClass().getResource(image11).toString());
+        image1.setImage(image);
         maNhanVien1.setEditable(false);
         maNhanVien1.setText(nhanVien.getMaNhanVien());
         hoTen.setText(nhanVien.getTenNhanVien());
@@ -501,9 +503,6 @@ public class TrangQuanLyNhanVienController implements Initializable {
                 if(!cancuoccongdancheck(cccd)){
                     return;
                 }
-                if(!cancuoccongdancheck(cccd)){
-                    return;
-                }
                 if(!sdtcheck(dienThoai)){
                     return;
                 }
@@ -520,6 +519,22 @@ public class TrangQuanLyNhanVienController implements Initializable {
                     showWarn("Tuổi phải lớn hơn 15.");
                     return;
                 }
+
+                NhanVienDAO nvd = new NhanVienDAO();
+                List<NhanVien> nv = nvd.getAllTaiKhoan();
+                NhanVien nvsdt = nv.stream().filter(x->x.getSdt().equals(dienThoai.getText())).findFirst().orElse(null);
+                NhanVien nvscccd = nv.stream().filter(x->x.getCccd().equals(cccd.getText())).findFirst().orElse(null);
+
+                if(nvscccd != null){
+                    showWarn("Căn cước công dân này đã được sử dụng, vui lòng sử dụng số căn cước công dân khác");
+                    return;
+                }
+
+                if(nvsdt != null){
+                    showWarn("Số điện thoại này đã được sử dụng, vui lòng sử dụng số điện thoại khác");
+                    return;
+                }
+
                 chinhSuaNhanVien(cellValue);
                 showAlert("Cập nhật nhân viên thành công");
                 xetLaiduLieuChoBang();

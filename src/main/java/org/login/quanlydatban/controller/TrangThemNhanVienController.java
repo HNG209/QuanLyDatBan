@@ -54,8 +54,7 @@ public class TrangThemNhanVienController implements Initializable {
     private TextField maNhanVien; // ma nhan vien
     @FXML
     private ComboBox<String> gioiTinh; // cbx gioi tinh
-    @FXML
-    private ComboBox<String> trangThaiLamViec; // cbx trang thai lam viec
+    // cbx trang thai lam viec
     @FXML
     private ComboBox<String> chucVu; // cbx chuc vu
     @FXML
@@ -311,9 +310,7 @@ public class TrangThemNhanVienController implements Initializable {
                    if (!trangThaiCheck(chucVu)) {
                        return;
                    }
-                   if (!trangThaiCheck(trangThaiLamViec)) {
-                       return;
-                   }
+
                    if(ngaySinh.getValue() == null){
                        showWarn("Ban phai nhap ngay sinh");
                        return;
@@ -327,6 +324,21 @@ public class TrangThemNhanVienController implements Initializable {
                        showWarn("Ban phai chọn ảnh");
                        return;
                    }
+                   // kiem tra sdt co trung hoac cccd co trung hay khong
+                   NhanVienDAO nvd = new NhanVienDAO();
+                   List<NhanVien> nv = nvd.getAllTaiKhoan();
+                   NhanVien nvsdt = nv.stream().filter(x->x.getSdt().equals(dienThoai.getText())).findFirst().orElse(null);
+                   NhanVien nvscccd = nv.stream().filter(x->x.getCccd().equals(cccd.getText())).findFirst().orElse(null);
+
+                   if(nvscccd != null){
+                       showWarn("Căn cước công dân này đã được sử dụng, vui lòng sử dụng số căn cước công dân khác");
+                       return;
+                   }
+
+                   if(nvsdt != null){
+                       showWarn("Số điện thoại này đã được sử dụng, vui lòng sử dụng số điện thoại khác");
+                       return;
+                   }
 
                    try {
                        ThemNhanVien();
@@ -337,11 +349,7 @@ public class TrangThemNhanVienController implements Initializable {
                        } catch (Exception e) {
                        throw new RuntimeException(e);
                        }
-
-
                    trangQuanLyNhanVien.xetLaiduLieuChoBang();}
-
-
            });
            btnHuyBo.setOnAction(new EventHandler<ActionEvent>() {
                @Override
@@ -363,14 +371,7 @@ public class TrangThemNhanVienController implements Initializable {
              gt= true;
          }
          taiKhoanDAO = new TaiKhoanDAO();
-         TrangThaiNhanVien tt = null;
-         if(trangThaiLamViec.getValue().equals("ĐANG LÀM")){
-             tt = TrangThaiNhanVien.DANG_LAM;
-         }else if(trangThaiLamViec.getValue().equals("NGHỈ PHÉP")){
-             tt = TrangThaiNhanVien.NGHI_PHEP;
-         }else if(trangThaiLamViec.getValue().equals("NGHỈ VIỆC")){
-            tt = TrangThaiNhanVien.NGHI_VIEC;
-         }
+
          ChucVu cv = null;
         if(chucVu.getValue().equals("Nhân viên")){
             cv = ChucVu.NHAN_VIEN;
@@ -385,7 +386,7 @@ public class TrangThemNhanVienController implements Initializable {
         nv.setDiaChi(diaChi.getText());
         nv.setCccd(cccd.getText());
         nv.setSdt(dienThoai.getText());
-        nv.setTrangThaiNhanVien(tt);
+        nv.setTrangThaiNhanVien(TrangThaiNhanVien.DANG_LAM);
         nv.setHinhAnh(duongdananh);
         nv.setChucVuNhanVien(cv);
         nv.setNgaySinh(ngaySinh.getValue());

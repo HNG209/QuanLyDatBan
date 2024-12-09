@@ -77,20 +77,12 @@
                   <Font name="System Bold" size="14.0" />
                </font>
             </Label>
-            <Label layoutX="178.0" layoutY="361.0" text="Trạng thái làm việc:">
+            <Label layoutX="178.0" layoutY="361.0">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
             </Label>
             <DatePicker fx:id="ngaySinh" layoutX="21.0" layoutY="463.0" prefHeight="30.0" prefWidth="290.0" />
-            <ComboBox fx:id="trangThaiLamViec" layoutX="179.0" layoutY="394.0" prefHeight="30.0" prefWidth="129.0">
-               <items>
-                  <FXCollections fx:factory="observableArrayList">
-                     <String fx:value="ĐANG LÀM" />
-                     <String fx:value="NGHỈ PHÉP" />
-                  </FXCollections>
-               </items>
-            </ComboBox>
             <ComboBox fx:id="gioiTinh" layoutX="186.0" layoutY="57.0" prefHeight="33.0" prefWidth="125.0">
                <items>
                   <FXCollections fx:factory="observableArrayList">
@@ -105,7 +97,7 @@
                   <Font name="System Bold" size="14.0" />
                </font>
             </Label>
-            <ComboBox fx:id="chucVu" layoutX="23.0" layoutY="394.0" prefHeight="30.0" prefWidth="149.0">
+            <ComboBox fx:id="chucVu" layoutX="23.0" layoutY="394.0" prefHeight="30.0" prefWidth="290.0">
                <items>
                   <FXCollections fx:factory="observableArrayList">
                      <String fx:value="Nhân viên" />
