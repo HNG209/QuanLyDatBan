@@ -127,9 +127,7 @@ public class TrangQuanLyNhanVienController implements Initializable {
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/QuanLyNhanVien.fxml"));
                     Parent newWindow = loader.load();
                     TrangThemNhanVienController nv = loader.getController();
-                    nv.setTenNhanVien(getNhanvien().toString());
                     nv.SetTrangQuanLyNhanVien(TrangQuanLyNhanVienController.this);
-                    // Tạo một cửa sổ mới
                     Stage stage = new Stage();
                     stage.setScene(new Scene(newWindow));
                     stage.setTitle("Quản Lý Nhân Viên");

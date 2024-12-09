@@ -41,6 +41,28 @@ public class TrangChuController implements Initializable {
     @FXML
     private Label time;
 
+    @FXML
+    private Menu khachHangMenu;
+
+    @FXML
+    private Menu lichDatMenu;
+
+    @FXML
+    private Menu nhaHangMenu;
+
+    @FXML
+    private Menu baoCaoMenu;
+    @FXML
+    private Menu nhanVienMenu;
+
+    @FXML
+    private Menu thongKeMenu;
+
+    @FXML
+    private Menu thucDonMenu;
+
+    @FXML
+    private Menu trangChuMenu;
 
     @FXML
     private TilePane tilePane;
@@ -61,6 +83,8 @@ public class TrangChuController implements Initializable {
     public void setTaiKhoan(TaiKhoan taiKhoan) {
         TrangChuController.taiKhoan = taiKhoan;
         showTooltipForAvatar();
+
+
         if (stage == null || !stage.isShowing()) {
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/TrangBaoCaoVaoCa.fxml"));
@@ -82,6 +106,10 @@ public class TrangChuController implements Initializable {
             }
         } else {
             stage.toFront();
+        }
+        if(TrangChuController.taiKhoan.getNhanVien().getChucVuNhanVien().equals(ChucVu.NHAN_VIEN)) {
+            nhanVienMenu.setVisible(false);
+            thucDonMenu.setVisible(false);
         }
 
     }
@@ -109,8 +137,6 @@ public class TrangChuController implements Initializable {
     public void quanlynhanvien() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/QuanLyNhanVien_XemDS.fxml"));
         AnchorPane anchorPane = loader.load();
-        TrangQuanLyNhanVienController nv = loader.getController();
-        nv.setNhanvien(taiKhoan.getUserName().toString());
         borderPane.setCenter(anchorPane);
         anchorPane.prefWidthProperty().bind(borderPane.widthProperty());
         anchorPane.prefHeightProperty().bind(borderPane.heightProperty());
@@ -300,7 +326,16 @@ public class TrangChuController implements Initializable {
         SeparatorMenuItem separatorMenuItem = new SeparatorMenuItem();
         MenuItem itemDangXuat = new MenuItem("Đăng xuất");
         itemDangXuat.setOnAction(event -> {
-            if (KetCaController.isKetCa) {
+            if(DangNhapController.isAdmin) {
+                Stage stage = (Stage) setting.getScene().getWindow();
+                stage.close();
+                try {
+                    dangXuat();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            else if (KetCaController.isKetCa) {
                 Stage stage = (Stage) setting.getScene().getWindow();
                 stage.close();
 
@@ -322,6 +357,18 @@ public class TrangChuController implements Initializable {
                 contextMenu.show(setting, boundsInScreen.getMinX() - 30, boundsInScreen.getMaxY() + 5);
             }
         });
+
+        if(DangNhapController.isAdmin) {
+            trangChuMenu.setVisible(false);
+            baoCaoMenu.setVisible(false);
+            lichDatMenu.setVisible(false);
+            thucDonMenu.setVisible(false);
+            thongKeMenu.setVisible(false);
+            khachHangMenu.setVisible(false);
+            nhaHangMenu.setVisible(false);
+        }
+
+
 
 
     }
@@ -412,6 +459,12 @@ public class TrangChuController implements Initializable {
             rank++;
         }
 
+    }
+
+    public void showTrangNhanVien(AnchorPane anchorPane) {
+        borderPane.setCenter(anchorPane);
+        anchorPane.prefWidthProperty().bind(borderPane.widthProperty());
+        anchorPane.prefHeightProperty().bind(borderPane.heightProperty());
     }
 
 }

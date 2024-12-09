@@ -58,7 +58,7 @@
             </AnchorPane>
             <MenuBar prefHeight="38.0" prefWidth="1598.0" styleClass="gradient3">
               <menus>
-                <Menu mnemonicParsing="false" text="Trang chủ">
+                <Menu fx:id="trangChuMenu" mnemonicParsing="false" text="Trang chủ">
                   <items>
                     <MenuItem mnemonicParsing="false" onAction="#trangChu" text="Trang chủ" />
                   </items>
@@ -70,7 +70,7 @@
                         </ImageView>
                      </graphic>
                 </Menu>
-                <Menu mnemonicParsing="false" text="Nhà hàng">
+                <Menu fx:id="nhaHangMenu" mnemonicParsing="false" text="Nhà hàng">
                   <items>
                     <MenuItem mnemonicParsing="false" onAction="#datMon" text="Đặt món" />
                         <MenuItem mnemonicParsing="false" onAction="#xemHoaDon" text="Quản lý hóa đơn" />
@@ -84,7 +84,7 @@
                         </ImageView>
                      </graphic>
                 </Menu>
-                  <Menu mnemonicParsing="false" text="Lịch đặt">
+                  <Menu fx:id="lichDatMenu" mnemonicParsing="false" text="Lịch đặt">
                      <items>
                         <MenuItem mnemonicParsing="false" onAction="#datLich" text="Đặt lịch trước" />
                      </items>
@@ -96,7 +96,7 @@
                         </ImageView>
                      </graphic>
                   </Menu>
-                <Menu mnemonicParsing="false" text="Thực đơn">
+                <Menu fx:id="thucDonMenu" mnemonicParsing="false" text="Thực đơn">
                   <items>
                     <MenuItem mnemonicParsing="false" onAction="#thucDon" text="Quản lý thực đơn" />
                   </items>
@@ -108,7 +108,7 @@
                         </ImageView>
                      </graphic>
                 </Menu>
-                  <Menu mnemonicParsing="false" text="Nhân viên">
+                  <Menu fx:id="nhanVienMenu" mnemonicParsing="false" text="Nhân viên">
                     <items>
                       <MenuItem mnemonicParsing="false" onAction="#quanlynhanvien" text="Quản lý nhân viên" />
                         <MenuItem mnemonicParsing="false" onAction="#quanlytaikhoan" text="Quản lý tài khoản" />
@@ -121,7 +121,7 @@
                         </ImageView>
                      </graphic>
                   </Menu>
-                  <Menu mnemonicParsing="false" text="Thống kê">
+                  <Menu fx:id="thongKeMenu" mnemonicParsing="false" text="Thống kê">
                      <items>
                         <MenuItem mnemonicParsing="false" onAction="#thongKe" text="Thống kê" />
                      </items>
@@ -133,7 +133,7 @@
                         </ImageView>
                      </graphic>
                   </Menu>
-                  <Menu mnemonicParsing="false" text="Khách hàng">
+                  <Menu fx:id="khachHangMenu" mnemonicParsing="false" text="Khách hàng">
                      <items>
                         <MenuItem mnemonicParsing="false" onAction="#khachHang" text="Quản lý khách hàng" />
                      </items>
@@ -145,7 +145,7 @@
                         </ImageView>
                      </graphic>
                   </Menu>
-                  <Menu mnemonicParsing="false" text="Báo cáo">
+                  <Menu fx:id="baoCaoMenu" mnemonicParsing="false" text="Báo cáo">
                      <items>
                         <MenuItem mnemonicParsing="false" onAction="#vaoCa" text="Vào ca" />
                         <MenuItem mnemonicParsing="false" onAction="#ketCa" text="Kết ca" />

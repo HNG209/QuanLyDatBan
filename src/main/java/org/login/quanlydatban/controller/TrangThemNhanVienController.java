@@ -40,8 +40,6 @@ public class TrangThemNhanVienController implements Initializable {
     @FXML
     private ImageView image1;
     private String duongdananh;
-    // bien de lay ten nhan vien
-    private String tenNhanVien;
     @FXML
     private Button btnHuyBo; // btn huy bo
     @FXML
@@ -209,14 +207,6 @@ public class TrangThemNhanVienController implements Initializable {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
-    }
-
-    public String getTenNhanVien() {
-        return tenNhanVien;
-    }
-
-    public void setTenNhanVien(String tenNhanVien) {
-        this.tenNhanVien = tenNhanVien;
     }
 
     public String getDuongdananh() {

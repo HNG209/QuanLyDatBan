@@ -10,6 +10,7 @@
     import javafx.scene.image.Image;
     import javafx.scene.image.ImageView;
     import javafx.scene.input.KeyCode;
+    import javafx.scene.layout.AnchorPane;
     import javafx.stage.Stage;
     import org.login.quanlydatban.dao.TaiKhoanDAO;
     import org.login.quanlydatban.encryptionUtils.EncryptionUtils;
@@ -29,8 +30,8 @@
         private TextField username;
         @FXML
         private ImageView img;
-        private  TrangChuController trangchuctr;
 
+        public static boolean isAdmin;
         private TaiKhoanDAO taiKhoanDAO;
 
         @FXML
@@ -80,20 +81,48 @@
         }
         @FXML
         public void dangNhap() throws Exception {
-            TaiKhoan taiKhoan = taiKhoanDAO.getTaiKhoan(username.getText());
-            if(taiKhoan != null){
-                if(password.getText().equals("")) {
-                    System.out.println("Vui long nhap mat khau");
-                }
-                else if(EncryptionUtils.encrypt(password.getText(), System.getenv("ENCRYPTION_KEY")).equals(taiKhoan.getPassword())){
-                    System.out.println("dang nhap thanh cong");
-                    showTrangChu(taiKhoan);
-                }
-                else
-                    System.out.println("sai mat khau");
+            String inputUsername = username.getText().trim();
+            String inputPassword = password.getText().trim();
+
+            if (inputUsername.isEmpty() || inputPassword.isEmpty()) {
+                System.out.println("Vui lòng nhập tài khoản và mật khẩu");
+                return;
             }
-            else System.out.println("khong ton tai");
+
+            // Kiểm tra đặc biệt cho tài khoản admin
+            if ("admin".equalsIgnoreCase(inputUsername)) {
+                if ("admin".equals(inputPassword)) { // So sánh trực tiếp với defaultAccount
+                    System.out.println("Đăng nhập admin thành công");
+                    isAdmin = true;
+                    showTrangChu(null); // Hoặc truyền null nếu không cần thông tin tài khoản
+                } else {
+                    System.out.println("Mật khẩu admin không đúng");
+                }
+                return;
+            }
+
+            // Kiểm tra tài khoản từ cơ sở dữ liệu
+            TaiKhoan taiKhoan;
+            try {
+                taiKhoan = taiKhoanDAO.getTaiKhoan(inputUsername);
+            } catch (Exception e) {
+                System.out.println("Lỗi khi truy vấn dữ liệu: " + e.getMessage());
+                return;
+            }
+
+            if (taiKhoan == null) {
+                System.out.println("Tài khoản không tồn tại");
+            } else {
+                String encryptedPassword = EncryptionUtils.encrypt(inputPassword, System.getenv("ENCRYPTION_KEY"));
+                if (encryptedPassword.equals(taiKhoan.getPassword())) {
+                    System.out.println("Đăng nhập thành công");
+                    showTrangChu(taiKhoan);
+                } else {
+                    System.out.println("Sai mật khẩu");
+                }
+            }
         }
+
         @FXML
         public void hienMatKhau() {
             String currentImageUrl = img.getImage().getUrl();
@@ -130,18 +159,22 @@
             FXMLLoader loader = new FXMLLoader(DangNhapController.class.getResource("/org/login/quanlydatban/views/TrangChu.fxml"));
             Parent root = loader.load();
 
-            //close current stage, stage with UNDECORATED style
             Stage stage = (Stage) username.getScene().getWindow();
             stage.close();
 
-            //init a new stage with no style add on
             stage = new Stage();
             Scene scene = new Scene(root);
             scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/org/login/quanlydatban/stylesheets/style.css")).toExternalForm());
 
-            //passing information to TrangChu
             TrangChuController trangChuController = loader.getController();
-            trangChuController.setTaiKhoan(taiKhoan);
+            if(taiKhoan != null) {
+                trangChuController.setTaiKhoan(taiKhoan);
+            }
+            else {
+                FXMLLoader loaderNhanVien = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/QuanLyNhanVien_XemDS.fxml"));
+                AnchorPane anchorPaneNhanVien = loaderNhanVien.load();
+                trangChuController.showTrangNhanVien(anchorPaneNhanVien);
+            }
             stage.setScene(scene);
             stage.centerOnScreen();
             stage.show();
