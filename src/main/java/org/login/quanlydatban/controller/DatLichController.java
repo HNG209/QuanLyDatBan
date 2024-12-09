@@ -37,8 +37,8 @@ import java.util.ResourceBundle;
 
 public class DatLichController implements Initializable {
 
-    @FXML
-    private ComboBox<LoaiBan> cbLoaiBan;
+//    @FXML
+//    private ComboBox<LoaiBan> cbLoaiBan;
 
     @FXML
     private ComboBox<Integer> cbGio;
@@ -93,6 +93,9 @@ public class DatLichController implements Initializable {
 
     @FXML
     private TextField tfTKmaBan;
+
+    @FXML
+    private TextField tfTKCCCD;
 
     @FXML
     private TextField cocKD;
@@ -179,8 +182,8 @@ public class DatLichController implements Initializable {
         cbBanLoaiBan.getItems().add(null);
         cbBanLoaiBan.getItems().addAll(LoaiBan.values());
 
-        cbLoaiBan.getItems().add(null);
-        cbLoaiBan.getItems().addAll(LoaiBan.values());
+//        cbLoaiBan.getItems().add(null);
+//        cbLoaiBan.getItems().addAll(LoaiBan.values());
 
         cbTrangThai.getItems().add(null);
         cbTrangThai.getItems().addAll(TrangThaiHoaDon.values());
@@ -627,7 +630,7 @@ public class DatLichController implements Initializable {
         tfTKmaLichDat.clear();
         tKngayNhanBan.setValue(null);
         cbTrangThai.setValue(null);
-        cbLoaiBan.setValue(null);
+        tfTKCCCD.clear();
 
         refreshBang();
     }
@@ -637,9 +640,9 @@ public class DatLichController implements Initializable {
         String maLD = tfTKmaLichDat.getText();
         LocalDate ngayNhanBan = tKngayNhanBan.getValue();
         TrangThaiHoaDon trangThaiHoaDon = cbTrangThai.getSelectionModel().getSelectedItem();
-        LoaiBan loaiBan = cbLoaiBan.getSelectionModel().getSelectedItem();
+        String cccd = tfTKCCCD.getText();
 
-        refreshBang(lichDatDAO.getDSLichDatBy(maLD, ngayNhanBan, trangThaiHoaDon, loaiBan));
+        refreshBang(lichDatDAO.getDSLichDatBy(maLD, ngayNhanBan, trangThaiHoaDon, cccd));
     }
 
     @FXML

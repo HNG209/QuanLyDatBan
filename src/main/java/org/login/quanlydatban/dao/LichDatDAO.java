@@ -66,21 +66,22 @@ public class LichDatDAO {
         return list;
     }
 
-    public List<LichDat> getDSLichDatBy(String maLichDat, LocalDate ngayNhanBan, TrangThaiHoaDon trangThaiHoaDon, LoaiBan loaiBan){
+    public List<LichDat> getDSLichDatBy(String maLichDat, LocalDate ngayNhanBan, TrangThaiHoaDon trangThaiHoaDon, String cccd){
         Session session = HibernateUtils.getFactory().openSession();
         session.getTransaction().begin();
 
         List<LichDat> list = session.createNativeQuery("SELECT l.* FROM lichDat AS l " +
                         "INNER JOIN hoaDon ON hoaDon.maHoaDon = l.hoaDon_maHoaDon " +
-                        "INNER JOIN ban ON hoaDon.maBan = ban.maBan " +
+                        "INNER JOIN khachHang ON khachHang.maKhachHang = l.maKhachHang " +
                         "WHERE (:maLichDat LIKE '' OR maLichDat LIKE :maLichDat) AND " +
+                        "(:cccd LIKE '' OR khachHang.cccd LIKE :cccd) AND " +
                         "(:trangThai IS NULL OR hoaDon.trangThaiHoaDon LIKE :trangThai) AND " +
-                        "(:thoiGianNhanBan IS NULL OR DATE(thoiGianNhanBan) = :thoiGianNhanBan) AND " +
-                        "(:loaiBan IS NULL OR ban.loaiBan LIKE :loaiBan)", LichDat.class)
+                        "(:thoiGianNhanBan IS NULL OR DATE(thoiGianNhanBan) = :thoiGianNhanBan)"
+                        , LichDat.class)
                 .setParameter("maLichDat", maLichDat)
+                .setParameter("cccd", cccd)
                 .setParameter("trangThai", trangThaiHoaDon == null ? null : trangThaiHoaDon.name())
                 .setParameter("thoiGianNhanBan", ngayNhanBan)
-                .setParameter("loaiBan", loaiBan == null ? null : loaiBan.name())
                 .getResultList();
 
         session.getTransaction().commit();

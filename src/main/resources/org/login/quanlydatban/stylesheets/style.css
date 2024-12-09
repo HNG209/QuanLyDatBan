@@ -83,6 +83,12 @@
     -fx-border-color: black;
 }
 
+.rounded-pane-simple1 {
+    -fx-background-radius: 10 10 10 10; /* Top-left corner rounded, others sharp */
+    -fx-border-radius: 10 10 10 10;
+    -fx-border-color: black;
+}
+
 .rounded-pane {
     -fx-background-radius: 25;     /* Radius for background */
 
