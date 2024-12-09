@@ -35,7 +35,7 @@
                <font>
                   <Font size="15.0" />
                </font></Label>
-            <ImageView fx:id="anhMon" fitHeight="122.0" fitWidth="121.0" layoutX="119.0" layoutY="237.0" pickOnBounds="true">
+            <ImageView fx:id="anhMon" blendMode="MULTIPLY" fitHeight="122.0" fitWidth="121.0" layoutX="119.0" layoutY="237.0" pickOnBounds="true">
                <image>
                   <Image url="@../icons/empty.png" />
                </image>
