@@ -6,6 +6,7 @@
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.input.KeyCodeCombination?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.Pane?>
@@ -65,9 +66,18 @@
                 </Menu>
                 <Menu mnemonicParsing="false" text="Nhà hàng">
                   <items>
-                    <MenuItem mnemonicParsing="false" onAction="#datMon" text="Đặt món" />
-                        <MenuItem mnemonicParsing="false" onAction="#xemHoaDon" text="Quản lý hóa đơn" />
-                        <MenuItem mnemonicParsing="false" onAction="#xemQuanLyBan" text="Quản lý bàn" />
+                    <MenuItem mnemonicParsing="false" onAction="#datMon" text="Đặt món">
+                           <accelerator>
+                              <KeyCodeCombination alt="UP" code="D" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                           </accelerator></MenuItem>
+                        <MenuItem mnemonicParsing="false" onAction="#xemHoaDon" text="Quản lý hóa đơn">
+                           <accelerator>
+                              <KeyCodeCombination alt="UP" code="H" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                           </accelerator></MenuItem>
+                        <MenuItem mnemonicParsing="false" onAction="#xemQuanLyBan" text="Quản lý bàn">
+                           <accelerator>
+                              <KeyCodeCombination alt="UP" code="B" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                           </accelerator></MenuItem>
                   </items>
                      <graphic>
                         <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
@@ -79,8 +89,14 @@
                 </Menu>
                   <Menu mnemonicParsing="false" text="Lịch đặt">
                      <items>
-                        <MenuItem mnemonicParsing="false" onAction="#datLich" text="Đặt lịch trước" />
-                        <MenuItem mnemonicParsing="false" onAction="#xemLich" text="Xem lịch" />
+                        <MenuItem mnemonicParsing="false" onAction="#datLich" text="Đặt lịch trước">
+                           <accelerator>
+                              <KeyCodeCombination alt="UP" code="L" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                           </accelerator></MenuItem>
+                        <MenuItem mnemonicParsing="false" onAction="#xemLich" text="Xem lịch">
+                           <accelerator>
+                              <KeyCodeCombination alt="UP" code="L" control="DOWN" meta="UP" shift="DOWN" shortcut="UP" />
+                           </accelerator></MenuItem>
                      </items>
                      <graphic>
                         <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
