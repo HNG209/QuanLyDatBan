@@ -12,8 +12,13 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import javafx.util.Duration;
+import org.login.quanlydatban.dao.BaoCaoDAO;
 import org.login.quanlydatban.dao.HoaDonDAO;
+import org.login.quanlydatban.dao.NhanVienDAO;
+import org.login.quanlydatban.entity.BaoCao;
+import org.login.quanlydatban.entity.NhanVien;
 import org.login.quanlydatban.entity.TaiKhoan;
+import org.login.quanlydatban.notification.Notification;
 import org.login.quanlydatban.utilities.Clock;
 
 import javax.swing.*;
@@ -81,13 +86,17 @@ public class KetCaController {
     private TaiKhoan taiKhoan;
     private HoaDonDAO hoaDonDAO;
     private DecimalFormat df = new DecimalFormat("#,### VND");;
-    public static boolean isKetCa = false;
+    public static boolean isKetCa;
     public TaiKhoan getTaiKhoan() {
         return taiKhoan;
     }
 
     public void setTaiKhoan(TaiKhoan taiKhoan) {
         this.taiKhoan = taiKhoan;
+    }
+
+    public static void setIsKetCa(boolean isKetCa) {
+        KetCaController.isKetCa = isKetCa;
     }
 
     @FXML
@@ -119,7 +128,7 @@ public class KetCaController {
             tongSoHoaDon.setText("0");
             tongDoanhThu.setText("0");
         } else {
-            tongDoanhThu.setText(doanhThuVaSoHD[0].toString());
+            tongDoanhThu.setText(df.format(doanhThuVaSoHD[0].toString()));
             tongSoHoaDon.setText(doanhThuVaSoHD[1].toString());
         }
     }
@@ -271,7 +280,9 @@ public class KetCaController {
                 writer.newLine();
                 writer.write("Tên nhân viên: " + tenNhanVien);
                 writer.newLine();
-                writer.write("Ngày lập báo cáo: " + ngayLap);
+                writer.write("Thời gian vào ca: " + VaoCaController.thoiGianVaoCa);
+                writer.newLine();
+                writer.write("Thời gian kết ca: " + ngayLap);
                 writer.newLine();
                 writer.write("-----------------------------------------------------------------------");
                 writer.newLine();
@@ -287,7 +298,9 @@ public class KetCaController {
                 writer.newLine();
                 writer.write("Chênh lệch: " + chenhLechText);
                 writer.newLine();
-
+                BaoCao bc = new BaoCao(null, VaoCaController.thoiGianVaoCa, thoiGianHienTai.getText(), Double.parseDouble(tienVaoCaText.replace(" VND", "").replace(",","")), Double.parseDouble(tongDoanhThuText.replace(" VND", "").replace(",","")), Double.parseDouble(tongMenhGiaText.replace(" VND", "").replace(",","")), taiKhoan.getNhanVien());
+                BaoCaoDAO baoCaoDAO = new BaoCaoDAO();
+                baoCaoDAO.themBaoCao(bc);
                 JOptionPane.showMessageDialog(null, "Xuất báo cáo kết ca thành công");
                 isKetCa = true;
                 for (Window window : Window.getWindows()) {

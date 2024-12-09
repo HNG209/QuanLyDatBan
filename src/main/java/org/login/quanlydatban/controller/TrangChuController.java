@@ -5,16 +5,14 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Bounds;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.shape.Circle;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -45,7 +43,7 @@ public class TrangChuController implements Initializable {
 
 
     @FXML
-    private FlowPane flowPane;
+    private TilePane tilePane;
 
     @FXML
     private ImageView avatar;
@@ -165,41 +163,47 @@ public class TrangChuController implements Initializable {
     @FXML
     public void ketCa() throws IOException {
 
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/TrangBaoCaoKetCa.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/TrangBaoCaoKetCa.fxml"));
+        AnchorPane anchorPane = loader.load();
+        KetCaController ketCa = loader.getController();
+        ketCa.setTaiKhoan(taiKhoan);
+
+        Scene scene = new Scene(anchorPane);
+        stage = new Stage();
+        stage.setScene(scene);
+        stage.setTitle("Báo Cáo Kết Ca");
+        stage.setOnCloseRequest(e -> stage = null);
+        stage.setResizable(false);
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.showAndWait();
+
+    }
+
+    @FXML
+    public void vaoCa() throws IOException {
+        try {
+            // Kiểm tra nếu báo cáo đã được lưu rồi
+            if (VaoCaController.isBaoCaoSaved) {
+                Notification.thongBao("Báo cáo vào ca đã được lưu rồi. Bạn không thể lưu lại.", Alert.AlertType.INFORMATION);
+                return;
+            }
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/TrangBaoCaoVaoCa.fxml"));
             AnchorPane anchorPane = loader.load();
-            KetCaController ketCa = loader.getController();
-            ketCa.setTaiKhoan(taiKhoan);
 
             Scene scene = new Scene(anchorPane);
             stage = new Stage();
             stage.setScene(scene);
-            stage.setTitle("Báo Cáo Kết Ca");
+            stage.setTitle("Báo Cáo Vào Ca");
             stage.setOnCloseRequest(e -> stage = null);
             stage.setResizable(false);
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.showAndWait();
+        } catch (IOException e) {
+            Notification.thongBao("Hiển thị báo cáo vào ca không thành công", Alert.AlertType.ERROR);
+        }
 
     }
-    @FXML
-    public void vaoCa() throws IOException {
-            try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/TrangBaoCaoVaoCa.fxml"));
-                AnchorPane anchorPane = loader.load();
 
-                Scene scene = new Scene(anchorPane);
-                stage = new Stage();
-                stage.setScene(scene);
-                stage.setTitle("Báo Cáo Vào Ca");
-                stage.setOnCloseRequest(e -> stage = null);
-                stage.setResizable(false);
-                stage.initModality(Modality.APPLICATION_MODAL);
-                stage.showAndWait();
-            }
-            catch (IOException e) {
-                Notification.thongBao("Hiển thị báo cáo vào ca không thành công", Alert.AlertType.ERROR);
-            }
-
-    }
     @FXML
     public void thucDon() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/TrangThucDon.fxml"));
@@ -209,6 +213,7 @@ public class TrangChuController implements Initializable {
         anchorPane.prefWidthProperty().bind(borderPane.widthProperty());
         anchorPane.prefHeightProperty().bind(borderPane.heightProperty());
     }
+
     @FXML
     public void xemHoaDon() throws IOException {
         try {
@@ -224,8 +229,9 @@ public class TrangChuController implements Initializable {
             e.printStackTrace();
         }
     }
+
     @FXML
-    public void khachHang() throws IOException{
+    public void khachHang() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/TrangKhachHang.fxml"));
         AnchorPane anchorPane = loader.load();
         borderPane.setCenter(anchorPane);
@@ -234,18 +240,19 @@ public class TrangChuController implements Initializable {
     }
 
     public static void dangXuat() throws IOException {
-            FXMLLoader loader = new FXMLLoader(TrangChuController.class.getResource("/org/login/quanlydatban/views/TrangDangNhap.fxml"));
-            Scene scene = new Scene(loader.load());
-            Stage stage = new Stage();
-
-            if (stage != null){
-                stage.setTitle("Đăng nhập");
-                stage.setScene(scene);
-                stage.initStyle(StageStyle.UNDECORATED);
-                stage.setScene(scene);
-                scene.getStylesheets().add(Objects.requireNonNull(TrangChuController.class.getResource("/org/login/quanlydatban/stylesheets/style.css")).toExternalForm());
-                stage.show();
-            }
+        FXMLLoader loader = new FXMLLoader(TrangChuController.class.getResource("/org/login/quanlydatban/views/TrangDangNhap.fxml"));
+        Scene scene = new Scene(loader.load());
+        Stage stage = new Stage();
+        VaoCaController.setIsBaoCaoSaved(false);
+        KetCaController.setIsKetCa(false);
+        if (stage != null) {
+            stage.setTitle("Đăng nhập");
+            stage.setScene(scene);
+            stage.initStyle(StageStyle.UNDECORATED);
+            stage.setScene(scene);
+            scene.getStylesheets().add(Objects.requireNonNull(TrangChuController.class.getResource("/org/login/quanlydatban/stylesheets/style.css")).toExternalForm());
+            stage.show();
+        }
     }
 
     @FXML
@@ -293,18 +300,17 @@ public class TrangChuController implements Initializable {
         SeparatorMenuItem separatorMenuItem = new SeparatorMenuItem();
         MenuItem itemDangXuat = new MenuItem("Đăng xuất");
         itemDangXuat.setOnAction(event -> {
-
-            if(KetCaController.isKetCa) {
+            if (KetCaController.isKetCa) {
                 Stage stage = (Stage) setting.getScene().getWindow();
                 stage.close();
+
                 try {
                     dangXuat();
                 } catch (IOException e) {
 
                     throw new RuntimeException(e);
                 }
-            }
-            else Notification.thongBao("Bạn chưa làm báo cáo kết ca", Alert.AlertType.INFORMATION);
+            } else Notification.thongBao("Bạn chưa làm báo cáo kết ca", Alert.AlertType.INFORMATION);
         });
 
         contextMenu.getItems().addAll(itemTaiKhoan, separatorMenuItem, itemDangXuat);
@@ -331,6 +337,7 @@ public class TrangChuController implements Initializable {
     public static void setBorderPaneStatic(BorderPane borderPaneStatic) {
         TrangChuController.borderPaneStatic = borderPaneStatic;
     }
+
     @FXML
     public void xemQuanLyBan() throws IOException {
         try {
@@ -346,6 +353,7 @@ public class TrangChuController implements Initializable {
             e.printStackTrace();
         }
     }
+
     @FXML
     public void showTooltipForAvatar() {
         Tooltip tooltip = new Tooltip();
@@ -369,32 +377,38 @@ public class TrangChuController implements Initializable {
         avatar.setOnMouseEntered(event -> tooltip.show(avatar, event.getScreenX(), event.getScreenY() + 15));
         avatar.setOnMouseExited(event -> tooltip.hide());
     }
+
     @FXML
     public void trangChu() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/TrangChu.fxml"));
         BorderPane newBorderPane = loader.load();
         borderPane.setCenter(newBorderPane.getCenter());
-        initialize(null, null);    }
+        initialize(null, null);
+    }
+
     public void loadRankingBoard() throws IOException {
         HoaDonDAO hoaDonDAO = new HoaDonDAO();
 
         List<Object[]> rankingFood = hoaDonDAO.layTop10MonAnTheoDoanhThuVaSoLuongBan();
         FXMLLoader titleLoader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/uicomponents/RankingCardTitle.fxml"));
         Node rankingTitleCard = titleLoader.load();
-        flowPane.getChildren().add(rankingTitleCard);
-        flowPane.setHgap(5);
-        flowPane.setVgap(5);
+        tilePane.getChildren().add(rankingTitleCard);
+        tilePane.setHgap(10);
+        tilePane.setVgap(10);
+        tilePane.setAlignment(Pos.CENTER); // Căn giữa
+        tilePane.setPrefWidth(Region.USE_COMPUTED_SIZE); // Đảm bảo tự động tính toán kích thước
+        tilePane.setPrefHeight(Region.USE_COMPUTED_SIZE);
         int rank = 1;
         for (Object[] object : rankingFood) {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/uicomponents/RankingCard.fxml"));
             AnchorPane rankingCard = loader.load();
             RankingCardController controller = loader.getController();
-            if(rank % 2 != 0) {
+            if (rank % 2 != 0) {
                 rankingCard.getStyleClass().remove("gradient1"); // Xóa class cũ
                 rankingCard.getStyleClass().add("gradient4");    // Thêm class mới
             }
             controller.setMonAn(rank, object[0].toString(), Double.parseDouble(object[1].toString()), Integer.parseInt(object[2].toString()));
-            flowPane.getChildren().add(rankingCard);
+            tilePane.getChildren().add(rankingCard);
             rank++;
         }
 

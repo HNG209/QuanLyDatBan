@@ -33,7 +33,7 @@ public class HibernateUtils {
         configuration.addAnnotatedClass(Ban.class);
         configuration.addAnnotatedClass(MonAn.class);
         configuration.addAnnotatedClass(KhachHang.class);
-        configuration.addAnnotatedClass(PhienThongKe.class);
+        configuration.addAnnotatedClass(BaoCao.class);
         configuration.addAnnotatedClass(HoaDon.class);
         configuration.addAnnotatedClass(ChiTietHoaDon.class);
         configuration.addAnnotatedClass(LichDat.class);

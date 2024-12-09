@@ -50,8 +50,18 @@ public class VaoCaController {
 
     @FXML
     private Label tongMenhGia;
-    private static boolean isBaoCaoSaved = false;
+    public static boolean isBaoCaoSaved = false;
+    public static String thoiGianVaoCa;
     public static String tongTienVaoCa;
+
+    public static boolean isIsBaoCaoSaved() {
+        return isBaoCaoSaved;
+    }
+
+    public static void setIsBaoCaoSaved(boolean isBaoCaoSaved) {
+        VaoCaController.isBaoCaoSaved = isBaoCaoSaved;
+    }
+
     private DecimalFormat df = new DecimalFormat("#,### VND");;
     @FXML
     public void initialize() {
@@ -112,12 +122,7 @@ public class VaoCaController {
 
         @FXML
         private void luuBaoCaoVaoCa() {
-            // Kiểm tra nếu báo cáo đã được lưu rồi
-            if (isBaoCaoSaved) {
-                Notification.thongBao("Báo cáo vào ca đã được lưu rồi. Bạn không thể lưu lại.", Alert.AlertType.INFORMATION);
-                dongCuaSo();
-                return;
-            }
+
 
             // Hiển thị thông báo xác nhận
             boolean confirm = Notification.xacNhan("Bạn có muốn lưu báo cáo vào ca không?");
@@ -125,7 +130,7 @@ public class VaoCaController {
             if (confirm) {
                 // Nếu người dùng nhấn "OK", lưu báo cáo
                 tongTienVaoCa = tongMenhGia.getText(); // Lưu tổng tiền vào ca
-
+                thoiGianVaoCa = thoiGianHienTai.getText();
                 // Đánh dấu báo cáo đã được lưu
                 isBaoCaoSaved = true;
 
@@ -136,7 +141,7 @@ public class VaoCaController {
                 Notification.thongBao("Bạn đã hủy lưu báo cáo.", Alert.AlertType.INFORMATION);
             }
         }
-    private void dongCuaSo() {
+    public static void dongCuaSo() {
         Stage stage = (Stage) Window.getWindows().stream()
                 .filter(Window::isFocused)
                 .findFirst()
