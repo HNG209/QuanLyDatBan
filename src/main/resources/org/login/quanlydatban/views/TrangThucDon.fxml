@@ -18,7 +18,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="635.0" prefWidth="1280.0" styleClass="gradient1" stylesheets="@../stylesheets/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.login.quanlydatban.controller.ThucDonController">
+<AnchorPane prefHeight="635.0" prefWidth="1280.0" styleClass="gradient1" stylesheets="@../stylesheets/style.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.login.quanlydatban.controller.ThucDonController">
    <children>
       <AnchorPane layoutX="715.2000122070312" layoutY="51.20000076293945" prefHeight="565.0" prefWidth="558.0" style="-fx-background-color: white; -fx-border-color: black;" styleClass="round-box" stylesheets="@../stylesheets/style.css" AnchorPane.bottomAnchor="19.0" AnchorPane.rightAnchor="9.0" AnchorPane.topAnchor="51.0">
          <children>
@@ -30,7 +30,7 @@
                <font>
                   <Font size="15.0" />
                </font></Label>
-            <TextArea fx:id="txfMoTa" layoutX="114.0" layoutY="400.0" prefHeight="55.0" prefWidth="398.0" promptText="Nếu có" styleClass="round-box" AnchorPane.bottomAnchor="110.0" AnchorPane.rightAnchor="33.0" AnchorPane.topAnchor="399.0" />
+            <TextArea fx:id="txfMoTa" layoutX="114.0" layoutY="400.8" prefHeight="73.0" prefWidth="398.0" promptText="Nếu có" AnchorPane.bottomAnchor="92.0" AnchorPane.rightAnchor="34.0" AnchorPane.topAnchor="400.0" />
             <Label layoutX="33.0" layoutY="254.0" prefHeight="18.0" prefWidth="87.0" text="Hình ảnh:">
                <font>
                   <Font size="15.0" />
@@ -54,7 +54,7 @@
                <font>
                   <Font size="15.0" />
                </font></Label>
-            <ComboBox fx:id="cbloaiMonAn" editable="true" layoutX="128.0" layoutY="65.0" prefHeight="26.0" prefWidth="398.0" styleClass="round-box">
+            <ComboBox fx:id="cbloaiMonAn" editable="true" layoutX="128.0" layoutY="65.0" prefHeight="26.0" prefWidth="398.0">
 <!--               <items>-->
 <!--                  <FXCollections fx:factory="observableArrayList">-->
 <!--                     <String fx:value="TRANG_MIENG" />-->
@@ -71,7 +71,7 @@
                <font>
                   <Font size="15.0" />
                </font></Label>
-            <ComboBox fx:id="cbtrangThaiMon" layoutX="128.0" layoutY="112.0" prefHeight="26.0" prefWidth="398.0" styleClass="round-box">
+            <ComboBox fx:id="cbtrangThaiMon" layoutX="128.0" layoutY="112.0" prefHeight="26.0" prefWidth="398.0">
                <items>
                   <FXCollections fx:factory="observableArrayList">
                      <String fx:value="Có sẵn" />
@@ -81,10 +81,10 @@
                </items>
             </ComboBox>
             <TextField fx:id="txtTenMonAn" layoutX="128.0" layoutY="20.0" prefHeight="26.0" prefWidth="398.0" promptText="Vui lòng nhập" styleClass="underlined-style" AnchorPane.rightAnchor="32.0" />
-            <Button fx:id="btnCapNhat" layoutX="28.0" layoutY="466.0" mnemonicParsing="false" onAction="#capNhatControl" prefHeight="31.0" prefWidth="245.0" styleClass="sunset-orange" text="Chỉnh sửa món" textFill="#0b0b0b" AnchorPane.bottomAnchor="67.3999999999999" AnchorPane.leftAnchor="28.0" AnchorPane.rightAnchor="284.0" />
-            <Button fx:id="btnXoaRong" layoutX="279.0" layoutY="466.0" mnemonicParsing="false" onAction="#xoaRongControl" prefHeight="31.0" prefWidth="246.0" styleClass="pale-lemon" text="Làm sạch bảng" textFill="#0b0b0b" AnchorPane.bottomAnchor="67.3999999999999" AnchorPane.leftAnchor="279.0" AnchorPane.rightAnchor="31.99999999999997" />
-            <Button fx:id="btnThemMon" layoutX="28.0" layoutY="511.0" mnemonicParsing="false" onAction="#themControl" prefHeight="31.0" prefWidth="498.0" styleClass="sage-green" stylesheets="@../stylesheets/style.css" text="Thêm món ăn" textFill="#0b0b0b" AnchorPane.bottomAnchor="22.39999999999991" AnchorPane.leftAnchor="28.0" AnchorPane.rightAnchor="31.200000000000045" />
-            <ComboBox fx:id="cbDonViTinh" editable="true" layoutX="129.0" layoutY="156.0" prefHeight="26.0" prefWidth="398.0" styleClass="round-box" />
+            <Button fx:id="btnCapNhat" layoutX="28.8" layoutY="494.4" mnemonicParsing="false" onAction="#capNhatControl" prefHeight="26.0" prefWidth="245.0" styleClass="sunset-orange" text="Chỉnh sửa món" textFill="#0b0b0b" AnchorPane.bottomAnchor="43.79999999999993" AnchorPane.leftAnchor="28.8" AnchorPane.rightAnchor="283.19999999999993" />
+            <Button fx:id="btnXoaRong" layoutX="280.0" layoutY="494.4" mnemonicParsing="false" onAction="#xoaRongControl" prefHeight="26.0" prefWidth="246.0" styleClass="pale-lemon" text="Làm sạch bảng" textFill="#0b0b0b" AnchorPane.bottomAnchor="43.79999999999993" AnchorPane.leftAnchor="280.0" AnchorPane.rightAnchor="31.19999999999996" />
+            <Button fx:id="btnThemMon" layoutX="28.6" layoutY="528.0" mnemonicParsing="false" onAction="#themControl" prefHeight="26.0" prefWidth="498.0" styleClass="sage-green" stylesheets="@../stylesheets/style.css" text="Thêm món ăn" textFill="#0b0b0b" AnchorPane.bottomAnchor="10.19999999999991" AnchorPane.leftAnchor="28.6" AnchorPane.rightAnchor="30.399999999999977" />
+            <ComboBox fx:id="cbDonViTinh" editable="true" layoutX="129.0" layoutY="156.0" prefHeight="26.0" prefWidth="398.0" />
          </children>
       </AnchorPane>
       <ScrollPane fx:id="scrollPane" layoutX="19.2" layoutY="51.2" prefHeight="566.0" prefWidth="686.0" AnchorPane.bottomAnchor="18.0" AnchorPane.leftAnchor="19.0" AnchorPane.rightAnchor="575.0" AnchorPane.topAnchor="51.0">
@@ -95,7 +95,7 @@
                </padding></FlowPane>
          </content>
       </ScrollPane>
-      <GridPane alignment="CENTER" hgap="10.0" layoutX="48.0" layoutY="17.0" prefHeight="27.0" prefWidth="597.0" AnchorPane.leftAnchor="48.0" AnchorPane.rightAnchor="644.0">
+      <GridPane alignment="CENTER" hgap="10.0" layoutX="52.0" layoutY="17.0" prefHeight="27.0" prefWidth="582.0" AnchorPane.leftAnchor="52.0" AnchorPane.rightAnchor="646.0">
          <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -105,8 +105,8 @@
             <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
          </rowConstraints>
          <children>
-            <TextField fx:id="txtTimKiem" prefHeight="27.0" prefWidth="919.0" promptText="Tìm kiếm tên món..." style="-fx-border-color: #F3B664;" styleClass="round-box" />
-            <ComboBox fx:id="cbTimLoaiMon" editable="true" prefHeight="27.0" prefWidth="498.0" promptText="Nhập hoặc chọn loại món" styleClass="round-box" GridPane.columnIndex="1">
+            <TextField fx:id="txtTimKiem" prefHeight="27.0" prefWidth="919.0" promptText="Tìm kiếm tên món..." style="-fx-border-color: #F3B664;" />
+            <ComboBox fx:id="cbTimLoaiMon" editable="true" prefHeight="27.0" prefWidth="498.0" promptText="Nhập hoặc chọn loại món" GridPane.columnIndex="1">
 <!--         <items>-->
 <!--            <FXCollections fx:factory="observableArrayList">-->
 <!--               <String fx:value="Tìm theo tên món" />-->
@@ -115,7 +115,7 @@
 <!--            </FXCollections>-->
 <!--         </items>-->
       </ComboBox>
-            <ComboBox fx:id="cbSapXep" prefHeight="27.0" prefWidth="678.0" promptText="Chọn cách sắp xếp" styleClass="round-box" GridPane.columnIndex="2">
+            <ComboBox fx:id="cbSapXep" prefHeight="27.0" prefWidth="678.0" promptText="Chọn cách sắp xếp" GridPane.columnIndex="2">
                <items>
                   <FXCollections fx:factory="observableArrayList">
                      <String fx:value="Sắp xếp giá tăng dần" />
