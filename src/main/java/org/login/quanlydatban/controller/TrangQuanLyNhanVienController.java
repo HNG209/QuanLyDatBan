@@ -439,7 +439,7 @@ public class TrangQuanLyNhanVienController implements Initializable {
         nv.setSdt(dienThoai.getText());
         nv.setChucVuNhanVien(cv);
         nv.setTrangThaiNhanVien(tt);
-        nv.setDiaChi(diaChi.getText());
+        nv.setDiaChi(diaChi1.getText());
         nv.setHinhAnh(duongdananh);
         nv.setNgaySinh(ngaySinh.getValue());
         NhanVienDAO nvd = new NhanVienDAO();
@@ -522,15 +522,22 @@ public class TrangQuanLyNhanVienController implements Initializable {
 
                 NhanVienDAO nvd = new NhanVienDAO();
                 List<NhanVien> nv = nvd.getAllTaiKhoan();
-                NhanVien nvsdt = nv.stream().filter(x->x.getSdt().equals(dienThoai.getText())).findFirst().orElse(null);
-                NhanVien nvscccd = nv.stream().filter(x->x.getCccd().equals(cccd.getText())).findFirst().orElse(null);
 
-                if(nvscccd != null){
+                long countNhanViensdt = nv.stream()
+                        .filter(x -> x.getSdt().equals(dienThoai.getText()))
+                        .count();
+
+                long countNhanViencccd = nv.stream()
+                        .filter(x -> x.getSdt().equals(dienThoai.getText()))
+                        .count();
+
+
+                if(countNhanViencccd >= 2){
                     showWarn("Căn cước công dân này đã được sử dụng, vui lòng sử dụng số căn cước công dân khác");
                     return;
                 }
 
-                if(nvsdt != null){
+                if(countNhanViensdt >=2){
                     showWarn("Số điện thoại này đã được sử dụng, vui lòng sử dụng số điện thoại khác");
                     return;
                 }
