@@ -111,6 +111,7 @@ public class ThucDonController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         cbloaiMonAn.getSelectionModel().selectFirst();
         cbtrangThaiMon.getSelectionModel().selectFirst();
+        cbSapXep.getSelectionModel().selectFirst();
         monAnDAO = new MonAnDAO();
         loaiMonDAO = new LoaiMonDAO();
         ObservableList<String> sharedList = FXCollections.observableArrayList();
@@ -419,10 +420,10 @@ public class ThucDonController implements Initializable {
         String selectedType = cbTimLoaiMon.getValue();
         int sortOption = cbSapXep.getSelectionModel().getSelectedIndex();
 
-        if (cbTimLoaiMon.getValue() == null && keyword.isEmpty() && sortOption == -1) {
-            Notification.thongBao("Bạn cần nhập/chọn một trong các cách tìm trước khi tiến hành tìm kiếm", Alert.AlertType.WARNING);
-        }
-        else {
+//        if (cbTimLoaiMon.getValue() == null && keyword.isEmpty() && sortOption == -1) {
+//            Notification.thongBao("Bạn cần nhập/chọn một trong các cách tìm trước khi tiến hành tìm kiếm", Alert.AlertType.WARNING);
+//        }
+//        else {
             // Clear the previous list
             flowPane.getChildren().clear();
             flowPane.prefHeightProperty().bind(scrollPane.heightProperty());
@@ -452,7 +453,7 @@ public class ThucDonController implements Initializable {
             // Show warning if no items are found
             if (filteredItems.isEmpty()) {
                 Notification.thongBao("Không tìm thấy món ăn phù hợp với tiêu chí tìm kiếm!", Alert.AlertType.WARNING);
-            }
+
       }
 
 
@@ -561,7 +562,7 @@ public class ThucDonController implements Initializable {
             txtTimKiem.clear();
             cbTimLoaiMon.getEditor().clear();
             cbTimLoaiMon.setValue("");
-            cbSapXep.getSelectionModel().clearSelection();
+            cbSapXep.getSelectionModel().selectFirst();
             flowPane.getChildren().clear(); // Clear existing items
 
             List<MonAn> monAnList = monAnDAO.getAllMonAn(); // Retrieve the latest data from the database
