@@ -85,29 +85,30 @@ public class TrangChuController implements Initializable {
     public void setTaiKhoan(TaiKhoan taiKhoan) {
         TrangChuController.taiKhoan = taiKhoan;
         showTooltipForAvatar();
+        showMenu();
+        if(TrangChuController.taiKhoan.getNhanVien().getChucVuNhanVien().equals(ChucVu.NHAN_VIEN)) {
+            if (stage == null || !stage.isShowing()) {
+                try {
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/TrangBaoCaoVaoCa.fxml"));
+                    AnchorPane anchorPane = loader.load();
 
+                    Scene scene = new Scene(anchorPane);
+                    stage = new Stage();
+                    stage.setScene(scene);
+                    stage.setTitle("Báo Cáo Vào Ca");
+                    stage.setResizable(false);
 
-        if (stage == null || !stage.isShowing()) {
-            try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/TrangBaoCaoVaoCa.fxml"));
-                AnchorPane anchorPane = loader.load();
-
-                Scene scene = new Scene(anchorPane);
-                stage = new Stage();
-                stage.setScene(scene);
-                stage.setTitle("Báo Cáo Vào Ca");
-                stage.setResizable(false);
-
-                stage.setOnCloseRequest(e -> stage = null);
-                stage.initModality(Modality.APPLICATION_MODAL);
-                stage.initStyle(StageStyle.UNDECORATED);
-                stage.showAndWait();
-            } catch (IOException e) {
-                Notification.thongBao("Hiển thị báo cáo vào ca không thành công", Alert.AlertType.ERROR);
-                e.printStackTrace();
+                    stage.setOnCloseRequest(e -> stage = null);
+                    stage.initModality(Modality.APPLICATION_MODAL);
+                    stage.initStyle(StageStyle.UNDECORATED);
+                    stage.showAndWait();
+                } catch (IOException e) {
+                    Notification.thongBao("Hiển thị báo cáo vào ca không thành công", Alert.AlertType.ERROR);
+                    e.printStackTrace();
+                }
+            } else {
+                stage.toFront();
             }
-        } else {
-            stage.toFront();
         }
         if(TrangChuController.taiKhoan.getNhanVien().getChucVuNhanVien().equals(ChucVu.NHAN_VIEN)) {
             nhanVienMenu.setVisible(false);
@@ -327,7 +328,7 @@ public class TrangChuController implements Initializable {
         SeparatorMenuItem separatorMenuItem = new SeparatorMenuItem();
         MenuItem itemDangXuat = new MenuItem("Đăng xuất");
         itemDangXuat.setOnAction(event -> {
-            if(DangNhapController.isAdmin) {
+            if(DangNhapController.isAdmin || TrangChuController.taiKhoan.getNhanVien().getChucVuNhanVien().equals(ChucVu.QUAN_LY)) {
                 Stage stage = (Stage) setting.getScene().getWindow();
                 stage.close();
                 try {
@@ -466,6 +467,16 @@ public class TrangChuController implements Initializable {
         borderPane.setCenter(anchorPane);
         anchorPane.prefWidthProperty().bind(borderPane.widthProperty());
         anchorPane.prefHeightProperty().bind(borderPane.heightProperty());
+    }
+    public void showMenu() {
+        trangChuMenu.setVisible(true);
+        baoCaoMenu.setVisible(true);
+        lichDatMenu.setVisible(true);
+        thucDonMenu.setVisible(true);
+        thongKeMenu.setVisible(true);
+        khachHangMenu.setVisible(true);
+        nhaHangMenu.setVisible(true);
+        nhanVienMenu.setVisible(true);
     }
 
 }

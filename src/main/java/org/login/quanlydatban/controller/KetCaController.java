@@ -4,6 +4,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -123,12 +124,17 @@ public class KetCaController {
         tenNhanVien.setText(TrangChuController.taiKhoan.getNhanVien().getTenNhanVien());
         Object[] doanhThuVaSoHD;
         doanhThuVaSoHD = hoaDonDAO.layDoanhThuVaSoHoaDon(maNV, LocalDate.now());
-        tienVaoCa.setText(VaoCaController.tongTienVaoCa.toString());
+        try {
+            tienVaoCa.setText(VaoCaController.tongTienVaoCa.toString());
+        }
+        catch (Exception e){
+            Notification.thongBao("Bạn chưa làm báo cáo vào ca", Alert.AlertType.ERROR);
+        }
         if (doanhThuVaSoHD.length == 0) {
             tongSoHoaDon.setText("0");
             tongDoanhThu.setText("0");
         } else {
-            tongDoanhThu.setText(df.format(doanhThuVaSoHD[0].toString()));
+            tongDoanhThu.setText(df.format(Double.parseDouble(doanhThuVaSoHD[0].toString())));
             tongSoHoaDon.setText(doanhThuVaSoHD[1].toString());
         }
     }
