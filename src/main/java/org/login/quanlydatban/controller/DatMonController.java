@@ -151,6 +151,8 @@ public class DatMonController implements Initializable {
 
     private ChiTietHoaDonDAO chiTietHoaDonDAO;
 
+    private LichDatDAO lichDatDAO;
+
     private HoaDon hoaDon;
 
     private KhachHang khachHang;
@@ -173,9 +175,10 @@ public class DatMonController implements Initializable {
             hoaDonDAO = new HoaDonDAO();
             chiTietHoaDonDAO = new ChiTietHoaDonDAO();
             khachHangDAO = new KhachHangDAO();
+            lichDatDAO = new LichDatDAO();
 
             tenKhachHang.focusedProperty().addListener((observable, oldValue, newValue) -> {
-                if (!newValue) { // If newValue is false, the TextField has lost focus
+                if (!newValue && !tfCCCD.getText().isEmpty()) { // If newValue is false, the TextField has lost focus
                     if (Notification.xacNhan("Lưu khách hàng này?")) {
                         KhachHang khachHang = new KhachHang();
                         khachHang.setCccd(tfCCCD.getText());
@@ -554,6 +557,7 @@ public class DatMonController implements Initializable {
             else {
                 tfDiemTichLuyDung.setDisable(true);
             }
+            capNhatTongTien();
         }
         chiTietHoaDonDAO.getCTHDfromHD(hoaDon).forEach(
                 i -> loadBang(new Object[] {i.getMonAn().getMaMonAn(),
@@ -567,42 +571,63 @@ public class DatMonController implements Initializable {
 
     @FXML
     void giuBan(ActionEvent event) {
-        if(Notification.xacNhan("Xác nhận giữ bàn, bạn có thể huỷ ngay nếu muốn")){
-            this.ban.setTrangThaiBan(TrangThaiBan.DANG_PHUC_VU);
-            this.ban = banDAO.updateBan(ban);
-            this.trangThaiBanText.setText(ban.getTrangThaiBan().toString());
-            this.btnHuy.setVisible(true);
-            this.btnGiuBan.setVisible(false);
+        try {
+            List<LichDat> lichDatBanHienTai = lichDatDAO.getLichDatIf(ban);
 
-            //lap hoa don voi trang thai chua thanh toan khi giu ban
-            HoaDon hoaDon = new HoaDon();
-            hoaDon.setNhanVien(TrangChuController.getTaiKhoan().getNhanVien());
-            hoaDon.setBan(ban);
-            hoaDon.setTrangThaiHoaDon(TrangThaiHoaDon.CHUA_THANH_TOAN);
-            hoaDon.setNgayLap(LocalDate.now());
-            hoaDon.setKhachHang(null);
+            if (!lichDatBanHienTai.isEmpty()) {
+                if(Notification.xacNhan("Bàn hiện tại đang có lịch đặt, vui lòng kiểm tra lịch")){
+                    DatLichController.getInstance().refreshBang(lichDatBanHienTai);
+                    TrangChuController.getBorderPaneStatic().setCenter(DatLichController.getInstance().getRoot());
+                    return;
+                }
+                return;
+            }
 
-            this.hoaDon = hoaDonDAO.lapHoaDon(hoaDon);
+            if (Notification.xacNhan("Xác nhận giữ bàn, bạn có thể huỷ ngay nếu muốn")) {
+                this.ban.setTrangThaiBan(TrangThaiBan.DANG_PHUC_VU);
+                this.ban = banDAO.updateBan(ban);
+                this.trangThaiBanText.setText(ban.getTrangThaiBan().toString());
+                this.btnHuy.setVisible(true);
+                this.btnGiuBan.setVisible(false);
 
-            Notification.thongBao("Giữ bàn thành công", Alert.AlertType.INFORMATION);
-        }
-    }
-    @FXML
-    void huyBan(ActionEvent event) {
-        if(orderTable.getItems().size() == 0){
-            ban.setTrangThaiBan(TrangThaiBan.BAN_TRONG);
-            this.ban = banDAO.updateBan(ban);
-            this.trangThaiBanText.setText(ban.getTrangThaiBan().toString());
-            this.btnHuy.setVisible(false);
-            this.btnGiuBan.setVisible(true);
+                //lap hoa don voi trang thai chua thanh toan khi giu ban
+                HoaDon hoaDon = new HoaDon();
+                hoaDon.setNhanVien(TrangChuController.getTaiKhoan().getNhanVien());
+                hoaDon.setBan(ban);
+                hoaDon.setTrangThaiHoaDon(TrangThaiHoaDon.CHUA_THANH_TOAN);
+                hoaDon.setNgayLap(LocalDate.now());
+                hoaDon.setKhachHang(null);
 
-            if(hoaDon != null) {
-                hoaDon.setTrangThaiHoaDon(TrangThaiHoaDon.DA_HUY);
-                hoaDonDAO.updateHoaDon(hoaDon);
-                hoaDon = null;
+                this.hoaDon = hoaDonDAO.lapHoaDon(hoaDon);
+
+                Notification.thongBao("Giữ bàn thành công", Alert.AlertType.INFORMATION);
             }
         }
-        else Notification.thongBao("Không thể huỷ, hãy tiến hành thanh toán", Alert.AlertType.INFORMATION);
+        catch (Exception e){
+            Notification.thongBao(e.getMessage(), Alert.AlertType.WARNING);
+        }
+    }
+
+    @FXML
+    void huyBan(ActionEvent event) {
+        try {
+            if (orderTable.getItems().size() == 0) {
+                ban.setTrangThaiBan(TrangThaiBan.BAN_TRONG);
+                this.ban = banDAO.updateBan(ban);
+                this.trangThaiBanText.setText(ban.getTrangThaiBan().toString());
+                this.btnHuy.setVisible(false);
+                this.btnGiuBan.setVisible(true);
+
+                if (hoaDon != null) {
+                    hoaDon.setTrangThaiHoaDon(TrangThaiHoaDon.DA_HUY);
+                    hoaDonDAO.updateHoaDon(hoaDon);
+                    hoaDon = null;
+                }
+            } else throw new IllegalArgumentException("Không thể huỷ, hãy tiến hành thanh toán");
+        }
+        catch (Exception e){
+            Notification.thongBao(e.getMessage(), Alert.AlertType.WARNING);
+        }
     }
 
     @FXML
@@ -643,51 +668,56 @@ public class DatMonController implements Initializable {
     @FXML
     void thanhToan(ActionEvent event) {
         try {
-            if (hoaDon != null) {
-                if (!orderTable.getItems().isEmpty()) {
-                    if (tkd != 0.0) {
-                        if (Notification.xacNhan("Xác nhận thanh toán?")) {
-                            orderTable.getItems().clear();
-                            this.hoaDon.setTrangThaiHoaDon(TrangThaiHoaDon.DA_THANH_TOAN);
-                            this.hoaDon.setPhuThu(pt);
-                            this.hoaDon.setChietKhau(tienTL);
-
-                            ban.setTrangThaiBan(TrangThaiBan.BAN_TRONG);
-                            trangThaiBanText.setText(TrangThaiBan.BAN_TRONG.toString());
-                            tongTienTxt.clear();
-                            tienKhachDua.clear();
-                            phuThu.clear();
-                            tienTraLai.clear();
-                            tfCCCD.clear();
-                            tenKhachHang.clear();
-                            tfDiemTichLuyht.clear();
-                            tfDiemTichLuyDung.clear();
-
-                            hoaDonDAO.updateHoaDon(hoaDon);
-                            banDAO.updateBan(ban);
-
-                            if (Notification.xacNhan("Thanh toán thành công, in hoá đơn?")){
-                                FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/org/login/quanlydatban/views/TrangXuatHoaDon.fxml")));
-                                AnchorPane pane = loader.load();
-                                XuatHoaDonController controller = loader.getController();
-                                controller.setHoaDon(hoaDon);
-
-                                Stage stage = new Stage();
-                                stage.setScene(new Scene(pane));
-                                stage.show();
-                            }
-                            hoaDon = null;
-                            khachHang = null;
-
-                            this.btnHuy.setVisible(false);
-                            this.btnGiuBan.setVisible(true);
-                        }
-                    } else
-                        throw new IllegalArgumentException("Vui lòng nhập tiền khách đưa trước khi thanh toán");
-                } else
-                    throw new IllegalArgumentException("Hoá đơn rỗng, bạn chi có thể huỷ");
-            } else
+            if (hoaDon == null)
                 throw new IllegalArgumentException("Vui lòng giữ bàn");
+
+            if (orderTable.getItems().isEmpty())
+                throw new IllegalArgumentException("Hoá đơn rỗng, bạn chi có thể huỷ");
+
+            if (tkd == 0.0)
+                throw new IllegalArgumentException("Vui lòng nhập tiền khách đưa trước khi thanh toán");
+
+            if (Notification.xacNhan("Xác nhận thanh toán?")) {
+                orderTable.getItems().clear();
+                this.hoaDon.setTrangThaiHoaDon(TrangThaiHoaDon.DA_THANH_TOAN);
+                this.hoaDon.setPhuThu(pt);
+                this.hoaDon.setChietKhau(tienTL);
+
+                ban.setTrangThaiBan(TrangThaiBan.BAN_TRONG);
+                trangThaiBanText.setText(TrangThaiBan.BAN_TRONG.toString());
+
+                int amount = Integer.parseInt(tfDiemTichLuyDung.getText().isEmpty() ? "0" : tfDiemTichLuyDung.getText());
+                khachHang.setDiemTichLuy(khachHang.getDiemTichLuy() - amount);
+
+                tongTienTxt.clear();
+                tienKhachDua.clear();
+                phuThu.clear();
+                tienTraLai.clear();
+                tfCCCD.clear();
+                tenKhachHang.clear();
+                tfDiemTichLuyht.clear();
+                tfDiemTichLuyDung.clear();
+
+                khachHangDAO.suaKhachHang(khachHang);
+                hoaDonDAO.updateHoaDon(hoaDon);
+                banDAO.updateBan(ban);
+
+                if (Notification.xacNhan("Thanh toán thành công, in hoá đơn?")) {
+                    FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/org/login/quanlydatban/views/TrangXuatHoaDon.fxml")));
+                    AnchorPane pane = loader.load();
+                    XuatHoaDonController controller = loader.getController();
+                    controller.setHoaDon(hoaDon);
+
+                    Stage stage = new Stage();
+                    stage.setScene(new Scene(pane));
+                    stage.show();
+                }
+                hoaDon = null;
+                khachHang = null;
+
+                this.btnHuy.setVisible(false);
+                this.btnGiuBan.setVisible(true);
+            }
         }
         catch (Exception e){
             Notification.thongBao(e.getMessage(), Alert.AlertType.WARNING);
@@ -702,6 +732,7 @@ public class DatMonController implements Initializable {
         }
         else {
             TrangChuController.getBorderPaneStatic().setCenter(DatLichController.getInstance().getRoot());
+            DatLichController.getInstance().capNhatCoc();
         }
     }
 

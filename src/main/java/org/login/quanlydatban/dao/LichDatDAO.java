@@ -1,6 +1,7 @@
 package org.login.quanlydatban.dao;
 
 import org.hibernate.Session;
+import org.login.quanlydatban.entity.Ban;
 import org.login.quanlydatban.entity.LichDat;
 import org.login.quanlydatban.entity.enums.LoaiBan;
 import org.login.quanlydatban.entity.enums.TrangThaiHoaDon;
@@ -8,14 +9,26 @@ import org.login.quanlydatban.hibernate.HibernateUtils;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public class LichDatDAO {
+
     public void taoLichDat(LichDat lichDat){
         Session session = HibernateUtils.getFactory().openSession();
         session.getTransaction().begin();
 
         session.persist(lichDat);
+
+        session.getTransaction().commit();
+        session.close();
+    }
+
+    public void capNhatLichDat(LichDat lichDat){
+        Session session = HibernateUtils.getFactory().openSession();
+        session.getTransaction().begin();
+
+        session.update(lichDat);
 
         session.getTransaction().commit();
         session.close();
@@ -87,6 +100,26 @@ public class LichDatDAO {
         session.getTransaction().commit();
         session.close();
 
+        return list;
+    }
+
+    public List<LichDat> getLichDatIf(Ban ban) {
+        Session session = HibernateUtils.getFactory().openSession();
+        session.getTransaction().begin();
+
+        List<LichDat> list = session.createNativeQuery("SELECT l.* FROM lichDat AS l " +
+                        "INNER JOIN hoaDon ON hoaDon.maHoaDon = l.hoaDon_maHoaDon " +
+                        "WHERE hoaDon.trangThaiHoaDon LIKE :trangThai AND " +
+                        "hoaDon.maBan LIKE :maBan AND " +
+                        "l.thoiGianNhanBan < :gioHienTai AND " +
+                        "DATE(l.thoiGianNhanBan) = DATE(:gioHienTai)", LichDat.class)
+                .setParameter("trangThai", TrangThaiHoaDon.DA_DAT.name())
+                .setParameter("maBan", ban.getMaBan())
+                .setParameter("gioHienTai", LocalDateTime.now())
+                .getResultList();
+
+        session.getTransaction().commit();
+        session.close();
         return list;
     }
 

@@ -38,22 +38,6 @@ public class XuatHoaDonController implements Initializable {
 
     public void setHoaDon(HoaDon hoaDon) {
         this.hoaDon = hoaDon;
-    }
-
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        hoaDonDAO = new HoaDonDAO();
-        chiTietHoaDonDAO = new ChiTietHoaDonDAO();
-    }
-
-    @FXML
-    void huy(ActionEvent event) {
-        Stage stage = (Stage) hdArea.getScene().getWindow();
-        stage.close();
-    }
-
-    @FXML
-    void xuatHoaDon(ActionEvent event) {
         ImageView img = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/org/login/quanlydatban/icons/logoHD.png"))));
         ColorAdjust grayscale = new ColorAdjust();
         grayscale.setSaturation(-1);
@@ -83,7 +67,7 @@ public class XuatHoaDonController implements Initializable {
 
         String headerCol = String.format("\n\n   %-5s| %-20s| %15s| %10s| %15s\n", "STT", "Tên món", "Đơn giá", "Số lượng", "Thành tiền");
         Text headerText = new Text(headerCol);
-        headerText.setFont(Font.font("Courier New", FontWeight.NORMAL, 12));
+        headerText.setFont(Font.font("Courier New", FontWeight.BOLD, 12));
         hdArea.getChildren().add(headerText);
         int index = 1;
         for (ChiTietHoaDon item : chiTietHoaDonDAO.fetchChiTietHoaDonNative(hoaDon.getMaHoaDon())) {
@@ -112,6 +96,28 @@ public class XuatHoaDonController implements Initializable {
         Text totalLine = new Text(total);
         totalLine.setFont(Font.font("Courier New", FontWeight.NORMAL, 12));
         hdArea.getChildren().add(totalLine);
+
+        String footer = String.format("\n\n\n\n      %10s\n  %5s", "Nhà hàng TOBO hân hạnh được phụ vụ quý khách!", "Mọi thông tin liên lạc, vui lòng liên hệ: 0355227249");
+        Text footerLine = new Text(footer);
+        footerLine.setFont(Font.font("Courier New", FontWeight.NORMAL, 17));
+        hdArea.getChildren().add(footerLine);
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        hoaDonDAO = new HoaDonDAO();
+        chiTietHoaDonDAO = new ChiTietHoaDonDAO();
+    }
+
+    @FXML
+    void huy(ActionEvent event) {
+        Stage stage = (Stage) hdArea.getScene().getWindow();
+        stage.close();
+    }
+
+    @FXML
+    void xuatHoaDon(ActionEvent event) {
+
     }
 
 }
