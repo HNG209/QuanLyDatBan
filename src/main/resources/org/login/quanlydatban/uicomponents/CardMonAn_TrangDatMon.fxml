@@ -6,20 +6,15 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="273.0" prefWidth="150.0" style="-fx-border-color: black;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.login.quanlydatban.controller.CardMonAnController">
    <children>
-      <StackPane layoutX="12.0" layoutY="14.0" prefHeight="113.0" prefWidth="113.0" styleClass="bottom-border">
-         <children>
-            <ImageView fitHeight="132.0" fitWidth="125.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../Image/test.png" />
-               </image>
-            </ImageView>
-         </children>
-      </StackPane>
+      <ImageView fx:id="image" blendMode="MULTIPLY" fitHeight="147.0" fitWidth="147.0" layoutX="1.0" layoutY="-1.0" pickOnBounds="true">
+         <image>
+            <Image url="@../icons/empty.png" />
+         </image>
+      </ImageView>
       <Label fx:id="tenMon" layoutX="12.0" layoutY="153.0" prefHeight="18.0" prefWidth="126.0" text="Tên món">
          <font>
             <Font name="System Bold" size="12.0" />

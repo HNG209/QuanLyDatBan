@@ -4,17 +4,22 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import org.login.quanlydatban.dao.BanDAO;
 import org.login.quanlydatban.entity.Ban;
+import org.login.quanlydatban.entity.enums.KhuVuc;
+import org.login.quanlydatban.entity.enums.LoaiBan;
 import org.login.quanlydatban.entity.enums.TrangThaiBan;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class ChonBanController implements Initializable {
@@ -25,7 +30,16 @@ public class ChonBanController implements Initializable {
     private ScrollPane scrollPane;
 
     @FXML
-    private Label selectedLoaiBan;
+    private TextField tfMaBan;
+
+    @FXML
+    private ComboBox<KhuVuc> cbKhuVuc;
+
+    @FXML
+    private ComboBox<LoaiBan> cbLoaiBan;
+
+    @FXML
+    private ComboBox<TrangThaiBan> cbTrangThaiBan;
 
     private BanDAO banDAO;
 
@@ -54,6 +68,14 @@ public class ChonBanController implements Initializable {
         flowPane.prefWidthProperty().bind(scrollPane.widthProperty());
 
         banDAO = new BanDAO();
+        cbKhuVuc.getItems().add(null);
+        cbKhuVuc.getItems().addAll(KhuVuc.values());
+
+        cbTrangThaiBan.getItems().add(null);
+        cbTrangThaiBan.getItems().addAll(TrangThaiBan.values());
+
+        cbLoaiBan.getItems().add(null);
+        cbLoaiBan.getItems().addAll(LoaiBan.values());
 
         for (Ban i : banDAO.readAll()){
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/uicomponents/CardBan_TrangChonBan.fxml"));
@@ -85,17 +107,13 @@ public class ChonBanController implements Initializable {
         }
     }
 
-    @FXML
-    void showBanDangPhucVu(MouseEvent event) {
-        selectedLoaiBan.setText(TrangThaiBan.DANG_PHUC_VU.toString());
+    public void refresh(List<Ban> list){
         flowPane.getChildren().clear();
-
-        for (Ban i : banDAO.readByStatus(TrangThaiBan.DANG_PHUC_VU)){
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/uicomponents/CardBan_TrangChonBan.fxml"));
+        for (Ban i : list){
+            FXMLLoader loader = new FXMLLoader(ChonBanController.class.getResource("/org/login/quanlydatban/uicomponents/CardBan_TrangChonBan.fxml"));
             try {
                 AnchorPane pane = loader.load();
                 CardBanChonBanController controller = loader.getController();
-
                 controller.setBan(i);
 
                 flowPane.getChildren().add(pane);
@@ -106,63 +124,21 @@ public class ChonBanController implements Initializable {
     }
 
     @FXML
-    void showBanHong(MouseEvent event) {
-        selectedLoaiBan.setText(TrangThaiBan.TAM_NGUNG_PHUC_VU.toString());
-        flowPane.getChildren().clear();
-
-        for (Ban i : banDAO.readByStatus(TrangThaiBan.TAM_NGUNG_PHUC_VU)){
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/uicomponents/CardBan_TrangChonBan.fxml"));
-            try {
-                AnchorPane pane = loader.load();
-                CardBanChonBanController controller = loader.getController();
-
-                controller.setBan(i);
-
-                flowPane.getChildren().add(pane);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-
+    void timKiem(MouseEvent event) {
+        refresh(banDAO.getListBanBy(tfMaBan.getText(),
+                cbTrangThaiBan.getSelectionModel().getSelectedItem(),
+                cbLoaiBan.getSelectionModel().getSelectedItem(),
+                cbKhuVuc.getSelectionModel().getSelectedItem()));
     }
 
     @FXML
-    void showBanTrong(MouseEvent event) {
-        selectedLoaiBan.setText(TrangThaiBan.BAN_TRONG.toString());
-        flowPane.getChildren().clear();
+    void refresh(MouseEvent event) {
+        tfMaBan.clear();
 
-        for (Ban i : banDAO.readByStatus(TrangThaiBan.BAN_TRONG)){
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/uicomponents/CardBan_TrangChonBan.fxml"));
-            try {
-                AnchorPane pane = loader.load();
-                CardBanChonBanController controller = loader.getController();
+        cbLoaiBan.setValue(null);
+        cbKhuVuc.setValue(null);
+        cbTrangThaiBan.setValue(null);
 
-                controller.setBan(i);
-
-                flowPane.getChildren().add(pane);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }
-
-    @FXML
-    void showAll(MouseEvent event) {
-        selectedLoaiBan.setText("TẤT CẢ BÀN");
-        flowPane.getChildren().clear();
-
-        for (Ban i : banDAO.readAll()){
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/uicomponents/CardBan_TrangChonBan.fxml"));
-            try {
-                AnchorPane pane = loader.load();
-                CardBanChonBanController controller = loader.getController();
-
-                controller.setBan(i);
-
-                flowPane.getChildren().add(pane);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
+        refresh();
     }
 }

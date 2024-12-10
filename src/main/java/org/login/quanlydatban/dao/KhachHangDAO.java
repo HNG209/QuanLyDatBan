@@ -64,6 +64,20 @@ public class KhachHangDAO {
         return khachHang;
     }
 
+    public KhachHang getKHByCCCD(String cccd) {
+        Session session = HibernateUtils.getFactory().openSession();
+        session.getTransaction().begin();
+
+        KhachHang khachHang = session.createNativeQuery("SELECT * FROM khachHang WHERE cccd LIKE :cccd", KhachHang.class)
+                .setParameter("cccd", cccd)
+                .getSingleResult();
+
+        session.getTransaction().commit();
+        session.close();
+
+        return khachHang;
+    }
+
     public boolean suaKhachHang(KhachHang khachHang) {
         Session session = HibernateUtils.getFactory().openSession();
         Transaction transaction = null;

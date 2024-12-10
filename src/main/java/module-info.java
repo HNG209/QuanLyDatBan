@@ -8,6 +8,7 @@ module org.login.quanlydatban {
     requires java.desktop;
     requires org.apache.poi.poi;
     requires org.apache.poi.ooxml;
+    requires net.bytebuddy;
 
 
     opens org.login.quanlydatban.entity.keygenerator to org.hibernate.orm.core;

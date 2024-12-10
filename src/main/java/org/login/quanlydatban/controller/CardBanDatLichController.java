@@ -46,6 +46,7 @@ public class CardBanDatLichController {
         loaiBan.setText(ban.getLoaiBan().toString());
         maBan.setText(ban.getMaBan());
         khuVuc.setText(ban.getKhuVuc().toString());
+        trangThai.setText(ban.getTrangThaiBan().toString());
         Image img;
         switch (ban.getTrangThaiBan()) {
             case BAN_TRONG:

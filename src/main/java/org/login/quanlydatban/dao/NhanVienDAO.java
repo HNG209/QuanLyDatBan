@@ -14,6 +14,8 @@ import java.util.List;
 public class NhanVienDAO {
     private NhanVien nhanVien;
     private TaiKhoanDAO taiKhoan;
+
+
     public List<NhanVien> getAllTaiKhoan() {
         List<NhanVien> taiKhoanList = null;
         Session session = HibernateUtils.getFactory().openSession();
@@ -104,7 +106,7 @@ public class NhanVienDAO {
                     return;
                 }
 
-                nhanVienCu.setTenNhanVien(nhanVienMoi.getMaNhanVien());
+                nhanVienCu.setTenNhanVien(nhanVienMoi.getTenNhanVien());
                 // Cập nhật thông tin nhân viên mà không thay đổi mã nhân viên
                 nhanVienCu.setTenNhanVien(nhanVienMoi.getTenNhanVien());
                 nhanVienCu.setNgaySinh(nhanVienMoi.getNgaySinh());
@@ -113,10 +115,9 @@ public class NhanVienDAO {
                 nhanVienCu.setHinhAnh(nhanVienMoi.getHinhAnh());
                 nhanVienCu.setSdt(nhanVienMoi.getSdt());
                 nhanVienCu.setCccd(nhanVienMoi.getCccd());
-                System.out.println(nhanVienMoi.getTrangThaiNhanVien());
                 nhanVienCu.setTrangThaiNhanVien(nhanVienMoi.getTrangThaiNhanVien()); // Cập nhật trạng thái
                 nhanVienCu.setChucVuNhanVien(nhanVienMoi.getChucVuNhanVien());
-
+                System.out.println(nhanVienCu.getSdt());
                 // Cập nhật tài khoản liên kết
                 TaiKhoan tktim = taiKhoan.getTaiKhoanNhanVien(maNhanVienCu);
                 if (tktim != null) {

@@ -1,6 +1,5 @@
 package org.login.quanlydatban.controller;
 
-import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
@@ -14,16 +13,14 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.util.StringConverter;
-import org.login.quanlydatban.dao.BanDAO;
-import org.login.quanlydatban.dao.HoaDonDAO;
-import org.login.quanlydatban.dao.KhachHangDAO;
-import org.login.quanlydatban.dao.LichDatDAO;
+import org.login.quanlydatban.dao.*;
 import org.login.quanlydatban.entity.Ban;
 import org.login.quanlydatban.entity.HoaDon;
 import org.login.quanlydatban.entity.KhachHang;
 import org.login.quanlydatban.entity.LichDat;
 import org.login.quanlydatban.entity.enums.*;
 import org.login.quanlydatban.notification.Notification;
+import org.login.quanlydatban.utilities.NumberFormatter;
 
 import javax.persistence.NoResultException;
 import java.io.IOException;
@@ -32,12 +29,10 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class DatLichController implements Initializable {
-
-    @FXML
-    private ComboBox<LoaiBan> cbLoaiBan;
 
     @FXML
     private ComboBox<Integer> cbGio;
@@ -46,22 +41,22 @@ public class DatLichController implements Initializable {
     private ComboBox<Integer> cbPhut;
 
     @FXML
+    private ComboBox<LoaiBan> cbBanLoaiBan;
+
+    @FXML
+    private ComboBox<KhuVuc> cbKhuVuc;
+
+    @FXML
+    private ComboBox<TrangThaiHoaDon> cbTrangThai;
+
+    @FXML
     private DatePicker tgNhanBan;
 
-    private HoaDonDAO hoaDonDAO;
-
-    private LichDatDAO lichDatDAO;
-
-    private BanDAO banDAO;
+    @FXML
+    private DatePicker tKngayNhanBan;
 
     @FXML
-    private ComboBox<KhuVuc> khuVuc;
-
-    @FXML
-    private ComboBox<LoaiBan> loaiBan1;
-
-    @FXML
-    private TableView<Object[]> bookingTable;
+    private TableView<Object[]> tableLichDat;
 
     @FXML
     private TableColumn<Object[], String> loaiBanCol;
@@ -82,16 +77,34 @@ public class DatLichController implements Initializable {
     private TableColumn<Object[], String> trangThaiCol;
 
     @FXML
-    private TextField tenKhachHang;
+    private TextField tfTenKhachHang;
 
     @FXML
-    private TextField sdt;
+    private TextField tfCCCD;
 
     @FXML
-    private TextField coc;
+    private TextField tfCoc;
 
     @FXML
-    private TextField soLuongNguoi;
+    private TextField tfTKmaBan;
+
+    @FXML
+    private TextField tfTKCCCD;
+
+    @FXML
+    private TextField tfCocKD;
+
+    @FXML
+    private TextField tfSoLuongNguoi;
+
+    @FXML
+    private TextField tfBan;
+
+    @FXML
+    private TextField tfTKmaLichDat;
+
+    @FXML
+    private TextField tfTienTraLai;
 
     @FXML
     private FlowPane listViewBan;
@@ -100,24 +113,41 @@ public class DatLichController implements Initializable {
     private ScrollPane scrollPane;
 
     @FXML
-    private TextField banTextField;
-
-    @FXML
-    private Button btnChonMon;
-
-    @FXML
     private Button btnNhanBan;
 
     @FXML
     private Button btnHuyLich;
 
-    private String prevSdt;
+    @FXML
+    private Button btnChonMon;
+
+    @FXML
+    private Button btnDatLich;
+
+    @FXML
+    private TextArea txtGhiChu;
+
+    double c = 0.0;
+
+    double ckd = 0.0;
 
     private KhachHangDAO khachHangDAO;
 
+    private ChiTietHoaDonDAO chiTietHoaDonDAO;
+
     private HoaDon hoaDon;
 
+    private HoaDonDAO hoaDonDAO;
+
+    private LichDatDAO lichDatDAO;
+
+    private BanDAO banDAO;
+
     private Ban ban;
+
+    private String prevCCCD;
+
+    private LichDat selectedLD;
 
     private static DatLichController instance;
 
@@ -141,13 +171,20 @@ public class DatLichController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        cbLoaiBan.getItems().addAll(LoaiBan.values());
-        khuVuc.getItems().addAll(KhuVuc.values());
-        loaiBan1.getItems().addAll(LoaiBan.values());
+
+        cbKhuVuc.getItems().add(null);
+        cbKhuVuc.getItems().addAll(KhuVuc.values());
+
+        cbBanLoaiBan.getItems().add(null);
+        cbBanLoaiBan.getItems().addAll(LoaiBan.values());
+
+        cbTrangThai.getItems().add(null);
+        cbTrangThai.getItems().addAll(TrangThaiHoaDon.values());
 
         hoaDonDAO = new HoaDonDAO();
         lichDatDAO = new LichDatDAO();
         khachHangDAO = new KhachHangDAO();
+        chiTietHoaDonDAO = new ChiTietHoaDonDAO();
         banDAO = new BanDAO();
 
         maLichDatCol.setCellValueFactory(data -> new SimpleStringProperty((String)data.getValue()[0]));
@@ -157,31 +194,31 @@ public class DatLichController implements Initializable {
         soLuongNguoiCol.setCellValueFactory(data -> new SimpleIntegerProperty((Integer) data.getValue()[4]).asObject());
         trangThaiCol.setCellValueFactory(data -> new SimpleStringProperty((String)data.getValue()[5]));
 
-        for(int i = 1; i <= 24; i++)
+        for(int i = 7; i <= 20; i++)
             cbGio.getItems().add(i);
 
         for (int i = 0; i <= 55; i += 5)
             cbPhut.getItems().add(i);
 
-        tenKhachHang.focusedProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue) { // If newValue is false, the TextField has lost focus
+        tfTenKhachHang.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue && tfTenKhachHang.isEditable()) { // If newValue is false, the TextField has lost focus
                 if(Notification.xacNhan("Lưu khách hàng này?")){
                     KhachHang khachHang = new KhachHang();
-                    khachHang.setSdt(sdt.getText());
-                    khachHang.setTenKhachHang(tenKhachHang.getText());
+                    khachHang.setCccd(tfCCCD.getText());
+                    khachHang.setTenKhachHang(tfTenKhachHang.getText());
 
-                    prevSdt = sdt.getText();
+                    prevCCCD = tfCCCD.getText();
 
                     khachHangDAO.themKhachHang(khachHang);
-                    tenKhachHang.setEditable(false);
+                    tfTenKhachHang.setEditable(false);
                 }
             }
         });
 
-        sdt.focusedProperty().addListener((observable, oldValue, newValue) -> {
+        tfCCCD.focusedProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue) { // If newValue is false, the TextField has lost focus
-                if(sdt.getText().length() < 10)
-                    sdt.setText(prevSdt);
+                if(tfCCCD.getText().length() < 10)
+                    tfCCCD.setText(prevCCCD);
             }
         });
 
@@ -205,15 +242,40 @@ public class DatLichController implements Initializable {
 
         refreshBang();
         refreshViewBan();
+        refeshTextFieldsAndButtons();
     }
 
     public void loadBang(Object[] objects) {
-        bookingTable.getItems().add(objects);
+        tableLichDat.getItems().add(objects);
     }
 
     public void setBan(Ban ban) {
-        this.ban = ban;
-        banTextField.setText(ban.getMaBan());
+        try{
+            if(selectedLD != null){
+                if(hoaDon.getTrangThaiHoaDon() != TrangThaiHoaDon.DA_DAT) return;
+
+                if(selectedLD.getThoiGianNhanBan().isBefore(LocalDateTime.now())){
+                    if(ban.getTrangThaiBan() == TrangThaiBan.DANG_PHUC_VU)
+                        throw new IllegalArgumentException("Bàn hiện đang phục vụ, vui lòng chọn bàn khác");
+                }
+
+                if(Notification.xacNhan("Xác nhận đổi bàn cho lịch đặt")) {
+                    hoaDon.setBan(ban);
+
+                    hoaDon = hoaDonDAO.updateHoaDon(hoaDon);
+                    refreshBang();
+                    this.ban = ban;
+                    tfBan.setText(ban.getMaBan());
+                }
+            }
+            else {
+                this.ban = ban;
+                tfBan.setText(ban.getMaBan());
+            }
+        }
+        catch (Exception e){
+            Notification.thongBao(e.getMessage(), Alert.AlertType.WARNING);
+        }
     }
 
     public void refreshViewBan() {
@@ -233,48 +295,95 @@ public class DatLichController implements Initializable {
         }
     }
 
+    public void refreshViewBan(List<Ban> list) {
+        listViewBan.getChildren().clear();
+        for (Ban i : list){
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/uicomponents/CardBan_TrangDatLich.fxml"));
+            try {
+                AnchorPane pane = loader.load();
+                CardBanDatLichController controller = loader.getController();
+
+                controller.setBan(i);
+
+                listViewBan.getChildren().add(pane);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
     public void refreshBang() {
-        bookingTable.getItems().clear();
-        lichDatDAO.getDSLichDat().forEach(i -> loadBang(new Object[] {i.getMaLichDat(),
+        tableLichDat.getItems().clear();
+        lichDatDAO.getDSLichDat().forEach(i -> loadBang(new Object[]{i.getMaLichDat(),
                 i.getThoiGianDat().format(DateTimeFormatter.ofPattern("dd/MM/yyyy - HH:mm")),
                 i.getThoiGianNhanBan().format(DateTimeFormatter.ofPattern("dd/MM/yyyy - HH:mm")),
                 i.getHoaDon().getBan().getLoaiBan().toString(),
                 i.getSoLuongNguoi(),
-                i.getHoaDon().getTrangThaiHoaDon().toString()}));
+                i.getHoaDon().getTrangThaiHoaDon() != TrangThaiHoaDon.DA_DAT ? i.getHoaDon().getTrangThaiHoaDon().toString()
+                        : i.getThoiGianNhanBan().isBefore(LocalDateTime.now()) ? TrangThaiHoaDon.DA_DAT + " (có thể nhận bàn)" : TrangThaiHoaDon.DA_DAT.toString()}));
+    }
+
+    public void refreshBang(List<LichDat> list) {
+        tableLichDat.getItems().clear();
+        list.forEach(i -> loadBang(new Object[]{i.getMaLichDat(),
+                i.getThoiGianDat().format(DateTimeFormatter.ofPattern("dd/MM/yyyy - HH:mm")),
+                i.getThoiGianNhanBan().format(DateTimeFormatter.ofPattern("dd/MM/yyyy - HH:mm")),
+                i.getHoaDon().getBan().getLoaiBan().toString(),
+                i.getSoLuongNguoi(),
+                i.getHoaDon().getTrangThaiHoaDon() != TrangThaiHoaDon.DA_DAT ? i.getHoaDon().getTrangThaiHoaDon().toString()
+                        : i.getThoiGianNhanBan().isBefore(LocalDateTime.now()) ? TrangThaiHoaDon.DA_DAT + " (có thể nhận bàn)" : TrangThaiHoaDon.DA_DAT.toString()}));
+    }
+
+    public void capNhatCoc() {
+        double tongTien = hoaDon.tinhTongTien();
+        selectedLD.setTienCoc(tongTien / 2);
+
+        c = selectedLD.getTienCoc();
+        tfCoc.setText(NumberFormatter.formatPrice(String.valueOf((int) selectedLD.getTienCoc())));
+        lichDatDAO.capNhatLichDat(selectedLD);
     }
 
     public void refeshTextFieldsAndButtons() {
         btnChonMon.setDisable(true);
         btnHuyLich.setDisable(true);
         btnNhanBan.setDisable(true);
+        btnDatLich.setDisable(false);
+        tfTenKhachHang.setEditable(false);
+        tfCCCD.setEditable(true);
+        tfSoLuongNguoi.setEditable(true);
 
         tgNhanBan.setValue(null);
-        cbGio.getSelectionModel().clearSelection();
-        cbPhut.getSelectionModel().clearSelection();
-        sdt.clear();
-        banTextField.clear();
-        tenKhachHang.clear();
-        soLuongNguoi.clear();
-        coc.clear();
+        cbGio.setValue(null);
+        cbPhut.setValue(null);
+        tfCCCD.clear();
+        tfBan.clear();
+        tfTenKhachHang.clear();
+        tfSoLuongNguoi.clear();
+        txtGhiChu.clear();
+        tfCoc.clear();
+        tfCocKD.clear();
+        tfTienTraLai.clear();
 
+        prevCCCD = null;
         hoaDon = null;
         ban = null;
+        selectedLD = null;
     }
 
     @FXML
     void nhanBan(ActionEvent event) {
         try {
-            if(bookingTable.getSelectionModel().getSelectedIndex() != -1){
+            if(tableLichDat.getSelectionModel().getSelectedIndex() != -1){
                 Ban b = hoaDon.getBan();
-                LichDat lichDat = lichDatDAO.getLichDat((String) bookingTable.getSelectionModel().getSelectedItem()[0]);
+                LichDat lichDat = lichDatDAO.getLichDat((String) tableLichDat.getSelectionModel().getSelectedItem()[0]);
 
                 if(lichDat.getThoiGianNhanBan().isAfter(LocalDateTime.now()))
                     throw new IllegalArgumentException("Chưa đến thời gian để nhận bàn");
 
                 //check if there're any served table at the time
-                for(Ban i : banDAO.readByStatus(TrangThaiBan.DANG_PHUC_VU)){
-                    if(i.getMaBan().equals(b.getMaBan()))
-                        throw new IllegalArgumentException("Không thể nhận bàn, vui lòng thanh toán bàn hiện tại trước khi nhận bàn");
+                for(Ban i : banDAO.readByStatus(TrangThaiBan.DANG_PHUC_VU)) {
+                    if (i.getMaBan().equals(b.getMaBan()))
+                        throw new IllegalArgumentException("Không thể nhận bàn, vui lòng thanh toán bàn " + i.getMaBan() + " trước khi nhận bàn");
                 }
 
                 if(Notification.xacNhan("Nhận bàn?")){
@@ -298,19 +407,23 @@ public class DatLichController implements Initializable {
     @FXML
     void chonMon(ActionEvent event) throws IOException {
         try {
-            if (ban != null) {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/TrangDatMon.fxml"));
-                AnchorPane pane = loader.load();
-                DatMonController controller = loader.getController();
-                controller.setPageSelected(1);
-                controller.setBan(ban);
+            if (ban == null)
+                throw new IllegalArgumentException("Vui lòng chọn bàn");
 
-                if (hoaDon != null)
-                    controller.setHoaDon(hoaDon);
-                else throw new IllegalArgumentException("Vui lòng chọn dòng tương ứng");
+            if(selectedLD.getThoiGianNhanBan().isBefore(LocalDateTime.now()))
+                throw new IllegalArgumentException("Không thể chọn món do đã tới thời gian nhận bàn");
 
-                TrangChuController.getBorderPaneStatic().setCenter(pane);
-            } else throw new IllegalArgumentException("Vui lòng chọn bàn");
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/TrangDatMon.fxml"));
+            AnchorPane pane = loader.load();
+            DatMonController controller = loader.getController();
+            controller.setPageSelected(1);
+            controller.setBan(ban);
+
+            if (hoaDon != null)
+                controller.setHoaDon(hoaDon);
+            else throw new IllegalArgumentException("Vui lòng chọn dòng tương ứng");
+
+            TrangChuController.getBorderPaneStatic().setCenter(pane);
         }
         catch (Exception e){
             Notification.thongBao(e.getMessage(), Alert.AlertType.WARNING);
@@ -320,27 +433,70 @@ public class DatLichController implements Initializable {
 
     @FXML
     void chonDong(MouseEvent event) {
-        LichDat lichDat = lichDatDAO.getLichDat((String) bookingTable.getSelectionModel().getSelectedItem()[0]);
+        selectedLD = lichDatDAO.getLichDat((String) tableLichDat.getSelectionModel().getSelectedItem()[0]);
 
-        tgNhanBan.setValue(lichDat.getThoiGianNhanBan().toLocalDate());
-        cbGio.getSelectionModel().select((Integer) lichDat.getThoiGianNhanBan().getHour());
-        cbPhut.getSelectionModel().select((Integer) lichDat.getThoiGianNhanBan().getMinute());
-        sdt.setText(lichDat.getKhachHang().getSdt());
-        prevSdt = sdt.getText();
-        tenKhachHang.setText(lichDat.getKhachHang().getTenKhachHang());
-        soLuongNguoi.setText(String.valueOf(lichDat.getSoLuongNguoi()));
-        ban = lichDat.getHoaDon().getBan();
-        banTextField.setText(ban.getMaBan());
-        hoaDon = lichDat.getHoaDon();
+        tgNhanBan.setValue(selectedLD.getThoiGianNhanBan().toLocalDate());
+        cbGio.getSelectionModel().select((Integer) selectedLD.getThoiGianNhanBan().getHour());
+        cbPhut.getSelectionModel().select((Integer) selectedLD.getThoiGianNhanBan().getMinute());
+        tfCCCD.setText(selectedLD.getKhachHang().getCccd());
+        prevCCCD = tfCCCD.getText();
+        tfTenKhachHang.setText(selectedLD.getKhachHang().getTenKhachHang());
+        tfSoLuongNguoi.setText(String.valueOf(selectedLD.getSoLuongNguoi()));
+        ban = selectedLD.getHoaDon().getBan();
+        tfBan.setText(ban.getMaBan());
+        hoaDon = selectedLD.getHoaDon();
+        txtGhiChu.setText(selectedLD.getGhiChu());
+        tfTenKhachHang.setEditable(false);
+        tfCoc.setText(NumberFormatter.formatPrice(String.valueOf((int) selectedLD.getTienCoc())));
+        c = selectedLD.getTienCoc();
+
         if(hoaDon.getTrangThaiHoaDon() != TrangThaiHoaDon.DA_DAT){
+            tfCCCD.setEditable(false);
+            tfSoLuongNguoi.setEditable(false);
+            tgNhanBan.setEditable(false);
+
+            btnDatLich.setDisable(false);
             btnChonMon.setDisable(true);
             btnHuyLich.setDisable(true);
             btnNhanBan.setDisable(true);
         }
         else{
+            tfCCCD.setEditable(true);
+            tfSoLuongNguoi.setEditable(true);
+            tgNhanBan.setEditable(true);
+
+            btnDatLich.setDisable(true);
             btnNhanBan.setDisable(false);
             btnChonMon.setDisable(false);
             btnHuyLich.setDisable(false);
+        }
+    }
+
+    @FXML
+    void nhapSLNguoi(KeyEvent event) {
+        try {
+            if(tfSoLuongNguoi.getText().isEmpty()){
+                refreshViewBan();
+                return;
+            }
+            if(tfSoLuongNguoi.getText().matches("\\d+")){
+                int sl = Integer.parseInt(tfSoLuongNguoi.getText());
+                if(sl <= 2 && sl > 0) {
+                    cbBanLoaiBan.setValue(LoaiBan.BAN_2_NGUOI);
+                    refreshViewBan(banDAO.getListBanBy("", null, LoaiBan.BAN_2_NGUOI, null));
+                } else if (sl > 2 && sl <= 5) {
+                    cbBanLoaiBan.setValue(LoaiBan.BAN_5_NGUOI);
+                    refreshViewBan(banDAO.getListBanBy("", null, LoaiBan.BAN_5_NGUOI, null));
+                }
+                else if (sl > 5 && sl <= 10) {
+                    cbBanLoaiBan.setValue(LoaiBan.BAN_10_NGUOI);
+                    refreshViewBan(banDAO.getListBanBy("", null, LoaiBan.BAN_10_NGUOI, null));
+                }
+            }
+            else throw new IllegalArgumentException("Vui lòng nhập số");
+        }
+        catch (Exception e) {
+            Notification.thongBao(e.getMessage(), Alert.AlertType.WARNING);
         }
     }
 
@@ -353,21 +509,24 @@ public class DatLichController implements Initializable {
 
             lichDat.setNhanVien(TrangChuController.getTaiKhoan().getNhanVien());
 
-            if (!prevSdt.isEmpty())
-                lichDat.setKhachHang(khachHangDAO.getKHBySDT(prevSdt));
-            else throw new IllegalArgumentException("Vui lòng nhập số điện thoại của khách hàng");
+            lichDat.setGhiChu(txtGhiChu.getText());
 
-            if (!soLuongNguoi.getText().isEmpty())
-                if (Integer.parseInt(soLuongNguoi.getText()) > 0)
-                    lichDat.setSoLuongNguoi(Integer.parseInt(soLuongNguoi.getText()));
+            if (prevCCCD != null && !prevCCCD.isEmpty())
+                lichDat.setKhachHang(khachHangDAO.getKHByCCCD(prevCCCD));
+            else throw new IllegalArgumentException("Vui lòng nhập CCCD của khách hàng");
+
+            if (!tfSoLuongNguoi.getText().isEmpty())
+                if (Integer.parseInt(tfSoLuongNguoi.getText()) > 0)
+                    lichDat.setSoLuongNguoi(Integer.parseInt(tfSoLuongNguoi.getText()));
                 else throw new IllegalArgumentException("Số lượng người > 0");
             else throw new IllegalArgumentException("Vui lòng nhập số lượng người");
 
             LocalDate date = tgNhanBan.getValue();
             HoaDon hoaDon = new HoaDon();
             hoaDon.setNgayLap(LocalDate.now());
+            hoaDon.setNhanVien(TrangChuController.getTaiKhoan().getNhanVien());
             hoaDon.setTrangThaiHoaDon(TrangThaiHoaDon.DA_DAT);
-            hoaDon.setKhachHang(khachHangDAO.getKHBySDT(prevSdt));
+            hoaDon.setKhachHang(khachHangDAO.getKHByCCCD(prevCCCD));
             if (ban != null)
                 hoaDon.setBan(ban);
             else throw new IllegalArgumentException("Vui lòng chọn bàn");
@@ -378,17 +537,80 @@ public class DatLichController implements Initializable {
                 else throw new IllegalArgumentException("Vui lòng chọn giờ");
             } else throw new IllegalArgumentException("Vui lòng chọn thời gian nhận bàn");
 
+            lichDat.setTienCoc(c);
+
             hoaDon.setMaHoaDon(date);
             lichDat.setHoaDon(hoaDon);
 
             hoaDonDAO.lapHoaDon(hoaDon);
             lichDatDAO.taoLichDat(lichDat);
 
+
+
             Notification.thongBao("Đặt lịch thành công, mã lịch đặt: " + lichDat.getMaLichDat(), Alert.AlertType.INFORMATION);
             refreshBang();
+
+            tableLichDat.getSelectionModel().select(tableLichDat.getItems().size() - 1);
+            chonDong(null);
         } catch (Exception e) {
-            Notification.thongBao(e.getMessage(), Alert.AlertType.WARNING);
+            Notification.thongBao(e.getMessage(), e.getStackTrace().clone()[0].toString(), Alert.AlertType.WARNING);
         }
+    }
+
+    @FXML
+    void nhapCoc(KeyEvent event) {
+        try {
+            if (event.getSource().equals(tfCoc)) {
+                if (tfCoc.getText().equals(""))
+                    return;
+                tfCoc.setText(NumberFormatter.formatPrice(tfCoc.getText()));
+                tfCoc.positionCaret(tfCoc.getText().length());
+
+                if (tfCoc.getText().replace(".", "").matches("\\d+"))
+                    c = Double.parseDouble(tfCoc.getText().replace(".", ""));
+                else throw new IllegalArgumentException("Chỉ được nhập số");
+                capNhatTienTraLai();
+            } else {
+                if (tfCocKD.getText().equals("")) {
+                    ckd = 0.0;
+                    capNhatTienTraLai();
+                    return;
+                }
+
+                tfCocKD.setText(NumberFormatter.formatPrice(tfCocKD.getText()));
+                tfCocKD.positionCaret(tfCocKD.getText().length());
+
+                if (tfCocKD.getText().replace(".", "").matches("\\d+"))
+                    ckd = Double.parseDouble(tfCocKD.getText().replace(".", ""));
+                else throw new IllegalArgumentException("Chỉ được nhập số");
+                capNhatTienTraLai();
+            }
+        }
+        catch (Exception e){
+            Notification.thongBao(e.getMessage(), Alert.AlertType.WARNING);
+            if(event.getSource().equals(tfCoc)){
+                tfCoc.setText(tfCoc.getText().substring(0, tfCoc.getLength() - 1));
+                tfCoc.setText(NumberFormatter.formatPrice(tfCoc.getText()));
+                tfCoc.positionCaret(tfCoc.getText().length());
+            }
+            else {
+                tfCocKD.setText(tfCocKD.getText().substring(0, tfCocKD.getLength() - 1));
+                tfCocKD.setText(NumberFormatter.formatPrice(tfCocKD.getText()));
+                tfCocKD.positionCaret(tfCocKD.getText().length());
+            }
+            capNhatTienTraLai();
+        }
+    }
+
+    public void capNhatTienTraLai() {
+        if(ckd - c >= 0)
+            tfTienTraLai.setText(NumberFormatter.formatPrice(String.valueOf((int) (ckd - c))));
+        else tfTienTraLai.clear();
+    }
+
+    @FXML
+    void refreshInput(MouseEvent event) {
+        refeshTextFieldsAndButtons();
     }
 
     @FXML
@@ -411,30 +633,58 @@ public class DatLichController implements Initializable {
 
     @FXML
     void resetFilterBan(MouseEvent event) {
+        cbBanLoaiBan.setValue(null);
+        cbKhuVuc.setValue(null);
+        tfTKmaBan.clear();
 
+        refreshViewBan();
     }
 
     @FXML
     void resetFilterLich(MouseEvent event) {
+        tfTKmaLichDat.clear();
+        tKngayNhanBan.setValue(null);
+        cbTrangThai.setValue(null);
+        tfTKCCCD.clear();
 
+        refreshBang();
     }
 
     @FXML
-    void sdtEnter(KeyEvent event) {
-        if(sdt.getText().length() == 10) {
+    void searchLich(MouseEvent event) {
+        String maLD = tfTKmaLichDat.getText();
+        LocalDate ngayNhanBan = tKngayNhanBan.getValue();
+        TrangThaiHoaDon trangThaiHoaDon = cbTrangThai.getSelectionModel().getSelectedItem();
+        String cccd = tfTKCCCD.getText();
+
+        refreshBang(lichDatDAO.getDSLichDatBy(maLD, ngayNhanBan, trangThaiHoaDon, cccd));
+    }
+
+    @FXML
+    void searchBan(MouseEvent event) {
+        String maBan = tfTKmaBan.getText();
+        LoaiBan loaiBan = cbBanLoaiBan.getSelectionModel().getSelectedItem();
+        KhuVuc khuVuc = cbKhuVuc.getSelectionModel().getSelectedItem();
+
+        refreshViewBan(banDAO.getListBanBy(maBan, null, loaiBan, khuVuc));
+    }
+
+    @FXML
+    void nhapCCCD(KeyEvent event) {
+        if(tfCCCD.getText().length() == 10) {
             try {
-                KhachHang khachHang = khachHangDAO.getKHBySDT(sdt.getText());
-                tenKhachHang.setText(khachHang.getTenKhachHang());
-                prevSdt = sdt.getText();
+                KhachHang khachHang = khachHangDAO.getKHByCCCD(tfCCCD.getText());
+                tfTenKhachHang.setText(khachHang.getTenKhachHang());
+                prevCCCD = tfCCCD.getText();
             }
             catch (NoResultException e) {
-                if(Notification.xacNhan("Số điện thoại mới, bạn có muốn tạo khách hàng này?")){
-                    tenKhachHang.requestFocus();
-                    tenKhachHang.setEditable(true);
+                if(Notification.xacNhan("CCCD mới, bạn có muốn tạo khách hàng này?")){
+                    tfTenKhachHang.requestFocus();
+                    tfTenKhachHang.setEditable(true);
                 }
-                else sdt.setText(prevSdt);
+                else tfCCCD.setText(prevCCCD);
             }
         }
-        else tenKhachHang.setEditable(false);
+        else tfTenKhachHang.setEditable(false);
     }
 }

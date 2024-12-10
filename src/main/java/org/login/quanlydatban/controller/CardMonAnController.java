@@ -6,6 +6,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -15,8 +17,10 @@ import org.login.quanlydatban.entity.MonAn;
 import org.login.quanlydatban.notification.Notification;
 import org.login.quanlydatban.utilities.NumberFormatter;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class CardMonAnController implements Initializable {
@@ -26,6 +30,10 @@ public class CardMonAnController implements Initializable {
 
     @FXML
     private Label tenMon;
+
+    @FXML
+    private ImageView image;
+
     private MonAn monAn;
 
     private DatMonController controller;
@@ -45,7 +53,6 @@ public class CardMonAnController implements Initializable {
     public void them(){
         if(controller != null) {
             if(controller.daLapHoaDon()){
-                System.out.println(controller.getHoaDon());
                 Object[] row = new Object[]{monAn.getMaMonAn(), monAn.getTenMonAn(), monAn.getDonGia(), 1, monAn.getDonViTinh(),""};
                 controller.themDuLieuVaoBangMonAn(row, monAn);
                 controller.capNhatTongTien();
@@ -80,8 +87,11 @@ public class CardMonAnController implements Initializable {
     public void setMonAn(MonAn monAn, DatMonController controller) {
         this.monAn = monAn;
         this.controller = controller;
+
+        if(monAn.getHinhAnh() != null && !monAn.getHinhAnh().isEmpty())
+            image.setImage(new Image(new File(monAn.getHinhAnh()).toURI().toString()));
         tenMon.setText(monAn.getTenMonAn());
-        giaTien.setText(NumberFormatter.formatPrice(String.valueOf((int) monAn.getDonGia())) + "đ/ " + monAn.getDonViTinh());
+        giaTien.setText(NumberFormatter.formatPrice(String.valueOf((int) monAn.getDonGia())) + "đ/" + monAn.getDonViTinh());
     }
 
     @Override

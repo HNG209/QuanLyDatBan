@@ -2,6 +2,7 @@ package org.login.quanlydatban.dao;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.login.quanlydatban.entity.LoaiMonAn;
 import org.login.quanlydatban.entity.MonAn;
 import org.login.quanlydatban.entity.NhanVien;
 import org.login.quanlydatban.hibernate.HibernateUtils;
@@ -138,6 +139,24 @@ public class MonAnDAO {
             session.close();
         }
     }
+
+    public List<String> getListDon() {
+        List<String> listDon = null;
+        Session session = HibernateUtils.getFactory().openSession();
+        Transaction transaction = null;
+        try  {
+            transaction = session.beginTransaction();
+            // Sử dụng HQL để lấy tất cả mon an
+            org.hibernate.query.Query<String> query = session.createQuery("SELECT DISTINCT m.donViTinh FROM MonAn m", String.class);
+            listDon  = query.list(); // Nhớ lưu kết quả vào danh sách
+            transaction.commit();
+        } catch (Exception e) {
+            e.printStackTrace(); // Handle exception if needed
+            listDon = null;
+        }
+        return listDon;
+    }
+
 
     public List<MonAn> getMonAnBy(String ten, double giaTT, double giaTD, String loai) {
         Session session = HibernateUtils.getFactory().openSession();

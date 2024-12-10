@@ -25,12 +25,14 @@ import org.login.quanlydatban.dao.NhanVienDAO;
 import org.login.quanlydatban.entity.NhanVien;
 import org.login.quanlydatban.entity.enums.ChucVu;
 import org.login.quanlydatban.entity.enums.TrangThaiNhanVien;
-import org.login.quanlydatban.notification.Notification;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.List;
@@ -70,6 +72,7 @@ public class TrangQuanLyNhanVienController implements Initializable {
     private Button btnthem;
     @FXML
     private TextField searchID;
+    private String image11;
 
     // bien ten nhan vien
     private String nhanvien;
@@ -78,6 +81,7 @@ public class TrangQuanLyNhanVienController implements Initializable {
     private TableView<NhanVien> tableNhanVien;
     @FXML
     private Button btnxuatFile;
+    private String duongdan;
 
     @FXML
     private TableColumn<NhanVien, String> nhanVienID; // 0 Cột ID
@@ -127,7 +131,9 @@ public class TrangQuanLyNhanVienController implements Initializable {
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/QuanLyNhanVien.fxml"));
                     Parent newWindow = loader.load();
                     TrangThemNhanVienController nv = loader.getController();
+                    nv.setTenNhanVien(getNhanvien().toString());
                     nv.SetTrangQuanLyNhanVien(TrangQuanLyNhanVienController.this);
+                    // Tạo một cửa sổ mới
                     Stage stage = new Stage();
                     stage.setScene(new Scene(newWindow));
                     stage.setTitle("Quản Lý Nhân Viên");
@@ -138,7 +144,6 @@ public class TrangQuanLyNhanVienController implements Initializable {
             }
         });
     }
-
 
     // xet lai du lieu cho bang nhan vien
     public void xetLaiduLieuChoBang(){
@@ -170,44 +175,49 @@ public class TrangQuanLyNhanVienController implements Initializable {
             @Override
             public void handle(ActionEvent event) {
                 System.out.println("Nhấn nút tải ảnh");
+
+                // Khởi tạo FileChooser để người dùng chọn hình ảnh
                 FileChooser fileChooser = new FileChooser();
+                URL resourceUrl = getClass().getResource("/org/login/quanlydatban/Image/");
+                File initialDirectory = null;
+                try {
+                    initialDirectory = new File(resourceUrl.toURI());
+                } catch (URISyntaxException e) {
+                    System.out.println("Không tìm thấy thư mục");
+                }
+                fileChooser.setInitialDirectory(initialDirectory);
                 fileChooser.setTitle("Mở file");
 
-                // Thiết lập thư mục khởi tạo
-                File initialDir = new File("src/main/resources/org/login/quanlydatban/Image");
-                if (initialDir.exists() && initialDir.isDirectory()) {
-                    fileChooser.setInitialDirectory(initialDir);
-                } else {
-                    Notification.thongBao(
-                            "Thư mục khởi tạo không tồn tại hoặc không phải là thư mục: " + initialDir.getAbsolutePath(),
-                            Alert.AlertType.ERROR
-                    );
-                    return; // Kết thúc nếu thư mục khởi tạo không hợp lệ
-                }
-
-                // Thiết lập bộ lọc file
+                // Thiết lập bộ lọc file hình ảnh
                 FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif");
                 fileChooser.getExtensionFilters().add(extFilter);
 
-                // Hiển thị hộp thoại chọn file
+                // Mở cửa sổ chọn file và lấy file được chọn
                 File file = fileChooser.showOpenDialog(null);
-
                 if (file != null) {
-                    // Lấy đường dẫn tương đối từ thư mục gốc dự án
-                    File projectRoot = new File("src/main/resources/org/login/quanlydatban/Image");
-                    duongdananh = projectRoot.toURI().relativize(file.toURI()).getPath();
+                    // Lấy tên file từ tệp được chọn
+                    String fileName = file.getName(); // Ví dụ "image.jpg"
 
-                    // Cập nhật ImageView với ảnh mới
-                    Image image = new Image(file.toURI().toString());
-                    image1.setImage(image);
+                    // Định nghĩa đường dẫn lưu file trong thư mục Image của dự án
+                    File destinationDirectory = new File(initialDirectory, fileName);
+                    try {
+                        // Copy file vào thư mục Image trong dự án
+                        Files.copy(file.toPath(), destinationDirectory.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                        System.out.println("Ảnh đã được lưu thành công.");
 
-                    // Hiển thị thông báo thành công
-                    Notification.thongBao("Tải ảnh thành công!", Alert.AlertType.INFORMATION);
-                } else {
-                    Notification.thongBao("Không có tệp nào được chọn.", Alert.AlertType.WARNING);
+                        // Cập nhật đường dẫn hình ảnh vào cơ sở dữ liệu (hoặc biến)
+                        duongdan = "/org/login/quanlydatban/Image/" + fileName;  // Đường dẫn tương đối
+                        duongdananh = duongdan;  // Cập nhật đường dẫn ảnh
+
+                        // Cập nhật ImageView với ảnh mới
+                        Image image = new Image(destinationDirectory.toURI().toString());
+                        image1.setImage(image);
+
+                    } catch (IOException e) {
+                        System.out.println("Lỗi khi lưu ảnh: " + e.getMessage());
+                    }
                 }
             }
-
 
         });
     }
@@ -280,6 +290,14 @@ public class TrangQuanLyNhanVienController implements Initializable {
         LocalDate currentDate = LocalDate.now();
         return Period.between(birthDate, currentDate).getYears();
     }
+    private boolean hinhAnh(String imageUrl) {
+        if (imageUrl == null ) {
+            // Tạo một hộp thoại thông báo
+            showWarn("Phai chon trang thai");
+            return  false;
+        }
+        return true;
+    }
 
     public boolean gioiTinhCheck(ComboBox<String> gioiTinh){
         if (gioiTinh.getValue() == null || gioiTinh.getValue().isEmpty()) {
@@ -345,10 +363,16 @@ public class TrangQuanLyNhanVienController implements Initializable {
         }
     }
     public void loaddulieulenform(NhanVien nhanVien){
-        String imageUrl = nhanVien.getHinhAnh();
-        // Tạo đối tượng Image từ URL
-        Image image = new Image(getClass().getResource(imageUrl).toString());
-        // Tạo ImageView và đặt hình ảnh vào
+
+        image11 = nhanVien.getHinhAnh();
+//        if(image11 != null || image11.isEmpty()){
+//            Image image = new Image("file:" + image11);
+//            // Tạo ImageView và đặt hình ảnh vào
+//            System.out.println("lll"+image11);
+//
+//        }
+        duongdananh = image11;
+        Image image = new Image(getClass().getResource(image11).toString());
         image1.setImage(image);
         maNhanVien1.setEditable(false);
         maNhanVien1.setText(nhanVien.getMaNhanVien());
@@ -357,13 +381,11 @@ public class TrangQuanLyNhanVienController implements Initializable {
         cccd.setText(nhanVien.getCccd());
         dienThoai.setText(nhanVien.getSdt());
         ngaySinh.setValue(nhanVien.getNgaySinh());
-
         if(nhanVien.getChucVuNhanVien().equals(ChucVu.NHAN_VIEN)){
             chucVu.setValue("Nhân viên");
         }else{
             chucVu.setValue("Quản Lý");
         }
-
         // gioi tinh
         if(nhanVien.isGioiTinh() == false){
             gioiTinh1.setValue("NAM");
@@ -408,8 +430,18 @@ public class TrangQuanLyNhanVienController implements Initializable {
             cv = ChucVu.QUAN_LY;
         }
 
-        NhanVien nv = new NhanVien(getMaNhanVien,hoTen.getText().toString(),dienThoai.getText().toString(),cccd.getText().toString(),diaChi.getText().toString(),gt,ngaySinh.getValue(),duongdananh.toString(),tt,cv);
-        System.out.println("Nhan vien moi" + nv.getHinhAnh());
+       // NhanVien nv = new NhanVien(getMaNhanVien,hoTen.getText().toString(),dienThoai.getText().toString(),cccd.getText().toString(),diaChi1.getText().toString(),gt,ngaySinh.getValue(),duongdananh,tt,cv);
+        NhanVien nv = new NhanVien();
+        //nv.setMaNhanVien(maNhanVientt);
+        nv.setTenNhanVien(hoTen.getText());
+        nv.setGioiTinh(gt);
+        nv.setCccd(cccd.getText());
+        nv.setSdt(dienThoai.getText());
+        nv.setChucVuNhanVien(cv);
+        nv.setTrangThaiNhanVien(tt);
+        nv.setDiaChi(diaChi.getText());
+        nv.setHinhAnh(duongdananh);
+        nv.setNgaySinh(ngaySinh.getValue());
         NhanVienDAO nvd = new NhanVienDAO();
         nvd.updateNhanVien(nv1.getMaNhanVien().toString(),nv);
     }
@@ -459,30 +491,53 @@ public class TrangQuanLyNhanVienController implements Initializable {
         btnLuu.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                if(gioiTinhCheck(gioiTinh1)){
-                    if(tencheck(hoTen)){
-                        if(diaChicheck(diaChi1)){
-                            if(cancuoccongdancheck(cccd)){
-                                if(sdtcheck(dienThoai)){
-                                    if(trangThaiCheck(trangThaiLamViec)){
-                                        if(duongdananh!= null){
-                                            int tuoi = calculateAge(ngaySinh.getValue());
-                                            if(tuoi < 15){
-                                                showWarn("Tuổi nhân viên phải lớn hơn 15");
-                                            }else {
-                                                    chinhSuaNhanVien(cellValue);
-                                                    showAlert("Thêm nhân viên thành công");
-                                                    xetLaiduLieuChoBang();
-                                            }
-                                        }else{
-                                            showAlert("Bạn phải chọn ảnh của nhân viên");
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
+                if(!gioiTinhCheck(gioiTinh1)){
+                    return;
                 }
+                if(!tencheck(hoTen)){
+                    return;
+                }
+                if(!diaChicheck(diaChi1)){
+                    return;
+                }
+                if(!cancuoccongdancheck(cccd)){
+                    return;
+                }
+                if(!sdtcheck(dienThoai)){
+                    return;
+                }
+                if(!trangThaiCheck(trangThaiLamViec)){
+                    return;
+                }
+                if(ngaySinh.getValue() == null){
+                    showWarn("Ban phai nhap ngay sinh");
+                    return;
+                }
+
+                int tuoi = calculateAge(ngaySinh.getValue());
+                if(tuoi < 15){
+                    showWarn("Tuổi phải lớn hơn 15.");
+                    return;
+                }
+
+                NhanVienDAO nvd = new NhanVienDAO();
+                List<NhanVien> nv = nvd.getAllTaiKhoan();
+                NhanVien nvsdt = nv.stream().filter(x->x.getSdt().equals(dienThoai.getText())).findFirst().orElse(null);
+                NhanVien nvscccd = nv.stream().filter(x->x.getCccd().equals(cccd.getText())).findFirst().orElse(null);
+
+                if(nvscccd != null){
+                    showWarn("Căn cước công dân này đã được sử dụng, vui lòng sử dụng số căn cước công dân khác");
+                    return;
+                }
+
+                if(nvsdt != null){
+                    showWarn("Số điện thoại này đã được sử dụng, vui lòng sử dụng số điện thoại khác");
+                    return;
+                }
+
+                chinhSuaNhanVien(cellValue);
+                showAlert("Cập nhật nhân viên thành công");
+                xetLaiduLieuChoBang();
             }
 
         });
@@ -504,11 +559,10 @@ public class TrangQuanLyNhanVienController implements Initializable {
                         return employee.getCccd() != null && employee.getCccd().contains(lowerCaseFilter);
                     }
                     // Duyệt theo mã nhân viên
-                } else if (lowerCaseFilter.matches("^(QL|NV)\\d{4}$")) {
-                    return employee.getMaNhanVien() != null && employee.getMaNhanVien().contains(lowerCaseFilter);
-                    // Duyệt theo tên
                 } else
-                    return employee.getTenNhanVien() != null && employee.getTenNhanVien().contains(lowerCaseFilter) ||  employee.getDiaChi() != null && employee.getDiaChi().contains(lowerCaseFilter);
+                    return employee.getTenNhanVien() != null && employee.getTenNhanVien().contains(lowerCaseFilter) ||
+                            employee.getDiaChi() != null && employee.getDiaChi().contains(lowerCaseFilter)||
+                            employee.getTrangThaiNhanVien().toString().contains(lowerCaseFilter)||employee.getMaNhanVien().contains(lowerCaseFilter);
                     // Duyệt theo địa chỉ
 
             });
@@ -531,6 +585,7 @@ public class TrangQuanLyNhanVienController implements Initializable {
                 if (mouseEvent.getClickCount() == 1) { // Kiểm tra nhấp chuột đơn,nv.getNgaySinh()
                         int rowIndex = tableNhanVien.getSelectionModel().getSelectedIndex();
                         cellValue = tableNhanVien.getItems().get(rowIndex).getMaNhanVien();
+                        System.out.println(cellValue);
                         NhanVienDAO nvdao = new  NhanVienDAO();
                         NhanVien nvtim = nvdao.getNhanVien(cellValue);
                         loaddulieulenform(nvtim);

@@ -26,17 +26,19 @@
                </padding></FlowPane>
          </content>
       </ScrollPane>
-      <AnchorPane layoutX="714.0" layoutY="296.0" prefHeight="315.0" prefWidth="598.0" style="-fx-background-color: white;" styleClass="rounded-pane-simple" AnchorPane.bottomAnchor="24.0" AnchorPane.rightAnchor="19.0" AnchorPane.topAnchor="296.0">
+      <AnchorPane layoutX="714.0" layoutY="258.4" prefHeight="353.0" prefWidth="598.0" style="-fx-background-color: white;" styleClass="rounded-pane-simple1" AnchorPane.bottomAnchor="24.0" AnchorPane.rightAnchor="19.0" AnchorPane.topAnchor="258.0">
          <children>
-            <GridPane layoutX="33.0" layoutY="4.8" prefHeight="225.0" prefWidth="534.0" AnchorPane.bottomAnchor="86.0" AnchorPane.topAnchor="4.0">
+            <GridPane layoutX="16.0" layoutY="8.8" prefHeight="255.0" prefWidth="563.0" AnchorPane.bottomAnchor="90.0" AnchorPane.topAnchor="8.0">
               <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="267.5333251953125" minWidth="10.0" prefWidth="125.86669464111328" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="477.6666946411133" minWidth="10.0" prefWidth="373.3333053588867" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="267.5333251953125" minWidth="10.0" prefWidth="159.4" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="477.6666946411133" minWidth="10.0" prefWidth="374.6" />
               </columnConstraints>
               <rowConstraints>
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -46,31 +48,31 @@
                <children>
                   <TextField fx:id="trangThaiBanText" editable="false" prefHeight="26.0" prefWidth="363.0" styleClass="underlined-style" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                   <TextField fx:id="banID" editable="false" layoutX="169.0" layoutY="148.0" prefHeight="26.0" prefWidth="363.0" styleClass="underlined-style" GridPane.columnIndex="1" />
-                  <TextField fx:id="tongTienTxt" editable="false" layoutX="169.0" layoutY="148.0" prefHeight="26.0" prefWidth="363.0" styleClass="underlined-style" text="0.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                  <TextField fx:id="tienKhachDua" layoutX="108.0" layoutY="88.0" onKeyTyped="#tinhTienTraLai" prefHeight="26.0" prefWidth="363.0" promptText="Vui lòng nhập" styleClass="underlined-style" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                  <TextField fx:id="tienTraLai" editable="false" layoutX="108.0" layoutY="123.0" prefHeight="26.0" prefWidth="363.0" styleClass="underlined-style" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                  <TextField fx:id="tongTienTxt" editable="false" layoutX="169.0" layoutY="148.0" prefHeight="26.0" prefWidth="363.0" styleClass="underlined-style" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                  <TextField fx:id="tienKhachDua" layoutX="108.0" layoutY="88.0" onKeyTyped="#tinhTienTraLai" prefHeight="26.0" prefWidth="363.0" promptText="Vui lòng nhập" styleClass="underlined-style" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+                  <TextField fx:id="tienTraLai" editable="false" layoutX="108.0" layoutY="123.0" prefHeight="26.0" prefWidth="363.0" styleClass="underlined-style" GridPane.columnIndex="1" GridPane.rowIndex="9" />
                   <Label alignment="CENTER" layoutX="10.0" layoutY="13.0" prefHeight="30.0" prefWidth="101.0" text="Trạng thái bàn:" GridPane.rowIndex="1">
                      <font>
                         <Font size="15.0" />
                      </font>
                   </Label>
-                  <Label layoutX="10.0" layoutY="49.0" prefHeight="30.0" prefWidth="101.0" text="Tổng tiền:" GridPane.rowIndex="2">
+                  <Label layoutX="10.0" layoutY="49.0" prefHeight="30.0" prefWidth="101.0" text="Tổng tiền:" GridPane.rowIndex="6">
+                     <font>
+                        <Font name="System Bold" size="15.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="10.0" layoutY="85.0" prefHeight="30.0" prefWidth="118.0" text="Tiền khách đưa:" GridPane.rowIndex="8">
                      <font>
                         <Font size="15.0" />
                      </font>
                   </Label>
-                  <Label layoutX="10.0" layoutY="85.0" prefHeight="30.0" prefWidth="118.0" text="Tiền khách đưa:" GridPane.rowIndex="3">
+                  <Label layoutX="10.0" layoutY="120.0" prefHeight="30.0" prefWidth="101.0" text="Tiền trả lại:" GridPane.rowIndex="9">
                      <font>
                         <Font size="15.0" />
                      </font>
                   </Label>
-                  <Label layoutX="10.0" layoutY="120.0" prefHeight="30.0" prefWidth="101.0" text="Tiền trả lại:" GridPane.rowIndex="5">
-                     <font>
-                        <Font size="15.0" />
-                     </font>
-                  </Label>
-                  <TextField fx:id="phuThu" layoutX="128.0" layoutY="89.0" onKeyTyped="#tinhTienTraLai" prefHeight="26.0" prefWidth="363.0" promptText="Nếu có" styleClass="underlined-style" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                  <Label layoutX="10.0" layoutY="89.0" prefHeight="30.0" prefWidth="118.0" text="Phụ thu:" GridPane.rowIndex="4">
+                  <TextField fx:id="phuThu" layoutX="128.0" layoutY="89.0" onKeyTyped="#tinhTienTraLai" prefHeight="26.0" prefWidth="363.0" promptText="Không bắt buộc" styleClass="underlined-style" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                  <Label layoutX="10.0" layoutY="89.0" prefHeight="30.0" prefWidth="118.0" text="Phụ thu:" GridPane.rowIndex="7">
                      <font>
                         <Font size="15.0" />
                      </font>
@@ -84,37 +86,49 @@
                         </Label>
                      </children>
                   </AnchorPane>
-                  <TextField fx:id="sdt" layoutX="156.0" layoutY="127.0" onKeyTyped="#sdtEnter" prefHeight="26.0" prefWidth="363.0" promptText="Nếu có" styleClass="underlined-style" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-                  <Label layoutX="10.0" layoutY="127.0" prefHeight="24.0" prefWidth="127.0" text="SDT khách hàng:" GridPane.rowIndex="6">
+                  <TextField fx:id="tfCCCD" layoutX="156.0" layoutY="127.0" onKeyTyped="#nhapCCCD" prefHeight="26.0" prefWidth="363.0" promptText="Không bắt buộc" styleClass="underlined-style" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <Label layoutX="10.0" layoutY="127.0" prefHeight="24.0" prefWidth="127.0" text="CCCD khách hàng:" GridPane.rowIndex="2">
                      <font>
                         <Font size="15.0" />
                      </font>
                   </Label>
-                  <Label layoutX="10.0" layoutY="150.0" prefHeight="24.0" prefWidth="127.0" text="Tên khách hàng:" GridPane.rowIndex="7">
+                  <Label layoutX="10.0" layoutY="150.0" prefHeight="24.0" prefWidth="127.0" text="Tên khách hàng:" GridPane.rowIndex="3">
                      <font>
                         <Font size="15.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="tenKhachHang" editable="false" layoutX="156.0" layoutY="150.0" prefHeight="26.0" prefWidth="363.0" styleClass="underlined-style" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                  <TextField fx:id="tenKhachHang" editable="false" layoutX="156.0" layoutY="150.0" prefHeight="26.0" prefWidth="363.0" styleClass="underlined-style" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                  <Label layoutX="10.0" layoutY="215.0" prefHeight="24.0" prefWidth="183.0" text="Điểm tích luỹ hiện tại:" GridPane.rowIndex="4">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="tfDiemTichLuyht" editable="false" layoutX="153.0" layoutY="213.0" prefHeight="26.0" prefWidth="363.0" styleClass="underlined-style" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                  <Label layoutX="10.0" layoutY="223.0" prefHeight="24.0" prefWidth="183.0" text="Điểm tích luỹ sử dụng:" GridPane.rowIndex="5">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="tfDiemTichLuyDung" layoutX="170.0" layoutY="221.0" onKeyTyped="#nhapDTL" prefHeight="26.0" prefWidth="363.0" promptText="Không bắt buộc" styleClass="underlined-style" GridPane.columnIndex="1" GridPane.rowIndex="5" />
                </children>
             </GridPane>
-            <Button fx:id="btnHuy" layoutX="33.0" layoutY="247.0" mnemonicParsing="false" onAction="#huyBan" prefHeight="26.0" prefWidth="254.0" styleClass="sunset-orange" text="Huỷ" AnchorPane.bottomAnchor="41.60000000000003" />
-            <Button fx:id="btnXacNhan" layoutX="33.0" layoutY="280.0" mnemonicParsing="false" onAction="#thanhToan" prefHeight="26.0" prefWidth="540.0" styleClass="sage-green" text="Xác nhận thanh toán" AnchorPane.bottomAnchor="8.600000000000001" />
-            <Button fx:id="btnGiuBan" layoutX="33.0" layoutY="247.0" mnemonicParsing="false" onAction="#giuBan" prefHeight="26.0" prefWidth="254.0" styleClass="sunset-orange" text="Giữ bàn" AnchorPane.bottomAnchor="41.6" />
-            <Button fx:id="btnChuyenBan" layoutX="294.0" layoutY="246.0" mnemonicParsing="false" onAction="#chuyenBan" prefHeight="26.0" prefWidth="278.0" styleClass="pale-lemon" text="Chuyển bàn" AnchorPane.bottomAnchor="42.6" />
+            <Button fx:id="btnHuy" layoutX="17.0" layoutY="283.0" mnemonicParsing="false" onAction="#huyBan" prefHeight="26.0" prefWidth="270.0" styleClass="sunset-orange" text="Huỷ" AnchorPane.bottomAnchor="43.200000000000024" />
+            <Button fx:id="btnXacNhan" layoutX="17.0" layoutY="316.0" mnemonicParsing="false" onAction="#thanhToan" prefHeight="26.0" prefWidth="563.0" styleClass="sage-green" text="Xác nhận thanh toán" AnchorPane.bottomAnchor="10.200000000000024" />
+            <Button fx:id="btnGiuBan" layoutX="17.0" layoutY="283.0" mnemonicParsing="false" onAction="#giuBan" prefHeight="26.0" prefWidth="270.0" styleClass="sunset-orange" text="Giữ bàn" AnchorPane.bottomAnchor="43.200000000000024" />
+            <Button fx:id="btnChuyenBan" layoutX="294.0" layoutY="283.0" mnemonicParsing="false" onAction="#chuyenBan" prefHeight="26.0" prefWidth="286.0" styleClass="pale-lemon" text="Chuyển bàn" AnchorPane.bottomAnchor="43.99999999999998" />
          </children>
       </AnchorPane>
-      <TableView fx:id="orderTable" layoutX="714.0" layoutY="19.0" prefHeight="269.0" prefWidth="598.0" styleClass="rounded-pane" AnchorPane.rightAnchor="19.0">
+      <TableView fx:id="orderTable" layoutX="714.0" layoutY="19.0" prefHeight="230.0" prefWidth="598.0" styleClass="rounded-pane-simple1" AnchorPane.rightAnchor="19.0">
         <columns>
-          <TableColumn fx:id="maBan" prefWidth="59.999937534332275" text="Mã" />
-          <TableColumn fx:id="tenMon" prefWidth="167.2000732421875" text="Tên món" />
+          <TableColumn fx:id="maBan" prefWidth="78.40002298355103" text="Mã" />
+          <TableColumn fx:id="tenMon" prefWidth="150.39997100830078" text="Tên món" />
             <TableColumn fx:id="donGia" prefWidth="87.19987487792969" text="Đơn giá" />
             <TableColumn fx:id="tang" prefWidth="32.0" text="+" />
             <TableColumn fx:id="soLuong" prefWidth="52.266845703125" text="SL" />
             <TableColumn fx:id="giam" prefWidth="32.0" text="-" />
-            <TableColumn fx:id="dvt" prefWidth="59.9998779296875" text="DVT" />
-            <TableColumn fx:id="huyMon" prefWidth="32.0001220703125" />
-            <TableColumn fx:id="ghiChu" prefWidth="50.39990234375" text="NOTE" />
+            <TableColumn fx:id="dvt" prefWidth="70.4000244140625" text="DVT" />
+            <TableColumn fx:id="huyMon" prefWidth="35.199920654296875" />
+            <TableColumn fx:id="ghiChu" prefWidth="56.800048828125" text="NOTE" />
         </columns>
       </TableView>
       <ImageView fitHeight="29.0" fitWidth="29.0" layoutX="55.0" layoutY="16.0" onMouseClicked="#refreshSearch" pickOnBounds="true" preserveRatio="true" styleClass="image-hover-effect" AnchorPane.leftAnchor="55.0">
@@ -132,7 +146,7 @@
             <Image url="@../icons/find.png" />
          </image>
       </ImageView>
-      <GridPane hgap="20.0" layoutX="91.2" layoutY="6.0" prefHeight="51.0" prefWidth="513.0" AnchorPane.leftAnchor="91.0" AnchorPane.rightAnchor="676.0">
+      <GridPane hgap="10.0" layoutX="91.2" layoutY="6.0" prefHeight="51.0" prefWidth="513.0" AnchorPane.leftAnchor="91.0" AnchorPane.rightAnchor="676.0">
         <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -143,10 +157,10 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <TextField fx:id="timTheoGiaTT" onKeyTyped="#formatGia" promptText="Giá tối thiểu" styleClass="underlined-style" GridPane.columnIndex="1" />
-            <TextField fx:id="timTheoGiaTD" layoutX="10.0" layoutY="36.0" onKeyTyped="#formatGia" promptText="Giá tối đa" styleClass="underlined-style" GridPane.columnIndex="2" />
-            <TextField fx:id="timTheoTen" layoutX="122.0" layoutY="22.0" prefWidth="166.0" promptText="Tên món ăn" styleClass="underlined-style" />
-            <TextField fx:id="timTheoLoai" layoutX="278.0" layoutY="24.0" promptText="Loại món ăn" styleClass="underlined-style" GridPane.columnIndex="3" />
+            <TextField fx:id="timTheoGiaTT" onKeyTyped="#formatGia" promptText="Giá tối thiểu" GridPane.columnIndex="1" />
+            <TextField fx:id="timTheoGiaTD" layoutX="10.0" layoutY="36.0" onKeyTyped="#formatGia" promptText="Giá tối đa" GridPane.columnIndex="2" />
+            <TextField fx:id="timTheoTen" layoutX="122.0" layoutY="22.0" prefWidth="166.0" promptText="Tên món ăn" />
+            <TextField fx:id="timTheoLoai" layoutX="278.0" layoutY="24.0" promptText="Loại món ăn" GridPane.columnIndex="3" />
          </children>
       </GridPane>
    </children>

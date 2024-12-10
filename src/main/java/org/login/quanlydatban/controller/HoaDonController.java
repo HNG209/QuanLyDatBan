@@ -25,13 +25,13 @@ public class HoaDonController implements Initializable {
     @FXML
     private TextField textTenKH;
     @FXML
-    private TextField textsdtKH;
+    private TextField textcccdKH;
     @FXML
     private TextField textMaNV;
     @FXML
     private TextField textTenNV;
     @FXML
-    private TextField textsdtNV;
+    private TextField textcccdNV;
     @FXML
     private TextField textTrangThaiNV;
 
@@ -61,6 +61,8 @@ public class HoaDonController implements Initializable {
     @FXML
     private TableColumn<HoaDon, String> colTongTien;
     @FXML
+    private TableColumn<HoaDon, String> colChietkhau;
+    @FXML
     private TableColumn<HoaDon, Double> colPhuThu;
 
     @FXML
@@ -88,7 +90,7 @@ public class HoaDonController implements Initializable {
         HoaDonDAO = new HoaDonDAO();
         ChiTietHoaDonDAO chiTietHoaDonDAO = new ChiTietHoaDonDAO();
         List<HoaDon> hoaDonList = HoaDonDAO.getAllHoaDon();
-
+        System.out.println(hoaDonList);
         ObservableList<HoaDon> observableList = FXCollections.observableArrayList(hoaDonList);
 
 
@@ -111,11 +113,11 @@ public class HoaDonController implements Initializable {
 
             colTongTien.setCellValueFactory(cellData -> {
                 HoaDon hoaDon = cellData.getValue();
-                String tongTien = String.valueOf(hoaDon.tinhTongTien()+ hoaDon.getPhuThu());
+                String tongTien = String.valueOf(hoaDon.getTongTien());
                 return new SimpleStringProperty(tongTien);
             });
             colPhuThu.setCellValueFactory(new PropertyValueFactory<>("phuThu"));
-
+            colChietkhau.setCellValueFactory(new PropertyValueFactory<>("chietKhau"));
             tabTatCa.setItems(observableList);
 
             colTenMonAn.setCellValueFactory(cellData -> {
@@ -159,7 +161,7 @@ public class HoaDonController implements Initializable {
                             textMaNV.setText(nhanVien.getMaNhanVien());
 
                             textTenNV.setText(nhanVien.getTenNhanVien());
-                            textsdtNV.setText(nhanVien.getSdt());
+                            textcccdNV.setText(nhanVien.getCccd());
 
                             textTrangThaiNV.setText(nhanVien.getTrangThaiNhanVien().toString());
                         }
@@ -167,11 +169,11 @@ public class HoaDonController implements Initializable {
                         if (khachHang != null) {
                             textMaKH.setText(khachHang.getMaKhachHang());
                             textTenKH.setText(khachHang.getTenKhachHang());
-                            textsdtKH.setText(khachHang.getSdt());
+                            textcccdKH.setText(khachHang.getCccd());
                         }else {
                             textMaKH.setText("");
                             textTenKH.setText("");
-                            textsdtKH.setText("");
+                            textcccdKH.setText("");
                         }
 
                     }
@@ -208,7 +210,7 @@ public class HoaDonController implements Initializable {
         // Lọc danh sách dựa trên các tiêu chí
         List<HoaDon> ketQuaLoc = danhSachGoc.stream()
                 .filter(hoaDon -> maHoaDon.isEmpty() || hoaDon.getMaHoaDon().contains(maHoaDon))
-                .filter(hoaDon -> tenKhachHang.isEmpty() || hoaDon.getKhachHang().getTenKhachHang().contains(tenKhachHang))
+                .filter(hoaDon -> tenKhachHang.isEmpty() ||  (hoaDon.getKhachHang() != null && hoaDon.getKhachHang().getMaKhachHang().contains(tenKhachHang)))
                 .filter(hoaDon -> {
                     TrangThaiHoaDon trangThaiEnum = convertStringToEnum(trangThai);
                     TrangThaiHoaDon trangThaiHoaDonEnum = hoaDon.getTrangThaiHoaDon();
@@ -222,23 +224,23 @@ public class HoaDonController implements Initializable {
         tabTatCa.getItems().setAll(ketQuaLoc);
     }
     public void onResetClicked() {
-        // 1. Xóa hết thông tin trong các TextField
+
         tfMaHoaDon.clear();
         tfTenKhachHang.clear();
         cbTrangThai.getSelectionModel().select("Trạng thái");
         dpNgayLap.setValue(null);
 
         textTenNV.clear();
-        textsdtKH.clear();
+        textcccdKH.clear();
         textTenKH.clear();
         textTenKH.clear();
         textMaKH.clear();
         textMaNV.clear();
-        textsdtNV.clear();
+        textcccdNV.clear();
         textTrangThaiNV.clear();
 
         tableCTHD.getItems().clear();
-        //Cập nhật lại bảng với tất cả các hóa đơn
+        //Cập nhật lại bảng
         HoaDonDAO hoaDonDAO = new HoaDonDAO();
         List<HoaDon> danhSachGoc = hoaDonDAO.getAllHoaDon();
 
@@ -259,11 +261,9 @@ public class HoaDonController implements Initializable {
         // Lấy danh sách các chi tiết hóa đơn cho hóa đơn hiện tại
         List<ChiTietHoaDon> chiTietList = chiTietHoaDonDAO.getChiTietHoaDonByMaHoaDon(String.valueOf(this.colMaHoaDon));
 
-        // Kiểm tra danh sách chi tiết hóa đơn có hợp lệ không
         if (chiTietList == null || chiTietList.isEmpty()) {
             return 0.0;
         }
-
         return chiTietList.stream()
                 .mapToDouble(chiTiet -> chiTiet.tinhTongCTHD())
                 .sum();

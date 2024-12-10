@@ -71,6 +71,8 @@ public class TrangChuController implements Initializable {
     private ImageView avatar;
 
     @FXML
+    private ImageView imageView;
+    @FXML
     private BorderPane borderPane;
 
     private static BorderPane borderPaneStatic;
@@ -290,6 +292,7 @@ public class TrangChuController implements Initializable {
 
     @FXML
     void xemLich(ActionEvent event) throws IOException {
+        XemLichDatController.getInstance().loadLichDatFromCurrentWeek();
         borderPane.setCenter(XemLichDatController.getInstance().getRoot());
     }
 

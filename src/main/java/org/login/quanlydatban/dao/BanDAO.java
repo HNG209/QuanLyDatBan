@@ -4,6 +4,8 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.login.quanlydatban.entity.Ban;
 import org.login.quanlydatban.entity.ChiTietHoaDon;
+import org.login.quanlydatban.entity.enums.KhuVuc;
+import org.login.quanlydatban.entity.enums.LoaiBan;
 import org.login.quanlydatban.entity.enums.TrangThaiBan;
 import org.login.quanlydatban.hibernate.HibernateUtils;
 
@@ -83,9 +85,29 @@ public class BanDAO {
 
         return list;
     }
-    public List<Ban> getListBan() {
-        return this.listBan;
+
+    public List<Ban> getListBanBy(String maBan, TrangThaiBan trangThaiBan, LoaiBan loaiBan, KhuVuc khuVuc) {
+        Session session = HibernateUtils.getFactory().openSession();
+        session.getTransaction().begin();
+
+        String sql = "SELECT * FROM ban WHERE " +
+                "(:maBan LIKE '' OR maBan LIKE :maBan) AND " +
+                "(:trangThai IS NULL OR trangThaiBan LIKE :trangThai) AND " +
+                "(:loaiBan IS NULL OR loaiBan LIKE :loaiBan) AND " +
+                "(:khuVuc IS NULL OR khuVuc LIKE :khuVuc)";
+        List<Ban> list = session.createNativeQuery(sql, Ban.class)
+                .setParameter("maBan", maBan)
+                .setParameter("trangThai", trangThaiBan == null ? null : trangThaiBan.name())
+                .setParameter("loaiBan", loaiBan == null ? null : loaiBan.name())
+                .setParameter("khuVuc", khuVuc == null ? null : khuVuc.name())
+                .getResultList();
+
+        session.getTransaction().commit();
+        session.close();
+
+        return list;
     }
+
     public Ban themBan(Ban ban) {
         Session session = HibernateUtils.getFactory().openSession();
         Transaction transaction = null;
