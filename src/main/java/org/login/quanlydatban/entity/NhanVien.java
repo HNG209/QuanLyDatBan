@@ -65,7 +65,7 @@ public class NhanVien implements Serializable {
 
     private String generateMaNhanVien(String chucVu) {
         // Xác định tiền tố dựa trên chức vụ đã chọn
-        String prefix = chucVu.equals("Nhân viên") ? "NV" : "QL";
+        String prefix = chucVu.equals("NHAN_VIEN") ? "NV" : "QL";
         Long maxId = getMaxIdFromDatabase(prefix);
         Long newIdNumber = (maxId == null) ? 1 : maxId + 1; // Tăng mã lên 1
         return prefix + String.format("%04d", newIdNumber); // Định dạng mã
