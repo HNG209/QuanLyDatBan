@@ -133,26 +133,43 @@ public class ThucDonController implements Initializable {
 
         taiAnh.setOnAction(new EventHandler<ActionEvent>() {
             @Override
-            public void handle(ActionEvent actionEvent) {
-                System.out.println("Nhan nut tai anh");
+            public void handle(ActionEvent event) {
+                //System.out.println("Nhấn nút tải ảnh");
                 FileChooser fileChooser = new FileChooser();
-
-                fileChooser.setInitialDirectory(new File("../QuanLyDatBan/src/main/resources/org/login/quanlydatban/ImageFood"));
                 fileChooser.setTitle("Mở file");
 
-                // Thiết lập bộ lọc file nếu cần
+                // Thiết lập thư mục khởi tạo
+                File initialDir = new File("src/main/resources/org/login/quanlydatban/Image");
+                if (initialDir.exists() && initialDir.isDirectory()) {
+                    fileChooser.setInitialDirectory(initialDir);
+                } else {
+                    Notification.thongBao(
+                            "Thư mục khởi tạo không tồn tại hoặc không phải là thư mục: " + initialDir.getAbsolutePath(),
+                            Alert.AlertType.ERROR
+                    );
+                    return; // Kết thúc nếu thư mục khởi tạo không hợp lệ
+                }
+
+                // Thiết lập bộ lọc file
                 FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif");
                 fileChooser.getExtensionFilters().add(extFilter);
 
+                // Hiển thị hộp thoại chọn file
                 File file = fileChooser.showOpenDialog(null);
-                //System.out.println("Nhấn nút tải ảnh");
 
                 if (file != null) {
-                    //duongDanAnh = file.getAbsolutePath();
-                    duongDanAnh = file.getAbsolutePath(); // Cập nhật đường dẫn
+                    // Lấy đường dẫn tương đối từ thư mục gốc dự án
+                    File projectRoot = new File("src/main/resources/org/login/quanlydatban/Image");
+                    duongDanAnh = projectRoot.toURI().relativize(file.toURI()).getPath();
+
                     // Cập nhật ImageView với ảnh mới
                     Image image = new Image(file.toURI().toString());
                     anhMon.setImage(image);
+
+                    // Hiển thị thông báo thành công
+                    Notification.thongBao("Tải ảnh thành công!", Alert.AlertType.INFORMATION);
+                } else {
+                    Notification.thongBao("Không có tệp nào được chọn.", Alert.AlertType.WARNING);
                 }
             }
         });
