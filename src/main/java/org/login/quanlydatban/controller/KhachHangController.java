@@ -252,9 +252,9 @@ public class KhachHangController {
         for (Object[] row : dsKhachHang) {
 
             KhachHang khachHang = new KhachHang(
-                    row[0].toString(),
-                    row[1].toString(),
-                    row[2].toString(),
+                    row[0] == null ? null :row[0].toString(),
+                    row[1] == null ? null :row[1].toString(),
+                    row[2] == null ? null :row[2].toString(),
                     row[3] == null ? null :row[3].toString(),
                     row[4] == null ? null :row[4].toString(),
                     row[5] == null ? null :row[5].toString(),
