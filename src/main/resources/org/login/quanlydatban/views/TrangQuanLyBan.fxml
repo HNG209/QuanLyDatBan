@@ -83,26 +83,6 @@
             </Pane>
             <Pane prefHeight="53.0" prefWidth="97.0" style="-fx-background-color: white;">
                <children>
-                  <ImageView fitHeight="36.0" fitWidth="43.0" layoutX="14.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../icons/bandattruoc.png" />
-                     </image>
-                  </ImageView>
-                  <Label layoutX="90.0" layoutY="11.0" text="ĐÃ ĐẶT" />
-                  <HBox alignment="CENTER" layoutX="89.0" layoutY="19.0" prefHeight="40.0" prefWidth="43.0">
-                     <children>
-                        <Label fx:id="textSLDaDat" text="0" />
-                        <Label text="/" />
-                        <Label fx:id="textTatCa3" text="25" textFill="#e00c0c" />
-                     </children>
-                  </HBox>
-               </children>
-               <opaqueInsets>
-                  <Insets />
-               </opaqueInsets>
-            </Pane>
-            <Pane prefHeight="53.0" prefWidth="97.0" style="-fx-background-color: white;">
-               <children>
                   <ImageView fitHeight="36.0" fitWidth="43.0" layoutX="14.0" layoutY="9.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../icons/banhong.png" />

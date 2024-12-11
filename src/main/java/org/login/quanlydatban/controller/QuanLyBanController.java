@@ -134,19 +134,19 @@ public class QuanLyBanController implements Initializable {
         textALL.setText(String.valueOf(tongBan));
         textTatCa1.setText(String.valueOf(tongBan));
         textTatCa2.setText(String.valueOf(tongBan));
-        textTatCa3.setText(String.valueOf(tongBan));
+
         textTatCa4.setText(String.valueOf(tongBan));
     }
     private void demSoLuongTheoTrangThai(List<Ban> banList) {
 
         long soBanTrong = banList.stream().filter(ban -> "BÀN TRỐNG".equals(ban.getTrangThaiBan().toString())).count();
         long soBanDangPhucVu = banList.stream().filter(ban -> "ĐANG PHỤC VỤ".equals(ban.getTrangThaiBan().toString())).count();
-        long soBanDaDat = banList.stream().filter(ban -> "ĐÃ ĐẶT".equals(ban.getTrangThaiBan().toString())).count();
+
         long soBanTamNgung = banList.stream().filter(ban -> "TẠM NGƯNG PHỤC VỤ".equals(ban.getTrangThaiBan().toString())).count();
 
         textSLBanTrong.setText(String.valueOf(soBanTrong));
         textSLDangPhucVu.setText(String.valueOf(soBanDangPhucVu));
-        textSLDaDat.setText(String.valueOf(soBanDaDat));
+
         textSLTamNgung.setText(String.valueOf(soBanTamNgung));
 
 
