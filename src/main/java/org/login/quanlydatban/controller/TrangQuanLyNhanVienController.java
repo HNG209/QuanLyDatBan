@@ -329,41 +329,6 @@ public class TrangQuanLyNhanVienController implements Initializable {
         alert.showAndWait();
     }
 
-    public void chinhSuaNhanVien(String getMaNhanVien){
-        nvdao = new NhanVienDAO();
-        NhanVien nv1 = nvdao.getNhanVien(getMaNhanVien);
-        Boolean gt = gioiTinh1.getValue().equals("NAM") ? false : true;
-        TrangThaiNhanVien tt = null;
-        if(trangThaiLamViec.getValue().equals("ĐANG LÀM")){
-            tt = TrangThaiNhanVien.DANG_LAM;
-        }else if(trangThaiLamViec.getValue().equals("NGHỈ PHÉP")){
-            tt = TrangThaiNhanVien.NGHI_PHEP;
-        }else if(trangThaiLamViec.getValue().equals("NGHỈ VIỆC")){
-            tt = TrangThaiNhanVien.NGHI_VIEC;
-        }
-
-        ChucVu cv = null;
-        if(chucVu.getValue().equals("Nhân viên")){
-            cv = ChucVu.NHAN_VIEN;
-        }else if(chucVu.getValue().equals("Quản Lý")){
-            cv = ChucVu.QUAN_LY;
-        }
-
-       // NhanVien nv = new NhanVien(getMaNhanVien,hoTen.getText().toString(),dienThoai.getText().toString(),cccd.getText().toString(),diaChi1.getText().toString(),gt,ngaySinh.getValue(),duongdananh,tt,cv);
-        NhanVien nv = new NhanVien();
-        //nv.setMaNhanVien(maNhanVientt);
-        nv.setTenNhanVien(hoTen.getText());
-        nv.setGioiTinh(gt);
-        nv.setCccd(cccd.getText());
-        nv.setSdt(dienThoai.getText());
-        nv.setChucVuNhanVien(cv);
-        nv.setTrangThaiNhanVien(tt);
-        nv.setDiaChi(diaChi1.getText());
-        nv.setHinhAnh(duongdananh);
-        nv.setNgaySinh(ngaySinh.getValue());
-        NhanVienDAO nvd = new NhanVienDAO();
-        nvd.updateNhanVien(nv1.getMaNhanVien().toString(),nv);
-    }
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         nhanVienDAO = new NhanVienDAO();
