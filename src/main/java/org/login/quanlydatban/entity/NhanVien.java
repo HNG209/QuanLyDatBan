@@ -217,10 +217,9 @@ public class NhanVien implements Serializable {
 
     public void setNgaySinh(LocalDate ngaySinh) {
         LocalDate currentDate = LocalDate.now();
-        int tuoi = Period.between(ngaySinh, currentDate).getYears();
         if(ngaySinh == null){
             throw  new IllegalArgumentException("Ngày sinh không được rồng");
-        }else if(tuoi< 15){
+        }else if(Period.between(ngaySinh, currentDate).getYears()< 15){
 
             throw  new IllegalArgumentException("Tuổi nhân viên phải lớn hơn 15");
         }

@@ -21,7 +21,6 @@ public class Notification {
         Alert alert = new Alert(alertType);
         alert.setTitle("Thông báo");
         alert.setHeaderText(text);
-
         alert.showAndWait();
     }
 
