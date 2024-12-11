@@ -178,18 +178,27 @@ public class DatMonController implements Initializable {
             lichDatDAO = new LichDatDAO();
 
             tenKhachHang.focusedProperty().addListener((observable, oldValue, newValue) -> {
-                if (!newValue && !tfCCCD.getText().isEmpty()) { // If newValue is false, the TextField has lost focus
-                    if (Notification.xacNhan("Lưu khách hàng này?")) {
-                        KhachHang khachHang = new KhachHang();
-                        khachHang.setCccd(tfCCCD.getText());
-                        khachHang.setTenKhachHang(tenKhachHang.getText());
+                try {
+                    if (!newValue && !tfCCCD.getText().isEmpty() && tenKhachHang.isEditable()) { // If newValue is false, the TextField has lost focus
+                        if (Notification.xacNhan("Lưu khách hàng này?")) {
+                            KhachHang khachHang = new KhachHang();
+                            khachHang.setCccd(tfCCCD.getText());
+                            khachHang.setTenKhachHang(tenKhachHang.getText());
 
-                        khachHangDAO.themKhachHang(khachHang);
-                        this.khachHang = khachHang;
+                            khachHangDAO.themKhachHang(khachHang);
+                            this.khachHang = khachHang;
 
-                        hoaDon.setKhachHang(khachHang);
-                        hoaDonDAO.updateHoaDon(hoaDon);
+                            hoaDon.setKhachHang(khachHang);
+                            hoaDonDAO.updateHoaDon(hoaDon);
+
+                            tenKhachHang.setEditable(false);
+                        }
                     }
+                }
+                catch (Exception e){
+                    Notification.thongBao(e.getMessage(), Alert.AlertType.WARNING);
+                    tfCCCD.clear();
+                    tenKhachHang.clear();
                 }
             });
 
@@ -914,7 +923,8 @@ public class DatMonController implements Initializable {
         try {
             if (hoaDon == null) throw new IllegalArgumentException("Hãy lập hoá đơn trước khi nhập");
 
-            if (tfCCCD.getText().length() == 10) {
+            if (tfCCCD.getText().length() == 12) {
+                khachHang.setCccd(tfCCCD.getText());
                 KhachHang khachHang = khachHangDAO.getKHByCCCD(tfCCCD.getText());
                 tenKhachHang.setText(khachHang.getTenKhachHang());
                 tfDiemTichLuyht.setText(String.valueOf(khachHang.getDiemTichLuy()));
@@ -929,6 +939,8 @@ public class DatMonController implements Initializable {
             }
         } catch (Exception e) {
             Notification.thongBao(e.getMessage(), Alert.AlertType.WARNING);
+            tfCCCD.clear();
+            tenKhachHang.clear();
         }
 
     }

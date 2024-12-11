@@ -201,17 +201,22 @@ public class DatLichController implements Initializable {
             cbPhut.getItems().add(i);
 
         tfTenKhachHang.focusedProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue && tfTenKhachHang.isEditable()) { // If newValue is false, the TextField has lost focus
-                if(Notification.xacNhan("Lưu khách hàng này?")){
-                    KhachHang khachHang = new KhachHang();
-                    khachHang.setCccd(tfCCCD.getText());
-                    khachHang.setTenKhachHang(tfTenKhachHang.getText());
+            try {
+                if (!newValue && tfTenKhachHang.isEditable()) { // If newValue is false, the TextField has lost focus
+                    if (Notification.xacNhan("Lưu khách hàng này?")) {
+                        KhachHang khachHang = new KhachHang();
+                        khachHang.setCccd(tfCCCD.getText());
+                        khachHang.setTenKhachHang(tfTenKhachHang.getText());
 
-                    prevCCCD = tfCCCD.getText();
+                        prevCCCD = tfCCCD.getText();
 
-                    khachHangDAO.themKhachHang(khachHang);
-                    tfTenKhachHang.setEditable(false);
+                        khachHangDAO.themKhachHang(khachHang);
+                        tfTenKhachHang.setEditable(false);
+                    }
                 }
+            }
+            catch (Exception e) {
+                Notification.thongBao(e.getMessage(), Alert.AlertType.WARNING);
             }
         });
 

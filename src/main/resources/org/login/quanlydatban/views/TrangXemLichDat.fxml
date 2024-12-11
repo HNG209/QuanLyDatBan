@@ -6,6 +6,8 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -16,8 +18,17 @@
 
 <AnchorPane prefHeight="635.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.login.quanlydatban.controller.XemLichDatController">
    <children>
-      <Pane layoutX="840.0" layoutY="164.0" prefHeight="53.0" prefWidth="422.0" style="-fx-background-color: white;" styleClass="rounded-pane" AnchorPane.leftAnchor="840.0" AnchorPane.rightAnchor="17.600000000000023" />
-      <Pane layoutX="24.0" layoutY="34.0" prefHeight="183.0" prefWidth="791.0" style="-fx-background-color: white;" styleClass="rounded-pane" />
+      <Pane layoutX="824.0" layoutY="103.0" prefHeight="52.0" prefWidth="438.0" style="-fx-background-color: white;" styleClass="rounded-pane-simple1" AnchorPane.leftAnchor="824.0" AnchorPane.rightAnchor="17.600000000000023">
+         <children>
+            <ImageView fitHeight="36.0" fitWidth="32.0" layoutX="4.0" layoutY="10.0" onMouseClicked="#resetFilter" pickOnBounds="true" preserveRatio="true" styleClass="image-hover-effect">
+               <image>
+                  <Image url="@../icons/filter.png" />
+               </image>
+            </ImageView>
+         </children>
+      </Pane>
+      <Pane layoutX="824.0" layoutY="164.0" prefHeight="54.0" prefWidth="438.0" style="-fx-background-color: white;" styleClass="rounded-pane-simple1" AnchorPane.leftAnchor="824.0" AnchorPane.rightAnchor="18.0" />
+      <Pane layoutX="24.0" layoutY="34.0" prefHeight="183.0" prefWidth="789.0" style="-fx-background-color: white;" styleClass="rounded-pane-simple1" />
       <ScrollPane layoutX="24.8" layoutY="228.0" prefHeight="396.0" prefWidth="1232.0" style="-fx-background-color: white;" styleClass="rounded-pane" AnchorPane.bottomAnchor="11.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="23.0" AnchorPane.topAnchor="228.0">
          <content>
             <GridPane style="-fx-background-color: white;">
@@ -178,32 +189,32 @@
                         <String fx:value="sunset-orange" />
                      </styleClass>
                   </VBox>
-                  <VBox fx:id="boxSangT2" spacing="10.0" style="-fx-padding: 10; -fx-background-color: aliceblue;" styleClass="right-bottom-border" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
-                  <VBox fx:id="boxSangT3" layoutX="155.0" layoutY="59.0" spacing="10.0" style="-fx-padding: 10; -fx-background-color: aliceblue;" styleClass="right-bottom-border" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                  <VBox fx:id="boxSangT4" layoutX="299.0" layoutY="59.0" spacing="10.0" style="-fx-padding: 10; -fx-background-color: aliceblue;" styleClass="right-bottom-border" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-                  <VBox fx:id="boxSangT5" layoutX="444.0" layoutY="59.0" spacing="10.0" style="-fx-padding: 10; -fx-background-color: aliceblue;" styleClass="right-bottom-border" GridPane.columnIndex="4" GridPane.rowIndex="1" />
-                  <VBox fx:id="boxSangT6" layoutX="588.0" layoutY="59.0" spacing="10.0" style="-fx-padding: 10; -fx-background-color: aliceblue;" styleClass="right-bottom-border" GridPane.columnIndex="5" GridPane.rowIndex="1" />
-                  <VBox fx:id="boxSangT7" layoutX="732.0" layoutY="59.0" spacing="10.0" style="-fx-padding: 10; -fx-background-color: aliceblue;" styleClass="right-bottom-border" GridPane.columnIndex="6" GridPane.rowIndex="1" />
-                  <VBox fx:id="boxSangCN" layoutX="876.0" layoutY="59.0" spacing="10.0" style="-fx-padding: 10; -fx-background-color: aliceblue;" styleClass="right-bottom-border" GridPane.columnIndex="7" GridPane.rowIndex="1" />
-                  <VBox fx:id="boxChieuT2" layoutX="1021.0" layoutY="59.0" spacing="10.0" style="-fx-padding: 10; -fx-background-color: aliceblue;" styleClass="right-bottom-border" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                  <VBox fx:id="boxChieuT3" layoutX="155.0" layoutY="209.0" spacing="10.0" style="-fx-padding: 10; -fx-background-color: aliceblue;" styleClass="right-bottom-border" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-                  <VBox fx:id="boxChieuT4" layoutX="299.0" layoutY="209.0" spacing="10.0" style="-fx-padding: 10; -fx-background-color: aliceblue;" styleClass="right-bottom-border" GridPane.columnIndex="3" GridPane.rowIndex="2" />
-                  <VBox fx:id="boxChieuT5" layoutX="444.0" layoutY="209.0" spacing="10.0" style="-fx-padding: 10; -fx-background-color: aliceblue;" styleClass="right-bottom-border" GridPane.columnIndex="4" GridPane.rowIndex="2" />
-                  <VBox fx:id="boxChieuT6" layoutX="588.0" layoutY="209.0" spacing="10.0" style="-fx-padding: 10; -fx-background-color: aliceblue;" styleClass="right-bottom-border" GridPane.columnIndex="5" GridPane.rowIndex="2" />
-                  <VBox fx:id="boxChieuT7" layoutX="732.0" layoutY="209.0" spacing="10.0" style="-fx-padding: 10; -fx-background-color: aliceblue;" styleClass="right-bottom-border" GridPane.columnIndex="6" GridPane.rowIndex="2" />
-                  <VBox fx:id="boxChieuCN" layoutX="876.0" layoutY="209.0" spacing="10.0" style="-fx-padding: 10; -fx-background-color: aliceblue;" styleClass="right-bottom-border" GridPane.columnIndex="7" GridPane.rowIndex="2" />
-                  <VBox fx:id="boxToiT2" layoutX="1021.0" layoutY="209.0" spacing="10.0" style="-fx-padding: 10; -fx-background-color: aliceblue;" styleClass="right-bottom-border" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                  <VBox fx:id="boxToiT3" layoutX="155.0" layoutY="360.0" spacing="10.0" style="-fx-padding: 10; -fx-background-color: aliceblue;" styleClass="right-bottom-border" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-                  <VBox fx:id="boxToiT4" layoutX="299.0" layoutY="360.0" spacing="10.0" style="-fx-padding: 10; -fx-background-color: aliceblue;" styleClass="right-bottom-border" GridPane.columnIndex="3" GridPane.rowIndex="3" />
-                  <VBox fx:id="boxToiT5" layoutX="444.0" layoutY="360.0" spacing="10.0" style="-fx-padding: 10; -fx-background-color: aliceblue;" styleClass="right-bottom-border" GridPane.columnIndex="4" GridPane.rowIndex="3" />
-                  <VBox fx:id="boxToiT6" layoutX="588.0" layoutY="360.0" spacing="10.0" style="-fx-padding: 10; -fx-background-color: aliceblue;" styleClass="right-bottom-border" GridPane.columnIndex="5" GridPane.rowIndex="3" />
-                  <VBox fx:id="boxToiT7" layoutX="732.0" layoutY="360.0" spacing="10.0" style="-fx-padding: 10; -fx-background-color: aliceblue;" styleClass="right-bottom-border" GridPane.columnIndex="6" GridPane.rowIndex="3" />
-                  <VBox fx:id="boxToiCN" layoutX="876.0" layoutY="360.0" spacing="10.0" style="-fx-padding: 10; -fx-background-color: aliceblue;" styleClass="right-bottom-border" GridPane.columnIndex="7" GridPane.rowIndex="3" />
+                  <VBox fx:id="boxSangT2" style="-fx-padding: 10; -fx-background-color: aliceblue;" styleClass="right-bottom-border" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+                  <VBox fx:id="boxSangT3" layoutX="155.0" layoutY="59.0" style="-fx-padding: 10; -fx-background-color: aliceblue;" styleClass="right-bottom-border" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                  <VBox fx:id="boxSangT4" layoutX="299.0" layoutY="59.0" style="-fx-padding: 10; -fx-background-color: aliceblue;" styleClass="right-bottom-border" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                  <VBox fx:id="boxSangT5" layoutX="444.0" layoutY="59.0" style="-fx-padding: 10; -fx-background-color: aliceblue;" styleClass="right-bottom-border" GridPane.columnIndex="4" GridPane.rowIndex="1" />
+                  <VBox fx:id="boxSangT6" layoutX="588.0" layoutY="59.0" style="-fx-padding: 10; -fx-background-color: aliceblue;" styleClass="right-bottom-border" GridPane.columnIndex="5" GridPane.rowIndex="1" />
+                  <VBox fx:id="boxSangT7" layoutX="732.0" layoutY="59.0" style="-fx-padding: 10; -fx-background-color: aliceblue;" styleClass="right-bottom-border" GridPane.columnIndex="6" GridPane.rowIndex="1" />
+                  <VBox fx:id="boxSangCN" layoutX="876.0" layoutY="59.0" style="-fx-padding: 10; -fx-background-color: aliceblue;" styleClass="right-bottom-border" GridPane.columnIndex="7" GridPane.rowIndex="1" />
+                  <VBox fx:id="boxChieuT2" layoutX="1021.0" layoutY="59.0" style="-fx-padding: 10; -fx-background-color: aliceblue;" styleClass="right-bottom-border" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <VBox fx:id="boxChieuT3" layoutX="155.0" layoutY="209.0" style="-fx-padding: 10; -fx-background-color: aliceblue;" styleClass="right-bottom-border" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                  <VBox fx:id="boxChieuT4" layoutX="299.0" layoutY="209.0" style="-fx-padding: 10; -fx-background-color: aliceblue;" styleClass="right-bottom-border" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                  <VBox fx:id="boxChieuT5" layoutX="444.0" layoutY="209.0" style="-fx-padding: 10; -fx-background-color: aliceblue;" styleClass="right-bottom-border" GridPane.columnIndex="4" GridPane.rowIndex="2" />
+                  <VBox fx:id="boxChieuT6" layoutX="588.0" layoutY="209.0" style="-fx-padding: 10; -fx-background-color: aliceblue;" styleClass="right-bottom-border" GridPane.columnIndex="5" GridPane.rowIndex="2" />
+                  <VBox fx:id="boxChieuT7" layoutX="732.0" layoutY="209.0" style="-fx-padding: 10; -fx-background-color: aliceblue;" styleClass="right-bottom-border" GridPane.columnIndex="6" GridPane.rowIndex="2" />
+                  <VBox fx:id="boxChieuCN" layoutX="876.0" layoutY="209.0" style="-fx-padding: 10; -fx-background-color: aliceblue;" styleClass="right-bottom-border" GridPane.columnIndex="7" GridPane.rowIndex="2" />
+                  <VBox fx:id="boxToiT2" layoutX="1021.0" layoutY="209.0" style="-fx-padding: 10; -fx-background-color: aliceblue;" styleClass="right-bottom-border" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                  <VBox fx:id="boxToiT3" layoutX="155.0" layoutY="360.0" style="-fx-padding: 10; -fx-background-color: aliceblue;" styleClass="right-bottom-border" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                  <VBox fx:id="boxToiT4" layoutX="299.0" layoutY="360.0" style="-fx-padding: 10; -fx-background-color: aliceblue;" styleClass="right-bottom-border" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+                  <VBox fx:id="boxToiT5" layoutX="444.0" layoutY="360.0" style="-fx-padding: 10; -fx-background-color: aliceblue;" styleClass="right-bottom-border" GridPane.columnIndex="4" GridPane.rowIndex="3" />
+                  <VBox fx:id="boxToiT6" layoutX="588.0" layoutY="360.0" style="-fx-padding: 10; -fx-background-color: aliceblue;" styleClass="right-bottom-border" GridPane.columnIndex="5" GridPane.rowIndex="3" />
+                  <VBox fx:id="boxToiT7" layoutX="732.0" layoutY="360.0" style="-fx-padding: 10; -fx-background-color: aliceblue;" styleClass="right-bottom-border" GridPane.columnIndex="6" GridPane.rowIndex="3" />
+                  <VBox fx:id="boxToiCN" layoutX="876.0" layoutY="360.0" style="-fx-padding: 10; -fx-background-color: aliceblue;" styleClass="right-bottom-border" GridPane.columnIndex="7" GridPane.rowIndex="3" />
                </children>
             </GridPane>
          </content>
       </ScrollPane>
-      <GridPane hgap="10.0" layoutX="856.0" layoutY="176.0" prefHeight="30.0" prefWidth="389.0" AnchorPane.leftAnchor="856.0" AnchorPane.rightAnchor="35.0">
+      <GridPane hgap="10.0" layoutX="835.2" layoutY="176.0" prefHeight="30.0" prefWidth="414.0" AnchorPane.leftAnchor="835.0" AnchorPane.rightAnchor="31.0">
         <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -248,6 +259,23 @@
             <Button fx:id="btnHuyLich" layoutX="398.0" layoutY="152.0" mnemonicParsing="false" onAction="#huyLich" prefHeight="26.0" prefWidth="640.0" styleClass="sunset-orange" text="Huỷ lịch" GridPane.columnIndex="3" GridPane.rowIndex="3" />
             <Label layoutX="10.0" layoutY="112.0" prefHeight="18.0" prefWidth="224.0" text="Trạng thái:" GridPane.rowIndex="3" />
             <TextField fx:id="tfTrangThai" layoutX="204.0" layoutY="109.0" styleClass="underlined-style" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+         </children>
+      </GridPane>
+      <GridPane hgap="5.0" layoutX="860.8" layoutY="105.0" prefHeight="47.0" prefWidth="389.0" AnchorPane.leftAnchor="861.0" AnchorPane.rightAnchor="30.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Button mnemonicParsing="false" onAction="#loadDaDat" prefHeight="26.0" prefWidth="180.0" styleClass="sage-green" text="Đã đặt" />
+            <Button layoutX="10.0" layoutY="65.0" mnemonicParsing="false" onAction="#loadDaHuy" prefHeight="26.0" prefWidth="208.0" styleClass="light-coral" text="Đã huỷ" GridPane.columnIndex="1" />
+            <Button layoutX="116.0" layoutY="65.0" mnemonicParsing="false" onAction="#loadChuaTT" prefHeight="26.0" prefWidth="381.0" styleClass="sunset-orange" text="Chưa thanh toán" GridPane.columnIndex="2" />
+            <Button layoutX="222.0" layoutY="65.0" mnemonicParsing="false" onAction="#loadDaTT" prefHeight="26.0" prefWidth="208.0" styleClass="pale-lemon" text="Đã thanh toán" GridPane.columnIndex="3" />
          </children>
       </GridPane>
    </children>
