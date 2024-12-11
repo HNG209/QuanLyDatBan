@@ -344,14 +344,16 @@ public class ThongKeQuanLyController {
             Number soHoaDon = (Number) hoaDon[1];
             double phanTram = (soLuongHD > 0) ? (soHoaDon.doubleValue() / soLuongHD) * 100 : 0;
             String tt;
+
             if(tenTrangThai.equalsIgnoreCase(TrangThaiHoaDon.DA_THANH_TOAN.toString())) {
                 tt = "Đã thanh toán";
             }
             else if(tenTrangThai.equalsIgnoreCase(TrangThaiHoaDon.CHUA_THANH_TOAN.toString())) {
                 tt = "Chưa thanh toán";
-            } else {
-                tt = "";
+            } else if(tenTrangThai.equalsIgnoreCase(TrangThaiHoaDon.DA_HUY.toString())){
+                tt = "Đã hủy";
             }
+            else tt = "Đã đặt";
             PieChart.Data slice = new PieChart.Data(tt, soHoaDon.doubleValue());
 
             bieuDoTronTrangThaiHoaDon.getData().add(slice);
