@@ -185,7 +185,7 @@ public class TrangThemNhanVienController implements Initializable {
                            nv.setNgaySinh(ngaySinh.getValue());
                            nvd.addNhanVien(nv);
                            String tenTaiKhoan = hoTen.getText().toString().replaceAll("\\s+", "");
-                           TaiKhoan takKhoan = new TaiKhoan(tenTaiKhoan, EncryptionUtils.encrypt("1111", System.getenv("ENCRYPTION_KEY")), nvd.getNhanVien(nv.getMaNhanVien().toString()));
+                           TaiKhoan takKhoan = new TaiKhoan(tenTaiKhoan, "1111", nvd.getNhanVien(nv.getMaNhanVien().toString()));
                            taiKhoanDAO.addNhanVien(takKhoan);
                            Stage stage = (Stage) btnLuu.getScene().getWindow();
                            showWarn("Thêm nhân viên thành công");
