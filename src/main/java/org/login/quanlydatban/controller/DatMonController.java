@@ -197,6 +197,7 @@ public class DatMonController implements Initializable {
 
                             preCCCD = khachHang.getCccd();
                         }
+                        else tfCCCD.setText(preCCCD);
                     }
                 }
                 catch (Exception e){
@@ -216,7 +217,6 @@ public class DatMonController implements Initializable {
                         hoaDonDAO.updateHoaDon(hoaDon);
                     }
                 }
-                tfCCCD.setText(preCCCD);
             });
 
             tfDiemTichLuyDung.focusedProperty().addListener((observable, oldValue, newValue) -> {
@@ -945,6 +945,7 @@ public class DatMonController implements Initializable {
                 tenKhachHang.requestFocus();
                 tenKhachHang.setEditable(true);
             }
+            else tfCCCD.setText(preCCCD);
         } catch (Exception e) {
             Notification.thongBao(e.getMessage(), Alert.AlertType.WARNING);
             tfCCCD.clear();
