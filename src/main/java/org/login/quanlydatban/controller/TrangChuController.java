@@ -73,6 +73,8 @@ public class TrangChuController implements Initializable {
     @FXML
     private ImageView imageView;
     @FXML
+    private MenuItem quanLyBanMenuItem;
+    @FXML
     private BorderPane borderPane;
 
     private static BorderPane borderPaneStatic;
@@ -113,6 +115,7 @@ public class TrangChuController implements Initializable {
         if(TrangChuController.taiKhoan.getNhanVien().getChucVuNhanVien().equals(ChucVu.NHAN_VIEN)) {
             nhanVienMenu.setVisible(false);
             thucDonMenu.setVisible(false);
+            quanLyBanMenuItem.setVisible(false);
         }
 
     }
@@ -190,19 +193,25 @@ public class TrangChuController implements Initializable {
     @FXML
     public void ketCa() throws IOException {
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/TrangBaoCaoKetCa.fxml"));
-        AnchorPane anchorPane = loader.load();
-        KetCaController ketCa = loader.getController();
-        ketCa.setTaiKhoan(taiKhoan);
+        try
+        {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/TrangBaoCaoKetCa.fxml"));
+            AnchorPane anchorPane = loader.load();
+            KetCaController ketCa = loader.getController();
+            ketCa.setTaiKhoan(taiKhoan);
 
-        Scene scene = new Scene(anchorPane);
-        stage = new Stage();
-        stage.setScene(scene);
-        stage.setTitle("Báo Cáo Kết Ca");
-        stage.setOnCloseRequest(e -> stage = null);
-        stage.setResizable(false);
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.showAndWait();
+            Scene scene = new Scene(anchorPane);
+            stage = new Stage();
+            stage.setScene(scene);
+            stage.setTitle("Báo Cáo Kết Ca");
+            stage.setOnCloseRequest(e -> stage = null);
+            stage.setResizable(false);
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.showAndWait();
+        }
+        catch (Exception e){
+            Notification.thongBao("Bạn chưa làm báo cáo vào ca", Alert.AlertType.ERROR);
+        }
 
     }
 
@@ -477,6 +486,7 @@ public class TrangChuController implements Initializable {
         khachHangMenu.setVisible(true);
         nhaHangMenu.setVisible(true);
         nhanVienMenu.setVisible(true);
+        quanLyBanMenuItem.setVisible(true);
     }
 
 }

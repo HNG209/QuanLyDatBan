@@ -124,12 +124,7 @@ public class KetCaController {
         tenNhanVien.setText(TrangChuController.taiKhoan.getNhanVien().getTenNhanVien());
         Object[] doanhThuVaSoHD;
         doanhThuVaSoHD = hoaDonDAO.layDoanhThuVaSoHoaDon(maNV, LocalDate.now());
-        try {
-            tienVaoCa.setText(VaoCaController.tongTienVaoCa.toString());
-        }
-        catch (Exception e){
-            Notification.thongBao("Bạn chưa làm báo cáo vào ca", Alert.AlertType.ERROR);
-        }
+        tienVaoCa.setText(VaoCaController.tongTienVaoCa.toString());
         if (doanhThuVaSoHD.length == 0) {
             tongSoHoaDon.setText("0");
             tongDoanhThu.setText("0");

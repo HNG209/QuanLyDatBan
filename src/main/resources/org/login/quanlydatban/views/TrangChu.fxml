@@ -81,7 +81,7 @@
                            <accelerator>
                               <KeyCodeCombination alt="UP" code="H" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                            </accelerator></MenuItem>
-                        <MenuItem mnemonicParsing="false" onAction="#xemQuanLyBan" text="Quản lý bàn">
+                        <MenuItem fx:id="quanLyBanMenuItem" mnemonicParsing="false" onAction="#xemQuanLyBan" text="Quản lý bàn">
                            <accelerator>
                               <KeyCodeCombination alt="UP" code="B" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                            </accelerator></MenuItem>
