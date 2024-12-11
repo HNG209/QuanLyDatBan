@@ -145,7 +145,7 @@ public class DatLichController implements Initializable {
 
     private Ban ban;
 
-    private String prevCCCD;
+    private String prevCCCD = "";
 
     private LichDat selectedLD;
 
@@ -201,23 +201,28 @@ public class DatLichController implements Initializable {
             cbPhut.getItems().add(i);
 
         tfTenKhachHang.focusedProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue && tfTenKhachHang.isEditable()) { // If newValue is false, the TextField has lost focus
-                if(Notification.xacNhan("Lưu khách hàng này?")){
-                    KhachHang khachHang = new KhachHang();
-                    khachHang.setCccd(tfCCCD.getText());
-                    khachHang.setTenKhachHang(tfTenKhachHang.getText());
+            try {
+                if (!newValue && tfTenKhachHang.isEditable()) { // If newValue is false, the TextField has lost focus
+                    if (Notification.xacNhan("Lưu khách hàng này?")) {
+                        KhachHang khachHang = new KhachHang();
+                        khachHang.setCccd(tfCCCD.getText());
+                        khachHang.setTenKhachHang(tfTenKhachHang.getText());
 
-                    prevCCCD = tfCCCD.getText();
+                        prevCCCD = tfCCCD.getText();
 
-                    khachHangDAO.themKhachHang(khachHang);
-                    tfTenKhachHang.setEditable(false);
+                        khachHangDAO.themKhachHang(khachHang);
+                        tfTenKhachHang.setEditable(false);
+                    }
                 }
+            }
+            catch (Exception e) {
+                Notification.thongBao(e.getMessage(), Alert.AlertType.WARNING);
             }
         });
 
         tfCCCD.focusedProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue) { // If newValue is false, the TextField has lost focus
-                if(tfCCCD.getText().length() < 10)
+                if(tfCCCD != null && tfCCCD.getText().length() < 12)
                     tfCCCD.setText(prevCCCD);
             }
         });
@@ -671,20 +676,23 @@ public class DatLichController implements Initializable {
 
     @FXML
     void nhapCCCD(KeyEvent event) {
-        if(tfCCCD.getText().length() == 10) {
-            try {
-                KhachHang khachHang = khachHangDAO.getKHByCCCD(tfCCCD.getText());
+        try {
+            if (tfCCCD.getText().length() == 12) {
+                KhachHang khachHang = new KhachHang();
+                khachHang.setCccd(tfCCCD.getText());
+                khachHang = khachHangDAO.getKHByCCCD(tfCCCD.getText());
                 tfTenKhachHang.setText(khachHang.getTenKhachHang());
                 prevCCCD = tfCCCD.getText();
             }
-            catch (NoResultException e) {
-                if(Notification.xacNhan("CCCD mới, bạn có muốn tạo khách hàng này?")){
-                    tfTenKhachHang.requestFocus();
-                    tfTenKhachHang.setEditable(true);
-                }
-                else tfCCCD.setText(prevCCCD);
-            }
+        } catch (NoResultException e) {
+            if (Notification.xacNhan("CCCD mới, bạn có muốn tạo khách hàng này?")) {
+                tfTenKhachHang.requestFocus();
+                tfTenKhachHang.setEditable(true);
+            } else tfCCCD.setText(prevCCCD);
+        } catch (Exception e) {
+            Notification.thongBao(e.getMessage(), Alert.AlertType.WARNING);
+            tfCCCD.clear();
+            tfTenKhachHang.clear();
         }
-        else tfTenKhachHang.setEditable(false);
     }
 }

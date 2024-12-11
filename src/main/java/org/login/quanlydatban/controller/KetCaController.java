@@ -4,6 +4,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -128,7 +129,7 @@ public class KetCaController {
             tongSoHoaDon.setText("0");
             tongDoanhThu.setText("0");
         } else {
-            tongDoanhThu.setText(df.format(doanhThuVaSoHD[0].toString()));
+            tongDoanhThu.setText(df.format(Double.parseDouble(doanhThuVaSoHD[0].toString())));
             tongSoHoaDon.setText(doanhThuVaSoHD[1].toString());
         }
     }

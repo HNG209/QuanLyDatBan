@@ -97,7 +97,7 @@ public class XuatHoaDonController implements Initializable {
         totalLine.setFont(Font.font("Courier New", FontWeight.NORMAL, 12));
         hdArea.getChildren().add(totalLine);
 
-        String footer = String.format("\n\n\n\n      %10s\n  %5s", "Nhà hàng TOBO hân hạnh được phụ vụ quý khách!", "Mọi thông tin liên lạc, vui lòng liên hệ: 0355227249");
+        String footer = String.format("\n\n\n\n     %10s\n  %5s", "Nhà hàng TOBO hân hạnh được phục vụ quý khách!", "Mọi thông tin liên lạc, vui lòng liên hệ: 0355227249");
         Text footerLine = new Text(footer);
         footerLine.setFont(Font.font("Courier New", FontWeight.NORMAL, 17));
         hdArea.getChildren().add(footerLine);
