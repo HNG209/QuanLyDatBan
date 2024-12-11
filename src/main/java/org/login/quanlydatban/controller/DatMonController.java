@@ -165,6 +165,8 @@ public class DatMonController implements Initializable {
 
     private double tienTL = 0.0;
 
+    private String preCCCD = "";
+
     private int pageSelected;
 
     @Override
@@ -192,6 +194,8 @@ public class DatMonController implements Initializable {
                             hoaDonDAO.updateHoaDon(hoaDon);
 
                             tenKhachHang.setEditable(false);
+
+                            preCCCD = khachHang.getCccd();
                         }
                     }
                 }
@@ -203,14 +207,16 @@ public class DatMonController implements Initializable {
             });
 
             tfCCCD.focusedProperty().addListener((observable, oldValue, newValue) -> {
-                if (!newValue && khachHang != null) { // If newValue is false, the TextField has lost focus
+                if (!newValue && khachHang != null && tfCCCD.getText().length() == 12) { // If newValue is false, the TextField has lost focus
                     if (Notification.xacNhan("Khách hàng sẽ được thêm vào hoá đơn")) {
                         KhachHang khachHang = khachHangDAO.getKHByCCCD(tfCCCD.getText());
 
+                        preCCCD = khachHang.getCccd();
                         hoaDon.setKhachHang(khachHang);
                         hoaDonDAO.updateHoaDon(hoaDon);
                     }
                 }
+                tfCCCD.setText(preCCCD);
             });
 
             tfDiemTichLuyDung.focusedProperty().addListener((observable, oldValue, newValue) -> {
@@ -560,6 +566,7 @@ public class DatMonController implements Initializable {
             if(hoaDon.getKhachHang() != null){
                 khachHang = hoaDon.getKhachHang();
                 tfCCCD.setText(khachHang.getCccd());
+                preCCCD = khachHang.getCccd();
                 tenKhachHang.setText(khachHang.getTenKhachHang());
                 tfDiemTichLuyht.setText(String.valueOf(khachHang.getDiemTichLuy()));
             }
@@ -924,8 +931,9 @@ public class DatMonController implements Initializable {
             if (hoaDon == null) throw new IllegalArgumentException("Hãy lập hoá đơn trước khi nhập");
 
             if (tfCCCD.getText().length() == 12) {
+                KhachHang khachHang = new KhachHang();
                 khachHang.setCccd(tfCCCD.getText());
-                KhachHang khachHang = khachHangDAO.getKHByCCCD(tfCCCD.getText());
+                khachHang = khachHangDAO.getKHByCCCD(tfCCCD.getText());
                 tenKhachHang.setText(khachHang.getTenKhachHang());
                 tfDiemTichLuyht.setText(String.valueOf(khachHang.getDiemTichLuy()));
                 this.khachHang = khachHang;
