@@ -40,6 +40,8 @@ public class HoaDonController implements Initializable {
     @FXML
     private TextField tfTenKhachHang;
     @FXML
+    private TextField tfMaban;
+    @FXML
     private ComboBox<String> cbTrangThai;
     @FXML
     private DatePicker dpNgayLap;
@@ -199,6 +201,7 @@ public class HoaDonController implements Initializable {
         // Lấy thông tin từ các trường đầu vào
         String maHoaDon = tfMaHoaDon.getText().trim();
         String tenKhachHang = tfTenKhachHang.getText().trim();
+        String maBan = tfMaban.getText().trim();
         String trangThai = cbTrangThai.getSelectionModel().getSelectedItem();
 
         LocalDate ngayLap = dpNgayLap.getValue();
@@ -211,6 +214,7 @@ public class HoaDonController implements Initializable {
         List<HoaDon> ketQuaLoc = danhSachGoc.stream()
                 .filter(hoaDon -> maHoaDon.isEmpty() || hoaDon.getMaHoaDon().contains(maHoaDon))
                 .filter(hoaDon -> tenKhachHang.isEmpty() ||  (hoaDon.getKhachHang() != null && hoaDon.getKhachHang().getMaKhachHang().contains(tenKhachHang)))
+                .filter(hoaDon -> maBan.isEmpty() || (hoaDon.getBan() != null && hoaDon.getBan().getMaBan().contains(maBan)))
                 .filter(hoaDon -> {
                     TrangThaiHoaDon trangThaiEnum = convertStringToEnum(trangThai);
                     TrangThaiHoaDon trangThaiHoaDonEnum = hoaDon.getTrangThaiHoaDon();
