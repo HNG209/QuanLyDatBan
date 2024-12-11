@@ -178,7 +178,7 @@ public class TrangQuanLyNhanVienController implements Initializable {
 
                 // Khởi tạo FileChooser để người dùng chọn hình ảnh
                 FileChooser fileChooser = new FileChooser();
-                URL resourceUrl = getClass().getResource("/org/login/quanlydatban/Image/");
+                URL resourceUrl = getClass().getResource("/org/login/quanlydatban/Image/giabao.png");
                 File initialDirectory = null;
                 try {
                     initialDirectory = new File(resourceUrl.toURI());

@@ -2,7 +2,6 @@
 
 <?import java.lang.String?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
@@ -14,13 +13,12 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="635.0" prefWidth="1280.0" styleClass="gradient1" stylesheets="../stylesheets/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.login.quanlydatban.controller.HoaDonController">
    <children>
-      <TableView fx:id="tableCTHD" layoutX="934.0" layoutY="322.0" prefHeight="304.0" prefWidth="439.0" style="-fx-border-color: green;" styleClass="small-round-box" AnchorPane.bottomAnchor="9.0" AnchorPane.rightAnchor="16.0" AnchorPane.topAnchor="322.0">
+      <TableView fx:id="tableCTHD" layoutX="934.0" layoutY="300.0" prefHeight="326.0" prefWidth="439.0" style="-fx-border-color: green;" styleClass="small-round-box" AnchorPane.bottomAnchor="9.0" AnchorPane.rightAnchor="16.0" AnchorPane.topAnchor="300.0">
          <columns>
             <TableColumn fx:id="colTenMonAn" prefWidth="96.00000262260437" text="Tên món ăn" />
             <TableColumn fx:id="colSoLuong" prefWidth="61.33324432373047" text="Số lượng" />
@@ -32,13 +30,13 @@
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
          </columnResizePolicy>
       </TableView>
-      <AnchorPane layoutX="11.0" layoutY="92.0" prefHeight="215.0" prefWidth="1251.0" style="-fx-border-color: black;" stylesheets="@../stylesheets/style.css" AnchorPane.leftAnchor="11.0" AnchorPane.rightAnchor="18.0">
+      <AnchorPane layoutX="11.0" layoutY="70.0" prefHeight="215.0" prefWidth="1251.0" style="-fx-border-color: black; -fx-background-color: white;" stylesheets="@../stylesheets/style.css" AnchorPane.leftAnchor="11.0" AnchorPane.rightAnchor="18.0">
          <styleClass>
             <String fx:value="round-box" />
             <String fx:value="gradient2" />
          </styleClass>
          <children>
-            <GridPane alignment="CENTER" hgap="40.0" layoutX="91.0" layoutY="13.0" prefHeight="170.0" prefWidth="1073.0" vgap="30.0" AnchorPane.leftAnchor="91.0" AnchorPane.rightAnchor="84.66666666666674" AnchorPane.topAnchor="13.0">
+            <GridPane alignment="CENTER" hgap="40.0" layoutX="101.0" layoutY="8.0" prefHeight="170.0" prefWidth="1073.0" vgap="30.0" AnchorPane.leftAnchor="101.0" AnchorPane.rightAnchor="77.66666666666652" AnchorPane.topAnchor="8.0">
               <columnConstraints>
                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -87,13 +85,13 @@
             <Insets />
          </opaqueInsets>
       </AnchorPane>
-      <TableView fx:id="tabTatCa" layoutX="8.0" layoutY="322.0" prefHeight="304.0" prefWidth="811.0" style="-fx-border-color: green;" styleClass="small-round-box" AnchorPane.bottomAnchor="9.0" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="461.0" AnchorPane.topAnchor="322.0">
+      <TableView fx:id="tabTatCa" layoutX="8.0" layoutY="299.3333333333333" prefHeight="327.0" prefWidth="811.0" style="-fx-border-color: green;" styleClass="small-round-box" AnchorPane.bottomAnchor="9.0" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="461.0" AnchorPane.topAnchor="299.0">
         <columns>
             <TableColumn fx:id="colMaHoaDon" prefWidth="115.33334636688232" text="Mã hóa đơn" />
             <TableColumn fx:id="colNgayLap" prefWidth="120.66667938232422" text="Ngày lập hóa đơn" />
             <TableColumn fx:id="colMaKhachHang" prefWidth="107.33338928222656" text="Mã khách hàng" />
             <TableColumn fx:id="colTrangThai" prefWidth="100.0" text="Trạng thái" />
-            <TableColumn fx:id="colMaBan" prefWidth="95.33334350585938" text="Khu vực/ Bàn" />
+            <TableColumn fx:id="colMaBan" prefWidth="95.33334350585938" text="Bàn" />
             <TableColumn fx:id="colMaNhanVien" prefWidth="86.66668701171875" text="Nhân viên" />
             <TableColumn fx:id="colTongTien" prefWidth="98.6666259765625" text="Tổng tiền" />
             <TableColumn fx:id="colChietkhau" prefWidth="75.0" text="Chiết khấu" />
@@ -106,81 +104,39 @@
             <Insets />
          </opaqueInsets>
       </TableView>
-      <GridPane alignment="CENTER" layoutX="157.0" layoutY="14.0" prefHeight="63.0" prefWidth="965.0" style="-fx-border-color: black; -fx-background-color: D3D3D3;" styleClass="small-round-box" AnchorPane.leftAnchor="157.0" AnchorPane.rightAnchor="158.33333333333326" AnchorPane.topAnchor="14.0">
+      <ImageView fitHeight="38.0" fitWidth="40.0" layoutX="20.0" layoutY="18.0" onMouseClicked="#onTimKiemClicked" pickOnBounds="true" preserveRatio="true" styleClass="image-hover-effect">
+         <image>
+            <Image url="@../icons/filter.png" />
+         </image>
+      </ImageView>
+      <GridPane hgap="10.0" layoutX="58.0" layoutY="19.0" prefHeight="35.0" prefWidth="915.0" AnchorPane.leftAnchor="58.0" AnchorPane.rightAnchor="307.33333333333326">
         <columnConstraints>
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="243.0" />
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="243.0" />
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="243.0" />
-            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="693.333272298177" minWidth="10.0" prefWidth="189.9999898274741" />
-          <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="566.6666463216146" minWidth="10.0" prefWidth="129.00008138020826" />
-          <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="367.3332519531249" minWidth="10.0" prefWidth="104.333251953125" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
         </columnConstraints>
         <rowConstraints>
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <DatePicker fx:id="dpNgayLap" prefHeight="35.0" prefWidth="114.0" promptText="Ngày lập" GridPane.columnIndex="3" />
-            <Button fx:id="btnTimKiem" mnemonicParsing="false" onAction="#onTimKiemClicked" prefHeight="35.0" prefWidth="92.0" styleClass="round-box" GridPane.columnIndex="4">
-               <graphic>
-                  <ImageView fitHeight="18.0" fitWidth="53.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../icons/find.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-            </Button>
-            <Button fx:id="BtnReset" mnemonicParsing="false" onAction="#onResetClicked" prefHeight="35.0" prefWidth="57.0" GridPane.columnIndex="5">
-               <graphic>
-                  <ImageView fitHeight="27.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../icons/circle-of-two-clockwise-arrows-rotation.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-            </Button>
-            <HBox alignment="CENTER" prefHeight="0.0" prefWidth="143.0" spacing="5.0">
-               <children>
-                  <ImageView fitHeight="33.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../icons/recipt.png" />
-                     </image>
-                  </ImageView>
-                  <TextField fx:id="tfMaHoaDon" prefHeight="36.0" prefWidth="193.0" promptText="Mã hóa đơn" styleClass="round-box" />
-               </children>
-               <padding>
-                  <Insets left="10.0" right="10.0" />
-               </padding>
-            </HBox>
-            <HBox alignment="CENTER" prefHeight="26.0" prefWidth="103.0" spacing="5.0" GridPane.columnIndex="1">
-               <children>
-                  <ImageView fitHeight="33.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../icons/name.png" />
-                     </image>
-                  </ImageView>
-                  <TextField fx:id="tfTenKhachHang" prefHeight="36.0" prefWidth="193.0" promptText="Mã khách hàng" styleClass="round-box" />
-               </children>
-               <padding>
-                  <Insets left="10.0" right="10.0" />
-               </padding>
-            </HBox>
-            <HBox alignment="CENTER" prefHeight="54.0" prefWidth="293.0" spacing="5.0" GridPane.columnIndex="2">
-               <children>
-                  <ImageView fitHeight="33.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../icons/status.png" />
-                     </image>
-                  </ImageView>
-                  <ComboBox fx:id="cbTrangThai" prefHeight="35.0" prefWidth="158.0" promptText="Trạng thái" style="-fx-background-color: #FFFFFF;" styleClass="round-box" />
-               </children>
-               <opaqueInsets>
-                  <Insets />
-               </opaqueInsets>
-               <padding>
-                  <Insets left="10.0" right="10.0" />
-               </padding>
-            </HBox>
+            <TextField fx:id="tfMaHoaDon" prefHeight="30.0" prefWidth="193.0" promptText="Mã hóa đơn" styleClass="bg1" />
+            <TextField fx:id="tfTenKhachHang" prefHeight="30.0" prefWidth="193.0" promptText="Mã khách hàng" GridPane.columnIndex="1" />
+            <ComboBox fx:id="cbTrangThai" prefHeight="29.0" prefWidth="175.0" promptText="Trạng thái" style="-fx-background-color: #FFFFFF;" GridPane.columnIndex="3" />
+            <DatePicker fx:id="dpNgayLap" prefHeight="30.0" prefWidth="175.0" promptText="Ngày lập" GridPane.columnIndex="4" />
+            <TextField fx:id="tfMaban" prefHeight="30.0" prefWidth="193.0" promptText="Mã bàn" GridPane.columnIndex="2" />
          </children>
       </GridPane>
+      <ImageView fx:id="btnTimKiem" fitHeight="30.0" fitWidth="38.0" layoutX="983.0" layoutY="20.0" onMouseClicked="#onTimKiemClicked" pickOnBounds="true" preserveRatio="true" styleClass="image-hover-effect" AnchorPane.rightAnchor="262.0">
+         <image>
+            <Image url="@../icons/find.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="BtnReset" fitHeight="30.0" fitWidth="35.0" layoutX="1027.0" layoutY="19.0" onMouseClicked="#onResetClicked" pickOnBounds="true" preserveRatio="true" styleClass="image-hover-effect" AnchorPane.rightAnchor="218.0">
+         <image>
+            <Image url="@../icons/circle-of-two-clockwise-arrows-rotation.png" />
+         </image>
+      </ImageView>
    </children>
 </AnchorPane>
