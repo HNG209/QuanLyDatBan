@@ -86,7 +86,7 @@
                 String inputUsername = username.getText().trim();
                 String inputPassword = password.getText().trim();
 
-                if (inputUsername.isEmpty() || inputPassword.isEmpty()) {
+                if (inputUsername.isEmpty() && inputPassword.isEmpty()) {
                     throw new IllegalArgumentException("Vui lòng nhập thông tin đăng nhập");
                 }
 
