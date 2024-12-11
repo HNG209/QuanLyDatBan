@@ -27,12 +27,9 @@ import org.login.quanlydatban.utilities.NumberFormatter;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -93,8 +90,6 @@ public class ThucDonController implements Initializable {
 
     @FXML
     private Button btnXoaRong;
-    private String duongdan;
-    private  String duongdananh;
 
 //    @FXML
 //    private Button btnTimKiem;
@@ -116,6 +111,7 @@ public class ThucDonController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         cbloaiMonAn.getSelectionModel().selectFirst();
         cbtrangThaiMon.getSelectionModel().selectFirst();
+        cbSapXep.getSelectionModel().selectFirst();
         monAnDAO = new MonAnDAO();
         loaiMonDAO = new LoaiMonDAO();
         ObservableList<String> sharedList = FXCollections.observableArrayList();
@@ -138,49 +134,43 @@ public class ThucDonController implements Initializable {
 
         taiAnh.setOnAction(new EventHandler<ActionEvent>() {
             @Override
-            public void handle(ActionEvent actionEvent) {
-                System.out.println("Nhấn nút tải ảnh");
-
-                // Khởi tạo FileChooser để người dùng chọn hình ảnh
+            public void handle(ActionEvent event) {
+                //System.out.println("Nhấn nút tải ảnh");
                 FileChooser fileChooser = new FileChooser();
-                URL resourceUrl = getClass().getResource("/org/login/quanlydatban/Image/");
-                File initialDirectory = null;
-                try {
-                    initialDirectory = new File(resourceUrl.toURI());
-                } catch (URISyntaxException e) {
-                    System.out.println("Không tìm thấy thư mục");
-                }
-                fileChooser.setInitialDirectory(initialDirectory);
                 fileChooser.setTitle("Mở file");
 
-                // Thiết lập bộ lọc file hình ảnh
+                // Thiết lập thư mục khởi tạo
+                File initialDir = new File("src/main/resources/org/login/quanlydatban/Image");
+                if (initialDir.exists() && initialDir.isDirectory()) {
+                    fileChooser.setInitialDirectory(initialDir);
+                } else {
+                    Notification.thongBao(
+                            "Thư mục khởi tạo không tồn tại hoặc không phải là thư mục: " + initialDir.getAbsolutePath(),
+                            Alert.AlertType.ERROR
+                    );
+                    return; // Kết thúc nếu thư mục khởi tạo không hợp lệ
+                }
+
+                // Thiết lập bộ lọc file
                 FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif");
                 fileChooser.getExtensionFilters().add(extFilter);
 
-                // Mở cửa sổ chọn file và lấy file được chọn
+                // Hiển thị hộp thoại chọn file
                 File file = fileChooser.showOpenDialog(null);
+
                 if (file != null) {
-                    // Lấy tên file từ tệp được chọn
-                    String fileName = file.getName(); // Ví dụ "image.jpg"
+                    // Lấy đường dẫn tương đối từ thư mục gốc dự án
+                    File projectRoot = new File("src/main/resources/org/login/quanlydatban/Image");
+                    duongDanAnh = projectRoot.toURI().relativize(file.toURI()).getPath();
 
-                    // Định nghĩa đường dẫn lưu file trong thư mục Image của dự án
-                    File destinationDirectory = new File(initialDirectory, fileName);
-                    try {
-                        // Copy file vào thư mục Image trong dự án
-                        Files.copy(file.toPath(), destinationDirectory.toPath(), StandardCopyOption.REPLACE_EXISTING);
-                        System.out.println("Ảnh đã được lưu thành công.");
+                    // Cập nhật ImageView với ảnh mới
+                    Image image = new Image(file.toURI().toString());
+                    anhMon.setImage(image);
 
-                        // Cập nhật đường dẫn hình ảnh vào cơ sở dữ liệu (hoặc biến)
-                        duongdan = "/org/login/quanlydatban/Image/" + fileName;  // Đường dẫn tương đối
-                        duongdananh = duongdan;  // Cập nhật đường dẫn ảnh
-
-                        // Cập nhật ImageView với ảnh mới
-                        Image image = new Image(destinationDirectory.toURI().toString());
-                        anhMon.setImage(image);
-
-                    } catch (IOException e) {
-                        System.out.println("Lỗi khi lưu ảnh: " + e.getMessage());
-                    }
+                    // Hiển thị thông báo thành công
+                    Notification.thongBao("Tải ảnh thành công!", Alert.AlertType.INFORMATION);
+                } else {
+                    Notification.thongBao("Không có tệp nào được chọn.", Alert.AlertType.WARNING);
                 }
             }
         });
@@ -430,10 +420,10 @@ public class ThucDonController implements Initializable {
         String selectedType = cbTimLoaiMon.getValue();
         int sortOption = cbSapXep.getSelectionModel().getSelectedIndex();
 
-        if (cbTimLoaiMon.getValue() == null && keyword.isEmpty() && sortOption == -1) {
-            Notification.thongBao("Bạn cần nhập/chọn một trong các cách tìm trước khi tiến hành tìm kiếm", Alert.AlertType.WARNING);
-        }
-        else {
+//        if (cbTimLoaiMon.getValue() == null && keyword.isEmpty() && sortOption == -1) {
+//            Notification.thongBao("Bạn cần nhập/chọn một trong các cách tìm trước khi tiến hành tìm kiếm", Alert.AlertType.WARNING);
+//        }
+//        else {
             // Clear the previous list
             flowPane.getChildren().clear();
             flowPane.prefHeightProperty().bind(scrollPane.heightProperty());
@@ -463,7 +453,7 @@ public class ThucDonController implements Initializable {
             // Show warning if no items are found
             if (filteredItems.isEmpty()) {
                 Notification.thongBao("Không tìm thấy món ăn phù hợp với tiêu chí tìm kiếm!", Alert.AlertType.WARNING);
-            }
+
       }
 
 
@@ -572,7 +562,7 @@ public class ThucDonController implements Initializable {
             txtTimKiem.clear();
             cbTimLoaiMon.getEditor().clear();
             cbTimLoaiMon.setValue("");
-            cbSapXep.getSelectionModel().clearSelection();
+            cbSapXep.getSelectionModel().selectFirst();
             flowPane.getChildren().clear(); // Clear existing items
 
             List<MonAn> monAnList = monAnDAO.getAllMonAn(); // Retrieve the latest data from the database
