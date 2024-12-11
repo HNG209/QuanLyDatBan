@@ -247,36 +247,64 @@ public class TrangThemNhanVienController implements Initializable {
            btnLuu.setOnAction(new EventHandler<ActionEvent>() {
                @Override
                public void handle(ActionEvent event) {
-                   if(gioiTinhCheck(gioiTinh)){
-                       if(tencheck(hoTen)){
-                           if(diaChicheck(diaChi)){
-                               if(cancuoccongdancheck(cccd)){
-                                   if(sdtcheck(dienThoai)){
-                                       if(trangThaiCheck(trangThaiLamViec)){
-                                           if(duongdan!= null){
-                                               int tuoi = calculateAge(ngaySinh.getValue());
-                                               if(tuoi < 15){
-                                                   showWarn("Tuổi nhân viên phải lớn hơn 15");
-                                               }else {
-                                                   try {
-                                                      ThemNhanVien();
-                                                      showAlert("Thêm nhân viên thành công");
-                                                      Stage stage = (Stage) btnLuu.getScene().getWindow();
-                                                      stage.close();
-                                                   } catch (Exception e) {
-                                                      throw new RuntimeException(e);
-                                                   }
-                                                trangQuanLyNhanVien.xetLaiduLieuChoBang();
-                                               }
-                                           }else{
-                                               showAlert("Bạn phải chọn ảnh của nhân viên");
-                                           }
-                                       }
-                                   }
-                               }
-                           }
-                       }
+                   if (!gioiTinhCheck(gioiTinh)) {
+                       return;
                    }
+                   if (!tencheck(hoTen)) {
+                       return;
+                   }
+                   if (!diaChicheck(diaChi)) {
+                       return;
+                   }
+                   if (!cancuoccongdancheck(cccd)) {
+                       return;
+                   }
+                   if (!sdtcheck(dienThoai)) {
+                       return;
+                   }
+                   if (!trangThaiCheck(chucVu)) {
+                       return;
+                   }
+
+                   if(ngaySinh.getValue() == null){
+                       showWarn("Ban phai nhap ngay sinh");
+                       return;
+                   }
+                   int tuoi = calculateAge(ngaySinh.getValue());
+                   if(tuoi < 15){
+                       showWarn("Tuổi phải lớn hơn 15.");
+                       return;
+                   }
+                   if(duongdananh == null){
+                       showWarn("Ban phai chọn ảnh");
+                       return;
+                   }
+                   // kiem tra sdt co trung hoac cccd co trung hay khong
+                   NhanVienDAO nvd = new NhanVienDAO();
+                   List<NhanVien> nv = nvd.getAllTaiKhoan();
+                   NhanVien nvsdt = nv.stream().filter(x->x.getSdt().equals(dienThoai.getText())).findFirst().orElse(null);
+                   NhanVien nvscccd = nv.stream().filter(x->x.getCccd().equals(cccd.getText())).findFirst().orElse(null);
+
+                   if(nvscccd != null){
+                       showWarn("Căn cước công dân này đã được sử dụng, vui lòng sử dụng số căn cước công dân khác");
+                       return;
+                   }
+
+                   if(nvsdt != null){
+                       showWarn("Số điện thoại này đã được sử dụng, vui lòng sử dụng số điện thoại khác");
+                       return;
+                   }
+
+                   try {
+                       ThemNhanVien();
+                       showAlert("Thêm nhân viên thành công");
+                       System.out.println("Them thanh cong");
+                       Stage stage = (Stage) btnLuu.getScene().getWindow();
+                       stage.close();
+                   } catch (Exception e) {
+                       throw new RuntimeException(e);
+                   }
+                   trangQuanLyNhanVien.xetLaiduLieuChoBang();
                }
            });
            btnHuyBo.setOnAction(new EventHandler<ActionEvent>() {
@@ -292,14 +320,6 @@ public class TrangThemNhanVienController implements Initializable {
     public void ThemNhanVien() throws Exception {
          Boolean gt = gioiTinh.getValue().equals("NAM") ? false : true;
          taiKhoanDAO = new TaiKhoanDAO();
-         TrangThaiNhanVien tt = null;
-         if(trangThaiLamViec.getValue().equals("ĐANG LÀM")){
-             tt = TrangThaiNhanVien.DANG_LAM;
-         }else if(trangThaiLamViec.getValue().equals("NGHỈ PHÉP")){
-             tt = TrangThaiNhanVien.NGHI_PHEP;
-         }else if(trangThaiLamViec.getValue().equals("NGHỈ VIỆC")){
-            tt = TrangThaiNhanVien.NGHI_VIEC;
-         }
 
          ChucVu cv = null;
         if(chucVu.getValue().equals("Nhân viên")){
@@ -308,19 +328,17 @@ public class TrangThemNhanVienController implements Initializable {
             cv = ChucVu.QUAN_LY;
         }
 
-
-
-
         //NhanVien nv = new NhanVien(maNhanVien.getText().toString(),hoTen.getText().toString(),dienThoai.getText().toString(),cccd.getText().toString(),diaChi.getText().toString(),gt,ngaySinh.getValue(),duongdan,tt,cv);
         NhanVien nv = new NhanVien();
         nv.setTenNhanVien(hoTen.getText());
         nv.setCccd(cccd.getText());
         nv.setSdt(dienThoai.getText());
         nv.setChucVuNhanVien(cv);
-        nv.setTrangThaiNhanVien(tt);
+        nv.setTrangThaiNhanVien(TrangThaiNhanVien.DANG_LAM);
         nv.setDiaChi(diaChi.getText());
         nv.setHinhAnh(duongdan);
         nv.setNgaySinh(ngaySinh.getValue());
+        nv.setGioiTinh(gt);
         NhanVienDAO nvd = new NhanVienDAO();
         nvd.addNhanVien(nv);
         String tenTaiKhoan = hoTen.getText().toString().replaceAll("\\s+","");

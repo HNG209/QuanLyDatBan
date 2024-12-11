@@ -27,9 +27,12 @@ import org.login.quanlydatban.utilities.NumberFormatter;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -90,6 +93,8 @@ public class ThucDonController implements Initializable {
 
     @FXML
     private Button btnXoaRong;
+    private String duongdan;
+    private  String duongdananh;
 
 //    @FXML
 //    private Button btnTimKiem;
@@ -134,25 +139,48 @@ public class ThucDonController implements Initializable {
         taiAnh.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                System.out.println("Nhan nut tai anh");
-                FileChooser fileChooser = new FileChooser();
+                System.out.println("Nhấn nút tải ảnh");
 
-                fileChooser.setInitialDirectory(new File("../QuanLyDatBan/src/main/resources/org/login/quanlydatban/ImageFood"));
+                // Khởi tạo FileChooser để người dùng chọn hình ảnh
+                FileChooser fileChooser = new FileChooser();
+                URL resourceUrl = getClass().getResource("/org/login/quanlydatban/Image/");
+                File initialDirectory = null;
+                try {
+                    initialDirectory = new File(resourceUrl.toURI());
+                } catch (URISyntaxException e) {
+                    System.out.println("Không tìm thấy thư mục");
+                }
+                fileChooser.setInitialDirectory(initialDirectory);
                 fileChooser.setTitle("Mở file");
 
-                // Thiết lập bộ lọc file nếu cần
+                // Thiết lập bộ lọc file hình ảnh
                 FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif");
                 fileChooser.getExtensionFilters().add(extFilter);
 
+                // Mở cửa sổ chọn file và lấy file được chọn
                 File file = fileChooser.showOpenDialog(null);
-                //System.out.println("Nhấn nút tải ảnh");
-
                 if (file != null) {
-                    //duongDanAnh = file.getAbsolutePath();
-                    duongDanAnh = file.getAbsolutePath(); // Cập nhật đường dẫn
-                    // Cập nhật ImageView với ảnh mới
-                    Image image = new Image(file.toURI().toString());
-                    anhMon.setImage(image);
+                    // Lấy tên file từ tệp được chọn
+                    String fileName = file.getName(); // Ví dụ "image.jpg"
+
+                    // Định nghĩa đường dẫn lưu file trong thư mục Image của dự án
+                    File destinationDirectory = new File(initialDirectory, fileName);
+                    try {
+                        // Copy file vào thư mục Image trong dự án
+                        Files.copy(file.toPath(), destinationDirectory.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                        System.out.println("Ảnh đã được lưu thành công.");
+
+                        // Cập nhật đường dẫn hình ảnh vào cơ sở dữ liệu (hoặc biến)
+                        duongdan = "/org/login/quanlydatban/Image/" + fileName;  // Đường dẫn tương đối
+                        duongdananh = duongdan;  // Cập nhật đường dẫn ảnh
+
+                        // Cập nhật ImageView với ảnh mới
+                        Image image = new Image(destinationDirectory.toURI().toString());
+                        anhMon.setImage(image);
+
+                    } catch (IOException e) {
+                        System.out.println("Lỗi khi lưu ảnh: " + e.getMessage());
+                    }
                 }
             }
         });
