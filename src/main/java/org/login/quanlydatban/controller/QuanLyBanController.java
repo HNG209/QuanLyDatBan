@@ -333,17 +333,22 @@ public class QuanLyBanController implements Initializable {
             textMaBan.setText(selectedBan.getMaBan());
             textKhuVuc.getSelectionModel().select(selectedBan.getKhuVuc());
             textLoaiBan.getSelectionModel().select(selectedBan.getLoaiBan());
-            if(selectedBan.getTrangThaiBan() == TrangThaiBan.DANG_PHUC_VU ) {
-                checkTamNgungPV.setDisable(true);
-            } else {
-                checkTamNgungPV.setDisable(false);
-            }
-
             if (selectedBan.getTrangThaiBan() == TrangThaiBan.TAM_NGUNG_PHUC_VU) {
                 checkTamNgungPV.setSelected(true);
             } else {
                 checkTamNgungPV.setSelected(false);
             }
+            if(selectedBan.getTrangThaiBan() == TrangThaiBan.DANG_PHUC_VU ) {
+                checkTamNgungPV.setDisable(true);
+                textLoaiBan.setDisable(true);
+                textKhuVuc.setDisable(true);
+            } else {
+                checkTamNgungPV.setDisable(false);
+                textLoaiBan.setDisable(false);
+                textKhuVuc.setDisable(false);
+            }
+
+
         } else {
             isEditing = false;
             clearForm();
