@@ -264,13 +264,32 @@ public class DatLichController implements Initializable {
                         throw new IllegalArgumentException("Bàn hiện đang phục vụ, vui lòng chọn bàn khác");
                 }
 
-                if(Notification.xacNhan("Xác nhận đổi bàn cho lịch đặt")) {
-                    hoaDon.setBan(ban);
+                int sl = 0;
+                switch (ban.getLoaiBan()){
+                    case LoaiBan.BAN_2_NGUOI -> sl = 2;
+                    case LoaiBan.BAN_5_NGUOI -> sl = 5;
+                    case LoaiBan.BAN_10_NGUOI -> sl = 10;
+                }
 
-                    hoaDon = hoaDonDAO.updateHoaDon(hoaDon);
-                    refreshBang();
-                    this.ban = ban;
-                    tfBan.setText(ban.getMaBan());
+                if(selectedLD.getSoLuongNguoi() > sl){
+                    if(Notification.xacNhan("Số lượng khách trong lịch đặt vượt quá sức chứa của bàn đã chọn. Bạn có chắc chắn muốn đổi bàn không?")) {
+                        hoaDon.setBan(ban);
+
+                        hoaDon = hoaDonDAO.updateHoaDon(hoaDon);
+                        refreshBang();
+                        this.ban = ban;
+                        tfBan.setText(ban.getMaBan());
+                    }
+                }
+                else {
+                    if(Notification.xacNhan("Xác nhận đổi bàn cho lịch đặt")) {
+                        hoaDon.setBan(ban);
+
+                        hoaDon = hoaDonDAO.updateHoaDon(hoaDon);
+                        refreshBang();
+                        this.ban = ban;
+                        tfBan.setText(ban.getMaBan());
+                    }
                 }
             }
             else {
