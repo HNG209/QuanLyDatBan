@@ -147,8 +147,7 @@ public class KhachHangController {
                     if (khachHangDAO.timKhachHangTheoSDT(sdt) == null) {
                         khachHang.setSdt(sdt);
                     } else {
-                        Notification.thongBao("Số điện thoại đã đăng kí thành viên", Alert.AlertType.INFORMATION);
-                        return;
+                       throw new IllegalArgumentException("Số điện thoại đã đăng kí thành viên");
                     }
                 }
 
@@ -166,10 +165,10 @@ public class KhachHangController {
                     lamMoi();
                     Notification.thongBao("Sửa thông tin khách hàng thành công", Alert.AlertType.INFORMATION);
                 } else {
-                    Notification.thongBao("Sửa thông tin khách hàng thất bại", Alert.AlertType.INFORMATION);
+                    throw new IllegalArgumentException("Sửa thông tin khách hàng thất bại");
                 }
             } else {
-                Notification.thongBao("Vui lòng chọn khách hàng để sửa", Alert.AlertType.INFORMATION);
+                throw new IllegalArgumentException("Vui lòng chọn khách hàng để sửa");
             }
         } catch (Exception e) {
             Notification.thongBao(e.getMessage(), Alert.AlertType.ERROR);
@@ -183,10 +182,11 @@ public class KhachHangController {
             return;
         }
 
-        if (!validateInput()) {
-            return;
-        }
+
         try {
+            if (!validateInput()) {
+                return;
+            }
             KhachHang khachHang = new KhachHang(
                     null,
                     txtTenKH.getText().trim(),
@@ -216,34 +216,27 @@ public class KhachHangController {
         String tenRegex = "^[A-Z][a-zA-Z]*( [A-Z][a-zA-Z]*)*$";
         String diaChiRegex = "^[A-Z0-9][a-zA-Z0-9/]*( [A-Z0-9][a-zA-Z0-9/]*)*$";
         if(txtTenKH.getText().isEmpty() && txtSDT.getText().isEmpty() && txtCCCD.getText().isEmpty()) {
-            Notification.thongBao("Vui lòng nhập thông tin khách hàng", Alert.AlertType.INFORMATION);
-            return false;
+            throw new IllegalArgumentException("Vui lòng nhập thông tin khách hàng");
         }
 
         if (!txtTenKH.getText().matches(tenRegex)) {
-            Notification.thongBao("Tên khách hàng không hợp lệ", Alert.AlertType.ERROR);
-            return false;
+           throw new IllegalArgumentException("Tên khách hàng không hợp lệ");
         }
         if (!txtSDT.getText().matches(sdtRegex)) {
-            Notification.thongBao("Số điện thoại không hợp lệ", Alert.AlertType.ERROR);
-            return false;
+            throw new IllegalArgumentException("Số điện thoại không hợp lệ");
         }
         if(khachHangDAO.timKhachHangTheoSDT(txtSDT.getText()) != null) {
-            Notification.thongBao("Số điện thoại đã đăng kí thành viên", Alert.AlertType.INFORMATION);
-            return false;
+            throw new IllegalArgumentException("Số điện thoại đã đăng kí thành viên");
         }
         if (!txtEmail.getText().equalsIgnoreCase("")&&!txtEmail.getText().matches(emailRegex)) {
-            Notification.thongBao("Email không hợp lệ", Alert.AlertType.ERROR);
-            return false;
+            throw new IllegalArgumentException("Email không hợp lệ");
         }
 
         if (!txtCCCD.getText().equalsIgnoreCase("")&&!txtCCCD.getText().matches(cccdRegex)) {
-            Notification.thongBao("CCCD không hợp lệ", Alert.AlertType.ERROR);
-            return false;
+            throw new IllegalArgumentException("CCCD không hợp lệ");
         }
         if (!txtDiaChi.getText().equalsIgnoreCase("")&&!txtDiaChi.getText().matches(diaChiRegex)) {
-            Notification.thongBao("Địa chỉ nhập không hợp lệ", Alert.AlertType.ERROR);
-            return false;
+            throw new IllegalArgumentException("Địa chỉ nhập không hợp lệ");
         }
         return true;
     }
