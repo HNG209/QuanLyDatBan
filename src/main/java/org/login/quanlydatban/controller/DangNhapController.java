@@ -51,11 +51,6 @@
             });
             username.setOnKeyPressed(event -> {
                 if (event.getCode() == KeyCode.ENTER) {
-                    try {
-                        dangNhap();
-                    } catch (Exception e) {
-                        throw new RuntimeException(e);
-                    }
                     password.requestFocus();
 
                 }

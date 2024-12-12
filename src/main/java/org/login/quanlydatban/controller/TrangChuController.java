@@ -452,9 +452,10 @@ public class TrangChuController implements Initializable {
 
         Stage tienIchStage = new Stage();
         tienIchStage.initStyle(StageStyle.UNDECORATED);
+        tienIchStage.initModality(Modality.APPLICATION_MODAL);
         tienIchStage.setScene(scene);
 
-        tienIchStage.show();
+        tienIchStage.showAndWait();
     }
 
     public void loadRankingBoard() throws IOException {
