@@ -17,9 +17,9 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="635.0" prefWidth="1280.0" styleClass="gradient1" stylesheets="../stylesheets/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.login.quanlydatban.controller.HoaDonController">
+<AnchorPane prefHeight="635.0" prefWidth="1280.0" styleClass="gradient1" stylesheets="../stylesheets/style.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.login.quanlydatban.controller.HoaDonController">
    <children>
-      <TableView fx:id="tableCTHD" layoutX="934.0" layoutY="300.0" prefHeight="326.0" prefWidth="439.0" style="-fx-border-color: green;" styleClass="small-round-box" AnchorPane.bottomAnchor="9.0" AnchorPane.rightAnchor="16.0" AnchorPane.topAnchor="300.0">
+      <TableView fx:id="tableCTHD" layoutX="934.0" layoutY="300.0" prefHeight="326.0" prefWidth="435.0" style="-fx-border-color: green;" styleClass="small-round-box" AnchorPane.bottomAnchor="9.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="300.0">
          <columns>
             <TableColumn fx:id="colTenMonAn" prefWidth="96.00000262260437" text="Tên món ăn" />
             <TableColumn fx:id="colSoLuong" prefWidth="61.33324432373047" text="Số lượng" />
@@ -31,18 +31,17 @@
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
          </columnResizePolicy>
       </TableView>
-      <AnchorPane layoutX="11.0" layoutY="70.0" prefHeight="215.0" prefWidth="1251.0" style="-fx-border-color: black; -fx-background-color: white;" stylesheets="@../stylesheets/style.css" AnchorPane.leftAnchor="11.0" AnchorPane.rightAnchor="18.0">
+      <AnchorPane layoutX="20.0" layoutY="70.0" prefHeight="222.0" prefWidth="1242.0" style="-fx-border-color: black; -fx-background-color: white;" stylesheets="@../stylesheets/style.css" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="18.0">
          <styleClass>
-            <String fx:value="round-box" />
+            <String fx:value="rounded-pane-simple1" />
             <String fx:value="gradient2" />
          </styleClass>
          <children>
-            <GridPane alignment="CENTER" hgap="40.0" layoutX="101.0" layoutY="8.0" prefHeight="170.0" prefWidth="1073.0" vgap="30.0" AnchorPane.leftAnchor="101.0" AnchorPane.rightAnchor="77.66666666666652" AnchorPane.topAnchor="8.0">
+            <GridPane alignment="CENTER" hgap="40.0" layoutX="24.0" layoutY="19.2" prefHeight="203.0" prefWidth="1193.0" vgap="30.0" AnchorPane.leftAnchor="23.0" AnchorPane.rightAnchor="26.0" AnchorPane.topAnchor="18.0">
               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="50.0" />
                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="30.0" />
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="50.0" />
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
               </columnConstraints>
               <rowConstraints>
@@ -56,7 +55,7 @@
                <children>
                   <Label style="-fx-font-weight: 700;" text="Thông tin khách hàng">
                      <font>
-                        <Font size="16.0" />
+                        <Font size="20.0" />
                      </font></Label>
                   <Label text="Mã khách hàng:" GridPane.rowIndex="1" />
                   <Label text="Tên khách hàng:" GridPane.rowIndex="2" />
@@ -64,10 +63,11 @@
                   <TextField fx:id="textMaKH" editable="false" prefHeight="26.0" prefWidth="242.0" styleClass="underlined-style" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                   <TextField fx:id="textTenKH" editable="false" prefHeight="25.0" prefWidth="397.0" styleClass="underlined-style" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                   <TextField fx:id="textcccdKH" prefHeight="26.0" prefWidth="242.0" styleClass="underlined-style" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                  <Label style="-fx-font-weight: 700;" text="Thông tin nhân viên" GridPane.columnIndex="3">
+                  <Label style="-fx-font-weight: 700;" text="Thông tin nhân viên" GridPane.columnIndex="2">
                      <font>
-                        <Font size="16.0" />
+                        <Font size="20.0" />
                      </font></Label>
+<<<<<<< HEAD
                   <Label text="Mã nhân viên:" GridPane.columnIndex="3" GridPane.rowIndex="1" />
                   <Label text="Tên nhân viên:" GridPane.columnIndex="3" GridPane.rowIndex="2" />
                   <Label text="Căn cước công dân:" GridPane.columnIndex="3" GridPane.rowIndex="3" />
@@ -77,6 +77,16 @@
                   <TextField fx:id="textcccdNV" editable="false" prefHeight="26.0" prefWidth="242.0" styleClass="underlined-style" GridPane.columnIndex="4" GridPane.rowIndex="3" />
                   <TextField fx:id="textTrangThaiNV" editable="false" prefHeight="26.0" prefWidth="242.0" styleClass="underlined-style" GridPane.columnIndex="4" GridPane.rowIndex="4" />
                   <Button fx:id="btnXuatHD" mnemonicParsing="false" onAction="#XuatHD" prefHeight="25.0" prefWidth="121.0" styleClass="pale-lemon" text="Xuất hóa đơn" GridPane.rowIndex="4" />
+=======
+                  <Label text="Mã nhân viên:" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                  <Label text="Tên nhân viên:" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                  <Label text="Căn cước công dân:" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                  <Label text="Trạng thái:" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+                  <TextField fx:id="textMaNV" editable="false" prefHeight="26.0" prefWidth="242.0" styleClass="underlined-style" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                  <TextField fx:id="textTenNV" editable="false" prefHeight="25.0" prefWidth="397.0" styleClass="underlined-style" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                  <TextField fx:id="textcccdNV" editable="false" prefHeight="26.0" prefWidth="242.0" styleClass="underlined-style" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+                  <TextField fx:id="textTrangThaiNV" editable="false" prefHeight="26.0" prefWidth="242.0" styleClass="underlined-style" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+>>>>>>> 30d111a40f58985417f4c5f0d499f74ea42cdcb1
                </children>
                <opaqueInsets>
                   <Insets />
@@ -87,7 +97,7 @@
             <Insets />
          </opaqueInsets>
       </AnchorPane>
-      <TableView fx:id="tabTatCa" layoutX="8.0" layoutY="299.3333333333333" prefHeight="327.0" prefWidth="811.0" style="-fx-border-color: green;" styleClass="small-round-box" AnchorPane.bottomAnchor="9.0" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="461.0" AnchorPane.topAnchor="299.0">
+      <TableView fx:id="tabTatCa" layoutX="18.4" layoutY="299.3333333333333" prefHeight="327.0" prefWidth="801.0" style="-fx-border-color: green;" styleClass="small-round-box" AnchorPane.bottomAnchor="9.0" AnchorPane.leftAnchor="18.0" AnchorPane.rightAnchor="461.0" AnchorPane.topAnchor="299.0">
         <columns>
             <TableColumn fx:id="colMaHoaDon" prefWidth="115.33334636688232" text="Mã hóa đơn" />
             <TableColumn fx:id="colNgayLap" prefWidth="120.66667938232422" text="Ngày lập hóa đơn" />
@@ -111,7 +121,7 @@
             <Image url="@../icons/filter.png" />
          </image>
       </ImageView>
-      <GridPane hgap="10.0" layoutX="58.0" layoutY="19.0" prefHeight="35.0" prefWidth="915.0" AnchorPane.leftAnchor="58.0" AnchorPane.rightAnchor="307.33333333333326">
+      <GridPane hgap="10.0" layoutX="58.0" layoutY="19.0" prefHeight="35.0" prefWidth="1106.0" AnchorPane.leftAnchor="58.0" AnchorPane.rightAnchor="116.0">
         <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -123,19 +133,19 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <TextField fx:id="tfMaHoaDon" prefHeight="30.0" prefWidth="193.0" promptText="Mã hóa đơn" styleClass="bg1" />
-            <TextField fx:id="tfTenKhachHang" prefHeight="30.0" prefWidth="193.0" promptText="Mã khách hàng" GridPane.columnIndex="1" />
-            <ComboBox fx:id="cbTrangThai" prefHeight="29.0" prefWidth="175.0" promptText="Trạng thái" style="-fx-background-color: #FFFFFF;" GridPane.columnIndex="3" />
-            <DatePicker fx:id="dpNgayLap" prefHeight="30.0" prefWidth="175.0" promptText="Ngày lập" GridPane.columnIndex="4" />
-            <TextField fx:id="tfMaban" prefHeight="30.0" prefWidth="193.0" promptText="Mã bàn" GridPane.columnIndex="2" />
+            <TextField fx:id="tfMaHoaDon" prefHeight="30.0" prefWidth="553.0" promptText="Mã hóa đơn" />
+            <TextField fx:id="tfTenKhachHang" prefHeight="30.0" prefWidth="535.0" promptText="Mã khách hàng" GridPane.columnIndex="1" />
+            <ComboBox fx:id="cbTrangThai" prefHeight="30.0" prefWidth="809.0" promptText="Trạng thái" GridPane.columnIndex="3" />
+            <DatePicker fx:id="dpNgayLap" prefHeight="30.0" prefWidth="674.0" promptText="Ngày lập" GridPane.columnIndex="4" />
+            <TextField fx:id="tfMaban" prefHeight="30.0" prefWidth="592.0" promptText="Mã bàn" GridPane.columnIndex="2" />
          </children>
       </GridPane>
-      <ImageView fx:id="btnTimKiem" fitHeight="30.0" fitWidth="38.0" layoutX="983.0" layoutY="20.0" onMouseClicked="#onTimKiemClicked" pickOnBounds="true" preserveRatio="true" styleClass="image-hover-effect" AnchorPane.rightAnchor="262.0">
+      <ImageView fx:id="btnTimKiem" fitHeight="30.0" fitWidth="38.0" layoutX="1174.0" layoutY="20.0" onMouseClicked="#onTimKiemClicked" pickOnBounds="true" preserveRatio="true" styleClass="image-hover-effect" AnchorPane.rightAnchor="76.0">
          <image>
             <Image url="@../icons/find.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="BtnReset" fitHeight="30.0" fitWidth="35.0" layoutX="1027.0" layoutY="19.0" onMouseClicked="#onResetClicked" pickOnBounds="true" preserveRatio="true" styleClass="image-hover-effect" AnchorPane.rightAnchor="218.0">
+      <ImageView fx:id="BtnReset" fitHeight="36.0" fitWidth="32.0" layoutX="1209.0" layoutY="19.0" onMouseClicked="#onResetClicked" pickOnBounds="true" preserveRatio="true" styleClass="image-hover-effect" AnchorPane.rightAnchor="39.0">
          <image>
             <Image url="@../icons/circle-of-two-clockwise-arrows-rotation.png" />
          </image>

@@ -65,17 +65,14 @@
             <TextField fx:id="tfBan" editable="false" layoutX="129.0" layoutY="46.0" styleClass="underlined-style" GridPane.columnIndex="3" GridPane.rowIndex="1" />
             <Label layoutX="249.0" layoutY="93.0" text="Bàn:" GridPane.columnIndex="2" GridPane.rowIndex="1" />
             <Label layoutX="10.0" layoutY="93.0" text="Tiền cọc:" GridPane.rowIndex="3" />
-            <TextField fx:id="tfCoc" layoutX="129.0" layoutY="90.0" onKeyTyped="#nhapCoc" styleClass="underlined-style" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <Label layoutX="10.0" layoutY="136.0" text="Cọc khách đưa:" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-            <TextField fx:id="tfCocKD" layoutX="129.0" layoutY="132.0" onKeyTyped="#nhapCoc" styleClass="underlined-style" GridPane.columnIndex="3" GridPane.rowIndex="3" />
-            <Label layoutX="249.0" layoutY="136.0" prefHeight="0.0" prefWidth="78.0" text="Tiền trả lại:" GridPane.columnIndex="4" GridPane.rowIndex="3" />
-            <TextField fx:id="tfTienTraLai" editable="false" layoutX="368.0" layoutY="132.0" styleClass="underlined-style" GridPane.columnIndex="5" GridPane.rowIndex="3" />
-            <Button fx:id="btnChonMon" mnemonicParsing="false" onAction="#chonMon" prefHeight="26.0" prefWidth="362.0" styleClass="pale-lemon" text="Chọn món" GridPane.columnIndex="4" GridPane.rowIndex="1" />
+            <TextField fx:id="tfCoc" editable="false" layoutX="129.0" layoutY="90.0" styleClass="underlined-style" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <Button fx:id="btnChonMon" mnemonicParsing="false" onAction="#chonMon" prefHeight="26.0" prefWidth="362.0" styleClass="pale-lemon" text="Chọn món" GridPane.columnIndex="3" GridPane.rowIndex="3" />
             <ImageView fitHeight="23.0" fitWidth="23.0" onMouseClicked="#refreshInput" pickOnBounds="true" preserveRatio="true" styleClass="image-hover-effect" GridPane.columnIndex="4">
                <image>
                   <Image url="@../icons/circle-of-two-clockwise-arrows-rotation.png" />
                </image>
             </ImageView>
+            <Button fx:id="btnXuat" layoutX="416.0" layoutY="136.0" mnemonicParsing="false" onAction="#xuatPhieuDat" prefHeight="26.0" prefWidth="362.0" styleClass="sunset-orange" text="Xuất phiếu đặt" GridPane.columnIndex="2" GridPane.rowIndex="3" />
          </children>
       </GridPane>
       <TableView fx:id="tableLichDat" layoutX="15.0" layoutY="55.2" onMouseClicked="#chonDong" prefHeight="229.0" prefWidth="831.0" styleClass="rounded-pane-simple1" AnchorPane.bottomAnchor="351.0" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="55.0">

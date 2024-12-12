@@ -46,13 +46,16 @@ public class LichDatDAO {
         return list;
     }
 
-    public List<LichDat> getDSLichDatFrom(LocalDate from, LocalDate to) {
+    public List<LichDat> getDSLichDatFrom(LocalDate from, LocalDate to, TrangThaiHoaDon trangThaiHoaDon) {
         Session session = HibernateUtils.getFactory().openSession();
         session.getTransaction().begin();
 
-        List<LichDat> list = session.createNativeQuery("SELECT * FROM lichDat " +
-                        "WHERE DATE(thoiGianNhanBan) BETWEEN :from AND :to " +
+        List<LichDat> list = session.createNativeQuery("SELECT l.* FROM lichDat AS l " +
+                        "INNER JOIN hoaDon ON hoaDon.maHoaDon = l.hoaDon_maHoaDon " +
+                        "WHERE (:trangThai IS NULL OR hoaDon.trangThaiHoaDon LIKE :trangThai) AND " +
+                        "DATE(thoiGianNhanBan) BETWEEN :from AND :to " +
                         "ORDER BY thoiGianNhanBan ASC", LichDat.class)
+                .setParameter("trangThai", trangThaiHoaDon == null ? null : trangThaiHoaDon.name())
                 .setParameter("from", from)
                 .setParameter("to", to)
                 .getResultList();
@@ -95,6 +98,25 @@ public class LichDatDAO {
                 .setParameter("cccd", cccd)
                 .setParameter("trangThai", trangThaiHoaDon == null ? null : trangThaiHoaDon.name())
                 .setParameter("thoiGianNhanBan", ngayNhanBan)
+                .getResultList();
+
+        session.getTransaction().commit();
+        session.close();
+
+        return list;
+    }
+
+    public List<LichDat> getDSLichDatBy(LocalDateTime thoiGianNhanBan, Ban ban){
+        Session session = HibernateUtils.getFactory().openSession();
+        session.getTransaction().begin();
+
+        List<LichDat> list = session.createNativeQuery("SELECT l.* FROM lichDat AS l " +
+                                "INNER JOIN hoaDon ON hoaDon.maHoaDon = l.hoaDon_maHoaDon " +
+                                "WHERE thoiGianNhanBan = :thoiGianNhanBan AND " +
+                                "hoaDon.maBan = :maBan"
+                        , LichDat.class)
+                .setParameter("thoiGianNhanBan", thoiGianNhanBan)
+                .setParameter("maBan", ban.getMaBan())
                 .getResultList();
 
         session.getTransaction().commit();

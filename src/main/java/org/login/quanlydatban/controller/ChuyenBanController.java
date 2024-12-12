@@ -6,7 +6,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Stage;
@@ -14,11 +16,14 @@ import org.login.quanlydatban.dao.BanDAO;
 import org.login.quanlydatban.dao.HoaDonDAO;
 import org.login.quanlydatban.entity.Ban;
 import org.login.quanlydatban.entity.HoaDon;
+import org.login.quanlydatban.entity.enums.KhuVuc;
+import org.login.quanlydatban.entity.enums.LoaiBan;
 import org.login.quanlydatban.entity.enums.TrangThaiBan;
 import org.login.quanlydatban.notification.Notification;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class ChuyenBanController implements Initializable {
@@ -42,6 +47,15 @@ public class ChuyenBanController implements Initializable {
 
     @FXML
     private TextField maBanChuyen;
+
+    @FXML
+    private ComboBox<KhuVuc> cbKhuVuc;
+
+    @FXML
+    private ComboBox<LoaiBan> cbLoaiBan;
+
+    @FXML
+    private TextField tfMaBan;
 
     @FXML
     private TextField maBanHT;
@@ -144,11 +158,16 @@ public class ChuyenBanController implements Initializable {
         } else Notification.thongBao("Vui lòng chọn bàn để chuyển", Alert.AlertType.INFORMATION);
     }
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        banDAO = new BanDAO();
-        hoaDonDAO = new HoaDonDAO();
+    @FXML
+    void timKiem(MouseEvent event) {
+        loadBan(banDAO.getListBanBy(tfMaBan.getText(),
+                TrangThaiBan.BAN_TRONG,
+                cbLoaiBan.getSelectionModel().getSelectedItem(),
+                cbKhuVuc.getSelectionModel().getSelectedItem()));
+    }
 
+    public void loadBan(){
+        flowPane.getChildren().clear();
         for (Ban i : banDAO.getListBanTrong()){
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/uicomponents/CardBan_TrangChuyenBan.fxml"));
             try {
@@ -162,5 +181,44 @@ public class ChuyenBanController implements Initializable {
                 throw new RuntimeException(e);
             }
         }
+    }
+
+    public void loadBan(List<Ban> list){
+        flowPane.getChildren().clear();
+        for (Ban i : list){
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/uicomponents/CardBan_TrangChuyenBan.fxml"));
+            try {
+                AnchorPane pane = loader.load();
+                CardBanChuyenBanController controller = loader.getController();
+                controller.setBan(i);
+                controller.setChuyenBanController(this);
+
+                flowPane.getChildren().add(pane);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    @FXML
+    void resetBan(MouseEvent event) {
+        tfMaBan.clear();
+        cbLoaiBan.setValue(null);
+        cbKhuVuc.setValue(null);
+        loadBan();
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        banDAO = new BanDAO();
+        hoaDonDAO = new HoaDonDAO();
+
+        cbKhuVuc.getItems().add(null);
+        cbKhuVuc.getItems().addAll(KhuVuc.values());
+
+        cbLoaiBan.getItems().add(null);
+        cbLoaiBan.getItems().addAll(LoaiBan.values());
+
+        loadBan();
     }
 }

@@ -117,15 +117,13 @@ public class KhachHang implements Serializable {
     }
 
     public void setCccd(String cccd) {
-        this.cccd = cccd;
-    }
-
-    public String getSdt() {
-        return sdt;
-    }
-
-    public void setSdt(String sdt) {
-        this.sdt = sdt;
+        if(cccd != null) {
+            if(cccd.matches("^\\d{3}[0-9][0-9]\\d{7}$")) {
+                this.cccd = cccd;
+            }
+            else throw new IllegalArgumentException("Căn cước công dân không hợp lệ");
+        }
+        else throw new IllegalArgumentException("Căn cước công dân rỗng");
     }
 
     public String getTenKhachHang() {
@@ -133,7 +131,22 @@ public class KhachHang implements Serializable {
     }
 
     public void setTenKhachHang(String tenKhachHang) {
-        this.tenKhachHang = tenKhachHang;
+        if(tenKhachHang != null) {
+            if(tenKhachHang.matches("^[A-Z][a-zA-Z]*( [A-Z][a-zA-Z]*)*$")) {
+                this.tenKhachHang = tenKhachHang;
+            }
+            else throw new IllegalArgumentException("Tên khách hàng không hợp lệ");
+
+        }
+        else throw new IllegalArgumentException("Tên khách hàng rỗng");
+
+    }
+    public String getSdt() {
+        return sdt;
+    }
+
+    public void setSdt(String sdt) {
+        this.sdt = sdt;
     }
 
 }

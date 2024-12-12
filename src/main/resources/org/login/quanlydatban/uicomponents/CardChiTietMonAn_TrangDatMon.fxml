@@ -9,21 +9,16 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="389.0" prefWidth="352.0" style="-fx-border-color: black;" styleClass="gradient2" stylesheets="@../stylesheets/style.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.login.quanlydatban.controller.CardChiTietMonAnController">
+<AnchorPane prefHeight="563.0" prefWidth="352.0" style="-fx-border-color: black;" styleClass="gradient2" stylesheets="@../stylesheets/style.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.login.quanlydatban.controller.CardChiTietMonAnController">
    <children>
-      <StackPane layoutX="120.0" layoutY="22.0" styleClass="bottom-border">
-         <children>
-            <ImageView fitHeight="129.0" fitWidth="127.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../Image/test.png" />
-               </image>
-            </ImageView>
-         </children>
-      </StackPane>
-      <GridPane layoutX="21.6" layoutY="165.0" prefHeight="173.0" prefWidth="309.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
+      <ImageView fx:id="image" fitHeight="299.0" fitWidth="300.0" layoutX="26.0" layoutY="26.0" pickOnBounds="true">
+         <image>
+            <Image url="@../icons/empty.png" />
+         </image>
+      </ImageView>
+      <GridPane layoutX="21.0" layoutY="339.0" prefHeight="173.0" prefWidth="309.0" AnchorPane.leftAnchor="21.0" AnchorPane.rightAnchor="20.600000000000023">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="155.20001220703125" minWidth="10.0" prefWidth="133.5999755859375" />
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="186.4000244140625" minWidth="10.0" prefWidth="186.4000244140625" />
@@ -73,6 +68,6 @@
                </font></TextField>
          </children>
       </GridPane>
-      <Button layoutX="23.0" layoutY="348.0" mnemonicParsing="false" onAction="#thoat" prefHeight="26.0" prefWidth="307.0" styleClass="sunset-orange" text="Đóng" textFill="WHITE" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" />
+      <Button layoutX="21.0" layoutY="522.0" mnemonicParsing="false" onAction="#thoat" prefHeight="26.0" prefWidth="309.0" styleClass="sunset-orange" text="Đóng" textFill="WHITE" AnchorPane.leftAnchor="21.0" AnchorPane.rightAnchor="22.0" />
    </children>
 </AnchorPane>

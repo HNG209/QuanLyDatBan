@@ -7,11 +7,14 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import javafx.util.StringConverter;
 import org.login.quanlydatban.dao.*;
 import org.login.quanlydatban.entity.Ban;
@@ -30,6 +33,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class DatLichController implements Initializable {
@@ -91,8 +95,8 @@ public class DatLichController implements Initializable {
     @FXML
     private TextField tfTKCCCD;
 
-    @FXML
-    private TextField tfCocKD;
+//    @FXML
+//    private TextField tfCocKD;
 
     @FXML
     private TextField tfSoLuongNguoi;
@@ -102,9 +106,6 @@ public class DatLichController implements Initializable {
 
     @FXML
     private TextField tfTKmaLichDat;
-
-    @FXML
-    private TextField tfTienTraLai;
 
     @FXML
     private FlowPane listViewBan;
@@ -123,6 +124,9 @@ public class DatLichController implements Initializable {
 
     @FXML
     private Button btnDatLich;
+
+    @FXML
+    private Button btnXuat;
 
     @FXML
     private TextArea txtGhiChu;
@@ -145,7 +149,7 @@ public class DatLichController implements Initializable {
 
     private Ban ban;
 
-    private String prevCCCD;
+    private String prevCCCD = "";
 
     private LichDat selectedLD;
 
@@ -201,23 +205,28 @@ public class DatLichController implements Initializable {
             cbPhut.getItems().add(i);
 
         tfTenKhachHang.focusedProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue && tfTenKhachHang.isEditable()) { // If newValue is false, the TextField has lost focus
-                if(Notification.xacNhan("Lưu khách hàng này?")){
-                    KhachHang khachHang = new KhachHang();
-                    khachHang.setCccd(tfCCCD.getText());
-                    khachHang.setTenKhachHang(tfTenKhachHang.getText());
+            try {
+                if (!newValue && tfTenKhachHang.isEditable()) { // If newValue is false, the TextField has lost focus
+                    if (Notification.xacNhan("Lưu khách hàng này?")) {
+                        KhachHang khachHang = new KhachHang();
+                        khachHang.setCccd(tfCCCD.getText());
+                        khachHang.setTenKhachHang(tfTenKhachHang.getText());
 
-                    prevCCCD = tfCCCD.getText();
+                        prevCCCD = tfCCCD.getText();
 
-                    khachHangDAO.themKhachHang(khachHang);
-                    tfTenKhachHang.setEditable(false);
+                        khachHangDAO.themKhachHang(khachHang);
+                        tfTenKhachHang.setEditable(false);
+                    }
                 }
+            }
+            catch (Exception e) {
+                Notification.thongBao(e.getMessage(), Alert.AlertType.WARNING);
             }
         });
 
         tfCCCD.focusedProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue) { // If newValue is false, the TextField has lost focus
-                if(tfCCCD.getText().length() < 10)
+                if(tfCCCD != null && tfCCCD.getText().length() < 12)
                     tfCCCD.setText(prevCCCD);
             }
         });
@@ -259,13 +268,35 @@ public class DatLichController implements Initializable {
                         throw new IllegalArgumentException("Bàn hiện đang phục vụ, vui lòng chọn bàn khác");
                 }
 
-                if(Notification.xacNhan("Xác nhận đổi bàn cho lịch đặt")) {
-                    hoaDon.setBan(ban);
+                int sl = 0;
+                switch (ban.getLoaiBan()){
+                    case LoaiBan.BAN_2_NGUOI -> sl = 2;
+                    case LoaiBan.BAN_5_NGUOI -> sl = 5;
+                    case LoaiBan.BAN_10_NGUOI -> sl = 10;
+                }
 
-                    hoaDon = hoaDonDAO.updateHoaDon(hoaDon);
-                    refreshBang();
-                    this.ban = ban;
-                    tfBan.setText(ban.getMaBan());
+                if(!lichDatDAO.getDSLichDatBy(selectedLD.getThoiGianNhanBan(), ban).isEmpty())
+                    throw new IllegalArgumentException("Bàn này đã tồn tại lịch đặt có cùng thời gian");
+
+                if(selectedLD.getSoLuongNguoi() > sl){
+                    if(Notification.xacNhan("Số lượng khách trong lịch đặt vượt quá sức chứa của bàn đã chọn. Bạn có chắc chắn muốn đổi bàn không?")) {
+                        hoaDon.setBan(ban);
+
+                        hoaDon = hoaDonDAO.updateHoaDon(hoaDon);
+                        refreshBang();
+                        this.ban = ban;
+                        tfBan.setText(ban.getMaBan());
+                    }
+                }
+                else {
+                    if(Notification.xacNhan("Xác nhận đổi bàn cho lịch đặt")) {
+                        hoaDon.setBan(ban);
+
+                        hoaDon = hoaDonDAO.updateHoaDon(hoaDon);
+                        refreshBang();
+                        this.ban = ban;
+                        tfBan.setText(ban.getMaBan());
+                    }
                 }
             }
             else {
@@ -361,8 +392,7 @@ public class DatLichController implements Initializable {
         tfSoLuongNguoi.clear();
         txtGhiChu.clear();
         tfCoc.clear();
-        tfCocKD.clear();
-        tfTienTraLai.clear();
+//        tfCocKD.clear();
 
         prevCCCD = null;
         hoaDon = null;
@@ -430,6 +460,21 @@ public class DatLichController implements Initializable {
         }
     }
 
+    @FXML
+    void xuatPhieuDat(ActionEvent event) throws IOException {
+        if(selectedLD != null && selectedLD.getHoaDon().getTrangThaiHoaDon() == TrangThaiHoaDon.DA_DAT){
+            FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/org/login/quanlydatban/views/TrangPhieuDatLich.fxml")));
+            AnchorPane pane = loader.load();
+
+            PhieuDatLichController controller = loader.getController();
+            controller.setLichDat(selectedLD);
+            Stage stage = new Stage();
+
+            stage.setScene(new Scene(pane));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.showAndWait();
+        }
+    }
 
     @FXML
     void chonDong(MouseEvent event) {
@@ -459,6 +504,7 @@ public class DatLichController implements Initializable {
             btnChonMon.setDisable(true);
             btnHuyLich.setDisable(true);
             btnNhanBan.setDisable(true);
+            btnXuat.setDisable(true);
         }
         else{
             tfCCCD.setEditable(true);
@@ -469,6 +515,7 @@ public class DatLichController implements Initializable {
             btnNhanBan.setDisable(false);
             btnChonMon.setDisable(false);
             btnHuyLich.setDisable(false);
+            btnXuat.setDisable(false);
         }
     }
 
@@ -524,7 +571,7 @@ public class DatLichController implements Initializable {
             LocalDate date = tgNhanBan.getValue();
             HoaDon hoaDon = new HoaDon();
             hoaDon.setNgayLap(LocalDate.now());
-            hoaDon.setNhanVien(TrangChuController.getTaiKhoan().getNhanVien());
+//            hoaDon.setNhanVien(TrangChuController.getTaiKhoan().getNhanVien());
             hoaDon.setTrangThaiHoaDon(TrangThaiHoaDon.DA_DAT);
             hoaDon.setKhachHang(khachHangDAO.getKHByCCCD(prevCCCD));
             if (ban != null)
@@ -537,7 +584,7 @@ public class DatLichController implements Initializable {
                 else throw new IllegalArgumentException("Vui lòng chọn giờ");
             } else throw new IllegalArgumentException("Vui lòng chọn thời gian nhận bàn");
 
-            lichDat.setTienCoc(c);
+            lichDat.setTienCoc(0);
 
             hoaDon.setMaHoaDon(date);
             lichDat.setHoaDon(hoaDon);
@@ -557,56 +604,56 @@ public class DatLichController implements Initializable {
         }
     }
 
-    @FXML
-    void nhapCoc(KeyEvent event) {
-        try {
-            if (event.getSource().equals(tfCoc)) {
-                if (tfCoc.getText().equals(""))
-                    return;
-                tfCoc.setText(NumberFormatter.formatPrice(tfCoc.getText()));
-                tfCoc.positionCaret(tfCoc.getText().length());
+//    @FXML
+//    void nhapCoc(KeyEvent event) {
+//        try {
+//            if (event.getSource().equals(tfCoc)) {
+//                if (tfCoc.getText().equals(""))
+//                    return;
+//                tfCoc.setText(NumberFormatter.formatPrice(tfCoc.getText()));
+//                tfCoc.positionCaret(tfCoc.getText().length());
+//
+//                if (tfCoc.getText().replace(".", "").matches("\\d+"))
+//                    c = Double.parseDouble(tfCoc.getText().replace(".", ""));
+//                else throw new IllegalArgumentException("Chỉ được nhập số");
+//                capNhatTienTraLai();
+//            } else {
+//                if (tfCocKD.getText().equals("")) {
+//                    ckd = 0.0;
+//                    capNhatTienTraLai();
+//                    return;
+//                }
+//
+//                tfCocKD.setText(NumberFormatter.formatPrice(tfCocKD.getText()));
+//                tfCocKD.positionCaret(tfCocKD.getText().length());
+//
+//                if (tfCocKD.getText().replace(".", "").matches("\\d+"))
+//                    ckd = Double.parseDouble(tfCocKD.getText().replace(".", ""));
+//                else throw new IllegalArgumentException("Chỉ được nhập số");
+//                capNhatTienTraLai();
+//            }
+//        }
+//        catch (Exception e){
+//            Notification.thongBao(e.getMessage(), Alert.AlertType.WARNING);
+//            if(event.getSource().equals(tfCoc)){
+//                tfCoc.setText(tfCoc.getText().substring(0, tfCoc.getLength() - 1));
+//                tfCoc.setText(NumberFormatter.formatPrice(tfCoc.getText()));
+//                tfCoc.positionCaret(tfCoc.getText().length());
+//            }
+//            else {
+//                tfCocKD.setText(tfCocKD.getText().substring(0, tfCocKD.getLength() - 1));
+//                tfCocKD.setText(NumberFormatter.formatPrice(tfCocKD.getText()));
+//                tfCocKD.positionCaret(tfCocKD.getText().length());
+//            }
+//            capNhatTienTraLai();
+//        }
+//    }
 
-                if (tfCoc.getText().replace(".", "").matches("\\d+"))
-                    c = Double.parseDouble(tfCoc.getText().replace(".", ""));
-                else throw new IllegalArgumentException("Chỉ được nhập số");
-                capNhatTienTraLai();
-            } else {
-                if (tfCocKD.getText().equals("")) {
-                    ckd = 0.0;
-                    capNhatTienTraLai();
-                    return;
-                }
-
-                tfCocKD.setText(NumberFormatter.formatPrice(tfCocKD.getText()));
-                tfCocKD.positionCaret(tfCocKD.getText().length());
-
-                if (tfCocKD.getText().replace(".", "").matches("\\d+"))
-                    ckd = Double.parseDouble(tfCocKD.getText().replace(".", ""));
-                else throw new IllegalArgumentException("Chỉ được nhập số");
-                capNhatTienTraLai();
-            }
-        }
-        catch (Exception e){
-            Notification.thongBao(e.getMessage(), Alert.AlertType.WARNING);
-            if(event.getSource().equals(tfCoc)){
-                tfCoc.setText(tfCoc.getText().substring(0, tfCoc.getLength() - 1));
-                tfCoc.setText(NumberFormatter.formatPrice(tfCoc.getText()));
-                tfCoc.positionCaret(tfCoc.getText().length());
-            }
-            else {
-                tfCocKD.setText(tfCocKD.getText().substring(0, tfCocKD.getLength() - 1));
-                tfCocKD.setText(NumberFormatter.formatPrice(tfCocKD.getText()));
-                tfCocKD.positionCaret(tfCocKD.getText().length());
-            }
-            capNhatTienTraLai();
-        }
-    }
-
-    public void capNhatTienTraLai() {
-        if(ckd - c >= 0)
-            tfTienTraLai.setText(NumberFormatter.formatPrice(String.valueOf((int) (ckd - c))));
-        else tfTienTraLai.clear();
-    }
+//    public void capNhatTienTraLai() {
+//        if(ckd - c >= 0)
+//            tfTienTraLai.setText(NumberFormatter.formatPrice(String.valueOf((int) (ckd - c))));
+//        else tfTienTraLai.clear();
+//    }
 
     @FXML
     void refreshInput(MouseEvent event) {
@@ -671,20 +718,23 @@ public class DatLichController implements Initializable {
 
     @FXML
     void nhapCCCD(KeyEvent event) {
-        if(tfCCCD.getText().length() == 10) {
-            try {
-                KhachHang khachHang = khachHangDAO.getKHByCCCD(tfCCCD.getText());
+        try {
+            if (tfCCCD.getText().length() == 12) {
+                KhachHang khachHang = new KhachHang();
+                khachHang.setCccd(tfCCCD.getText());
+                khachHang = khachHangDAO.getKHByCCCD(tfCCCD.getText());
                 tfTenKhachHang.setText(khachHang.getTenKhachHang());
                 prevCCCD = tfCCCD.getText();
             }
-            catch (NoResultException e) {
-                if(Notification.xacNhan("CCCD mới, bạn có muốn tạo khách hàng này?")){
-                    tfTenKhachHang.requestFocus();
-                    tfTenKhachHang.setEditable(true);
-                }
-                else tfCCCD.setText(prevCCCD);
-            }
+        } catch (NoResultException e) {
+            if (Notification.xacNhan("CCCD mới, bạn có muốn tạo khách hàng này?")) {
+                tfTenKhachHang.requestFocus();
+                tfTenKhachHang.setEditable(true);
+            } else tfCCCD.setText(prevCCCD);
+        } catch (Exception e) {
+            Notification.thongBao(e.getMessage(), Alert.AlertType.WARNING);
+            tfCCCD.clear();
+            tfTenKhachHang.clear();
         }
-        else tfTenKhachHang.setEditable(false);
     }
 }
