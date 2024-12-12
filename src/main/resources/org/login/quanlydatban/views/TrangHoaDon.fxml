@@ -2,6 +2,7 @@
 
 <?import java.lang.String?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
@@ -75,6 +76,7 @@
                   <TextField fx:id="textTenNV" editable="false" prefHeight="25.0" prefWidth="397.0" styleClass="underlined-style" GridPane.columnIndex="4" GridPane.rowIndex="2" />
                   <TextField fx:id="textcccdNV" editable="false" prefHeight="26.0" prefWidth="242.0" styleClass="underlined-style" GridPane.columnIndex="4" GridPane.rowIndex="3" />
                   <TextField fx:id="textTrangThaiNV" editable="false" prefHeight="26.0" prefWidth="242.0" styleClass="underlined-style" GridPane.columnIndex="4" GridPane.rowIndex="4" />
+                  <Button fx:id="btnXuatHD" mnemonicParsing="false" onAction="#XuatHD" prefHeight="25.0" prefWidth="121.0" styleClass="pale-lemon" text="Xuất hóa đơn" GridPane.rowIndex="4" />
                </children>
                <opaqueInsets>
                   <Insets />
