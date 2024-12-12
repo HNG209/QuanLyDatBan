@@ -17,7 +17,6 @@ import org.login.quanlydatban.entity.ChiTietHoaDon;
 import org.login.quanlydatban.entity.LichDat;
 import org.login.quanlydatban.utilities.NumberFormatter;
 
-import java.io.Serializable;
 import java.net.URL;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
@@ -46,6 +45,11 @@ public class PhieuDatLichController implements Initializable {
         img.setBlendMode(BlendMode.MULTIPLY);
         phieuDatArea.getChildren().add(img);
 
+        String maLD = String.format("\n   Mã lịch đặt: %s", lichDat.getMaLichDat());
+        Text maLDline = new Text(maLD);
+        maLDline.setFont(Font.font("Courier New", FontWeight.NORMAL, 12));
+        phieuDatArea.getChildren().add(maLDline);
+
         String ngayLap = String.format("\n   Ngày đặt: %s", lichDat.getThoiGianDat().toLocalDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) + " (" + lichDat.getThoiGianDat().toLocalTime().getHour() + ":" + lichDat.getThoiGianDat().toLocalTime().getMinute() + ")");
         Text nlLine = new Text(ngayLap);
         nlLine.setFont(Font.font("Courier New", FontWeight.NORMAL, 12));
@@ -56,11 +60,13 @@ public class PhieuDatLichController implements Initializable {
         nnbLine.setFont(Font.font("Courier New", FontWeight.NORMAL, 12));
         phieuDatArea.getChildren().add(nnbLine);
 
-        String nv = String.format("\n\n   Nhân viên: %s(%s)\n   Khách hàng: %s(%s)\n",
+        String nv = String.format("\n\n   Nhân viên: %s(%s)\n   Khách hàng: %s(%s) CCCD: %s\n",
                 lichDat.getNhanVien().getMaNhanVien(),
                 lichDat.getNhanVien().getTenNhanVien(),
                 lichDat.getKhachHang().getMaKhachHang(),
-                lichDat.getKhachHang().getTenKhachHang());
+                lichDat.getKhachHang().getTenKhachHang(),
+                lichDat.getKhachHang().getCccd()
+        );
         Text nvLine = new Text(nv);
         nvLine.setFont(Font.font("Courier New", FontWeight.NORMAL, 12));
         phieuDatArea.getChildren().add(nvLine);

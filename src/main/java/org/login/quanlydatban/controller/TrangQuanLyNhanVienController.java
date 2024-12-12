@@ -182,7 +182,7 @@ public class TrangQuanLyNhanVienController implements Initializable {
 
                 // Khởi tạo FileChooser để người dùng chọn hình ảnh
                 FileChooser fileChooser = new FileChooser();
-                URL resourceUrl = getClass().getResource("/org/login/quanlydatban/Image/giabao.png");
+                URL resourceUrl = getClass().getResource("/org/login/quanlydatban/Image/");
                 File initialDirectory = null;
                 try {
                     initialDirectory = new File(resourceUrl.toURI());
@@ -218,7 +218,7 @@ public class TrangQuanLyNhanVienController implements Initializable {
                         image1.setImage(image);
 
                     } catch (IOException e) {
-                        System.out.println("Lỗi khi lưu ảnh: " + e.getMessage());
+                        Notification.thongBao(e.getMessage(), Alert.AlertType.WARNING);
                     }
                 }
             }

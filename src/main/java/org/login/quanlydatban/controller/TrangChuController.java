@@ -52,8 +52,12 @@ public class TrangChuController implements Initializable {
 
     @FXML
     private Menu baoCaoMenu;
+
     @FXML
     private Menu nhanVienMenu;
+
+    @FXML
+    private Menu menuTienIch;
 
     @FXML
     private Menu thongKeMenu;
@@ -377,6 +381,7 @@ public class TrangChuController implements Initializable {
             thongKeMenu.setVisible(false);
             khachHangMenu.setVisible(false);
             nhaHangMenu.setVisible(false);
+            menuTienIch.setVisible(false);
         }
 
 
@@ -501,6 +506,7 @@ public class TrangChuController implements Initializable {
         nhaHangMenu.setVisible(true);
         nhanVienMenu.setVisible(true);
         quanLyBanMenuItem.setVisible(true);
+        menuTienIch.setVisible(true);
     }
 
 }

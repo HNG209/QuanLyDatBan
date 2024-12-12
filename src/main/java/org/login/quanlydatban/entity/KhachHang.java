@@ -73,8 +73,8 @@ public class KhachHang implements Serializable {
     public KhachHang(String maKhachHang, String tenKhachHang, String sdt, String cccd, String diaChi, String email, int diemTichLuy) {
         this.maKhachHang = maKhachHang;
         this.tenKhachHang = tenKhachHang;
-        this.sdt = sdt;
-        this.cccd = cccd;
+        setSdt(sdt);
+        setCccd(cccd);
         this.diaChi = diaChi;
         this.email = email;
         this.diemTichLuy = diemTichLuy;
@@ -146,7 +146,12 @@ public class KhachHang implements Serializable {
     }
 
     public void setSdt(String sdt) {
-        this.sdt = sdt;
+        if(sdt != null){
+            if(sdt.matches("^(09|03|02|04)\\d{8}$"))
+                this.sdt = sdt;
+            else throw new IllegalArgumentException("Số điện thoại không hợp lệ");
+        }
+        else throw new IllegalArgumentException("Số điện thoại không được rỗng");
     }
 
 }

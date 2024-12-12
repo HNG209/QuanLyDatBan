@@ -68,20 +68,25 @@ public class KhachHangController {
     private KhachHangDAO khachHangDAO = new KhachHangDAO();
     @FXML
     public void initialize() {
-        tableKhachHang.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        List<Object[]> dsKhachHang = khachHangDAO.layDSKhachHang();
+        try {
+            tableKhachHang.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+            List<Object[]> dsKhachHang = khachHangDAO.layDSKhachHang();
 
-        ObservableList<KhachHang> data = FXCollections.observableArrayList();
+            ObservableList<KhachHang> data = FXCollections.observableArrayList();
 
-        colmaKH.setCellValueFactory(new PropertyValueFactory<>("maKhachHang"));
-        colTenKH.setCellValueFactory(new PropertyValueFactory<>("tenKhachHang"));
-        colSDT.setCellValueFactory(new PropertyValueFactory<>("sdt"));
-        colEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
-        colDiaChi.setCellValueFactory(new PropertyValueFactory<>("diaChi"));
-        colCCCD.setCellValueFactory(new PropertyValueFactory<>("cccd"));
-        colDTL.setCellValueFactory(new PropertyValueFactory<>("diemTichLuy"));
-        tableKhachHang.setItems(data);
-        themDuLieuVaoBangKhachHang();
+            colmaKH.setCellValueFactory(new PropertyValueFactory<>("maKhachHang"));
+            colTenKH.setCellValueFactory(new PropertyValueFactory<>("tenKhachHang"));
+            colSDT.setCellValueFactory(new PropertyValueFactory<>("sdt"));
+            colEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
+            colDiaChi.setCellValueFactory(new PropertyValueFactory<>("diaChi"));
+            colCCCD.setCellValueFactory(new PropertyValueFactory<>("cccd"));
+            colDTL.setCellValueFactory(new PropertyValueFactory<>("diemTichLuy"));
+            tableKhachHang.setItems(data);
+            themDuLieuVaoBangKhachHang();
+        }
+        catch (Exception e){
+            Notification.thongBao(e.getMessage(), Alert.AlertType.WARNING);
+        }
     }
     @FXML
     public void onCustomerSelected() {
@@ -167,7 +172,7 @@ public class KhachHangController {
                 Notification.thongBao("Vui lòng chọn khách hàng để sửa", Alert.AlertType.INFORMATION);
             }
         } catch (Exception e) {
-            Notification.thongBao("Có lỗi xảy ra khi sửa thông tin khách hàng", Alert.AlertType.ERROR);
+            Notification.thongBao(e.getMessage(), Alert.AlertType.ERROR);
         }
     }
 
@@ -199,7 +204,7 @@ public class KhachHangController {
                 Notification.thongBao("Thêm khách hàng thành công", Alert.AlertType.INFORMATION);
             }
         } catch (Exception e) {
-            Notification.thongBao("Có lỗi xảy ra khi thêm khách hàng", Alert.AlertType.ERROR);
+            Notification.thongBao(e.getMessage(), Alert.AlertType.ERROR);
         }
     }
 

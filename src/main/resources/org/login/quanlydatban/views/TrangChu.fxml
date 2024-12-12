@@ -175,7 +175,7 @@
                         </ImageView>
                      </graphic>
                   </Menu>
-                  <Menu mnemonicParsing="false" text="Tiện ích">
+                  <Menu fx:id="menuTienIch" mnemonicParsing="false" text="Tiện ích">
                     <items>
                       <MenuItem mnemonicParsing="false" onAction="#tinhTien" text="Tính tiền">
                            <accelerator>

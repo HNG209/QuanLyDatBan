@@ -6,6 +6,7 @@ import javafx.collections.transformation.FilteredList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
@@ -15,6 +16,7 @@ import org.login.quanlydatban.dao.NhanVienDAO;
 import org.login.quanlydatban.dao.TaiKhoanDAO;
 import org.login.quanlydatban.encryptionUtils.EncryptionUtils;
 import org.login.quanlydatban.entity.NhanVien;
+import org.login.quanlydatban.notification.Notification;
 
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
@@ -96,7 +98,6 @@ public class TrangQuanLyTaiKhoanController implements Initializable {
         tableTaiKhoan.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-
                 if (mouseEvent.getClickCount() == 1) { // Kiểm tra nhấp chuột đơn,nv.getNgaySinh()
                     try {
                         int rowIndex = tableTaiKhoan.getSelectionModel().getSelectedIndex();
@@ -109,15 +110,22 @@ public class TrangQuanLyTaiKhoanController implements Initializable {
                             tenNhanVienn.setText(nvtim.getTenNhanVien());
                             maNhanVien.setText(nvtim.getMaNhanVien());
                             tenTaiKhoan.setText(taiKhoanDAO.getTaiKhoanNhanVien(cellValue).getUserName().toString());
-                            password.setText(EncryptionUtils.decrypt(taiKhoanDAO.getTaiKhoanNhanVien(cellValue).getPassword().toString(), System.getenv("ENCRYPTION_KEY")));
-                            hienthi = EncryptionUtils.decrypt(taiKhoanDAO.getTaiKhoanNhanVien(cellValue).getPassword().toString(), System.getenv("ENCRYPTION_KEY"));
+                            if(taiKhoanDAO.getTaiKhoanNhanVien(cellValue).getPassword().toString().equals("1111")) {
+                                hienthi="1111";
+                                password.setText("1111");
+                            } else{
+                                password.setText(EncryptionUtils.decrypt(taiKhoanDAO.getTaiKhoanNhanVien(cellValue).getPassword().toString(), System.getenv("ENCRYPTION_KEY")));
+                                hienthi = EncryptionUtils.decrypt(taiKhoanDAO.getTaiKhoanNhanVien(cellValue).getPassword().toString(), System.getenv("ENCRYPTION_KEY"));
+                            }
+
+                            //hienthi = EncryptionUtils.decrypt(nvd.getTaiKhoanNhanVien(cellValue).getPassword().toString(), System.getenv("ENCRYPTION_KEY"));
                             Tooltip tooltip = new Tooltip(hienthi);
                             Tooltip.install(password, tooltip); // Cài đặt Tooltip cho PasswordField
                             Image image = new Image(getClass().getResource(nvtim.getHinhAnh()).toString());
                             hinhAnh.setImage(image);
                         }
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        Notification.thongBao(e.getMessage(), Alert.AlertType.WARNING);
                     }
                 }
             }
