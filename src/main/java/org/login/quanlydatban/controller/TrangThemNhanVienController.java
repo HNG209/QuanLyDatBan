@@ -67,7 +67,6 @@ public class TrangThemNhanVienController implements Initializable {
     @FXML
     private DatePicker ngaySinh;
     private TaiKhoanDAO taiKhoanDAO;
-    private String duongdan;// duong dan cua anh
     private TrangQuanLyNhanVienController trangQuanLyNhanVien;
     public void SetTrangQuanLyNhanVien(TrangQuanLyNhanVienController trangQuanLyNhanVien) {
         this.trangQuanLyNhanVien = trangQuanLyNhanVien;
@@ -79,16 +78,7 @@ public class TrangThemNhanVienController implements Initializable {
             public void handle(ActionEvent event) {
                 System.out.println("Nhấn nút tải ảnh");
 
-                // Khởi tạo FileChooser để người dùng chọn hình ảnh
                 FileChooser fileChooser = new FileChooser();
-                URL resourceUrl = getClass().getResource("/org/login/quanlydatban/Image/");
-                File initialDirectory = null;
-                try {
-                    initialDirectory = new File(resourceUrl.toURI());
-                } catch (URISyntaxException e) {
-                    System.out.println("Không tìm thấy thư mục");
-                }
-                fileChooser.setInitialDirectory(initialDirectory);
                 fileChooser.setTitle("Mở file");
 
                 // Thiết lập bộ lọc file hình ảnh
@@ -98,31 +88,33 @@ public class TrangThemNhanVienController implements Initializable {
                 // Mở cửa sổ chọn file và lấy file được chọn
                 File file = fileChooser.showOpenDialog(null);
                 if (file != null) {
-                    // Lấy tên file từ tệp được chọn
-                    String fileName = file.getName(); // Ví dụ "image.jpg"
-
-                    // Định nghĩa đường dẫn lưu file trong thư mục Image của dự án
-                    File destinationDirectory = new File(initialDirectory, fileName);
                     try {
-                        // Copy file vào thư mục Image trong dự án
-                        Files.copy(file.toPath(), destinationDirectory.toPath(), StandardCopyOption.REPLACE_EXISTING);
-                        System.out.println("Ảnh đã được lưu thành công.");
+                        // Đường dẫn tuyệt đối của file cha
+                        File destinationDirectory = new File("src/main/resources/org/login/quanlydatban/Image/");
+                        if (!destinationDirectory.exists()) {
+                            destinationDirectory.mkdirs(); // Tạo thư mục nếu chưa tồn tại
+                        }
 
-                        // Cập nhật đường dẫn hình ảnh vào cơ sở dữ liệu (hoặc biến)
-                        duongdan = "/org/login/quanlydatban/Image/" + fileName;  // Đường dẫn tương đối
-                        duongdananh = duongdan;  // Cập nhật đường dẫn ảnh
+                        // Copy file vào thư mục Image
+                        File destinationFile = new File(destinationDirectory, file.getName());
+                        Files.copy(file.toPath(), destinationFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
 
-                        // Cập nhật ImageView với ảnh mới
-                        Image image = new Image(destinationDirectory.toURI().toString());
+                        // Cập nhật ImageView
+                        Image image = new Image(destinationFile.toURI().toString());
                         image1.setImage(image);
 
+                        // Gán đường dẫn ảnh vào biến
+                        duongdananh = destinationFile.getAbsolutePath();
+
                     } catch (IOException e) {
-                        System.out.println("Lỗi khi lưu ảnh: " + e.getMessage());
+
+                        showWarn("Lỗi khi lưu ảnh: " + e.getMessage());
                     }
                 }
             }
         });
     }
+
     private void showWarn(String message) {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle("Kết Quả");
@@ -181,7 +173,7 @@ public class TrangThemNhanVienController implements Initializable {
                            nv.setSdt(dienThoai.getText());
                            nv.setChucVuNhanVien(cv);
                            nv.setTrangThaiNhanVien(TrangThaiNhanVien.DANG_LAM);
-                           nv.setHinhAnh(duongdan);
+                           nv.setHinhAnh(duongdananh);
                            nv.setNgaySinh(ngaySinh.getValue());
                            nvd.addNhanVien(nv);
                            String tenTaiKhoan = hoTen.getText().toString().replaceAll("\\s+", "");

@@ -121,8 +121,7 @@ public class TrangQuanLyTaiKhoanController implements Initializable {
                             //hienthi = EncryptionUtils.decrypt(nvd.getTaiKhoanNhanVien(cellValue).getPassword().toString(), System.getenv("ENCRYPTION_KEY"));
                             Tooltip tooltip = new Tooltip(hienthi);
                             Tooltip.install(password, tooltip); // Cài đặt Tooltip cho PasswordField
-                            Image image = new Image(getClass().getResource(nvtim.getHinhAnh()).toString());
-                            hinhAnh.setImage(image);
+                            hinhAnh.setImage(new Image("file:" + nvtim.getHinhAnh()));
                         }
                     } catch (Exception e) {
                         Notification.thongBao(e.getMessage(), Alert.AlertType.WARNING);

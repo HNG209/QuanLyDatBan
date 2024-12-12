@@ -423,7 +423,7 @@ public class TrangChuController implements Initializable {
 
         if (taiKhoan != null && taiKhoan.getNhanVien() != null) {
             String url = taiKhoan.getNhanVien().getHinhAnh();
-            avatar.setImage(new Image(getClass().getResource(url).toExternalForm()));
+            avatar.setImage(new Image("file:"+ url));
             avatar.setFitWidth(40); // Chiều rộng
             avatar.setFitHeight(60); // Chiều cao
             avatar.setPreserveRatio(true);

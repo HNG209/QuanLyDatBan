@@ -246,7 +246,7 @@ public class NhanVien implements Serializable {
         if(hinhAnh == null){
             throw new IllegalArgumentException("Đường dẫn ảnh nhân viên không được rỗng");
         }
-        this.hinhAnh = hinhAnh;
+        else this.hinhAnh = hinhAnh;
     }
 
 }

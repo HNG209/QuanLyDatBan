@@ -16,6 +16,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -141,7 +142,8 @@ public class TrangQuanLyNhanVienController implements Initializable {
                     Stage stage = new Stage();
                     stage.setScene(new Scene(newWindow));
                     stage.setTitle("Quản Lý Nhân Viên");
-                    stage.show();
+                    stage.initModality(Modality.APPLICATION_MODAL);
+                    stage.showAndWait();
                 } catch (IOException e) {
                     e.printStackTrace(); // Xử lý ngoại lệ nếu có lỗi khi tải FXML
                 }
@@ -174,7 +176,7 @@ public class TrangQuanLyNhanVienController implements Initializable {
     }
 
     @FXML
-    public  void taiAnh(){
+    public void taiAnh() {
         btnTaiAnh1.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -182,14 +184,6 @@ public class TrangQuanLyNhanVienController implements Initializable {
 
                 // Khởi tạo FileChooser để người dùng chọn hình ảnh
                 FileChooser fileChooser = new FileChooser();
-                URL resourceUrl = getClass().getResource("/org/login/quanlydatban/Image/");
-                File initialDirectory = null;
-                try {
-                    initialDirectory = new File(resourceUrl.toURI());
-                } catch (URISyntaxException e) {
-                    System.out.println("Không tìm thấy thư mục");
-                }
-                fileChooser.setInitialDirectory(initialDirectory);
                 fileChooser.setTitle("Mở file");
 
                 // Thiết lập bộ lọc file hình ảnh
@@ -199,22 +193,29 @@ public class TrangQuanLyNhanVienController implements Initializable {
                 // Mở cửa sổ chọn file và lấy file được chọn
                 File file = fileChooser.showOpenDialog(null);
                 if (file != null) {
-                    // Lấy tên file từ tệp được chọn
-                    String fileName = file.getName(); // Ví dụ "image.jpg"
-
-                    // Định nghĩa đường dẫn lưu file trong thư mục Image của dự án
-                    File destinationDirectory = new File(initialDirectory, fileName);
                     try {
-                        // Copy file vào thư mục Image trong dự án
-                        Files.copy(file.toPath(), destinationDirectory.toPath(), StandardCopyOption.REPLACE_EXISTING);
-                        System.out.println("Ảnh đã được lưu thành công.");
+                        // Lấy đường dẫn tuyệt đối của file
+                        String absolutePath = file.getAbsolutePath();
+                        System.out.println(absolutePath);
+                        System.out.println(file.getParent());
+                        // Thư mục đích để lưu ảnh
+                        File destinationDirectory = new File(file.getParent());
+                        if (!destinationDirectory.exists()) {
+                            destinationDirectory.mkdirs(); // Tạo thư mục nếu chưa tồn tại
+                        }
 
-                        // Cập nhật đường dẫn hình ảnh vào cơ sở dữ liệu (hoặc biến)
-                        duongdan = "/org/login/quanlydatban/Image/" + fileName;  // Đường dẫn tương đối
-                        duongdananh = duongdan;  // Cập nhật đường dẫn ảnh
+                        // Tạo file đích trong thư mục
+                        File destinationFile = new File(destinationDirectory, file.getName());
 
-                        // Cập nhật ImageView với ảnh mới
-                        Image image = new Image(destinationDirectory.toURI().toString());
+                        // Copy file vào thư mục đích
+                        Files.copy(file.toPath(), destinationFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+
+
+                        // Gán đường dẫn ảnh tuyệt đối vào biến duongdananh
+                        duongdananh = destinationFile.getAbsolutePath();
+
+                        // Hiển thị ảnh trong ImageView
+                        Image image = new Image(destinationFile.toURI().toString());
                         image1.setImage(image);
 
                     } catch (IOException e) {
@@ -222,9 +223,10 @@ public class TrangQuanLyNhanVienController implements Initializable {
                     }
                 }
             }
-
         });
     }
+
+
 
     private void showWarn(String message) {
         Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -291,7 +293,7 @@ public class TrangQuanLyNhanVienController implements Initializable {
 //
 //        }
         duongdananh = image11;
-        Image image = new Image(getClass().getResource(image11).toString());
+        Image image = new Image("file:" + image11);
         image1.setImage(image);
         maNhanVien1.setEditable(false);
         maNhanVien1.setText(nhanVien.getMaNhanVien());
@@ -306,7 +308,7 @@ public class TrangQuanLyNhanVienController implements Initializable {
             chucVu.setValue("Quản Lý");
         }
         // gioi tinh
-        if(nhanVien.isGioiTinh() == false){
+        if(!nhanVien.isGioiTinh()){
             gioiTinh1.setValue("NAM");
         }else{
             gioiTinh1.setValue("NỮ");
