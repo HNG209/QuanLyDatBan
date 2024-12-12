@@ -106,6 +106,25 @@ public class LichDatDAO {
         return list;
     }
 
+    public List<LichDat> getDSLichDatBy(LocalDateTime thoiGianNhanBan, Ban ban){
+        Session session = HibernateUtils.getFactory().openSession();
+        session.getTransaction().begin();
+
+        List<LichDat> list = session.createNativeQuery("SELECT l.* FROM lichDat AS l " +
+                                "INNER JOIN hoaDon ON hoaDon.maHoaDon = l.hoaDon_maHoaDon " +
+                                "WHERE thoiGianNhanBan = :thoiGianNhanBan AND " +
+                                "hoaDon.maBan = :maBan"
+                        , LichDat.class)
+                .setParameter("thoiGianNhanBan", thoiGianNhanBan)
+                .setParameter("maBan", ban.getMaBan())
+                .getResultList();
+
+        session.getTransaction().commit();
+        session.close();
+
+        return list;
+    }
+
     public List<LichDat> getLichDatIf(Ban ban) {
         Session session = HibernateUtils.getFactory().openSession();
         session.getTransaction().begin();

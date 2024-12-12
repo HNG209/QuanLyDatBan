@@ -91,8 +91,8 @@ public class DatLichController implements Initializable {
     @FXML
     private TextField tfTKCCCD;
 
-    @FXML
-    private TextField tfCocKD;
+//    @FXML
+//    private TextField tfCocKD;
 
     @FXML
     private TextField tfSoLuongNguoi;
@@ -102,9 +102,6 @@ public class DatLichController implements Initializable {
 
     @FXML
     private TextField tfTKmaLichDat;
-
-    @FXML
-    private TextField tfTienTraLai;
 
     @FXML
     private FlowPane listViewBan;
@@ -271,6 +268,9 @@ public class DatLichController implements Initializable {
                     case LoaiBan.BAN_10_NGUOI -> sl = 10;
                 }
 
+                if(!lichDatDAO.getDSLichDatBy(selectedLD.getThoiGianNhanBan(), ban).isEmpty())
+                    throw new IllegalArgumentException("Bàn này đã tồn tại lịch đặt có cùng thời gian");
+
                 if(selectedLD.getSoLuongNguoi() > sl){
                     if(Notification.xacNhan("Số lượng khách trong lịch đặt vượt quá sức chứa của bàn đã chọn. Bạn có chắc chắn muốn đổi bàn không?")) {
                         hoaDon.setBan(ban);
@@ -385,8 +385,7 @@ public class DatLichController implements Initializable {
         tfSoLuongNguoi.clear();
         txtGhiChu.clear();
         tfCoc.clear();
-        tfCocKD.clear();
-        tfTienTraLai.clear();
+//        tfCocKD.clear();
 
         prevCCCD = null;
         hoaDon = null;
@@ -561,7 +560,7 @@ public class DatLichController implements Initializable {
                 else throw new IllegalArgumentException("Vui lòng chọn giờ");
             } else throw new IllegalArgumentException("Vui lòng chọn thời gian nhận bàn");
 
-            lichDat.setTienCoc(c);
+            lichDat.setTienCoc(0);
 
             hoaDon.setMaHoaDon(date);
             lichDat.setHoaDon(hoaDon);
@@ -581,56 +580,56 @@ public class DatLichController implements Initializable {
         }
     }
 
-    @FXML
-    void nhapCoc(KeyEvent event) {
-        try {
-            if (event.getSource().equals(tfCoc)) {
-                if (tfCoc.getText().equals(""))
-                    return;
-                tfCoc.setText(NumberFormatter.formatPrice(tfCoc.getText()));
-                tfCoc.positionCaret(tfCoc.getText().length());
+//    @FXML
+//    void nhapCoc(KeyEvent event) {
+//        try {
+//            if (event.getSource().equals(tfCoc)) {
+//                if (tfCoc.getText().equals(""))
+//                    return;
+//                tfCoc.setText(NumberFormatter.formatPrice(tfCoc.getText()));
+//                tfCoc.positionCaret(tfCoc.getText().length());
+//
+//                if (tfCoc.getText().replace(".", "").matches("\\d+"))
+//                    c = Double.parseDouble(tfCoc.getText().replace(".", ""));
+//                else throw new IllegalArgumentException("Chỉ được nhập số");
+//                capNhatTienTraLai();
+//            } else {
+//                if (tfCocKD.getText().equals("")) {
+//                    ckd = 0.0;
+//                    capNhatTienTraLai();
+//                    return;
+//                }
+//
+//                tfCocKD.setText(NumberFormatter.formatPrice(tfCocKD.getText()));
+//                tfCocKD.positionCaret(tfCocKD.getText().length());
+//
+//                if (tfCocKD.getText().replace(".", "").matches("\\d+"))
+//                    ckd = Double.parseDouble(tfCocKD.getText().replace(".", ""));
+//                else throw new IllegalArgumentException("Chỉ được nhập số");
+//                capNhatTienTraLai();
+//            }
+//        }
+//        catch (Exception e){
+//            Notification.thongBao(e.getMessage(), Alert.AlertType.WARNING);
+//            if(event.getSource().equals(tfCoc)){
+//                tfCoc.setText(tfCoc.getText().substring(0, tfCoc.getLength() - 1));
+//                tfCoc.setText(NumberFormatter.formatPrice(tfCoc.getText()));
+//                tfCoc.positionCaret(tfCoc.getText().length());
+//            }
+//            else {
+//                tfCocKD.setText(tfCocKD.getText().substring(0, tfCocKD.getLength() - 1));
+//                tfCocKD.setText(NumberFormatter.formatPrice(tfCocKD.getText()));
+//                tfCocKD.positionCaret(tfCocKD.getText().length());
+//            }
+//            capNhatTienTraLai();
+//        }
+//    }
 
-                if (tfCoc.getText().replace(".", "").matches("\\d+"))
-                    c = Double.parseDouble(tfCoc.getText().replace(".", ""));
-                else throw new IllegalArgumentException("Chỉ được nhập số");
-                capNhatTienTraLai();
-            } else {
-                if (tfCocKD.getText().equals("")) {
-                    ckd = 0.0;
-                    capNhatTienTraLai();
-                    return;
-                }
-
-                tfCocKD.setText(NumberFormatter.formatPrice(tfCocKD.getText()));
-                tfCocKD.positionCaret(tfCocKD.getText().length());
-
-                if (tfCocKD.getText().replace(".", "").matches("\\d+"))
-                    ckd = Double.parseDouble(tfCocKD.getText().replace(".", ""));
-                else throw new IllegalArgumentException("Chỉ được nhập số");
-                capNhatTienTraLai();
-            }
-        }
-        catch (Exception e){
-            Notification.thongBao(e.getMessage(), Alert.AlertType.WARNING);
-            if(event.getSource().equals(tfCoc)){
-                tfCoc.setText(tfCoc.getText().substring(0, tfCoc.getLength() - 1));
-                tfCoc.setText(NumberFormatter.formatPrice(tfCoc.getText()));
-                tfCoc.positionCaret(tfCoc.getText().length());
-            }
-            else {
-                tfCocKD.setText(tfCocKD.getText().substring(0, tfCocKD.getLength() - 1));
-                tfCocKD.setText(NumberFormatter.formatPrice(tfCocKD.getText()));
-                tfCocKD.positionCaret(tfCocKD.getText().length());
-            }
-            capNhatTienTraLai();
-        }
-    }
-
-    public void capNhatTienTraLai() {
-        if(ckd - c >= 0)
-            tfTienTraLai.setText(NumberFormatter.formatPrice(String.valueOf((int) (ckd - c))));
-        else tfTienTraLai.clear();
-    }
+//    public void capNhatTienTraLai() {
+//        if(ckd - c >= 0)
+//            tfTienTraLai.setText(NumberFormatter.formatPrice(String.valueOf((int) (ckd - c))));
+//        else tfTienTraLai.clear();
+//    }
 
     @FXML
     void refreshInput(MouseEvent event) {

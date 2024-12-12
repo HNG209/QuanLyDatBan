@@ -444,6 +444,19 @@ public class TrangChuController implements Initializable {
         initialize(null, null);
     }
 
+    @FXML
+    void tinhTien(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/TrangTinhTien.fxml"));
+        Scene scene = new Scene(loader.load());
+        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/org/login/quanlydatban/stylesheets/style.css")).toExternalForm());
+
+        Stage tienIchStage = new Stage();
+        tienIchStage.initStyle(StageStyle.UNDECORATED);
+        tienIchStage.setScene(scene);
+
+        tienIchStage.show();
+    }
+
     public void loadRankingBoard() throws IOException {
         HoaDonDAO hoaDonDAO = new HoaDonDAO();
 

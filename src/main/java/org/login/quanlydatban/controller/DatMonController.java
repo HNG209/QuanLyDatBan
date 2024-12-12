@@ -10,12 +10,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.ContextMenuEvent;
-import javafx.scene.input.InputMethodEvent;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
@@ -23,15 +19,11 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.login.quanlydatban.dao.*;
 import org.login.quanlydatban.entity.*;
-import org.login.quanlydatban.entity.enums.KhuVuc;
 import org.login.quanlydatban.entity.enums.TrangThaiBan;
 import org.login.quanlydatban.entity.enums.TrangThaiHoaDon;
 import org.login.quanlydatban.entity.keygenerator.CTHDCompositeKey;
-import org.login.quanlydatban.hibernate.HibernateUtils;
 import org.login.quanlydatban.notification.Notification;
 import org.login.quanlydatban.utilities.NumberFormatter;
 
@@ -41,7 +33,6 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class DatMonController implements Initializable {
@@ -51,15 +42,7 @@ public class DatMonController implements Initializable {
     @FXML
     private ScrollPane scrollPane;
 
-    @FXML
-    private TextField banID;
-
-    @FXML
-    private TextField trangThaiBanText;
-
-    @FXML
-    private TextField tongTienTxt;
-
+    //buttons
     @FXML
     private Button btnChuyenBan;
 
@@ -72,24 +55,8 @@ public class DatMonController implements Initializable {
     @FXML
     private Button btnXacNhan;
 
-    private MonAnDAO monAnDAO;
-
-    private BanDAO banDAO;
-
-    @FXML
-    private TextField tienKhachDua;
-
-    @FXML
-    private TextField tienTraLai;
-
-    @FXML
-    private TextField tfCCCD;
-
-    @FXML
-    private TextField tenKhachHang;
-
-    @FXML
-    private TextField phuThu;
+    //table column
+    private ObservableList<Object[]> objectsObservableList;
 
     @FXML
     private TableView<Object[]> orderTable;
@@ -121,6 +88,7 @@ public class DatMonController implements Initializable {
     @FXML
     private TableColumn<Object[], Void> tang;
 
+    //textfields
     @FXML
     private TextField timTheoGiaTD;
 
@@ -137,14 +105,33 @@ public class DatMonController implements Initializable {
     private TextField tfDiemTichLuyDung;
 
     @FXML
+    private TextField tienKhachDua;
+
+    @FXML
+    private TextField tienTraLai;
+
+    @FXML
+    private TextField tfCCCD;
+
+    @FXML
+    private TextField tenKhachHang;
+
+    @FXML
+    private TextField phuThu;
+
+    @FXML
+    private TextField banID;
+
+    @FXML
+    private TextField trangThaiBanText;
+
+    @FXML
+    private TextField tongTienTxt;
+
+    @FXML
     private TextField tfDiemTichLuyht;
 
-    private ObservableList<Object[]> objectsObservableList;
-
-    private Ban ban;
-
-    private NhanVien nhanVien;
-
+    //DAO
     private HoaDonDAO hoaDonDAO;
 
     private KhachHangDAO khachHangDAO;
@@ -153,11 +140,16 @@ public class DatMonController implements Initializable {
 
     private LichDatDAO lichDatDAO;
 
+    private MonAnDAO monAnDAO;
+
+    private BanDAO banDAO;
+
     private HoaDon hoaDon;
 
+    //temp data
     private KhachHang khachHang;
 
-    private Stage chuyenBanStage;
+    private Ban ban;
 
     private double tkd = 0.0;
 
@@ -165,9 +157,11 @@ public class DatMonController implements Initializable {
 
     private double tienTL = 0.0;
 
-    private String preCCCD = "";
+    private String prevCCCD = "";
 
     private int pageSelected;
+
+    private Stage chuyenBanStage;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -195,9 +189,9 @@ public class DatMonController implements Initializable {
 
                             tenKhachHang.setEditable(false);
 
-                            preCCCD = khachHang.getCccd();
+                            prevCCCD = khachHang.getCccd();
                         }
-                        else tfCCCD.setText(preCCCD);
+                        else tfCCCD.setText(prevCCCD);
                     }
                 }
                 catch (Exception e){
@@ -212,7 +206,7 @@ public class DatMonController implements Initializable {
                     if (Notification.xacNhan("Khách hàng sẽ được thêm vào hoá đơn")) {
                         KhachHang khachHang = khachHangDAO.getKHByCCCD(tfCCCD.getText());
 
-                        preCCCD = khachHang.getCccd();
+                        prevCCCD = khachHang.getCccd();
                         hoaDon.setKhachHang(khachHang);
                         hoaDonDAO.updateHoaDon(hoaDon);
                     }
@@ -547,10 +541,6 @@ public class DatMonController implements Initializable {
         return hoaDon != null;
     }
 
-    public void setNhanVien(NhanVien nhanVien) {
-        this.nhanVien = nhanVien;
-    }
-
     public Ban getBan() {
         return this.ban;
     }
@@ -566,7 +556,7 @@ public class DatMonController implements Initializable {
             if(hoaDon.getKhachHang() != null){
                 khachHang = hoaDon.getKhachHang();
                 tfCCCD.setText(khachHang.getCccd());
-                preCCCD = khachHang.getCccd();
+                prevCCCD = khachHang.getCccd();
                 tenKhachHang.setText(khachHang.getTenKhachHang());
                 tfDiemTichLuyht.setText(String.valueOf(khachHang.getDiemTichLuy()));
             }
@@ -702,8 +692,11 @@ public class DatMonController implements Initializable {
                 ban.setTrangThaiBan(TrangThaiBan.BAN_TRONG);
                 trangThaiBanText.setText(TrangThaiBan.BAN_TRONG.toString());
 
-                int amount = Integer.parseInt(tfDiemTichLuyDung.getText().isEmpty() ? "0" : tfDiemTichLuyDung.getText());
-                khachHang.setDiemTichLuy(khachHang.getDiemTichLuy() - amount);
+                if(khachHang != null){
+                    int amount = Integer.parseInt(tfDiemTichLuyDung.getText().isEmpty() ? "0" : tfDiemTichLuyDung.getText());
+                    khachHang.setDiemTichLuy(khachHang.getDiemTichLuy() - amount);
+                    khachHangDAO.suaKhachHang(khachHang);
+                }
 
                 tongTienTxt.clear();
                 tienKhachDua.clear();
@@ -714,7 +707,6 @@ public class DatMonController implements Initializable {
                 tfDiemTichLuyht.clear();
                 tfDiemTichLuyDung.clear();
 
-                khachHangDAO.suaKhachHang(khachHang);
                 hoaDonDAO.updateHoaDon(hoaDon);
                 banDAO.updateBan(ban);
 
@@ -945,7 +937,7 @@ public class DatMonController implements Initializable {
                 tenKhachHang.requestFocus();
                 tenKhachHang.setEditable(true);
             }
-            else tfCCCD.setText(preCCCD);
+            else tfCCCD.setText(prevCCCD);
         } catch (Exception e) {
             Notification.thongBao(e.getMessage(), Alert.AlertType.WARNING);
             tfCCCD.clear();
