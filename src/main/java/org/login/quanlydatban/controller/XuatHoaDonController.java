@@ -19,6 +19,7 @@ import org.login.quanlydatban.entity.HoaDon;
 import org.login.quanlydatban.utilities.NumberFormatter;
 
 import java.net.URL;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
@@ -47,7 +48,7 @@ public class XuatHoaDonController implements Initializable {
         img.setBlendMode(BlendMode.MULTIPLY);
         hdArea.getChildren().add(img);
 
-        String ngayLap = String.format("\n   Ngày lập: %-50s", hoaDon.getNgayLap());
+        String ngayLap = String.format("\n   Ngày lập: %-50s", hoaDon.getNgayLap().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
         Text nlLine = new Text(ngayLap);
         nlLine.setFont(Font.font("Courier New", FontWeight.NORMAL, 12));
         hdArea.getChildren().add(nlLine);

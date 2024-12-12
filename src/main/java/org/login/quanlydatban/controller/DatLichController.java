@@ -367,9 +367,12 @@ public class DatLichController implements Initializable {
 
     public void capNhatCoc() {
         double tongTien = hoaDon.tinhTongTien();
-        selectedLD.setTienCoc(tongTien / 2);
+        if(tongTien < 200_000.0)
+            selectedLD.setTienCoc(0.0);
+        else selectedLD.setTienCoc(tongTien / 2);
 
         c = selectedLD.getTienCoc();
+
         tfCoc.setText(NumberFormatter.formatPrice(String.valueOf((int) selectedLD.getTienCoc())));
         lichDatDAO.capNhatLichDat(selectedLD);
     }

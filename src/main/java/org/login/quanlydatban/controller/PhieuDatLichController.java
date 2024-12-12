@@ -19,6 +19,7 @@ import org.login.quanlydatban.utilities.NumberFormatter;
 
 import java.io.Serializable;
 import java.net.URL;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
@@ -45,12 +46,12 @@ public class PhieuDatLichController implements Initializable {
         img.setBlendMode(BlendMode.MULTIPLY);
         phieuDatArea.getChildren().add(img);
 
-        String ngayLap = String.format("\n   Ngày đặt: %s", lichDat.getThoiGianDat().toLocalDate() + "(" + lichDat.getThoiGianDat().toLocalTime().getHour() + ":" + lichDat.getThoiGianDat().toLocalTime().getMinute() + ")");
+        String ngayLap = String.format("\n   Ngày đặt: %s", lichDat.getThoiGianDat().toLocalDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) + " (" + lichDat.getThoiGianDat().toLocalTime().getHour() + ":" + lichDat.getThoiGianDat().toLocalTime().getMinute() + ")");
         Text nlLine = new Text(ngayLap);
         nlLine.setFont(Font.font("Courier New", FontWeight.NORMAL, 12));
         phieuDatArea.getChildren().add(nlLine);
 
-        String ngayNhanban = String.format("\n   Ngày nhận bàn: %s", lichDat.getThoiGianNhanBan().toLocalDate() + "(" + lichDat.getThoiGianNhanBan().toLocalTime().getHour() + ":" + lichDat.getThoiGianNhanBan().toLocalTime().getMinute() + ")");
+        String ngayNhanban = String.format("\n   Ngày nhận bàn: %s", lichDat.getThoiGianNhanBan().toLocalDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) + " (" + lichDat.getThoiGianNhanBan().toLocalTime().getHour() + ":" + lichDat.getThoiGianNhanBan().toLocalTime().getMinute() + ")");
         Text nnbLine = new Text(ngayNhanban);
         nnbLine.setFont(Font.font("Courier New", FontWeight.NORMAL, 12));
         phieuDatArea.getChildren().add(nnbLine);
