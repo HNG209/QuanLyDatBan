@@ -6,12 +6,14 @@ import javafx.fxml.FXML;
 import javafx.scene.chart.*;
 import javafx.scene.control.*;
 import javafx.scene.control.Label;
+import javafx.util.converter.LocalDateStringConverter;
 import org.login.quanlydatban.dao.HoaDonDAO;
 import org.login.quanlydatban.entity.TaiKhoan;
 import org.login.quanlydatban.entity.enums.TrangThaiHoaDon;
 
 import java.text.DecimalFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 
@@ -44,10 +46,8 @@ public class ThongKeQuanLyController {
     private BarChart<String, Number> bieuDoCotDoanhThu; // Thay đổi tên thành bieuDoCotDoanhThu
 
     @FXML
-    private CategoryAxis xDoanhThu;
+    private DatePicker chooseDate;
 
-    @FXML
-    private CategoryAxis xHoaDon;
 
     @FXML
     private BarChart<String, Number> bieuDoCotHoaDon;
@@ -75,6 +75,7 @@ public class ThongKeQuanLyController {
         capNhatDuLieuChoBieuDoCot();
         capNhatDuLieuThongKeLoaiMonAn();
         capNhatDuLieuThongKeTrangThaiHoaDon();
+
         tieuChiThongKeBieuDoCot.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if ("Theo tháng".equals(newValue) || "Theo quý".equals(newValue)) {
                 namThongKeBieuDoCot.setVisible(true);
@@ -83,9 +84,11 @@ public class ThongKeQuanLyController {
             }
             capNhatDuLieuChoBieuDoCot();
         });
+
         namThongKeBieuDoCot.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             capNhatDuLieuChoBieuDoCot();
         });
+
         if ("Tất cả".equals(namThongKeBieuDoTron.getSelectionModel().getSelectedItem())) {
             quyThongKeBieuDoTron.setVisible(false);
             thangThongKeBieuDoTron.setVisible(false);
@@ -95,6 +98,7 @@ public class ThongKeQuanLyController {
             quyThongKeBieuDoTron.setVisible(true);
             thangThongKeBieuDoTron.setVisible(true);
         }
+
         namThongKeBieuDoTron.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if ("Tất cả".equals(newValue)) {
                 quyThongKeBieuDoTron.setVisible(false);
@@ -105,24 +109,36 @@ public class ThongKeQuanLyController {
                 quyThongKeBieuDoTron.setVisible(true);
                 thangThongKeBieuDoTron.setVisible(true);
             }
+            chooseDate.setValue(null); // Reset DatePicker khi chọn năm
             capNhatDuLieuThongKeTrangThaiHoaDon();
             capNhatDuLieuThongKeLoaiMonAn();
         });
+
         thangThongKeBieuDoTron.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             quyThongKeBieuDoTron.getSelectionModel().select(0);
             thangThongKeBieuDoTron.getSelectionModel().select(newValue);
             capNhatDuLieuThongKeLoaiMonAn();
             capNhatDuLieuThongKeTrangThaiHoaDon();
         });
+
         quyThongKeBieuDoTron.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             thangThongKeBieuDoTron.getSelectionModel().select(0);
             quyThongKeBieuDoTron.getSelectionModel().select(newValue);
             capNhatDuLieuThongKeTrangThaiHoaDon();
             capNhatDuLieuThongKeLoaiMonAn();
         });
-
-
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        chooseDate.setConverter(new LocalDateStringConverter(formatter, formatter));
+        chooseDate.setPromptText("dd/MM/yyyy");
+        chooseDate.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                namThongKeBieuDoTron.getSelectionModel().select("Tất cả"); // Reset năm về "Tất cả"
+                capNhatDuLieuThongKeTrangThaiHoaDon();
+                capNhatDuLieuThongKeLoaiMonAn();
+            }
+        });
     }
+
 
     private void capNhatDuLieuDoanhThuVaHoaDon() {
         Object[] tongDoanhThuVaHoaDon = hoaDonDAO.layDoanhThuVaSoHoaDon(null, null);
@@ -270,6 +286,7 @@ public class ThongKeQuanLyController {
 
     private void capNhatDuLieuThongKeLoaiMonAn() {
         List<Object[]> dsMonAn;
+        LocalDate ngay;
         int nam = 0, quy = 0, thang = 0;
         try {
             nam = Integer.parseInt(namThongKeBieuDoTron.getSelectionModel().getSelectedItem());
@@ -286,7 +303,17 @@ public class ThongKeQuanLyController {
         } catch (NumberFormatException e) {
             quy = 0;
         }
-        dsMonAn = hoaDonDAO.layDoanhThuTheoLoaiMonAn(nam, quy, thang);
+        try {
+            ngay = chooseDate.getValue();
+        } catch (Exception e) {
+            ngay = null;
+        }
+        if(ngay != null) {
+            dsMonAn = hoaDonDAO.layDoanhThuLoaiMonAnTheoNgay(null, ngay);
+        } else {
+            dsMonAn = hoaDonDAO.layDoanhThuTheoLoaiMonAn(nam, quy, thang);
+        }
+
         bieuDoTronMonAn.getData().clear();
         double tongDoanhThu = 0;
         for (Object[] loaiMonAnData : dsMonAn) {
@@ -315,6 +342,8 @@ public class ThongKeQuanLyController {
     }
     private void capNhatDuLieuThongKeTrangThaiHoaDon() {
         int nam = 0, quy = 0, thang = 0;
+        LocalDate ngay = null;
+
         try {
             nam = Integer.parseInt(namThongKeBieuDoTron.getSelectionModel().getSelectedItem());
         } catch (NumberFormatException e) {
@@ -330,7 +359,21 @@ public class ThongKeQuanLyController {
         } catch (NumberFormatException e) {
             quy = 0;
         }
-        List<Object[]> dsTrangThai = hoaDonDAO.laySoHoaDonTheoTrangThaiHoaDon(null, nam, quy, thang);
+
+        try {
+            ngay = chooseDate.getValue();
+        } catch (Exception e) {
+            ngay = null;
+        }
+
+        List<Object[]> dsTrangThai;
+
+        if (ngay != null) {
+            dsTrangThai = hoaDonDAO.laySoHoaDonTheoTrangThaiVaNgay(null, ngay);
+        } else {
+            dsTrangThai = hoaDonDAO.laySoHoaDonTheoTrangThaiHoaDon(null, nam, quy, thang);
+        }
+
         bieuDoTronTrangThaiHoaDon.getData().clear();
 
         int soLuongHD = 0;
@@ -344,13 +387,15 @@ public class ThongKeQuanLyController {
             Number soHoaDon = (Number) hoaDon[1];
             double phanTram = (soLuongHD > 0) ? (soHoaDon.doubleValue() / soLuongHD) * 100 : 0;
             String tt;
-            if(tenTrangThai.equalsIgnoreCase(TrangThaiHoaDon.DA_THANH_TOAN.toString())) {
+
+            if (tenTrangThai.equalsIgnoreCase(TrangThaiHoaDon.DA_THANH_TOAN.toString())) {
                 tt = "Đã thanh toán";
-            }
-            else if(tenTrangThai.equalsIgnoreCase(TrangThaiHoaDon.CHUA_THANH_TOAN.toString())) {
+            } else if (tenTrangThai.equalsIgnoreCase(TrangThaiHoaDon.CHUA_THANH_TOAN.toString())) {
                 tt = "Chưa thanh toán";
+            } else if (tenTrangThai.equalsIgnoreCase(TrangThaiHoaDon.DA_HUY.toString())) {
+                tt = "Đã hủy";
             } else {
-                tt = "";
+                tt = "Đã đặt";
             }
             PieChart.Data slice = new PieChart.Data(tt, soHoaDon.doubleValue());
 

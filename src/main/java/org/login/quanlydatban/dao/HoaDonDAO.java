@@ -37,6 +37,7 @@ public class HoaDonDAO {
             if (ngay != null) {
                 predicates.add(builder.equal(rootHD.get("ngayLap"), ngay));
             }
+            predicates.add(builder.equal(rootHD.get("trangThaiHoaDon"), TrangThaiHoaDon.DA_THANH_TOAN)); // Thêm điều kiện trạng thái
 
             if (!predicates.isEmpty()) {
                 query.where(predicates.toArray(new Predicate[0]));
@@ -66,6 +67,7 @@ public class HoaDonDAO {
 
 
 
+
     public List<Object[]> layDoanhThuVaSoHoaDonTheoThang(String maNhanVien, Integer nam) {
         Session session = HibernateUtils.getFactory().openSession();
         List<Object[]> results = new ArrayList<>();
@@ -88,6 +90,7 @@ public class HoaDonDAO {
             if (nam != null) {
                 predicates.add(builder.equal(builder.function("YEAR", Integer.class, rootHD.get("ngayLap")), nam));
             }
+            predicates.add(builder.equal(rootHD.get("trangThaiHoaDon"), TrangThaiHoaDon.DA_THANH_TOAN)); // Thêm điều kiện trạng thái
 
             if (!predicates.isEmpty()) {
                 query.where(predicates.toArray(new Predicate[0]));
@@ -133,6 +136,7 @@ public class HoaDonDAO {
             if (nam != 0) {
                 predicates.add(builder.equal(builder.function("YEAR", Integer.class, rootHD.get("ngayLap")), nam));
             }
+            predicates.add(builder.equal(rootHD.get("trangThaiHoaDon"), TrangThaiHoaDon.DA_THANH_TOAN)); // Thêm điều kiện trạng thái
 
             if (!predicates.isEmpty()) {
                 query.where(predicates.toArray(new Predicate[0]));
@@ -156,6 +160,7 @@ public class HoaDonDAO {
     }
 
 
+
     public List<Object[]> layDoanhThuVaSoHoaDonTheoNam(String maNhanVien) {
         Session session = HibernateUtils.getFactory().openSession();
         List<Object[]> results = new ArrayList<>();
@@ -168,10 +173,19 @@ public class HoaDonDAO {
             Join<HoaDon, NhanVien> joinNV = rootHD.join("nhanVien");
             Join<HoaDon, ChiTietHoaDon> joinCTHD = rootHD.join("chiTietHoaDon");
             Join<ChiTietHoaDon, MonAn> joinMA = joinCTHD.join("monAn");
-            if (maNhanVien != null) {
-                query.where(builder.equal(joinNV.get("maNhanVien"), maNhanVien));
 
+            // Thêm điều kiện lọc trạng thái "Đã thanh toán"
+            Predicate statusPredicate = builder.equal(rootHD.get("trangThaiHoaDon"), TrangThaiHoaDon.DA_THANH_TOAN);
+
+            if (maNhanVien != null) {
+                query.where(builder.and(
+                        builder.equal(joinNV.get("maNhanVien"), maNhanVien),
+                        statusPredicate
+                ));
+            } else {
+                query.where(statusPredicate);
             }
+
             query.multiselect(
                     builder.function("YEAR", Integer.class, rootHD.get("ngayLap")),
                     builder.sum(builder.prod(joinMA.get("donGia"), joinCTHD.get("soLuong"))),
@@ -187,8 +201,8 @@ public class HoaDonDAO {
         }
 
         return results;
-
     }
+
 
     public List<Object[]> layDoanhThuTheoLoaiMonAn(int nam, int quy, int thang) {
         List<Object[]> result = new ArrayList<>();
@@ -210,7 +224,6 @@ public class HoaDonDAO {
 
             List<Predicate> predicates = new ArrayList<>();
 
-
             if (nam != 0) {
                 predicates.add(builder.equal(builder.function("year", Integer.class, joinHD.get("ngayLap")), nam));
                 if (quy != 0 && thang == 0) {
@@ -222,6 +235,8 @@ public class HoaDonDAO {
                     predicates.add(builder.equal(builder.function("month", Integer.class, joinHD.get("ngayLap")), thang));
                 }
             }
+            predicates.add(builder.equal(joinHD.get("trangThaiHoaDon"), TrangThaiHoaDon.DA_THANH_TOAN)); // Thêm điều kiện trạng thái
+
             if (!predicates.isEmpty()) {
                 query.where(predicates.toArray(new Predicate[0]));
             }
@@ -234,6 +249,50 @@ public class HoaDonDAO {
         }
         return result;
     }
+
+    public List<Object[]> layDoanhThuLoaiMonAnTheoNgay(String maNV, LocalDate date) {
+        List<Object[]> result = new ArrayList<>();
+
+        try (Session session = HibernateUtils.getFactory().openSession()) {
+            CriteriaBuilder builder = session.getCriteriaBuilder();
+            CriteriaQuery<Object[]> query = builder.createQuery(Object[].class);
+            Root<ChiTietHoaDon> rootCTHD = query.from(ChiTietHoaDon.class);
+
+            Join<ChiTietHoaDon, MonAn> joinMA = rootCTHD.join("monAn");
+            Join<MonAn, LoaiMonAn> joinLoaiMA = joinMA.join("loaiMonAn");
+            Join<ChiTietHoaDon, HoaDon> joinHD = rootCTHD.join("hoaDon");
+            Join<HoaDon, NhanVien> joinNV = joinHD.join("nhanVien");
+
+            query.multiselect(
+                    joinLoaiMA.get("tenLoaiMonAn"), // Tên loại món ăn
+                    builder.sum(builder.prod(joinMA.get("donGia"), rootCTHD.get("soLuong"))) // Tính tổng doanh thu
+            );
+
+            List<Predicate> predicates = new ArrayList<>();
+
+            if (maNV != null && !maNV.isEmpty()) {
+                predicates.add(builder.equal(joinNV.get("maNhanVien"), maNV));
+            }
+
+            if (date != null) {
+                predicates.add(builder.equal(joinHD.get("ngayLap"), date));
+            }
+            predicates.add(builder.equal(joinHD.get("trangThaiHoaDon"), TrangThaiHoaDon.DA_THANH_TOAN)); // Thêm điều kiện trạng thái
+
+            if (!predicates.isEmpty()) {
+                query.where(predicates.toArray(new Predicate[0]));
+            }
+
+            query.groupBy(joinLoaiMA.get("tenLoaiMonAn"));
+            query.orderBy(builder.desc(builder.sum(builder.prod(joinMA.get("donGia"), rootCTHD.get("soLuong")))));
+
+            result = session.createQuery(query).getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
 
     public List<Integer> layCacNamLapHoaDon(String maNV) {
         Session session = HibernateUtils.getFactory().openSession();
@@ -285,8 +344,10 @@ public class HoaDonDAO {
                     builder.sum(joinCTHD.get("soLuong")) // Tổng số lượng bán ra
             );
 
-            // Nhóm theo tên món ăn và hình ảnh
-            query.groupBy(joinMA.get("tenMonAn"), joinMA.get("hinhAnh"));
+            query.groupBy(joinMA.get("tenMonAn"));
+
+            // Thêm điều kiện trạng thái "DA_THANH_TOAN"
+            query.where(builder.equal(rootHD.get("trangThaiHoaDon"), TrangThaiHoaDon.DA_THANH_TOAN));
 
             // Sắp xếp theo số lượng bán giảm dần, sau đó doanh thu giảm dần
             query.orderBy(
@@ -304,6 +365,7 @@ public class HoaDonDAO {
 
         return result;
     }
+
 
     public List<HoaDon> getAllHoaDon() {
         List<HoaDon> listHoaDon = new ArrayList<>(); // Khởi tạo
@@ -428,7 +490,45 @@ public class HoaDonDAO {
         }
         return result;
     }
+    public List<Object[]> laySoHoaDonTheoTrangThaiVaNgay(String maNV, LocalDate ngay) {
+        List<Object[]> result = new ArrayList<>();
 
+        try (Session session = HibernateUtils.getFactory().openSession()) {
+            CriteriaBuilder builder = session.getCriteriaBuilder();
+            CriteriaQuery<Object[]> query = builder.createQuery(Object[].class);
+            Root<HoaDon> rootHD = query.from(HoaDon.class);
+
+            Join<HoaDon, NhanVien> joinNV = rootHD.join("nhanVien");
+
+            query.multiselect(
+                    rootHD.get("trangThaiHoaDon"),
+                    builder.countDistinct(rootHD.get("maHoaDon"))
+            );
+
+            List<Predicate> predicates = new ArrayList<>();
+
+            if (ngay != null) {
+                predicates.add(builder.equal(rootHD.get("ngayLap"), ngay));
+            }
+
+            if (maNV != null && !maNV.isEmpty()) {
+                predicates.add(builder.equal(joinNV.get("maNhanVien"), maNV));
+            }
+
+            if (!predicates.isEmpty()) {
+                query.where(predicates.toArray(new Predicate[0]));
+            }
+
+            query.groupBy(rootHD.get("trangThaiHoaDon"));
+            query.orderBy(builder.desc(builder.countDistinct(rootHD.get("maHoaDon"))));
+
+            result = session.createQuery(query).getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+
+    }
     public void xoaHoaDon(HoaDon hoaDon) {
         Session session = HibernateUtils.getFactory().openSession();
         session.getTransaction().begin();

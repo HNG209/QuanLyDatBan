@@ -5,6 +5,7 @@
     import javafx.fxml.Initializable;
     import javafx.scene.Parent;
     import javafx.scene.Scene;
+    import javafx.scene.control.Alert;
     import javafx.scene.control.PasswordField;
     import javafx.scene.control.TextField;
     import javafx.scene.image.Image;
@@ -15,9 +16,11 @@
     import org.login.quanlydatban.dao.TaiKhoanDAO;
     import org.login.quanlydatban.encryptionUtils.EncryptionUtils;
     import org.login.quanlydatban.entity.TaiKhoan;
+    import org.login.quanlydatban.notification.Notification;
 
     import java.io.IOException;
     import java.net.URL;
+    import java.text.ParsePosition;
     import java.util.Objects;
     import java.util.ResourceBundle;
 
@@ -41,8 +44,6 @@
                     password.setText(newValue);
                 }
             });
-
-            // Khi có thay đổi ở trường password, cập nhật trường pwd
             password.textProperty().addListener((observable, oldValue, newValue) -> {
                 if (!showPasswordField.getText().equals(newValue)) {
                     showPasswordField.setText(newValue);
@@ -81,45 +82,40 @@
         }
         @FXML
         public void dangNhap() throws Exception {
-            String inputUsername = username.getText().trim();
-            String inputPassword = password.getText().trim();
-
-            if (inputUsername.isEmpty() || inputPassword.isEmpty()) {
-                System.out.println("Vui lòng nhập tài khoản và mật khẩu");
-                return;
-            }
-
-            // Kiểm tra đặc biệt cho tài khoản admin
-            if ("admin".equalsIgnoreCase(inputUsername)) {
-                if ("admin".equals(inputPassword)) { // So sánh trực tiếp với defaultAccount
-                    System.out.println("Đăng nhập admin thành công");
-                    isAdmin = true;
-                    showTrangChu(null); // Hoặc truyền null nếu không cần thông tin tài khoản
-                } else {
-                    System.out.println("Mật khẩu admin không đúng");
-                }
-                return;
-            }
-
-            // Kiểm tra tài khoản từ cơ sở dữ liệu
-            TaiKhoan taiKhoan;
             try {
-                taiKhoan = taiKhoanDAO.getTaiKhoan(inputUsername);
-            } catch (Exception e) {
-                System.out.println("Lỗi khi truy vấn dữ liệu: " + e.getMessage());
-                return;
-            }
+                String inputUsername = username.getText().trim();
+                String inputPassword = password.getText().trim();
 
-            if (taiKhoan == null) {
-                System.out.println("Tài khoản không tồn tại");
-            } else {
-                String encryptedPassword = EncryptionUtils.encrypt(inputPassword, System.getenv("ENCRYPTION_KEY"));
-                if (encryptedPassword.equals(taiKhoan.getPassword()) || (taiKhoan.getPassword().equals("1111") && inputPassword.equals("1111"))) {
-                    System.out.println("Đăng nhập thành công");
-                    showTrangChu(taiKhoan);
-                } else {
-                    System.out.println("Sai mật khẩu");
+                if (inputUsername.isEmpty() && inputPassword.isEmpty()) {
+                    throw new IllegalArgumentException("Vui lòng nhập thông tin đăng nhập");
                 }
+
+                if ("admin".equalsIgnoreCase(inputUsername)) {
+                    if ("admin".equals(inputPassword)) {
+                        isAdmin = true;
+                        showTrangChu(null);
+                    } else {
+                        throw new IllegalArgumentException("Mật khẩu không chính xác");
+                    }
+                    return;
+                }
+                TaiKhoan taiKhoan;
+
+                taiKhoan = taiKhoanDAO.getTaiKhoan(inputUsername);
+
+
+                if (taiKhoan == null) {
+                    throw new IllegalArgumentException("Tài khoản không tồn tại");
+                } else {
+                    String encryptedPassword = EncryptionUtils.encrypt(inputPassword, System.getenv("ENCRYPTION_KEY"));
+                    if (encryptedPassword.equals(taiKhoan.getPassword())) {
+                        showTrangChu(taiKhoan);
+                    } else
+                        throw new IllegalArgumentException("Sai mật khẩu");
+                }
+            }
+            catch (Exception e) {
+                Notification.thongBao(e.getMessage(), Alert.AlertType.ERROR);
             }
         }
 

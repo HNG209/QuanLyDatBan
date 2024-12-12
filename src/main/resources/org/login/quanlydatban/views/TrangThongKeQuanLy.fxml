@@ -8,6 +8,7 @@
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.chart.PieChart?>
 <?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
@@ -18,7 +19,7 @@
 
 <AnchorPane prefHeight="635.0" prefWidth="1280.0" styleClass="bg1" stylesheets="@../stylesheets/style.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.login.quanlydatban.controller.ThongKeQuanLyController">
     <children>
-        <AnchorPane layoutX="832.0" layoutY="34.0" prefHeight="635.0" prefWidth="448.0" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
+        <AnchorPane layoutX="818.0" layoutY="4.0" prefHeight="635.0" prefWidth="448.0" AnchorPane.bottomAnchor="5.599999999999909" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="4.0">
             <children>
                 <PieChart fx:id="bieuDoTronMonAn" layoutY="336.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="290.0" prefWidth="311.0" style="-fx-font-weight: bold; -fx-border-color: white;" title="Tỉ lệ doanh thu theo loại món ăn" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="300.0">
                     <styleClass>
@@ -26,15 +27,15 @@
                         <String fx:value="bg1" />
                     </styleClass>
                 </PieChart>
-                <HBox alignment="CENTER" prefHeight="35.0" prefWidth="384.0" spacing="15.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                <HBox alignment="CENTER" prefHeight="35.0" prefWidth="304.0" spacing="5.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <children>
-                        <ComboBox fx:id="namThongKeBieuDoTron" prefHeight="26.0" prefWidth="100.0" promptText="Tất cả" style="-fx-background-color: white;" styleClass="round-box">
+                        <ComboBox fx:id="namThongKeBieuDoTron" prefHeight="26.0" prefWidth="74.0" promptText="Tất cả" style="-fx-background-color: white;" styleClass="round-box">
                             <items>
                                 <FXCollections fx:factory="observableArrayList">
                                 </FXCollections>
                             </items>
                         </ComboBox>
-                        <ComboBox fx:id="quyThongKeBieuDoTron" layoutX="10.0" layoutY="10.0" prefHeight="26.0" prefWidth="100.0" promptText="Chọn quý" style="-fx-background-color: white;" styleClass="round-box">
+                        <ComboBox fx:id="quyThongKeBieuDoTron" layoutX="10.0" layoutY="10.0" prefHeight="26.0" prefWidth="94.0" promptText="Chọn quý" style="-fx-background-color: white;" styleClass="round-box">
                             <items>
                                 <FXCollections fx:factory="observableArrayList">
                                     <String fx:value="Chọn quý" />
@@ -45,7 +46,7 @@
                                 </FXCollections>
                             </items>
                         </ComboBox>
-                        <ComboBox fx:id="thangThongKeBieuDoTron" layoutX="10.0" layoutY="10.0" prefHeight="26.0" prefWidth="109.0" promptText="Chọn tháng" style="-fx-background-color: white;" styleClass="round-box">
+                        <ComboBox fx:id="thangThongKeBieuDoTron" layoutX="10.0" layoutY="10.0" prefHeight="26.0" prefWidth="106.0" promptText="Chọn tháng" style="-fx-background-color: white;" styleClass="round-box">
                             <items>
                                 <FXCollections fx:factory="observableArrayList">
                                     <String fx:value="Chọn tháng" />
@@ -72,6 +73,7 @@
                   <String fx:value="bg1" />
                </styleClass>
             </PieChart>
+            <DatePicker fx:id="chooseDate" layoutX="315.0" layoutY="15.0" prefHeight="26.0" prefWidth="124.0" />
             </children>
             <styleClass>
                 <String fx:value="gradient1" />
@@ -138,9 +140,9 @@
                 </VBox>
             </children>
         </HBox>
-        <AnchorPane layoutX="37.0" layoutY="134.0" prefHeight="500.0" prefWidth="800.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="470.0" AnchorPane.topAnchor="105.0">
+        <AnchorPane layoutX="37.0" layoutY="134.0" prefHeight="525.0" prefWidth="790.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="485.0" AnchorPane.topAnchor="105.0">
             <children>
-                <TabPane layoutX="0.8" layoutY="47.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="438.0" prefWidth="762.0" style="-fx-border-color: white;" stylesheets="@../stylesheets/style.css" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="47.0">
+                <TabPane layoutX="27.2" layoutY="47.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="456.0" prefWidth="758.0" style="-fx-border-color: white;" stylesheets="@../stylesheets/style.css" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="35.0">
                     <tabs>
                         <Tab text="Thống kê doanh thu">
                             <content>
@@ -181,7 +183,7 @@
                         <String fx:value="rounded-pane" />
                     </styleClass>
                 </TabPane>
-                <HBox alignment="CENTER" layoutX="2.4" layoutY="0.8" prefHeight="35.0" prefWidth="762.0" spacing="10" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="-2.0" AnchorPane.topAnchor="1.0">
+                <HBox alignment="CENTER" layoutX="2.4" layoutY="0.8" prefHeight="35.0" prefWidth="762.0" spacing="10" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="-2.0">
                     <ComboBox fx:id="tieuChiThongKeBieuDoCot" prefHeight="25.0" prefWidth="304.0" promptText="Chọn khoảng thời gian" style="-fx-background-color: white;" styleClass="small-round-box">
                         <items>
                             <FXCollections fx:factory="observableArrayList">
