@@ -104,7 +104,6 @@ public class ThucDonController implements Initializable {
 
     private LoaiMonDAO loaiMonDAO;
 
-    private String duongDanAnh;
     private double donGia = 0.0;
 
     @Override
@@ -139,18 +138,6 @@ public class ThucDonController implements Initializable {
                 FileChooser fileChooser = new FileChooser();
                 fileChooser.setTitle("Mở file");
 
-                // Thiết lập thư mục khởi tạo
-                File initialDir = new File("src/main/resources/org/login/quanlydatban/Image");
-                if (initialDir.exists() && initialDir.isDirectory()) {
-                    fileChooser.setInitialDirectory(initialDir);
-                } else {
-                    Notification.thongBao(
-                            "Thư mục khởi tạo không tồn tại hoặc không phải là thư mục: " + initialDir.getAbsolutePath(),
-                            Alert.AlertType.ERROR
-                    );
-                    return; // Kết thúc nếu thư mục khởi tạo không hợp lệ
-                }
-
                 // Thiết lập bộ lọc file
                 FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif");
                 fileChooser.getExtensionFilters().add(extFilter);
@@ -159,13 +146,11 @@ public class ThucDonController implements Initializable {
                 File file = fileChooser.showOpenDialog(null);
 
                 if (file != null) {
-                    // Lấy đường dẫn tương đối từ thư mục gốc dự án
-                    File projectRoot = new File("src/main/resources/org/login/quanlydatban/Image");
-                    duongDanAnh = projectRoot.toURI().relativize(file.toURI()).getPath();
+
+
 
                     // Cập nhật ImageView với ảnh mới
-                    Image image = new Image(file.toURI().toString());
-                    anhMon.setImage(image);
+                    anhMon.setImage(new Image("file:" + file.getAbsolutePath()));
 
                     // Hiển thị thông báo thành công
                     Notification.thongBao("Tải ảnh thành công!", Alert.AlertType.INFORMATION);
@@ -753,13 +738,7 @@ public class ThucDonController implements Initializable {
             txtGia.setText(NumberFormatter.formatPrice(String.format("%.0f", monAn.getDonGia())));
             donGia = monAn.getDonGia();
 
-            String imagePath = monAn.getHinhAnh();
-            String imageDefaultPath = "/org/login/quanlydatban/icons/restaurant.png";
-            if (imagePath != null && !imagePath.isEmpty()) {
-                anhMon.setImage(new Image(new File(imagePath).toURI().toString()));
-            } else {
-                anhMon.setImage(new Image(getClass().getResource(imageDefaultPath).toString()));
-            }
+            anhMon.setImage(new Image("file:" + monAn.getHinhAnh()));
 
             txfMoTa.setText(monAn.getMoTaMonAn());
         }
