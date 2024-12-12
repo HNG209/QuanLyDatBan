@@ -4,17 +4,24 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import org.login.quanlydatban.dao.ChiTietHoaDonDAO;
 import org.login.quanlydatban.dao.HoaDonDAO;
 import org.login.quanlydatban.entity.*;
 import org.login.quanlydatban.entity.enums.TrangThaiHoaDon;
 
+import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
@@ -70,7 +77,8 @@ public class HoaDonController implements Initializable {
     @FXML
     private TableView<HoaDon> tabTatCa;
 
-
+    @FXML
+    private Button btnXuatHD;
 
     @FXML
     private TableColumn<ChiTietHoaDon, String> colTenMonAn;
@@ -272,6 +280,39 @@ public class HoaDonController implements Initializable {
                 .mapToDouble(chiTiet -> chiTiet.tinhTongCTHD())
                 .sum();
     }
+    public void XuatHD() throws IOException {
+        HoaDon selectedHoaDon = tabTatCa.getSelectionModel().getSelectedItem();
+        if(selectedHoaDon == null){
+           showAlert("Vui lòng chọn 1 hoá đơn để xuất!");
+            return;
+        }
+        if(selectedHoaDon.getTrangThaiHoaDon() == TrangThaiHoaDon.DA_THANH_TOAN){
+            FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/org/login/quanlydatban/views/TrangXuatHoaDon.fxml")));
+            AnchorPane pane = loader.load();
+            XuatHoaDonController controller = loader.getController();
+            controller.setHoaDon(selectedHoaDon);
+
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setScene(new Scene(pane));
+            stage.showAndWait();
+        }
+        else {
+            showAlert("Hóa đơn chưa được thanh toán!");
+        }
+
+
+
+    }
+
+    private void showAlert(String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Thông báo");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
 
 
 
