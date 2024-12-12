@@ -172,7 +172,7 @@
             suggestionBox.getItems().clear(); // Xóa các gợi ý cũ
             String input = sourceField.getText().replace(".", "").trim();
 
-            if (!input.isEmpty() && input.matches("\\d+")) { // Kiểm tra nếu nhập số
+            if (!input.isEmpty() && input.matches("\\d+") && Integer.parseInt(input) > 0) { // Kiểm tra nếu nhập số
                 int baseValue = Integer.parseInt(input);
 
                 // Tạo danh sách các bội số
@@ -219,7 +219,10 @@
         }
         private void formatInputs(TextField textField) {
                 String input = textField.getText().replace(".", "");
-                int value = Integer.parseInt(input);
+                int value = 0;
+                if(!input.equalsIgnoreCase("")) {
+                    value = Integer.parseInt(input);
+                }
                 textField.setText(NumberFormatter.formatPrice(String.valueOf(value)));
 
         }
