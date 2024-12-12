@@ -382,6 +382,7 @@ public class DatLichController implements Initializable {
         btnHuyLich.setDisable(true);
         btnNhanBan.setDisable(true);
         btnDatLich.setDisable(false);
+        btnXuat.setDisable(true);
         tfTenKhachHang.setEditable(false);
         tfCCCD.setEditable(true);
         tfSoLuongNguoi.setEditable(true);
@@ -395,7 +396,6 @@ public class DatLichController implements Initializable {
         tfSoLuongNguoi.clear();
         txtGhiChu.clear();
         tfCoc.clear();
-//        tfCocKD.clear();
 
         prevCCCD = null;
         hoaDon = null;
@@ -594,7 +594,6 @@ public class DatLichController implements Initializable {
 
             hoaDonDAO.lapHoaDon(hoaDon);
             lichDatDAO.taoLichDat(lichDat);
-
 
 
             Notification.thongBao("Đặt lịch thành công, mã lịch đặt: " + lichDat.getMaLichDat(), Alert.AlertType.INFORMATION);

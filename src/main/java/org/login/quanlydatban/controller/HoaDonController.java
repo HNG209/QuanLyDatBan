@@ -163,7 +163,9 @@ public class HoaDonController implements Initializable {
 
                     HoaDon hoaDon = tabTatCa.getSelectionModel().getSelectedItem();
                     if (hoaDon != null) {
-
+                        btnXuatHD.setDisable(false);
+                        if(hoaDon.getTrangThaiHoaDon() != TrangThaiHoaDon.DA_THANH_TOAN)
+                            btnXuatHD.setDisable(true);
                         NhanVien nhanVien = hoaDon.getNhanVien();
                         KhachHang khachHang = hoaDon.getKhachHang();
 
