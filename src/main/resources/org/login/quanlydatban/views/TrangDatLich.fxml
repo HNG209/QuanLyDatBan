@@ -72,6 +72,7 @@
                   <Image url="@../icons/circle-of-two-clockwise-arrows-rotation.png" />
                </image>
             </ImageView>
+            <Button fx:id="btnXuat" layoutX="416.0" layoutY="136.0" mnemonicParsing="false" onAction="#xuatPhieuDat" prefHeight="26.0" prefWidth="362.0" styleClass="sunset-orange" text="Xuất phiếu đặt" GridPane.columnIndex="2" GridPane.rowIndex="3" />
          </children>
       </GridPane>
       <TableView fx:id="tableLichDat" layoutX="15.0" layoutY="55.2" onMouseClicked="#chonDong" prefHeight="229.0" prefWidth="831.0" styleClass="rounded-pane-simple1" AnchorPane.bottomAnchor="351.0" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="55.0">

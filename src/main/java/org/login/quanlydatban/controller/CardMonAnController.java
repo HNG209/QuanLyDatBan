@@ -56,7 +56,6 @@ public class CardMonAnController implements Initializable {
                 Object[] row = new Object[]{monAn.getMaMonAn(), monAn.getTenMonAn(), monAn.getDonGia(), 1, monAn.getDonViTinh(),""};
                 controller.themDuLieuVaoBangMonAn(row, monAn);
                 controller.capNhatTongTien();
-                controller.capNhatTienTraLai();
             }
             else Notification.thongBao("Hãy xác nhận giữ bàn trước khi thêm món ăn", Alert.AlertType.INFORMATION);
         }

@@ -7,11 +7,14 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import javafx.util.StringConverter;
 import org.login.quanlydatban.dao.*;
 import org.login.quanlydatban.entity.Ban;
@@ -30,6 +33,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class DatLichController implements Initializable {
@@ -120,6 +124,9 @@ public class DatLichController implements Initializable {
 
     @FXML
     private Button btnDatLich;
+
+    @FXML
+    private Button btnXuat;
 
     @FXML
     private TextArea txtGhiChu;
@@ -453,6 +460,21 @@ public class DatLichController implements Initializable {
         }
     }
 
+    @FXML
+    void xuatPhieuDat(ActionEvent event) throws IOException {
+        if(selectedLD != null && selectedLD.getHoaDon().getTrangThaiHoaDon() == TrangThaiHoaDon.DA_DAT){
+            FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/org/login/quanlydatban/views/TrangPhieuDatLich.fxml")));
+            AnchorPane pane = loader.load();
+
+            PhieuDatLichController controller = loader.getController();
+            controller.setLichDat(selectedLD);
+            Stage stage = new Stage();
+
+            stage.setScene(new Scene(pane));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.showAndWait();
+        }
+    }
 
     @FXML
     void chonDong(MouseEvent event) {
@@ -482,6 +504,7 @@ public class DatLichController implements Initializable {
             btnChonMon.setDisable(true);
             btnHuyLich.setDisable(true);
             btnNhanBan.setDisable(true);
+            btnXuat.setDisable(true);
         }
         else{
             tfCCCD.setEditable(true);
@@ -492,6 +515,7 @@ public class DatLichController implements Initializable {
             btnNhanBan.setDisable(false);
             btnChonMon.setDisable(false);
             btnHuyLich.setDisable(false);
+            btnXuat.setDisable(false);
         }
     }
 
@@ -547,7 +571,7 @@ public class DatLichController implements Initializable {
             LocalDate date = tgNhanBan.getValue();
             HoaDon hoaDon = new HoaDon();
             hoaDon.setNgayLap(LocalDate.now());
-            hoaDon.setNhanVien(TrangChuController.getTaiKhoan().getNhanVien());
+//            hoaDon.setNhanVien(TrangChuController.getTaiKhoan().getNhanVien());
             hoaDon.setTrangThaiHoaDon(TrangThaiHoaDon.DA_DAT);
             hoaDon.setKhachHang(khachHangDAO.getKHByCCCD(prevCCCD));
             if (ban != null)
