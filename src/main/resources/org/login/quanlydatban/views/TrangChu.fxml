@@ -212,12 +212,12 @@
                   </StackPane>
                   <VBox layoutY="274.0" prefHeight="163.0" prefWidth="820.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                      <children>
-                        <Label alignment="CENTER" prefHeight="58.0" prefWidth="918.0" text="TOBO Restaurant" textFill="WHITE">
+                        <Label alignment="CENTER" prefHeight="63.0" prefWidth="1230.0" text="TOBO Restaurant" textFill="WHITE">
                            <font>
                               <Font name="Verdana Bold" size="48.0" />
                            </font>
                         </Label>
-                        <Label alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="78.0" prefWidth="918.0" text="TasteOutstanding Bites Only" textFill="WHITE">
+                        <Label alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="100.0" prefWidth="1230.0" text="TasteOutstanding Bites Only" textFill="WHITE">
                            <font>
                               <Font name="Edwardian Script ITC" size="72.0" />
                            </font>

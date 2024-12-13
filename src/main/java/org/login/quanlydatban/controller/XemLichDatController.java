@@ -224,109 +224,28 @@ public class XemLichDatController implements Initializable {
 
     public void refreshBox() {
         boxSangT2.getChildren().clear();
-        boxSangT2.setMinWidth(Region.USE_COMPUTED_SIZE);
-        boxSangT2.setMaxWidth(Region.USE_COMPUTED_SIZE);
-        boxSangT2.setPrefHeight(Region.USE_COMPUTED_SIZE);
-
         boxSangT3.getChildren().clear();
-        boxSangT3.setMinWidth(Region.USE_COMPUTED_SIZE);
-        boxSangT3.setMaxWidth(Region.USE_COMPUTED_SIZE);
-        boxSangT3.setPrefHeight(Region.USE_COMPUTED_SIZE);
-
         boxSangT4.getChildren().clear();
-        boxSangT4.setMinWidth(Region.USE_COMPUTED_SIZE);
-        boxSangT4.setMaxWidth(Region.USE_COMPUTED_SIZE);
-        boxSangT4.setPrefHeight(Region.USE_COMPUTED_SIZE);
-
         boxSangT5.getChildren().clear();
-        boxSangT5.setMinWidth(Region.USE_COMPUTED_SIZE);
-        boxSangT5.setMaxWidth(Region.USE_COMPUTED_SIZE);
-        boxSangT5.setPrefHeight(Region.USE_COMPUTED_SIZE);
-
         boxSangT6.getChildren().clear();
-        boxSangT6.setMinWidth(Region.USE_COMPUTED_SIZE);
-        boxSangT6.setMaxWidth(Region.USE_COMPUTED_SIZE);
-        boxSangT6.setPrefHeight(Region.USE_COMPUTED_SIZE);
-
         boxSangT7.getChildren().clear();
-        boxSangT7.setMinWidth(Region.USE_COMPUTED_SIZE);
-        boxSangT7.setMaxWidth(Region.USE_COMPUTED_SIZE);
-        boxSangT7.setPrefHeight(Region.USE_COMPUTED_SIZE);
-
         boxSangCN.getChildren().clear();
-        boxSangCN.setMinWidth(Region.USE_COMPUTED_SIZE);
-        boxSangCN.setMaxWidth(Region.USE_COMPUTED_SIZE);
-        boxSangCN.setPrefHeight(Region.USE_COMPUTED_SIZE);
 
         boxChieuT2.getChildren().clear();
-        boxChieuT2.setMinWidth(Region.USE_COMPUTED_SIZE);
-        boxChieuT2.setMaxWidth(Region.USE_COMPUTED_SIZE);
-        boxChieuT2.setPrefHeight(Region.USE_COMPUTED_SIZE);
-
         boxChieuT3.getChildren().clear();
-        boxChieuT3.setMinWidth(Region.USE_COMPUTED_SIZE);
-        boxChieuT3.setMaxWidth(Region.USE_COMPUTED_SIZE);
-        boxChieuT3.setPrefHeight(Region.USE_COMPUTED_SIZE);
-
         boxChieuT4.getChildren().clear();
-        boxChieuT4.setMinWidth(Region.USE_COMPUTED_SIZE);
-        boxChieuT4.setMaxWidth(Region.USE_COMPUTED_SIZE);
-        boxChieuT4.setPrefHeight(Region.USE_COMPUTED_SIZE);
-
         boxChieuT5.getChildren().clear();
-        boxChieuT5.setMinWidth(Region.USE_COMPUTED_SIZE);
-        boxChieuT5.setMaxWidth(Region.USE_COMPUTED_SIZE);
-        boxChieuT5.setPrefHeight(Region.USE_COMPUTED_SIZE);
-
         boxChieuT6.getChildren().clear();
-        boxChieuT6.setMinWidth(Region.USE_COMPUTED_SIZE);
-        boxChieuT6.setMaxWidth(Region.USE_COMPUTED_SIZE);
-        boxChieuT6.setPrefHeight(Region.USE_COMPUTED_SIZE);
-
         boxChieuT7.getChildren().clear();
-        boxChieuT7.setMinWidth(Region.USE_COMPUTED_SIZE);
-        boxChieuT7.setMaxWidth(Region.USE_COMPUTED_SIZE);
-        boxChieuT7.setPrefHeight(Region.USE_COMPUTED_SIZE);
-
         boxChieuCN.getChildren().clear();
-        boxChieuCN.setMinWidth(Region.USE_COMPUTED_SIZE);
-        boxChieuCN.setMaxWidth(Region.USE_COMPUTED_SIZE);
-        boxChieuCN.setPrefHeight(Region.USE_COMPUTED_SIZE);
 
         boxToiT2.getChildren().clear();
-        boxToiT2.setMinWidth(Region.USE_COMPUTED_SIZE);
-        boxToiT2.setMaxWidth(Region.USE_COMPUTED_SIZE);
-        boxToiT2.setPrefHeight(Region.USE_COMPUTED_SIZE);
-
         boxToiT3.getChildren().clear();
-        boxToiT3.setMinWidth(Region.USE_COMPUTED_SIZE);
-        boxToiT3.setMaxWidth(Region.USE_COMPUTED_SIZE);
-        boxToiT3.setPrefHeight(Region.USE_COMPUTED_SIZE);
-
         boxToiT4.getChildren().clear();
-        boxToiT4.setMinWidth(Region.USE_COMPUTED_SIZE);
-        boxToiT4.setMaxWidth(Region.USE_COMPUTED_SIZE);
-        boxToiT4.setPrefHeight(Region.USE_COMPUTED_SIZE);
-
         boxToiT5.getChildren().clear();
-        boxToiT5.setMinWidth(Region.USE_COMPUTED_SIZE);
-        boxToiT5.setMaxWidth(Region.USE_COMPUTED_SIZE);
-        boxToiT5.setPrefHeight(Region.USE_COMPUTED_SIZE);
-
         boxToiT6.getChildren().clear();
-        boxToiT6.setMinWidth(Region.USE_COMPUTED_SIZE);
-        boxToiT6.setMaxWidth(Region.USE_COMPUTED_SIZE);
-        boxToiT6.setPrefHeight(Region.USE_COMPUTED_SIZE);
-
         boxToiT7.getChildren().clear();
-        boxToiT7.setMinWidth(Region.USE_COMPUTED_SIZE);
-        boxToiT7.setMaxWidth(Region.USE_COMPUTED_SIZE);
-        boxToiT7.setPrefHeight(Region.USE_COMPUTED_SIZE);
-
         boxToiCN.getChildren().clear();
-        boxToiCN.setMinWidth(Region.USE_COMPUTED_SIZE);
-        boxToiCN.setMaxWidth(Region.USE_COMPUTED_SIZE);
-        boxToiCN.setPrefHeight(Region.USE_COMPUTED_SIZE);
     }
 
     public void refreshTextFields() {
@@ -391,88 +310,65 @@ public class XemLichDatController implements Initializable {
 
             switch (time.getDayOfWeek()) {
                 case MONDAY:
-                    if (time.toLocalTime().isAfter(LocalTime.of(6, 0)) && time.toLocalTime().isBefore(LocalTime.of(12, 0)))
+                    if (time.toLocalTime().isAfter(LocalTime.of(6, 0)) && (time.toLocalTime().isBefore(LocalTime.of(12, 1))))
                         boxSangT2.getChildren().add(pane);
-                    else if (time.toLocalTime().isAfter(LocalTime.of(12, 0)) && time.toLocalTime().isBefore(LocalTime.of(18, 0)))
+                    else if (time.toLocalTime().isAfter(LocalTime.of(12, 0)) && time.toLocalTime().isBefore(LocalTime.of(18, 1)))
                         boxChieuT2.getChildren().add(pane);
-                    else if (time.toLocalTime().isAfter(LocalTime.of(18, 0)) && time.toLocalTime().isBefore(LocalTime.of(22, 0)))
+                    else
                         boxToiT2.getChildren().add(pane);
                     break;
                 case TUESDAY:
-                    if (time.toLocalTime().isAfter(LocalTime.of(6, 0)) && time.toLocalTime().isBefore(LocalTime.of(12, 0)))
+                    if (time.toLocalTime().isAfter(LocalTime.of(6, 0)) && time.toLocalTime().isBefore(LocalTime.of(12, 1)))
                         boxSangT3.getChildren().add(pane);
-                    else if (time.toLocalTime().isAfter(LocalTime.of(12, 0)) && time.toLocalTime().isBefore(LocalTime.of(18, 0)))
+                    else if (time.toLocalTime().isAfter(LocalTime.of(12, 0)) && time.toLocalTime().isBefore(LocalTime.of(18, 1)))
                         boxChieuT3.getChildren().add(pane);
-                    else if (time.toLocalTime().isAfter(LocalTime.of(18, 0)) && time.toLocalTime().isBefore(LocalTime.of(22, 0)))
+                    else
                         boxToiT3.getChildren().add(pane);
                     break;
                 case WEDNESDAY:
-                    if (time.toLocalTime().isAfter(LocalTime.of(6, 0)) && time.toLocalTime().isBefore(LocalTime.of(12, 0)))
+                    if (time.toLocalTime().isAfter(LocalTime.of(6, 0)) && time.toLocalTime().isBefore(LocalTime.of(12, 1)))
                         boxSangT4.getChildren().add(pane);
-                    else if (time.toLocalTime().isAfter(LocalTime.of(12, 0)) && time.toLocalTime().isBefore(LocalTime.of(18, 0)))
+                    else if (time.toLocalTime().isAfter(LocalTime.of(12, 0)) && time.toLocalTime().isBefore(LocalTime.of(18, 1)))
                         boxChieuT4.getChildren().add(pane);
-                    else if (time.toLocalTime().isAfter(LocalTime.of(18, 0)) && time.toLocalTime().isBefore(LocalTime.of(22, 0)))
+                    else
                         boxToiT4.getChildren().add(pane);
                     break;
                 case THURSDAY:
-                    if (time.toLocalTime().isAfter(LocalTime.of(6, 0)) && time.toLocalTime().isBefore(LocalTime.of(12, 0)))
+                    if (time.toLocalTime().isAfter(LocalTime.of(6, 0)) && time.toLocalTime().isBefore(LocalTime.of(12, 1)))
                         boxSangT5.getChildren().add(pane);
-                    else if (time.toLocalTime().isAfter(LocalTime.of(12, 0)) && time.toLocalTime().isBefore(LocalTime.of(18, 0)))
+                    else if (time.toLocalTime().isAfter(LocalTime.of(12, 0)) && time.toLocalTime().isBefore(LocalTime.of(18, 1)))
                         boxChieuT5.getChildren().add(pane);
-                    else if (time.toLocalTime().isAfter(LocalTime.of(18, 0)) && time.toLocalTime().isBefore(LocalTime.of(22, 0)))
+                    else
                         boxToiT5.getChildren().add(pane);
                     break;
                 case FRIDAY:
-                    if (time.toLocalTime().isAfter(LocalTime.of(6, 0)) && time.toLocalTime().isBefore(LocalTime.of(12, 0)))
+                    if (time.toLocalTime().isAfter(LocalTime.of(6, 0)) && time.toLocalTime().isBefore(LocalTime.of(12, 1)))
                         boxSangT6.getChildren().add(pane);
-                    else if (time.toLocalTime().isAfter(LocalTime.of(12, 0)) && time.toLocalTime().isBefore(LocalTime.of(18, 0)))
+                    else if (time.toLocalTime().isAfter(LocalTime.of(12, 0)) && time.toLocalTime().isBefore(LocalTime.of(18, 1)))
                         boxChieuT6.getChildren().add(pane);
-                    else if (time.toLocalTime().isAfter(LocalTime.of(18, 0)) && time.toLocalTime().isBefore(LocalTime.of(22, 0)))
+                    else
                         boxToiT6.getChildren().add(pane);
                     break;
                 case SATURDAY:
-                    if (time.toLocalTime().isAfter(LocalTime.of(6, 0)) && time.toLocalTime().isBefore(LocalTime.of(12, 0)))
+                    if (time.toLocalTime().isAfter(LocalTime.of(6, 0)) && time.toLocalTime().isBefore(LocalTime.of(12, 1)))
                         boxSangT7.getChildren().add(pane);
-                    else if (time.toLocalTime().isAfter(LocalTime.of(12, 0)) && time.toLocalTime().isBefore(LocalTime.of(18, 0)))
+                    else if (time.toLocalTime().isAfter(LocalTime.of(12, 0)) && time.toLocalTime().isBefore(LocalTime.of(18, 1)))
                         boxChieuT7.getChildren().add(pane);
-                    else if (time.toLocalTime().isAfter(LocalTime.of(18, 0)) && time.toLocalTime().isBefore(LocalTime.of(22, 0)))
+                    else
                         boxToiT7.getChildren().add(pane);
                     break;
                 case SUNDAY:
-                    if (time.toLocalTime().isAfter(LocalTime.of(6, 0)) && time.toLocalTime().isBefore(LocalTime.of(12, 0)))
+                    if (time.toLocalTime().isAfter(LocalTime.of(6, 0)) && time.toLocalTime().isBefore(LocalTime.of(12, 1)))
                         boxSangCN.getChildren().add(pane);
-                    else if (time.toLocalTime().isAfter(LocalTime.of(12, 0)) && time.toLocalTime().isBefore(LocalTime.of(18, 0)))
+                    else if (time.toLocalTime().isAfter(LocalTime.of(12, 0)) && time.toLocalTime().isBefore(LocalTime.of(18, 1)))
                         boxChieuCN.getChildren().add(pane);
-                    else if (time.toLocalTime().isAfter(LocalTime.of(18, 0)) && time.toLocalTime().isBefore(LocalTime.of(22, 0)))
+                    else
                         boxToiCN.getChildren().add(pane);
                     break;
                 default:
                     break;
             }
         }
-        boxSangT2.requestLayout();
-        boxSangT3.requestLayout();
-        boxSangT4.requestLayout();
-        boxSangT5.requestLayout();
-        boxSangT6.requestLayout();
-        boxSangT7.requestLayout();
-        boxSangCN.requestLayout();
-
-        boxChieuT2.requestLayout();
-        boxChieuT3.requestLayout();
-        boxChieuT4.requestLayout();
-        boxChieuT5.requestLayout();
-        boxChieuT6.requestLayout();
-        boxChieuT7.requestLayout();
-        boxChieuCN.requestLayout();
-
-        boxToiT2.requestLayout();
-        boxToiT3.requestLayout();
-        boxToiT4.requestLayout();
-        boxToiT5.requestLayout();
-        boxToiT6.requestLayout();
-        boxToiT7.requestLayout();
-        boxToiCN.requestLayout();
     }
 
     @Override
