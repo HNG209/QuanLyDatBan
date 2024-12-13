@@ -10,6 +10,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import javafx.util.Duration;
@@ -237,7 +238,7 @@ public class KetCaController {
             JOptionPane.showMessageDialog(null, "Dữ liệu không đầy đủ. Vui lòng kiểm tra lại.");
             return;
         } else {
-            tienVaoCaText = df.format(Double.parseDouble(tienVaoCa.getText().replace(" VND", "").replace(",","")));
+            tienVaoCaText = df.format(Double.parseDouble(tienVaoCa.getText().replace(" VND", "").replace(",", "")));
         }
 
         if (chenhLech.getTextFill() == Color.RED) {
@@ -247,17 +248,18 @@ public class KetCaController {
             }
         }
 
-        try {
-            String folderPath = "src/main/resources/org/login/quanlydatban/baoCaoKetCa/";
-            File folder = new File(folderPath);
-            if (!folder.exists()) {
-                folder.mkdirs();  // Create the directory if it does not exist
-            }
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Chọn nơi lưu báo cáo");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Text Files", "*.txt"));
 
-            String fileName = "BaoCaoKetCa_" + maNhanVien + "_" + ngayLap.replace("/", "_").replace(":", "_").replace(" ", "") + ".txt";
-            File file = new File(folderPath + fileName);
+        // Đặt tên mặc định cho tệp
+        String fileName = "BaoCaoKetCa_" + maNhanVien + "_" + ngayLap.replace("/", "_").replace(":", "_").replace(" ", "") + ".txt";
+        fileChooser.setInitialFileName(fileName);
 
-            try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+        File selectedFile = fileChooser.showSaveDialog(chenhLech.getScene().getWindow());
+
+        if (selectedFile != null) {
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(selectedFile))) {
                 String title = "BÁO CÁO KẾT CA";
                 int width = 78;
                 int padding = (width - title.length()) / 2;
@@ -290,9 +292,11 @@ public class KetCaController {
                 writer.newLine();
                 writer.write("Chênh lệch: " + chenhLechText);
                 writer.newLine();
-                BaoCao bc = new BaoCao(null, VaoCaController.thoiGianVaoCa, thoiGianHienTai.getText(), Double.parseDouble(tienVaoCaText.replace(" VND", "").replace(",","")), Double.parseDouble(tongDoanhThuText.replace(" VND", "").replace(",","")), Double.parseDouble(tongMenhGiaText.replace(" VND", "").replace(",","")), taiKhoan.getNhanVien());
+
+                BaoCao bc = new BaoCao(null, VaoCaController.thoiGianVaoCa, thoiGianHienTai.getText(), Double.parseDouble(tienVaoCaText.replace(" VND", "").replace(",", "")), Double.parseDouble(tongDoanhThuText.replace(" VND", "").replace(",", "")), Double.parseDouble(tongMenhGiaText.replace(" VND", "").replace(",", "")), taiKhoan.getNhanVien());
                 BaoCaoDAO baoCaoDAO = new BaoCaoDAO();
                 baoCaoDAO.themBaoCao(bc);
+
                 JOptionPane.showMessageDialog(null, "Xuất báo cáo kết ca thành công");
                 isKetCa = true;
                 for (Window window : Window.getWindows()) {
@@ -308,11 +312,11 @@ public class KetCaController {
                 JOptionPane.showMessageDialog(null, "Xuất báo cáo kết ca không thành công");
                 e.printStackTrace();
             }
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "Có lỗi trong việc chuyển đổi số liệu. Vui lòng kiểm tra lại dữ liệu nhập.");
-            e.printStackTrace();
+        } else {
+            JOptionPane.showMessageDialog(null, "Không có tệp nào được chọn. Báo cáo không được lưu.");
         }
     }
+
 
 
 
