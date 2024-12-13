@@ -20,7 +20,7 @@ public class HibernateUtils {
         Properties properties = new Properties();
         properties.put(Environment.DIALECT, "org.hibernate.dialect.MySQL8Dialect");
         properties.put(Environment.DRIVER, "com.mysql.cj.jdbc.Driver");
-        properties.put(Environment.URL, "jdbc:mysql://localhost/nhahangtobo");
+        properties.put(Environment.URL, "jdbc:mysql://localhost/nhahangtobo?createDatabaseIfNotExist=true");
         properties.put(Environment.USER, System.getenv("MYSQL_USER"));
         properties.put(Environment.PASS, System.getenv("MYSQL_PASSWORD"));
         properties.put(Environment.HBM2DDL_AUTO, "update");
