@@ -147,11 +147,10 @@ public class KhachHang implements Serializable {
 
     public void setSdt(String sdt) {
         if(sdt != null){
-            if(sdt.matches("^(09|03|02|04)\\d{8}$"))
+            if (sdt.matches("^(09|03|02|04|08)\\d{8}$") || sdt.equals(""))
                 this.sdt = sdt;
             else throw new IllegalArgumentException("Số điện thoại không hợp lệ");
         }
-        else throw new IllegalArgumentException("Số điện thoại không được rỗng");
     }
 
 }

@@ -171,7 +171,7 @@ public class NhanVien implements Serializable {
     public void setSdt(String sdt) {
         if(sdt == null || sdt.isEmpty()){
             throw new  IllegalArgumentException("Số điện thoại không được rỗng");
-        }else if(!sdt.matches("^(03|07|09)[0-9]{8}$")){
+        }else if(!sdt.matches("^(09|03|02|04|08)\\d{8}$")){
             throw new  IllegalArgumentException("Số điện thoại phải là số và có 10 kí tư");
         }
         this.sdt = sdt;
