@@ -124,7 +124,7 @@ public class KetCaController {
         tenNhanVien.setText(TrangChuController.taiKhoan.getNhanVien().getTenNhanVien());
         Object[] doanhThuVaSoHD;
         doanhThuVaSoHD = hoaDonDAO.layDoanhThuVaSoHoaDon(maNV, LocalDate.now());
-        tienVaoCa.setText(VaoCaController.tongTienVaoCa.toString());
+        tienVaoCa.setText(VaoCaController.tongTienVaoCa.isEmpty() ? df.format(0) : VaoCaController.tongTienVaoCa);
         if (doanhThuVaSoHD.length == 0) {
             tongSoHoaDon.setText("0");
             tongDoanhThu.setText("0");
@@ -150,7 +150,9 @@ public class KetCaController {
                 + tien100K * 100000 + tien200K * 200000 + tien500K * 500000;
 
         tongMenhGia.setText(df.format(tongMenhGiaTien));
-        double tienChenhLech = tongMenhGiaTien - Double.parseDouble(tienCuoiCa.getText().replace(" VND", "").replace(",",""));
+        double tienVao = tienVaoCa.getText().isEmpty() ? 0.0 : Double.parseDouble(tienVaoCa.getText().replace(" VND", "").replace(",", ""));
+
+        double tienChenhLech = tongMenhGiaTien - tienVao;
         if(tienChenhLech < 0) {
             chenhLech.setTextFill(Color.RED);
         }
@@ -167,13 +169,8 @@ public class KetCaController {
     }
     @FXML
     private void loadTienCuoiCaVaChenhLech() {
-        double tienVao = 0.0;
-        try {
-            tienVao = tienVaoCa.getText().isEmpty() ? 0.0 : Double.parseDouble(tienVaoCa.getText().replace(" VND", "").replace(",",""));
-        } catch (NumberFormatException e) {
-            Platform.runLater(() -> tienVaoCa.setText("0"));
-            tienVao = 0.0;
-        }
+        double tienVao = tienVaoCa.getText().isEmpty() ? 0.0 : Double.parseDouble(tienVaoCa.getText().replace(" VND", "").replace(",",""));
+
         double doanhThu = tongDoanhThu.getText().isEmpty() ? 0.0 : Double.parseDouble(tongDoanhThu.getText().replace(" VND", "").replace(",",""));
         double tienCuoiCaValue = tienVao + doanhThu;
         double tongMenhGiaTien = tongMenhGia.getText().isEmpty() ? 0.0 : Double.parseDouble(tongMenhGia.getText().replace(" VND", "").replace(",",""));
@@ -185,12 +182,7 @@ public class KetCaController {
             chenhLech.setTextFill(Color.BLACK);
         }
         chenhLech.setText(df.format(Math.abs(tienChenhLech)));
-        if(tienCuoiCaValue == 0.0){
-            tienCuoiCa.setText("");
-        }
-        else {
-            tienCuoiCa.setText(df.format(tienCuoiCaValue));
-        }
+        tienCuoiCa.setText(df.format(tienCuoiCaValue));
     }
     @FXML
     private void thoat() {
@@ -225,7 +217,6 @@ public class KetCaController {
         menhGia100K.setText("");
         menhGia200K.setText("");
         menhGia500K.setText("");
-        tienVaoCa.setText("");
         tongMenhGia.setText("");
         chenhLech.setText("");
 
