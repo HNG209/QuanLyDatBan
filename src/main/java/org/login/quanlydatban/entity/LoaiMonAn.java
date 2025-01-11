@@ -19,16 +19,11 @@ public class LoaiMonAn implements Serializable {
     @Column
     private String tenLoaiMonAn;
 
-//    @Column
-//    private String moTaLoaiMonAn;
-
-
     public LoaiMonAn() {
     }
 
     public LoaiMonAn(String tenLoai) {
         this.tenLoaiMonAn = tenLoai;
-       // this.moTaLoaiMonAn = moTa;
     }
 
     @PrePersist
