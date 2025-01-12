@@ -18,8 +18,8 @@ public class KhachHang implements Serializable {
 
     @Column(nullable = false)
     private String tenKhachHang;
-
-    @Column(nullable = false)
+    // tao bo nullable
+    @Column
     private String cccd;
 
     private String sdt;
@@ -131,14 +131,15 @@ public class KhachHang implements Serializable {
     }
 
     public void setTenKhachHang(String tenKhachHang) {
-        if(tenKhachHang != null) {
-            if(tenKhachHang.matches("^[A-Z][a-zA-Z]*( [A-Z][a-zA-Z]*)*$")) {
-                this.tenKhachHang = tenKhachHang;
-            }
-            else throw new IllegalArgumentException("Tên khách hàng không hợp lệ");
-
-        }
-        else throw new IllegalArgumentException("Tên khách hàng rỗng");
+        this.tenKhachHang = tenKhachHang;
+//        if(tenKhachHang != null) {
+//            if(tenKhachHang.matches("^[A-Z][a-zA-Z]*( [A-Z][a-zA-Z]*)*$")) {
+//                this.tenKhachHang = tenKhachHang;
+//            }
+//            else throw new IllegalArgumentException("Tên khách hàng không hợp lệ");
+//
+//        }
+//        else throw new IllegalArgumentException("Tên khách hàng rỗng");
 
     }
     public String getSdt() {

@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.text.Normalizer;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table
@@ -18,6 +19,7 @@ public class LoaiMonAn implements Serializable {
 
     @Column
     private String tenLoaiMonAn;
+
 
 //    @Column
 //    private String moTaLoaiMonAn;
@@ -35,11 +37,22 @@ public class LoaiMonAn implements Serializable {
     public void onPrePersist() {
         if (tenLoaiMonAn != null) {
             this.maLoaiMonAn = generateLoaiMonAn(tenLoaiMonAn);
-            System.out.println("1");
         } else {
             throw new IllegalArgumentException("tenLoaiMonAn is null");
         }
 
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        LoaiMonAn loaiMonAn = (LoaiMonAn) o;
+        return Objects.equals(maLoaiMonAn, loaiMonAn.maLoaiMonAn);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(maLoaiMonAn);
     }
 
     public String getMaLoaiMonAn() {
@@ -120,6 +133,7 @@ public class LoaiMonAn implements Serializable {
                 .limit(2)                             // Take only the first 2 letters
                 .reduce("", String::concat);         // Combine into a single string
     }
+
 
     @Override
     public String toString() {

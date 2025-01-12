@@ -4,11 +4,11 @@ module org.login.quanlydatban {
     requires org.hibernate.orm.core;
     requires java.persistence;
     requires java.naming;
-    requires java.sql;
     requires java.desktop;
     requires org.apache.poi.poi;
     requires org.apache.poi.ooxml;
     requires net.bytebuddy;
+    requires net.datafaker;
 
 
     opens org.login.quanlydatban.entity.keygenerator to org.hibernate.orm.core;

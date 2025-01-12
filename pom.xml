@@ -46,7 +46,14 @@
             <artifactId>hibernate-core</artifactId>
             <version>5.6.15.Final</version>
         </dependency>
-<!--        <dependency>-->
+        <!-- https://mvnrepository.com/artifact/net.datafaker/datafaker -->
+        <dependency>
+            <groupId>net.datafaker</groupId>
+            <artifactId>datafaker</artifactId>
+            <version>2.4.2</version>
+        </dependency>
+
+        <!--        <dependency>-->
 <!--            <groupId>org.openjfx</groupId>-->
 <!--            <artifactId>javafx-controls</artifactId>-->
 <!--            <version>22</version>-->
