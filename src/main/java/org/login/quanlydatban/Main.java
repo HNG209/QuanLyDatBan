@@ -21,9 +21,7 @@ public class Main extends Application {
         Scene scene = new Scene(fxmlLoader.load());
 
         Session session = HibernateUtils.getFactory().openSession();
-
-          session.close();
-
+        session.close();
         LichDatDAO lichDatDAO = new LichDatDAO();
         lichDatDAO.getDSLichDatBy("", LocalDate.of(2024, 12, 4), null, null).forEach(System.out::println);
 

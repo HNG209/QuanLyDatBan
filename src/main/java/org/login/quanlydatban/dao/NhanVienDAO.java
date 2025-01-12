@@ -151,12 +151,13 @@ public class NhanVienDAO {
             transaction = session.beginTransaction();
             String hql = "SELECT nv, tk FROM NhanVien nv JOIN nv.taiKhoan tk";
             Query<Object[]> query = session.createQuery(hql, Object[].class);
-
+            // ND chinh sua
             List<Object[]> results = query.getResultList();
             for (Object[] result : results) {
                 NhanVien nv = (NhanVien) result[0];
                 TaiKhoan tk = (TaiKhoan) result[1];
-                nv.setTenTaiKhoan(tk.getUserName());
+//                nv.setTaiKhoan(tk);
+//                nv.setTenTaiKhoan(tk.getUserName());
                 nv.setTaiKhoan(tk); // Giả sử bạn có phương thức setTaiKhoan trong NhanVien
                 nhanViens.add(nv);
             }

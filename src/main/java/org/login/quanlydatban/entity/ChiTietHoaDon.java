@@ -20,6 +20,7 @@ public class ChiTietHoaDon implements Serializable {
     private String ghiChu;
 
     @ManyToOne
+    //@OneToOne
     @MapsId("maMonAn")
     @JoinColumn(name = "maMonAn", referencedColumnName = "maMonAn")
     private MonAn monAn;

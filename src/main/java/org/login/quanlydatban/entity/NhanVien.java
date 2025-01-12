@@ -16,11 +16,8 @@ import java.util.Set;
 @Entity
 @Table
 public class NhanVien implements Serializable {
-
-
     @Id
     private String maNhanVien;
-
     @OneToOne(mappedBy = "nhanVien", fetch = FetchType.EAGER)
     private TaiKhoan taiKhoan; // Mối quan hệ với TaiKhoan
     @Column(nullable = false)
@@ -41,7 +38,8 @@ public class NhanVien implements Serializable {
     @Column(nullable = false)
     private LocalDate ngaySinh;
 
-    @Column(nullable = false)
+    //@Column(nullable = false)
+    @Column
     private String hinhAnh;
 
     @Enumerated(EnumType.STRING)
@@ -51,10 +49,13 @@ public class NhanVien implements Serializable {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private ChucVu chucVuNhanVien;
-    private String tenTaiKhoan;
+
+
+
     public NhanVien(){
 
     }
+    ///  alooooo
 
     @PrePersist
     public  void generateID(){
@@ -101,13 +102,13 @@ public class NhanVien implements Serializable {
     }
 
 
-    public String getTenTaiKhoan() {
-        return tenTaiKhoan;
-    }
-
-    public void setTenTaiKhoan(String tenTaiKhoan) {
-        this.tenTaiKhoan = tenTaiKhoan;
-    }
+//    public String getTenTaiKhoan() {
+//        return tenTaiKhoan;
+//    }
+//
+//    public void setTenTaiKhoan(String tenTaiKhoan) {
+//        this.tenTaiKhoan = tenTaiKhoan;
+//    }
 
     public ChucVu getChucVuNhanVien() {
 
@@ -119,21 +120,10 @@ public class NhanVien implements Serializable {
     }
 
     public void setTaiKhoan(TaiKhoan taiKhoan) {
+
         this.taiKhoan = taiKhoan;
     }
 
-    public NhanVien(String maNhanVien, String tenNhanVien, String sdt, String cccd, String diaChi, Boolean gioiTinh, LocalDate ngaySinh, String hinhAnh, TrangThaiNhanVien trangThaiNhanVien, ChucVu chucVuNhanVien) {
-        this.maNhanVien = maNhanVien;
-        this.tenNhanVien = tenNhanVien;
-        this.sdt = sdt;
-        this.cccd = cccd;
-        this.diaChi = diaChi;
-        this.gioiTinh = gioiTinh;
-        this.ngaySinh = ngaySinh;
-        this.hinhAnh = hinhAnh;
-        this.trangThaiNhanVien = trangThaiNhanVien;
-        this.chucVuNhanVien = chucVuNhanVien;
-    }
 
     public void setChucVuNhanVien(ChucVu chucVuNhanVien) {
         if(chucVuNhanVien == null){
@@ -156,11 +146,11 @@ public class NhanVien implements Serializable {
     }
 
     public void setTenNhanVien(String tenNhanVien) {
-        if(tenNhanVien == null || tenNhanVien.isEmpty()){
-            throw new  IllegalArgumentException("Tên nhân viên không được rỗng");
-        }else if(!tenNhanVien.matches("^([A-Z][a-z]*)( [A-Z][a-z]*)*$")){
-            throw new  IllegalArgumentException("Tên nhân viên không hợp lệ");
-        }
+//        if(tenNhanVien == null || tenNhanVien.isEmpty()){
+//            throw new  IllegalArgumentException("Tên nhân viên không được rỗng");
+//        }else if(!tenNhanVien.matches("^([A-Z][a-z]*)( [A-Z][a-z]*)*$")){
+//            throw new  IllegalArgumentException("Tên nhân viên không hợp lệ");
+//        }
         this.tenNhanVien = tenNhanVien;
     }
 
@@ -243,10 +233,11 @@ public class NhanVien implements Serializable {
     }
 
     public void setHinhAnh(String hinhAnh) {
-        if(hinhAnh == null){
-            throw new IllegalArgumentException("Đường dẫn ảnh nhân viên không được rỗng");
-        }
-        else this.hinhAnh = hinhAnh;
+//        if(hinhAnh == null){
+//            throw new IllegalArgumentException("Đường dẫn ảnh nhân viên không được rỗng");
+//        }
+//        else
+            this.hinhAnh = hinhAnh;
     }
 
 }

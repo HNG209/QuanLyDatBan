@@ -9,6 +9,7 @@ import org.login.quanlydatban.hibernate.HibernateUtils;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table
@@ -41,6 +42,8 @@ public class MonAn implements Serializable {
     private String moTaMonAn;
 
     public MonAn() {}
+
+
 
     @Override
     public String toString() {

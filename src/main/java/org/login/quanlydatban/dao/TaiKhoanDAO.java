@@ -9,9 +9,6 @@ import org.login.quanlydatban.entity.NhanVien;
 import org.login.quanlydatban.entity.TaiKhoan;
 import org.login.quanlydatban.hibernate.HibernateUtils;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.util.List;
 
 public class TaiKhoanDAO {

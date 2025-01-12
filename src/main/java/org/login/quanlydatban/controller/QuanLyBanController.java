@@ -398,9 +398,4 @@ public class QuanLyBanController implements Initializable {
         }
     }
 
-
-
-
-
-
 }
