@@ -17,10 +17,11 @@ import java.util.Set;
 @Table
 public class NhanVien implements Serializable {
     @Id
+    @Column(name = "ma_nhan_vien")
     private String maNhanVien;
     @OneToOne(mappedBy = "nhanVien", fetch = FetchType.EAGER)
     private TaiKhoan taiKhoan; // Mối quan hệ với TaiKhoan
-    @Column(nullable = false)
+    @Column(nullable = false, name = "ten_nhan_vien")
     private String tenNhanVien;
 
     @Column(nullable = false)
@@ -29,25 +30,25 @@ public class NhanVien implements Serializable {
     @Column(nullable = false)
     private String cccd;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "dia_chi")
     private String diaChi;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "gioi_tinh")
     private Boolean gioiTinh;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "ngay_sinh")
     private LocalDate ngaySinh;
 
     //@Column(nullable = false)
-    @Column
+    @Column(name = "hinh_anh")
     private String hinhAnh;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(nullable = false, name = "trang_thai_nhan_vien")
     private TrangThaiNhanVien trangThaiNhanVien;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(nullable = false, name = "chuc_vu")
     private ChucVu chucVuNhanVien;
 
 

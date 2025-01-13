@@ -16,29 +16,30 @@ import java.util.Objects;
 public class MonAn implements Serializable {
 
     @Id
+    @Column(name = "ma_mon_an")
     private String maMonAn;
 
     @ManyToOne
-    @JoinColumn(name = "maLoaiMonAn")
+    @JoinColumn(name = "ma_loai_mon_an")
     private LoaiMonAn loaiMonAn;
 
-    @Column
+    @Column(name = "ten_mon_an")
     private String tenMonAn;
 
-    @Column
+    @Column(name = "don_gia")
     private double donGia;
 
-    @Column
+    @Column(name = "don_vi_tinh")
     private String donViTinh;
 
-    @Column
+    @Column(name = "hinh_anh")
     private String hinhAnh;
 
-    @Column
+    @Column(name = "trang_thai_mon_an")
     @Enumerated(EnumType.STRING)
     private TrangThaiMonAn trangThaiMonAn;
 
-    @Column
+    @Column(name = "mo_ta_mon_an")
     private String moTaMonAn;
 
     public MonAn() {}

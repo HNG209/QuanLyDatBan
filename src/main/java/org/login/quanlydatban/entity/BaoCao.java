@@ -13,24 +13,27 @@ import java.time.format.DateTimeFormatter;
 public class BaoCao implements Serializable {
 
     @Id
+    @Column(name = "ma_bao_cao")
     private String maBaoCao;
 
-    @Column
+    @Column(name = "thoi_gian_vao_ca")
     private String thoiGianVaoCa;
 
 
-    @Column
+    @Column(name = "thoi_gian_ket_ca")
     private String thoiGianKetCa;
 
-    @Column
+    @Column(name = "tien_vao_ca")
     private double tienVaoCa;
 
-    @Column
+    @Column(name = "tong_doanh_thu")
     private double tongDoanhThu;
 
-    @Column
+    @Column(name = "tien_ban_giao")
     private double tienBanGiao;
+
     @OneToOne
+    @JoinColumn(name = "ma_nhan_vien")
     private NhanVien nhanVien;
 
     @PrePersist

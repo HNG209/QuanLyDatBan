@@ -19,36 +19,38 @@ import java.util.Set;
 @Table
 public class HoaDon implements Serializable {
     @Id
+    @Column(name = "ma_hoa_don")
     private String maHoaDon;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "ngay_lap")
     private LocalDate ngayLap;
 
     @ManyToOne
-    @JoinColumn(name = "maBan")
+    @JoinColumn(name = "ma_ban")
     private Ban ban;
 
     @OneToMany(mappedBy = "hoaDon", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<ChiTietHoaDon> chiTietHoaDon;
 
     @ManyToOne
-    @JoinColumn(name = "maKhachHang")
+    @JoinColumn(name = "ma_khach_hang")
     private KhachHang khachHang;
 
     @ManyToOne
-    @JoinColumn(name = "maNhanVien")
+    @JoinColumn(name = "ma_nhan_vien")
     private NhanVien nhanVien;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "trang_thai_hoa_don")
     private TrangThaiHoaDon trangThaiHoaDon = TrangThaiHoaDon.CHUA_THANH_TOAN;
 
-    @Column
+    @Column(name = "phu_thu")
     private double phuThu;
 
-    @Column
+    @Column(name = "tong_tien")
     private double tongTien;
 
-    @Column
+    @Column(name = "chiet_khau")
     private double chietKhau;
 
     @Transient
