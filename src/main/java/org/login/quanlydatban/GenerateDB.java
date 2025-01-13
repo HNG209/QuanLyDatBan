@@ -158,7 +158,13 @@ public class GenerateDB {
             Session session = HibernateUtils.getFactory().openSession();
             session.getTransaction().begin();
             LichDat ld = new LichDat();
-            ld.setThoiGianDat(LocalDateTime.now());
+            LocalDate today = LocalDate.now();
+
+            // Tạo số ngày ngẫu nhiên từ 0 đến 365
+            int daysToAdd = ThreadLocalRandom.current().nextInt(0, 366);
+            // Tính toán ngày ngẫu nhiên
+            LocalDate randomFutureDate = today.plusDays(daysToAdd);
+            ld.setThoiGianDat(LocalDateTime.of(randomFutureDate, LocalTime.MIN));
 
             int nam = ThreadLocalRandom.current().nextInt(0, LocalDateTime.now().getYear());
             int thang = ThreadLocalRandom.current().nextInt(1, 13);
