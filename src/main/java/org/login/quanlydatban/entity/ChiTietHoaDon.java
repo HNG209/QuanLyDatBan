@@ -75,9 +75,11 @@ public class ChiTietHoaDon implements Serializable {
     }
 
     @PrePersist
+    @PreUpdate
     private void generateCompositeKey() {
         if (monAn != null && hoaDon != null && this.maChiTietHoaDon == null) {
             this.maChiTietHoaDon = new CTHDCompositeKey(hoaDon.getMaHoaDon(), monAn.getMaMonAn());
+
         }
     }
 

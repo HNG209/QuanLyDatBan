@@ -9,6 +9,7 @@ import org.login.quanlydatban.hibernate.HibernateUtils;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -153,21 +154,58 @@ public class GenerateDB {
         }
         // thoi gian dat, thoi gian nhan, khach hang, nhan vien, so luong nguoi, hoa don, tien coc, ghi chu
         List<LichDat> lichiDatList = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 1; i++) {
             Session session = HibernateUtils.getFactory().openSession();
             session.getTransaction().begin();
             LichDat ld = new LichDat();
             ld.setThoiGianDat(LocalDateTime.now());
 
-            int year = ThreadLocalRandom.current().nextInt(0, LocalDateTime.now().getYear());
-            int month = ThreadLocalRandom.current().nextInt(1, 13);
-            int day = ThreadLocalRandom.current().nextInt(1, 29);
-            LocalDate randomBirthDate = LocalDate.of(year, month, day);
-            // ld.setThoiGianNhanBan(faker.random().t, banList.get(faker.random().nextInt(banList.size()-1)));
+            int nam = ThreadLocalRandom.current().nextInt(0, LocalDateTime.now().getYear());
+            int thang = ThreadLocalRandom.current().nextInt(1, 13);
+            int ngay = ThreadLocalRandom.current().nextInt(1, 29);
+            LocalDate randomNgay = LocalDate.of(nam, thang, ngay);
+            int gio = faker.random().nextInt(0, 20);
+            int phut = faker.random().nextInt(0, 11)*5;
+            ld.setThoiGianNhanBan(LocalDateTime.of(randomNgay, LocalTime.of(gio,phut)));
 
-            ld.setNhanVien(nhanVienList.get(faker.random().nextInt(nhanVienList.size() - 1)));
-            ld.setKhachHang(khachHangList.get(faker.random().nextInt(khachHangList.size() - 1)));
+            // nhan vien
+            int randomNhanVien = faker.random().nextInt(0, nhanVienList.size()-1);
+            NhanVien nv = session.get(NhanVien.class, nhanVienList.get(randomNhanVien).getMaNhanVien());
+            ld.setNhanVien(nv);
+
+            // khach hnag
+            int randomKH = faker.random().nextInt(0, khachHangList.size()-1);
+            KhachHang kh = session.get(KhachHang.class, khachHangList.get(randomKH).getMaKhachHang());
+            ld.setKhachHang(kh);
+
             ld.setSoLuongNguoi(faker.random().nextInt(10));
+
+            // tao hoa don
+            HoaDon hd = new HoaDon();
+            hd.setNgayLap(randomNgay);
+            hd.setPhuThu(Double.parseDouble(faker.commerce().price(10.0, 1000.0)));
+            hd.setTrangThaiHoaDon(TrangThaiHoaDon.DA_DAT);
+            // Trạng thái hóa đơn
+            int randomIndexBan = faker.random().nextInt(banList.size() - 1);
+            Ban randomBan = session.get(Ban.class, banList.get(randomIndexBan).getMaBan());
+            hd.setBan(randomBan); // set ban
+
+            hd.setChietKhau(Double.parseDouble(faker.commerce().price(0.0, 100.0))); // Chiết khấu
+
+            // khach hang
+            hd.setKhachHang(kh);
+            // nhan vien
+            hd.setNhanVien(nv);
+            hoaDonList.add(hd);
+            session.persist(hd);
+
+            ld.setHoaDon(hd);
+            lichiDatList.add(ld);
+            session.persist(ld);
+
+            session.getTransaction().commit();
+            session.close();
+
 
         }
 
@@ -207,8 +245,8 @@ public class GenerateDB {
                 }
             }
         }
-        session.getTransaction().commit();
-        session.close();
+
+
 
 
 
