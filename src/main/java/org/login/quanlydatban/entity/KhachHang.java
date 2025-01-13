@@ -14,9 +14,10 @@ import java.util.Set;
 public class KhachHang implements Serializable {
 
     @Id
+    @Column(name = "ma_khach_hang")
     private String maKhachHang;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "ten_khach_hang")
     private String tenKhachHang;
     // tao bo nullable
     @Column
@@ -24,10 +25,12 @@ public class KhachHang implements Serializable {
 
     private String sdt;
 
+    @Column(name = "dia_chi")
     private String diaChi;
 
     private String email;
 
+    @Column(name = "diem_tich_luy")
     private int diemTichLuy = 0;
 
     public KhachHang() {

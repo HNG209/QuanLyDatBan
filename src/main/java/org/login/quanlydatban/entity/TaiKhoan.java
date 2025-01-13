@@ -9,14 +9,14 @@ public class TaiKhoan implements Serializable {
     // bien luu ten nhan vien
 
     @Id
-    @Column(nullable = false)
+    @Column(nullable = false, name = "user_name")
     private String userName;
 
     @Column(nullable = false)
     private String password;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "nhanVien_maNhanVien", referencedColumnName = "maNhanVien") // Khóa ngoại liên kết đến NhanVien
+    @JoinColumn(name = "ma_nhan_vien", referencedColumnName = "ma_nhan_vien") // Khóa ngoại liên kết đến NhanVien
     private NhanVien nhanVien;
 
     public TaiKhoan() {

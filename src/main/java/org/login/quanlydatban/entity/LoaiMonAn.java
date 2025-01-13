@@ -15,9 +15,10 @@ import java.util.Objects;
 @Table
 public class LoaiMonAn implements Serializable {
     @Id
+    @Column(name = "ma_loai_mon_an")
     private String maLoaiMonAn;
 
-    @Column
+    @Column(name = "ten_loai_mon_an")
     private String tenLoaiMonAn;
 
 
