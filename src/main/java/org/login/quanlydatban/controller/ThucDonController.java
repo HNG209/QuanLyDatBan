@@ -286,7 +286,8 @@ public class ThucDonController implements Initializable {
                 }
 
             } catch (Exception e) {
-                Notification.thongBao(e.getMessage(), Alert.AlertType.WARNING);
+//                Notification.thongBao(e.getMessage(), Alert.AlertType.WARNING);
+                e.printStackTrace();
             }
 
         }

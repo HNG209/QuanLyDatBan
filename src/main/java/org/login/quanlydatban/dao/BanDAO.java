@@ -77,8 +77,8 @@ public class BanDAO {
         Session session = HibernateUtils.getFactory().openSession();
         session.getTransaction().begin();
 
-        String sql = "SELECT * FROM Ban WHERE trangThaiBan = 'BAN_TRONG'";
-        List<Ban> list = session.createNativeQuery(sql, Ban.class).getResultList();
+        String sql = "SELECT ban FROM Ban ban WHERE ban.trangThaiBan = 'BAN_TRONG'";
+        List<Ban> list = session.createQuery(sql, Ban.class).getResultList();
 
         session.getTransaction().commit();
         session.close();

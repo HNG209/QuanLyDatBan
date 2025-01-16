@@ -132,8 +132,8 @@ public class MonAnDAO {
     public List<MonAn> getMonAnBy(String ten, double giaTT, double giaTD, String loai, int index, int limit) {
         Session session = HibernateUtils.getFactory().openSession();
         session.getTransaction().begin();
-        String hql = "FROM MonAn m " +
-                "JOIN m.loaiMonAn l " +
+        String hql = "SELECT m FROM MonAn m " +
+                "INNER JOIN LoaiMonAn l ON l.maLoaiMonAn = m.loaiMonAn.maLoaiMonAn " +
                 "WHERE (:loai IS NULL OR l.tenLoaiMonAn LIKE :loai) AND " +
                 "(:ten IS NULL OR m.tenMonAn LIKE :ten) AND " +
                 "(:giaTT IS NULL OR m.donGia >= :giaTT) AND " +
@@ -157,12 +157,12 @@ public class MonAnDAO {
     public int countMonAnBy(String ten, double giaTT, double giaTD, String loai){
         Session session = HibernateUtils.getFactory().openSession();
         session.getTransaction().begin();
-        String hql = "FROM MonAn m " +
+        String hql = "SELECT m FROM MonAn m " +
                 "INNER JOIN m.loaiMonAn l " +
                 "WHERE (:loai IS NULL OR l.tenLoaiMonAn LIKE :loai) AND " +
                 "(:ten IS NULL OR m.tenMonAn LIKE :ten) AND " +
-                "(:giaTT = 0 OR m.donGia >= :giaTT) AND " +
-                "(:giaTD = 0 OR m.donGia <= :giaTD)";
+                "(:giaTT IS NULL OR m.donGia >= :giaTT) AND " +
+                "(:giaTD IS NULL OR m.donGia <= :giaTD)";
         List<MonAn> monAnList = session.createQuery(hql, MonAn.class)
                 .setParameter("loai", "%" + loai + "%")
                 .setParameter("ten", "%" + ten + "%")

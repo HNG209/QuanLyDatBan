@@ -67,7 +67,7 @@ public class GenerateDB {
             session.close();
         }
 
-        List<LoaiMonAn> loaiMonAnList = new ArrayList<>();
+        Set<LoaiMonAn> loaiMonAnSet = new HashSet<>();
         for (int i = 0; i < 10; i++) {
             Session session = HibernateUtils.getFactory().openSession();
             session.getTransaction().begin();
@@ -75,7 +75,7 @@ public class GenerateDB {
             String tem = faker.food().dish();
             LoaiMonAn loaiMonAn = new LoaiMonAn();
             loaiMonAn.setTenLoaiMonAn(tem);
-            loaiMonAnList.add(loaiMonAn);
+            loaiMonAnSet.add(loaiMonAn);
             session.persist(loaiMonAn);
 
             session.getTransaction().commit();
@@ -89,7 +89,8 @@ public class GenerateDB {
             MonAn sp = new MonAn();
             sp.setTenMonAn(faker.commerce().productName());
             sp.setDonGia(Double.parseDouble(faker.commerce().price(10.0, 1000.0)));
-            sp.setLoaiMonAn(loaiMonAnList.get(faker.random().nextInt(0, loaiMonAnList.size() - 1)));
+            List<LoaiMonAn> loaiMonAnList = new ArrayList<>(loaiMonAnSet);
+            sp.setLoaiMonAn(loaiMonAnList.get(faker.random().nextInt(0, loaiMonAnSet.size() - 1)));
 
 
             monAnList.add(sp);
