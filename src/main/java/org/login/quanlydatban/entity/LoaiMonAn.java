@@ -21,17 +21,11 @@ public class LoaiMonAn implements Serializable {
     @Column(name = "ten_loai_mon_an")
     private String tenLoaiMonAn;
 
-
-//    @Column
-//    private String moTaLoaiMonAn;
-
-
     public LoaiMonAn() {
     }
 
     public LoaiMonAn(String tenLoai) {
         this.tenLoaiMonAn = tenLoai;
-       // this.moTaLoaiMonAn = moTa;
     }
 
     @PrePersist

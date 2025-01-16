@@ -37,12 +37,6 @@ import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class DatMonController implements Initializable {
-    @FXML
-    private FlowPane flowPane;
-
-    @FXML
-    private ScrollPane scrollPane;
-
     //buttons
     @FXML
     private Button btnChuyenBan;
@@ -132,6 +126,9 @@ public class DatMonController implements Initializable {
     @FXML
     private TextField tfDiemTichLuyht;
 
+    @FXML
+    private Pagination pagination;
+
     //DAO
     private HoaDonDAO hoaDonDAO;
 
@@ -171,6 +168,8 @@ public class DatMonController implements Initializable {
             chiTietHoaDonDAO = new ChiTietHoaDonDAO();
             khachHangDAO = new KhachHangDAO();
             lichDatDAO = new LichDatDAO();
+
+            pagination.setPageFactory(this::createPageContent);
 
             tenKhachHang.focusedProperty().addListener((observable, oldValue, newValue) -> {
                 try {
@@ -229,7 +228,6 @@ public class DatMonController implements Initializable {
                     tfDiemTichLuyDung.clear();
                     tienTL = 0.0;
                     capNhatTongTien();
-//                    capNhatTienTraLai();
                 }
             });
 
@@ -365,7 +363,6 @@ public class DatMonController implements Initializable {
                         chiTietHoaDonDAO.deleteChiTietHoaDon(hoaDon.getMaHoaDon(), String.valueOf(objects[0]));
                         getTableView().getItems().remove(getIndex());
                         capNhatTongTien();
-//                        capNhatTienTraLai();
                     });
 
                     button.setStyle("-fx-background-color: #F3B664");
@@ -405,7 +402,6 @@ public class DatMonController implements Initializable {
                         orderTable.refresh();
 
                         capNhatTongTien();
-//                        capNhatTienTraLai();
                     });
 
                     button.setStyle("-fx-background-color: #9FBB73");
@@ -447,7 +443,6 @@ public class DatMonController implements Initializable {
                         orderTable.refresh();
 
                         capNhatTongTien();
-//                        capNhatTienTraLai();
                     });
 
                     button.setStyle("-fx-background-color: #F3B664");
@@ -470,28 +465,53 @@ public class DatMonController implements Initializable {
 
             orderTable.setItems(objectsObservableList);
             monAnDAO.readAll();
-            flowPane.prefHeightProperty().bind(scrollPane.heightProperty());
-            flowPane.prefWidthProperty().bind(scrollPane.widthProperty());
-
-            for (MonAn i : monAnDAO.getListMonAn()) {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/uicomponents/CardMonAn_TrangDatMon.fxml"));
-                try {
-                    AnchorPane pane = loader.load();
-
-                    CardMonAnController controller = loader.getController();
-                    controller.setMonAn(i, this);
-                    controller.setController(this);
-                    flowPane.getChildren().add(pane);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-            monAnDAO.getListMonAn();
         } catch (Exception e) {
             Notification.thongBao(e.getMessage(), Alert.AlertType.WARNING);
         }
     }
 
+    private ScrollPane createPageContent(int pageIndex) {
+        FlowPane fp = new FlowPane();
+        fp.setAlignment(Pos.CENTER);
+        fp.setHgap(15);
+        fp.setVgap(10);
+
+        String tenMon = timTheoTen.getText();
+        String loaiMon = timTheoLoai.getText();
+        double giaTT = timTheoGiaTT.getText().isEmpty() ? 0.0 : Double.parseDouble(timTheoGiaTT.getText().replace(".", ""));
+        double giaTD = timTheoGiaTD.getText().isEmpty() ? 0.0 : Double.parseDouble(timTheoGiaTD.getText().replace(".", ""));
+
+        List<MonAn> monAnList = monAnDAO.getMonAnBy(tenMon, giaTT, giaTD, loaiMon, pageIndex, 5);
+        int size = monAnDAO.countMonAnBy(tenMon, giaTT, giaTD, loaiMon);
+        int maximumPageCount;
+
+        if(size % 5 == 0)
+            maximumPageCount = size / 5;
+        else maximumPageCount = (size / 5) + 1;
+
+        pagination.setPageCount(maximumPageCount);
+
+        for (MonAn i : monAnList) {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/uicomponents/CardMonAn_TrangDatMon.fxml"));
+            try {
+                AnchorPane pane = loader.load();
+
+                CardMonAnController controller = loader.getController();
+                controller.setMonAn(i, this);
+                controller.setController(this);
+                fp.getChildren().add(pane);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        ScrollPane sc = new ScrollPane(fp);
+        fp.prefHeightProperty().bind(sc.heightProperty());
+        fp.prefWidthProperty().bind(sc.widthProperty());
+
+        return sc;
+    }
+    
     public void capNhatTongTien() {
         if(tienTL > 0.0)
             tongTienTxt.setText(NumberFormatter.formatPrice(String.valueOf((int) (hoaDon.tinhTongTien() + hoaDon.getPhuThu() - tienTL))) + " (-" + NumberFormatter.formatPrice(String.valueOf((int) tienTL)) + ")");
@@ -871,25 +891,7 @@ public class DatMonController implements Initializable {
 
     @FXML
     void timKiem(MouseEvent event) {
-        String tenMon = timTheoTen.getText();
-        String loaiMon = timTheoLoai.getText();
-        double giaTT = timTheoGiaTT.getText().isEmpty() ? 0.0 : Double.parseDouble(timTheoGiaTT.getText().replace(".", ""));
-        double giaTD = timTheoGiaTD.getText().isEmpty() ? 0.0 : Double.parseDouble(timTheoGiaTD.getText().replace(".", ""));
-
-        flowPane.getChildren().clear();
-        for (MonAn i : monAnDAO.getMonAnBy(tenMon, giaTT, giaTD, loaiMon)) {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/uicomponents/CardMonAn_TrangDatMon.fxml"));
-            try {
-                AnchorPane pane = loader.load();
-
-                CardMonAnController controller = loader.getController();
-                controller.setMonAn(i, this);
-                controller.setController(this);
-                flowPane.getChildren().add(pane);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
+        pagination.setPageFactory(this::createPageContent);
     }
 
     @FXML

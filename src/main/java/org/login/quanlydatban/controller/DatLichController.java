@@ -95,9 +95,6 @@ public class DatLichController implements Initializable {
     @FXML
     private TextField tfTKCCCD;
 
-//    @FXML
-//    private TextField tfCocKD;
-
     @FXML
     private TextField tfSoLuongNguoi;
 

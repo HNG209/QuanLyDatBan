@@ -2,15 +2,12 @@ package org.login.quanlydatban.dao;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.login.quanlydatban.entity.LoaiMonAn;
 import org.login.quanlydatban.entity.MonAn;
-import org.login.quanlydatban.entity.NhanVien;
 import org.login.quanlydatban.hibernate.HibernateUtils;
 
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.List;
 
@@ -52,6 +49,22 @@ public class MonAnDAO {
         return monAnList ;
     }
 
+    public List<MonAn> getAllMonAn(int index, int limit) {
+        Session session = HibernateUtils.getFactory().openSession();
+        session.getTransaction().begin();
+
+        List<MonAn> monAnList = session.createNativeQuery(
+                        "SELECT * FROM monAn LIMIT :limit OFFSET :amount", MonAn.class)
+                .setParameter("limit", limit)
+                .setParameter("amount", index * limit)
+                .getResultList();
+
+        session.getTransaction().commit();
+        session.close();
+
+        return monAnList;
+    }
+
 
     public void themMonAn(MonAn monAn) {
         Session session = HibernateUtils.getFactory().openSession();
@@ -73,50 +86,6 @@ public class MonAnDAO {
         }
     }
 
-
-    public void xoaMonAn(String maMonAn) {
-        Session session = HibernateUtils.getFactory().openSession();
-        Transaction transaction = null;
-
-        try {
-            transaction = session.beginTransaction();
-            MonAn monAn = session.createQuery("FROM MonAn WHERE maMonAn = :maMonAn", MonAn.class)
-                    .setParameter("maMonAn", maMonAn)
-                    .uniqueResult();
-
-            if (monAn != null) {
-                session.delete(monAn); // Delete the object
-                transaction.commit();
-            }
-        } catch (Exception e) {
-            if (transaction != null) transaction.rollback();
-            e.printStackTrace();
-        } finally {
-            session.close();
-        }
-    }
-
-
-
-    public void capNhatMonAn(MonAn monAn) {
-        Session session = HibernateUtils.getFactory().openSession();
-        Transaction transaction = null;
-
-        try {
-            transaction = session.beginTransaction();
-
-            session.update(monAn);
-            transaction.commit();
-
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            e.printStackTrace();
-        } finally {
-            session.close();
-        }
-    }
 
     public void capNhatMonAn(MonAn monCu, MonAn monAnMoi) {
         Session session = HibernateUtils.getFactory().openSession();
@@ -158,7 +127,32 @@ public class MonAnDAO {
     }
 
 
-    public List<MonAn> getMonAnBy(String ten, double giaTT, double giaTD, String loai) {
+    public List<MonAn> getMonAnBy(String ten, double giaTT, double giaTD, String loai, int index, int limit) {
+        Session session = HibernateUtils.getFactory().openSession();
+        session.getTransaction().begin();
+
+        List<MonAn> monAnList = session.createNativeQuery(
+                        "SELECT m.* FROM monan AS m " +
+                                "INNER JOIN loaimonan ON loaimonan.maLoaiMonAn = m.maLoaiMonAn " +
+                                "WHERE (:loai LIKE '' OR loaimonan.tenLoaiMonAn LIKE :loai) AND " +
+                                "(:ten LIKE '' OR m.tenMonAn LIKE :ten) AND " +
+                                "(:giaTT = 0 OR m.donGia >= :giaTT) AND " +
+                                "(:giaTD = 0 OR m.donGia <= :giaTD) LIMIT :limit OFFSET :amount", MonAn.class)
+                .setParameter("loai", "%" + loai + "%")
+                .setParameter("ten", "%" + ten + "%")
+                .setParameter("giaTT", giaTT)
+                .setParameter("giaTD", giaTD)
+                .setParameter("limit", limit)
+                .setParameter("amount", limit * index)
+                .getResultList();
+
+        session.getTransaction().commit();
+        session.close();
+
+        return monAnList;
+    }
+
+    public int countMonAnBy(String ten, double giaTT, double giaTD, String loai){
         Session session = HibernateUtils.getFactory().openSession();
         session.getTransaction().begin();
 
@@ -178,7 +172,7 @@ public class MonAnDAO {
         session.getTransaction().commit();
         session.close();
 
-        return monAnList;
+        return monAnList.size();
     }
 
     public List<MonAn> getListMonAn() {
