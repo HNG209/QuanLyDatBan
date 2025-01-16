@@ -580,7 +580,7 @@ public class DatLichController implements Initializable {
 
             if (tgNhanBan.getValue() != null) {
                 if (cbGio.getValue() != null && cbPhut.getValue() != null)
-                    lichDat.setThoiGianNhanBan(LocalDateTime.of(tgNhanBan.getValue(), LocalTime.of(cbGio.getValue(), cbPhut.getValue())), ban);
+                    lichDat.setThoiGianNhanBan(LocalDateTime.of(tgNhanBan.getValue(), LocalTime.of(cbGio.getValue(), cbPhut.getValue())));
                 else throw new IllegalArgumentException("Vui lòng chọn giờ");
             } else throw new IllegalArgumentException("Vui lòng chọn thời gian nhận bàn");
 
@@ -599,7 +599,7 @@ public class DatLichController implements Initializable {
             tableLichDat.getSelectionModel().select(tableLichDat.getItems().size() - 1);
             chonDong(null);
         } catch (Exception e) {
-            Notification.thongBao(e.getMessage(), e.getStackTrace().clone()[0].toString(), Alert.AlertType.WARNING);
+           Notification.thongBao(e.getMessage(), e.getStackTrace().clone()[0].toString(), Alert.AlertType.WARNING);
         }
     }
 

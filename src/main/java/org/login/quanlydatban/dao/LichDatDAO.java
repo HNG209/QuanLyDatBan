@@ -53,7 +53,7 @@ public class LichDatDAO {
         String hql = "SELECT ld FROM LichDat ld " +
                 "INNER JOIN HoaDon hd ON hd.maHoaDon = ld.hoaDon.maHoaDon " +
                 "WHERE (:trangThai IS NULL OR hd.trangThaiHoaDon = :trangThai) AND " +
-                "ld.thoiGianNhanBan BETWEEN :from AND :to " +
+                "ld.thoiGianNhanBan BETWEEN DATE(:from) AND DATE(:to) " +
                 "ORDER BY ld.thoiGianNhanBan ASC";
 
         List<LichDat> list = session.createQuery(hql, LichDat.class)
