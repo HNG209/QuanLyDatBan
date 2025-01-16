@@ -90,23 +90,23 @@ public class BanDAO {
         Session session = HibernateUtils.getFactory().openSession();
         session.getTransaction().begin();
 
-        String sql = "SELECT * FROM ban WHERE " +
-                "(:maBan LIKE '' OR maBan LIKE :maBan) AND " +
-                "(:trangThai IS NULL OR trangThaiBan LIKE :trangThai) AND " +
-                "(:loaiBan IS NULL OR loaiBan LIKE :loaiBan) AND " +
-                "(:khuVuc IS NULL OR khuVuc LIKE :khuVuc)";
-        List<Ban> list = session.createNativeQuery(sql, Ban.class)
-                .setParameter("maBan", maBan)
-                .setParameter("trangThai", trangThaiBan == null ? null : trangThaiBan.name())
-                .setParameter("loaiBan", loaiBan == null ? null : loaiBan.name())
-                .setParameter("khuVuc", khuVuc == null ? null : khuVuc.name())
-                .getResultList();
+        String hql = "SELECT b FROM Ban b WHERE " +
+                "(:maBan IS NULL OR b.maBan LIKE :maBan) AND " +
+                "(:trangThai IS NULL OR b.trangThaiBan = :trangThai) AND " +
+                "(:loaiBan IS NULL OR b.loaiBan = :loaiBan) AND " +
+                "(:khuVuc IS NULL OR b.khuVuc = :khuVuc)";
+        List<Ban> list = session.createQuery(hql, Ban.class)
+                .setParameter("maBan", maBan == null || maBan.isEmpty() ? null : "%" + maBan + "%")
+                .setParameter("trangThai", trangThaiBan)
+                .setParameter("loaiBan", loaiBan)
+                .setParameter("khuVuc", khuVuc).getResultList();;
 
         session.getTransaction().commit();
         session.close();
 
         return list;
     }
+
 
     public Ban themBan(Ban ban) {
         Session session = HibernateUtils.getFactory().openSession();

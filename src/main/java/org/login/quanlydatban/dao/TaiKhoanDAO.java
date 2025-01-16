@@ -75,9 +75,9 @@ public class TaiKhoanDAO {
     public TaiKhoan updateTaiKhoan(TaiKhoan taiKhoan) {
         Session session = HibernateUtils.getFactory().openSession();
         session.getTransaction().begin();
-        String sql = "UPDATE taiKhoan SET password = :matKhau WHERE userName = :tenDN";
+        String hql = "UPDATE TaiKhoan tk SET tk.password = :matKhau WHERE tk.userName = :tenDN";
 
-        session.createNativeQuery(sql, TaiKhoan.class)
+        session.createQuery(hql, TaiKhoan.class)
                 .setParameter("matKhau", taiKhoan.getPassword())
                 .setParameter("tenDN", taiKhoan.getUserName())
                         .executeUpdate();

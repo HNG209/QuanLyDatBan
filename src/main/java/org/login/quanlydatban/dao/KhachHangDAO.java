@@ -54,7 +54,7 @@ public class KhachHangDAO {
         Session session = HibernateUtils.getFactory().openSession();
         session.getTransaction().begin();
 
-        KhachHang khachHang = session.createNativeQuery("SELECT * FROM khachHang WHERE sdt LIKE :sdt", KhachHang.class)
+        KhachHang khachHang = session.createQuery("SELECT kh FROM KhachHang kh WHERE kh.sdt LIKE :sdt", KhachHang.class)
                 .setParameter("sdt", sdt)
                 .getSingleResult();
 
@@ -68,7 +68,7 @@ public class KhachHangDAO {
         Session session = HibernateUtils.getFactory().openSession();
         session.getTransaction().begin();
 
-        KhachHang khachHang = session.createNativeQuery("SELECT * FROM khachHang WHERE cccd LIKE :cccd", KhachHang.class)
+        KhachHang khachHang = session.createQuery("SELECT kh FROM KhachHang kh WHERE kh.cccd LIKE :cccd", KhachHang.class)
                 .setParameter("cccd", cccd)
                 .getSingleResult();
 

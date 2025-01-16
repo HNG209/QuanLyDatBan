@@ -29,8 +29,8 @@ public class ChiTietHoaDonDAO {
     public List<ChiTietHoaDon> fetchChiTietHoaDonNative(String maHoaDon) {
         Session session = HibernateUtils.getFactory().openSession();
         session.getTransaction().begin();
-        String sql = "SELECT * FROM ChiTietHoaDon WHERE maHoaDon = :maHoaDon";
-        List<ChiTietHoaDon> chiTietHoaDonList = session.createNativeQuery(sql, ChiTietHoaDon.class)
+        String hql = "SELECT cthd FROM ChiTietHoaDon cthd WHERE cthd.hoaDon.maHoaDon = :maHoaDon";
+        List<ChiTietHoaDon> chiTietHoaDonList = session.createQuery(hql, ChiTietHoaDon.class)
                 .setParameter("maHoaDon", maHoaDon)
                 .getResultList();
         session.getTransaction().commit();
@@ -38,19 +38,29 @@ public class ChiTietHoaDonDAO {
         return chiTietHoaDonList;
     }
 
-    public void deleteChiTietHoaDon(String maHoaDon, String maMonAn){
+    public void deleteChiTietHoaDon(String maHoaDon, String maMonAn) {
         Session session = HibernateUtils.getFactory().openSession();
-        session.getTransaction().begin();
+        try {
+            session.getTransaction().begin();
 
-        String sql = "DELETE FROM ChiTietHoaDon WHERE maHoaDon = :maHoaDon AND maMonAn = :maMonAn";
-        session.createNativeQuery(sql).
-                setParameter("maHoaDon", maHoaDon).
-                setParameter("maMonAn", maMonAn).
-                executeUpdate();
 
-        session.getTransaction().commit();
-        session.close();
+            String hql = "DELETE FROM ChiTietHoaDon cthd WHERE cthd.hoaDon.maHoaDon = :maHoaDon AND cthd.monAn.maMonAn = :maMonAn";
+            session.createQuery(hql)
+                    .setParameter("maHoaDon", maHoaDon)
+                    .setParameter("maMonAn", maMonAn)
+                    .executeUpdate();
+
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            if (session.getTransaction() != null) {
+                session.getTransaction().rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
     }
+
 
 
     public void capNhatSoLuong(CTHDCompositeKey key, int soLuong) {

@@ -533,8 +533,8 @@ public class HoaDonDAO {
         Session session = HibernateUtils.getFactory().openSession();
         session.getTransaction().begin();
 
-        String sql = "DELETE FROM HoaDon WHERE maHoaDon = :maHoaDon";
-        session.createNativeQuery(sql).
+        String hql = "DELETE FROM HoaDon h WHERE h.maHoaDon = :maHoaDon";
+        session.createQuery(hql).
                 setParameter("maHoaDon", hoaDon.getMaHoaDon()).
                 executeUpdate();
 

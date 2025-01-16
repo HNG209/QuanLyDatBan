@@ -9,6 +9,7 @@ import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MonAnDAO {
@@ -52,11 +53,12 @@ public class MonAnDAO {
     public List<MonAn> getAllMonAn(int index, int limit) {
         Session session = HibernateUtils.getFactory().openSession();
         session.getTransaction().begin();
+        List<MonAn> monAnList = new ArrayList<>();
+        String hql = "FROM MonAn";
 
-        List<MonAn> monAnList = session.createNativeQuery(
-                        "SELECT * FROM monAn LIMIT :limit OFFSET :amount", MonAn.class)
-                .setParameter("limit", limit)
-                .setParameter("amount", index * limit)
+        monAnList = session.createQuery(hql, MonAn.class)
+                .setFirstResult(index * limit) // OFFSET
+                .setMaxResults(limit)          // LIMIT
                 .getResultList();
 
         session.getTransaction().commit();
@@ -130,21 +132,21 @@ public class MonAnDAO {
     public List<MonAn> getMonAnBy(String ten, double giaTT, double giaTD, String loai, int index, int limit) {
         Session session = HibernateUtils.getFactory().openSession();
         session.getTransaction().begin();
-
-        List<MonAn> monAnList = session.createNativeQuery(
-                        "SELECT m.* FROM monan AS m " +
-                                "INNER JOIN loaimonan ON loaimonan.maLoaiMonAn = m.maLoaiMonAn " +
-                                "WHERE (:loai LIKE '' OR loaimonan.tenLoaiMonAn LIKE :loai) AND " +
-                                "(:ten LIKE '' OR m.tenMonAn LIKE :ten) AND " +
-                                "(:giaTT = 0 OR m.donGia >= :giaTT) AND " +
-                                "(:giaTD = 0 OR m.donGia <= :giaTD) LIMIT :limit OFFSET :amount", MonAn.class)
+        String hql = "FROM MonAn m " +
+                "JOIN m.loaiMonAn l " +
+                "WHERE (:loai IS NULL OR l.tenLoaiMonAn LIKE :loai) AND " +
+                "(:ten IS NULL OR m.tenMonAn LIKE :ten) AND " +
+                "(:giaTT IS NULL OR m.donGia >= :giaTT) AND " +
+                "(:giaTD IS NULL OR m.donGia <= :giaTD)";
+        List<MonAn> monAnList = session.createQuery(hql, MonAn.class)
                 .setParameter("loai", "%" + loai + "%")
                 .setParameter("ten", "%" + ten + "%")
                 .setParameter("giaTT", giaTT)
                 .setParameter("giaTD", giaTD)
-                .setParameter("limit", limit)
-                .setParameter("amount", limit * index)
+                .setFirstResult(index * limit)
+                .setMaxResults(limit)
                 .getResultList();
+
 
         session.getTransaction().commit();
         session.close();
@@ -155,14 +157,13 @@ public class MonAnDAO {
     public int countMonAnBy(String ten, double giaTT, double giaTD, String loai){
         Session session = HibernateUtils.getFactory().openSession();
         session.getTransaction().begin();
-
-        List<MonAn> monAnList = session.createNativeQuery(
-                        "SELECT m.* FROM monan AS m " +
-                                "INNER JOIN loaimonan ON loaimonan.maLoaiMonAn = m.maLoaiMonAn " +
-                                "WHERE (:loai LIKE '' OR loaimonan.tenLoaiMonAn LIKE :loai) AND " +
-                                "(:ten LIKE '' OR m.tenMonAn LIKE :ten) AND " +
-                                "(:giaTT = 0 OR m.donGia >= :giaTT) AND " +
-                                "(:giaTD = 0 OR m.donGia <= :giaTD)", MonAn.class)
+        String hql = "FROM MonAn m " +
+                "INNER JOIN m.loaiMonAn l " +
+                "WHERE (:loai IS NULL OR l.tenLoaiMonAn LIKE :loai) AND " +
+                "(:ten IS NULL OR m.tenMonAn LIKE :ten) AND " +
+                "(:giaTT = 0 OR m.donGia >= :giaTT) AND " +
+                "(:giaTD = 0 OR m.donGia <= :giaTD)";
+        List<MonAn> monAnList = session.createQuery(hql, MonAn.class)
                 .setParameter("loai", "%" + loai + "%")
                 .setParameter("ten", "%" + ten + "%")
                 .setParameter("giaTT", giaTT)

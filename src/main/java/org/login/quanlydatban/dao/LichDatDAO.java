@@ -10,6 +10,7 @@ import org.login.quanlydatban.hibernate.HibernateUtils;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class LichDatDAO {
@@ -38,7 +39,7 @@ public class LichDatDAO {
         Session session = HibernateUtils.getFactory().openSession();
         session.getTransaction().begin();
 
-        List<LichDat> list = session.createNativeQuery("SELECT * FROM lichDat", LichDat.class).getResultList();
+        List<LichDat> list = session.createQuery("SELECT ld FROM LichDat ld", LichDat.class).getResultList();
 
         session.getTransaction().commit();
         session.close();
@@ -49,12 +50,13 @@ public class LichDatDAO {
     public List<LichDat> getDSLichDatFrom(LocalDate from, LocalDate to, TrangThaiHoaDon trangThaiHoaDon) {
         Session session = HibernateUtils.getFactory().openSession();
         session.getTransaction().begin();
+        String hql = "SELECT ld FROM LichDat ld " +
+                "INNER JOIN HoaDon hd ON hd.maHoaDon = ld.hoaDon.maHoaDon " +
+                "WHERE (:trangThai IS NULL OR hd.trangThaiHoaDon = :trangThai) AND " +
+                "ld.thoiGianNhanBan BETWEEN :from AND :to " +
+                "ORDER BY ld.thoiGianNhanBan ASC";
 
-        List<LichDat> list = session.createNativeQuery("SELECT l.* FROM lichDat AS l " +
-                        "INNER JOIN hoaDon ON hoaDon.maHoaDon = l.hoaDon_maHoaDon " +
-                        "WHERE (:trangThai IS NULL OR hoaDon.trangThaiHoaDon LIKE :trangThai) AND " +
-                        "DATE(thoiGianNhanBan) BETWEEN :from AND :to " +
-                        "ORDER BY thoiGianNhanBan ASC", LichDat.class)
+        List<LichDat> list = session.createQuery(hql, LichDat.class)
                 .setParameter("trangThai", trangThaiHoaDon == null ? null : trangThaiHoaDon.name())
                 .setParameter("from", from)
                 .setParameter("to", to)
@@ -69,10 +71,11 @@ public class LichDatDAO {
     public List<LichDat> getDSLichDatByStatus(TrangThaiHoaDon trangThaiHoaDon) {
         Session session = HibernateUtils.getFactory().openSession();
         session.getTransaction().begin();
+        String hql = "SELECT ld FROM LichDat ld " +
+                "INNER JOIN ld.hoaDon hd " +
+                "WHERE (:trangThai IS NULL OR hd.trangThaiHoaDon = :trangThai)";
 
-        List<LichDat> list = session.createNativeQuery("SELECT l.* FROM lichDat AS l " +
-                "INNER JOIN hoaDon ON hoaDon.maHoaDon = l.hoaDon_maHoaDon " +
-                "WHERE hoaDon.trangThaiHoaDon LIKE :trangThai", LichDat.class)
+        List<LichDat> list = session.createQuery(hql, LichDat.class)
                 .setParameter("trangThai", trangThaiHoaDon.name())
                 .getResultList();
 
@@ -85,19 +88,18 @@ public class LichDatDAO {
     public List<LichDat> getDSLichDatBy(String maLichDat, LocalDate ngayNhanBan, TrangThaiHoaDon trangThaiHoaDon, String cccd){
         Session session = HibernateUtils.getFactory().openSession();
         session.getTransaction().begin();
-
-        List<LichDat> list = session.createNativeQuery("SELECT l.* FROM lichDat AS l " +
-                        "INNER JOIN hoaDon ON hoaDon.maHoaDon = l.hoaDon_maHoaDon " +
-                        "INNER JOIN khachHang ON khachHang.maKhachHang = l.maKhachHang " +
-                        "WHERE (:maLichDat LIKE '' OR maLichDat LIKE :maLichDat) AND " +
-                        "(:cccd LIKE '' OR khachHang.cccd LIKE :cccd) AND " +
-                        "(:trangThai IS NULL OR hoaDon.trangThaiHoaDon LIKE :trangThai) AND " +
-                        "(:thoiGianNhanBan IS NULL OR DATE(thoiGianNhanBan) = :thoiGianNhanBan)"
-                        , LichDat.class)
+        String hql = "SELECT ld FROM LichDat ld " +
+                "INNER JOIN ld.hoaDon hd " +
+                "INNER JOIN ld.khachHang kh " +
+                "WHERE (:maLichDat IS NULL OR ld.maLichDat LIKE :maLichDat) AND " +
+                "(:cccd IS NULL OR kh.cccd LIKE :cccd) AND " +
+                "(:trangThai IS NULL OR hd.trangThaiHoaDon = :trangThai) AND " +
+                "(:ngayNhanBan IS NULL OR ld.thoiGianNhanBan = :ngayNhanBan)";
+        List<LichDat> list = session.createQuery(hql, LichDat.class)
                 .setParameter("maLichDat", maLichDat)
                 .setParameter("cccd", cccd)
                 .setParameter("trangThai", trangThaiHoaDon == null ? null : trangThaiHoaDon.name())
-                .setParameter("thoiGianNhanBan", ngayNhanBan)
+                .setParameter("ngayNhanBan", ngayNhanBan)
                 .getResultList();
 
         session.getTransaction().commit();
@@ -110,11 +112,11 @@ public class LichDatDAO {
         Session session = HibernateUtils.getFactory().openSession();
         session.getTransaction().begin();
 
-        List<LichDat> list = session.createNativeQuery("SELECT l.* FROM lichDat AS l " +
-                                "INNER JOIN hoaDon ON hoaDon.maHoaDon = l.hoaDon_maHoaDon " +
-                                "WHERE thoiGianNhanBan = :thoiGianNhanBan AND " +
-                                "hoaDon.maBan = :maBan"
-                        , LichDat.class)
+        String hql = "SELECT ld FROM LichDat ld " +
+                "INNER JOIN ld.hoaDon hd " +
+                "WHERE ld.thoiGianNhanBan = :thoiGianNhanBan AND " +
+                "hd.ban.maBan = :maBan";
+        List<LichDat> list = session.createQuery(hql, LichDat.class)
                 .setParameter("thoiGianNhanBan", thoiGianNhanBan)
                 .setParameter("maBan", ban.getMaBan())
                 .getResultList();
@@ -128,13 +130,13 @@ public class LichDatDAO {
     public List<LichDat> getLichDatIf(Ban ban) {
         Session session = HibernateUtils.getFactory().openSession();
         session.getTransaction().begin();
-
-        List<LichDat> list = session.createNativeQuery("SELECT l.* FROM lichDat AS l " +
-                        "INNER JOIN hoaDon ON hoaDon.maHoaDon = l.hoaDon_maHoaDon " +
-                        "WHERE hoaDon.trangThaiHoaDon LIKE :trangThai AND " +
-                        "hoaDon.maBan LIKE :maBan AND " +
-                        "l.thoiGianNhanBan < :gioHienTai AND " +
-                        "DATE(l.thoiGianNhanBan) = DATE(:gioHienTai)", LichDat.class)
+        String hql = "SELECT ld FROM LichDat ld " +
+                "INNER JOIN ld.hoaDon hd " +
+                "WHERE hd.trangThaiHoaDon = :trangThai AND " +
+                "hd.ban.maBan = :maBan AND " +
+                "ld.thoiGianNhanBan < :gioHienTai AND " +
+                "DATE(ld.thoiGianNhanBan) = DATE(:gioHienTai)";
+        List<LichDat> list = session.createQuery(hql, LichDat.class)
                 .setParameter("trangThai", TrangThaiHoaDon.DA_DAT.name())
                 .setParameter("maBan", ban.getMaBan())
                 .setParameter("gioHienTai", LocalDateTime.now())
