@@ -8,6 +8,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.hibernate.Session;
 import org.login.quanlydatban.dao.LichDatDAO;
+import org.login.quanlydatban.dao.MonAnDAO;
 import org.login.quanlydatban.hibernate.HibernateUtils;
 import org.login.quanlydatban.notification.Notification;
 
@@ -20,10 +21,8 @@ public class Main extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/org/login/quanlydatban/views/TrangDangNhap.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
 
-//        Session session = HibernateUtils.getFactory().openSession();
-//        session.close();
-//        LichDatDAO lichDatDAO = new LichDatDAO();
-//        lichDatDAO.getDSLichDatBy("", LocalDate.of(2024, 12, 4), null, null).forEach(System.out::println);
+        Session session = HibernateUtils.getFactory().openSession();
+        session.close();
 
         stage.setTitle("Đăng nhập");
         stage.setScene(scene);

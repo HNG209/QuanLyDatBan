@@ -137,7 +137,7 @@ public class LichDatDAO {
                 "ld.thoiGianNhanBan < :gioHienTai AND " +
                 "DATE(ld.thoiGianNhanBan) = DATE(:gioHienTai)";
         List<LichDat> list = session.createQuery(hql, LichDat.class)
-                .setParameter("trangThai", TrangThaiHoaDon.DA_DAT.name())
+                .setParameter("trangThai", TrangThaiHoaDon.DA_DAT)
                 .setParameter("maBan", ban.getMaBan())
                 .setParameter("gioHienTai", LocalDateTime.now())
                 .getResultList();

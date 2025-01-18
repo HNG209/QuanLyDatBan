@@ -595,8 +595,8 @@ public class DatMonController implements Initializable {
     }
 
     @FXML
-    void giuBan(ActionEvent event) {
-        try {
+    void giuBan(ActionEvent event) throws IOException {
+//        try {
             List<LichDat> lichDatBanHienTai = lichDatDAO.getLichDatIf(ban);
 
             if (!lichDatBanHienTai.isEmpty()) {
@@ -626,10 +626,10 @@ public class DatMonController implements Initializable {
 
                 Notification.thongBao("Giữ bàn thành công", Alert.AlertType.INFORMATION);
             }
-        }
-        catch (Exception e){
-            Notification.thongBao(e.getMessage(), Alert.AlertType.WARNING);
-        }
+//        }
+//        catch (Exception e){
+//            Notification.thongBao(e.getMessage(), Alert.AlertType.WARNING);
+//        }
     }
 
     @FXML

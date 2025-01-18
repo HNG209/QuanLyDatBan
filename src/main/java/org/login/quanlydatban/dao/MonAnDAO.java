@@ -136,8 +136,8 @@ public class MonAnDAO {
                 "INNER JOIN LoaiMonAn l ON l.maLoaiMonAn = m.loaiMonAn.maLoaiMonAn " +
                 "WHERE (:loai IS NULL OR l.tenLoaiMonAn LIKE :loai) AND " +
                 "(:ten IS NULL OR m.tenMonAn LIKE :ten) AND " +
-                "(:giaTT IS NULL OR m.donGia >= :giaTT) AND " +
-                "(:giaTD IS NULL OR m.donGia <= :giaTD)";
+                "(:giaTT = 0.0 OR m.donGia >= :giaTT) AND " +
+                "(:giaTD = 0.0 OR m.donGia <= :giaTD)";
         List<MonAn> monAnList = session.createQuery(hql, MonAn.class)
                 .setParameter("loai", "%" + loai + "%")
                 .setParameter("ten", "%" + ten + "%")
@@ -161,8 +161,8 @@ public class MonAnDAO {
                 "INNER JOIN m.loaiMonAn l " +
                 "WHERE (:loai IS NULL OR l.tenLoaiMonAn LIKE :loai) AND " +
                 "(:ten IS NULL OR m.tenMonAn LIKE :ten) AND " +
-                "(:giaTT IS NULL OR m.donGia >= :giaTT) AND " +
-                "(:giaTD IS NULL OR m.donGia <= :giaTD)";
+                "(:giaTT = 0.0 OR m.donGia >= :giaTT) AND " +
+                "(:giaTD = 0.0 OR m.donGia <= :giaTD)";
         List<MonAn> monAnList = session.createQuery(hql, MonAn.class)
                 .setParameter("loai", "%" + loai + "%")
                 .setParameter("ten", "%" + ten + "%")
