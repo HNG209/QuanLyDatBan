@@ -39,7 +39,7 @@ public class MonAnDAO {
             transaction = session.beginTransaction();
             // Sử dụng HQL để lấy tất cả mon an
             org.hibernate.query.Query<MonAn> query = session.createQuery("FROM MonAn", MonAn.class);
-            monAnList  = query.list(); // Nhớ lưu kết quả vào danh sách
+            monAnList = query.list(); // Nhớ lưu kết quả vào danh sách
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) transaction.rollback();
@@ -47,7 +47,7 @@ public class MonAnDAO {
         } finally {
             session.close();
         }
-        return monAnList ;
+        return monAnList;
     }
 
     public List<MonAn> getAllMonAn(int index, int limit) {
@@ -74,7 +74,7 @@ public class MonAnDAO {
 
         try {
             transaction = session.beginTransaction();
-
+            monAn.setMaMonAn(this.generateMaMonAn(monAn));
             session.save(monAn);
             transaction.commit();
 
@@ -115,11 +115,11 @@ public class MonAnDAO {
         List<String> listDon = null;
         Session session = HibernateUtils.getFactory().openSession();
         Transaction transaction = null;
-        try  {
+        try {
             transaction = session.beginTransaction();
             // Sử dụng HQL để lấy tất cả mon an
             org.hibernate.query.Query<String> query = session.createQuery("SELECT DISTINCT m.donViTinh FROM MonAn m", String.class);
-            listDon  = query.list(); // Nhớ lưu kết quả vào danh sách
+            listDon = query.list(); // Nhớ lưu kết quả vào danh sách
             transaction.commit();
         } catch (Exception e) {
             e.printStackTrace(); // Handle exception if needed
@@ -154,7 +154,7 @@ public class MonAnDAO {
         return monAnList;
     }
 
-    public int countMonAnBy(String ten, double giaTT, double giaTD, String loai){
+    public int countMonAnBy(String ten, double giaTT, double giaTD, String loai) {
         Session session = HibernateUtils.getFactory().openSession();
         session.getTransaction().begin();
         String hql = "SELECT m FROM MonAn m " +
@@ -176,7 +176,47 @@ public class MonAnDAO {
         return monAnList.size();
     }
 
-    public List<MonAn> getListMonAn() {
-        return this.listMonAn;
+    private String generateMaMonAn(MonAn monAn) {
+        if (monAn.getLoaiMonAn().getMaLoaiMonAn().isEmpty())
+            throw new IllegalArgumentException("maMonAn must be specified");
+        String prefix = monAn.getLoaiMonAn().getMaLoaiMonAn();
+        Long maxSuffix = getMaMonFromDatabase(prefix);
+        Long newSuffix = (maxSuffix == null) ? 1 : maxSuffix + 1;
+
+        return prefix + String.format("%04d", newSuffix);
+    }
+
+    public Long getMaMonFromDatabase(String prefix) {
+        Session session = HibernateUtils.getFactory().openSession();
+        Transaction transaction = null;
+        Long maxSuffix = null;
+
+        try {
+            transaction = session.beginTransaction();
+
+            // Query to fetch IDs starting with the given "XXXX" prefix
+            String query = "SELECT maMonAn FROM MonAn WHERE maMonAn LIKE :prefix";
+            List<String> maMonAns = session.createQuery(query, String.class)
+                    .setParameter("prefix", prefix + "%") // Match IDs with the given prefix
+                    .getResultList();
+
+            // Extract the "YYYY" part, convert to a number, and find the maximum
+            maxSuffix = maMonAns.stream()
+                    .map(id -> id.substring(prefix.length())) // Extract "YYYY" part
+                    .filter(yy -> yy.matches("\\d+"))         // Ensure it is numeric
+                    .map(Long::parseLong)                    // Convert to Long
+                    .max(Long::compare)                      // Find the maximum
+                    .orElse(0L);
+
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) transaction.rollback();
+            e.printStackTrace(); // Consider using a logger for better error handling
+        } finally {
+            if (session != null) {
+                session.close(); // Ensure the session is closed properly
+            }
+        }
+        return maxSuffix;
     }
 }

@@ -19,7 +19,7 @@ public class KhachHang implements Serializable {
 
     @Column(nullable = false, name = "ten_khach_hang")
     private String tenKhachHang;
-    // tao bo nullable
+
     @Column
     private String cccd;
 
@@ -35,42 +35,6 @@ public class KhachHang implements Serializable {
 
     public KhachHang() {
 
-    }
-    @PrePersist
-    @PreUpdate
-    public void generateId() {
-        if (this.maKhachHang == null) {
-            this.maKhachHang = generateCustomId();
-        }
-    }
-
-    private String generateCustomId() {
-        String prefix = "KH";
-       int currentYear = LocalDate.now().getYear();
-        int counterValue = getAndUpdateDailyCounter(currentYear);
-        return prefix + currentYear + String.format("%04d", counterValue);
-    }
-
-    private int getAndUpdateDailyCounter(int currentYear) {
-        Session session = HibernateUtils.getFactory().openSession();
-        session.getTransaction().begin();
-        DailyCustomerCounter dailyCounter = session.find(DailyCustomerCounter.class, currentYear);
-        int counterValue;
-
-        if (dailyCounter != null) {
-            counterValue = dailyCounter.getCounterValue() + 1;
-            dailyCounter.setCounterValue(counterValue);
-        } else {
-            counterValue = 1;
-            dailyCounter = new DailyCustomerCounter();
-            dailyCounter.setCounterDate(currentYear);
-            dailyCounter.setCounterValue(counterValue);
-            session.persist(dailyCounter);
-        }
-
-        session.getTransaction().commit();
-        session.close();
-        return counterValue;
     }
 
     public KhachHang(String maKhachHang, String tenKhachHang, String sdt, String cccd, String diaChi, String email, int diemTichLuy) {
@@ -135,16 +99,8 @@ public class KhachHang implements Serializable {
 
     public void setTenKhachHang(String tenKhachHang) {
         this.tenKhachHang = tenKhachHang;
-//        if(tenKhachHang != null) {
-//            if(tenKhachHang.matches("^[A-Z][a-zA-Z]*( [A-Z][a-zA-Z]*)*$")) {
-//                this.tenKhachHang = tenKhachHang;
-//            }
-//            else throw new IllegalArgumentException("Tên khách hàng không hợp lệ");
-//
-//        }
-//        else throw new IllegalArgumentException("Tên khách hàng rỗng");
-
     }
+
     public String getSdt() {
         return sdt;
     }

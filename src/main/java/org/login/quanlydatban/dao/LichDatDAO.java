@@ -9,6 +9,7 @@ import org.login.quanlydatban.hibernate.HibernateUtils;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -19,6 +20,7 @@ public class LichDatDAO {
         Session session = HibernateUtils.getFactory().openSession();
         session.getTransaction().begin();
 
+        lichDat.setMaLichDat(this.generateCustomId());
         session.persist(lichDat);
 
         session.getTransaction().commit();
@@ -157,5 +159,14 @@ public class LichDatDAO {
         session.close();
 
         return lichDat;
+    }
+
+    private String generateCustomId() {
+        String prefix = "LD";
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("ddMMyyyyHHmmss");
+        String dateTimeSeries = LocalDateTime.now().format(formatter);
+
+        return prefix + dateTimeSeries;
     }
 }

@@ -5,10 +5,12 @@ import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.login.quanlydatban.entity.*;
 import org.login.quanlydatban.entity.enums.TrangThaiHoaDon;
+import org.login.quanlydatban.entity.keygenerator.DailyCounter;
 import org.login.quanlydatban.hibernate.HibernateUtils;
 
 import javax.persistence.criteria.*;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -542,5 +544,53 @@ public class HoaDonDAO {
         session.close();
     }
 
+    private String generateCustomId() {//generate HoaDon id when create(auto)
+        String prefix = "HD";
+        LocalDate today = LocalDate.now();
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("ddMMyyyy");
+        String datePart = today.format(dateFormatter);
 
+        int counterValue = getAndUpdateDailyCounter(today);
+
+        // Combine prefix, date part, and zero-padded counter (e.g., HD01102024001)
+        return prefix + datePart + String.format("%03d", counterValue);
+    }
+
+    public String generateCustomIdFuture(LocalDate date) {//generate HoaDon id when needed(manual), use for future booking
+        String prefix = "HD";
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("ddMMyyyy");
+        String datePart = date.format(dateFormatter);
+
+        int counterValue = getAndUpdateDailyCounter(date);
+
+        // Combine prefix, date part, and zero-padded counter (e.g., HD01102024001)
+        return prefix + datePart + String.format("%03d", counterValue);
+    }
+
+
+    private int getAndUpdateDailyCounter(LocalDate today) {
+        Session session = HibernateUtils.getFactory().openSession();
+        session.getTransaction().begin();
+//        DailyCounter dailyCounter = entityManager.find(DailyCounter.class, today);
+        DailyCounter dailyCounter = session.find(DailyCounter.class, today);
+
+        int counterValue;
+        if (dailyCounter != null) {
+            // Entry exists; increment the counter
+            counterValue = dailyCounter.getCounterValue() + 1;
+            dailyCounter.setCounterValue(counterValue);
+        } else {
+            // Entry doesn't exist; create a new one for today
+            counterValue = 1;
+            dailyCounter = new DailyCounter();
+            dailyCounter.setCounterDate(today);
+            dailyCounter.setCounterValue(counterValue);
+//            entityManager.persist(dailyCounter);
+            session.persist(dailyCounter);
+        }
+
+        session.getTransaction().commit();
+        session.close();
+        return counterValue;
+    }
 }

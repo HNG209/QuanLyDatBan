@@ -77,7 +77,7 @@ public class TaiKhoanDAO {
         session.getTransaction().begin();
         String hql = "UPDATE TaiKhoan tk SET tk.password = :matKhau WHERE tk.userName = :tenDN";
 
-        session.createQuery(hql, TaiKhoan.class)
+        session.createQuery(hql)
                 .setParameter("matKhau", taiKhoan.getPassword())
                 .setParameter("tenDN", taiKhoan.getUserName())
                         .executeUpdate();

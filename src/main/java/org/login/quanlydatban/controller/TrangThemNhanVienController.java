@@ -129,6 +129,7 @@ public class TrangThemNhanVienController implements Initializable {
         alert.setContentText(message);
         alert.showAndWait();
     }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
            maNhanVien.setEditable(false);

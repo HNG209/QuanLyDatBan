@@ -9,7 +9,7 @@ public class TaiKhoan implements Serializable {
     // bien luu ten nhan vien
 
     @Id
-    @Column(nullable = false, name = "user_name")
+    @Column(nullable = false)
     private String userName;
 
     @Column(nullable = false)

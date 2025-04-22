@@ -3,12 +3,14 @@ package org.login.quanlydatban.dao;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.login.quanlydatban.entity.KhachHang;
+import org.login.quanlydatban.entity.keygenerator.DailyCustomerCounter;
 import org.login.quanlydatban.hibernate.HibernateUtils;
 
 import javax.persistence.NoResultException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,7 +46,10 @@ public class KhachHangDAO {
     public KhachHang themKhachHang(KhachHang khachHang) {
         Session session = HibernateUtils.getFactory().openSession();
         session.getTransaction().begin();
+
+        khachHang.setMaKhachHang(this.generateCustomId());
         session.persist(khachHang);
+
         session.getTransaction().commit();
         session.close();
         return khachHang;
@@ -97,6 +102,7 @@ public class KhachHangDAO {
             session.close();
         }
     }
+
     public KhachHang timKhachHangTheoSDT(String sdt) {
         Session session = HibernateUtils.getFactory().openSession();
 
@@ -121,7 +127,32 @@ public class KhachHangDAO {
         return null;
     }
 
+    private String generateCustomId() {
+        String prefix = "KH";
+        int currentYear = LocalDate.now().getYear();
+        int counterValue = getAndUpdateDailyCounter(currentYear);
+        return prefix + currentYear + String.format("%04d", counterValue);
+    }
 
+    private int getAndUpdateDailyCounter(int currentYear) {
+        Session session = HibernateUtils.getFactory().openSession();
+        session.getTransaction().begin();
+        DailyCustomerCounter dailyCounter = session.find(DailyCustomerCounter.class, currentYear);
+        int counterValue;
 
+        if (dailyCounter != null) {
+            counterValue = dailyCounter.getCounterValue() + 1;
+            dailyCounter.setCounterValue(counterValue);
+        } else {
+            counterValue = 1;
+            dailyCounter = new DailyCustomerCounter();
+            dailyCounter.setCounterDate(currentYear);
+            dailyCounter.setCounterValue(counterValue);
+            session.persist(dailyCounter);
+        }
 
+        session.getTransaction().commit();
+        session.close();
+        return counterValue;
+    }
 }

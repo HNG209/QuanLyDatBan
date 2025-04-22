@@ -44,8 +44,6 @@ public class MonAn implements Serializable {
 
     public MonAn() {}
 
-
-
     @Override
     public String toString() {
         return "MonAn{" +
@@ -71,14 +69,14 @@ public class MonAn implements Serializable {
         this.moTaMonAn = moTaMonAn;
     }
 
-    @PrePersist
-    public void onPrePersist() {
-        if (loaiMonAn.getMaLoaiMonAn() != null) {
-            this.maMonAn = generateMaMonAn(loaiMonAn.getMaLoaiMonAn());
-        } else {
-            throw new IllegalArgumentException("loaiMonAn is null");
-        }
-    }
+//    @PrePersist
+//    public void onPrePersist() {
+//        if (loaiMonAn.getMaLoaiMonAn() != null) {
+//            this.maMonAn = generateMaMonAn(loaiMonAn.getMaLoaiMonAn());
+//        } else {
+//            throw new IllegalArgumentException("loaiMonAn is null");
+//        }
+//    }
 
     public String getMaMonAn() {
         return maMonAn;
@@ -148,53 +146,53 @@ public class MonAn implements Serializable {
         this.moTaMonAn = moTaMonAn;
     }
 
-    private String generateMaMonAn(String itemName) {
-        //LoaiMonDAO loaiMonDAO = new LoaiMonDAO();
-        // Generate the "XXXX" part using the logic for XXYY
-        //loaiMonDAO.themLoaiMonAn(loaiMonAn); // Assume this generates the XXYY format
-        String prefix = loaiMonAn.getMaLoaiMonAn();
-        // Fetch the maximum "YYYY" part for the given "XXXX" prefix and increment it
-        Long maxSuffix = getMaMonFromDatabase(prefix);
-        Long newSuffix = (maxSuffix == null) ? 1 : maxSuffix + 1;
-
-        // Combine "XXXX" (from XXYY) and "YYYY" into the final format
-        return prefix + String.format("%04d", newSuffix); // Ensure "YYYY" is 4 digits
-    }
-
-    // Method to retrieve the maximum "YYYY" value for a specific "XXXX" prefix
-    public Long getMaMonFromDatabase(String prefix) {
-        Session session = HibernateUtils.getFactory().openSession();
-        Transaction transaction = null;
-        Long maxSuffix = null;
-
-        try {
-            transaction = session.beginTransaction();
-
-            // Query to fetch IDs starting with the given "XXXX" prefix
-            String query = "SELECT maMonAn FROM MonAn WHERE maMonAn LIKE :prefix";
-            List<String> maMonAns = session.createQuery(query, String.class)
-                    .setParameter("prefix", prefix + "%") // Match IDs with the given prefix
-                    .getResultList();
-
-            // Extract the "YYYY" part, convert to a number, and find the maximum
-            maxSuffix = maMonAns.stream()
-                    .map(id -> id.substring(prefix.length())) // Extract "YYYY" part
-                    .filter(yy -> yy.matches("\\d+"))         // Ensure it is numeric
-                    .map(Long::parseLong)                    // Convert to Long
-                    .max(Long::compare)                      // Find the maximum
-                    .orElse(0L);
-
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction != null) transaction.rollback();
-            e.printStackTrace(); // Consider using a logger for better error handling
-        } finally {
-            if (session != null) {
-                session.close(); // Ensure the session is closed properly
-            }
-        }
-        return maxSuffix;
-    }
+//    private String generateMaMonAn(String itemName) {
+//        //LoaiMonDAO loaiMonDAO = new LoaiMonDAO();
+//        // Generate the "XXXX" part using the logic for XXYY
+//        //loaiMonDAO.themLoaiMonAn(loaiMonAn); // Assume this generates the XXYY format
+//        String prefix = loaiMonAn.getMaLoaiMonAn();
+//        // Fetch the maximum "YYYY" part for the given "XXXX" prefix and increment it
+//        Long maxSuffix = getMaMonFromDatabase(prefix);
+//        Long newSuffix = (maxSuffix == null) ? 1 : maxSuffix + 1;
+//
+//        // Combine "XXXX" (from XXYY) and "YYYY" into the final format
+//        return prefix + String.format("%04d", newSuffix); // Ensure "YYYY" is 4 digits
+//    }
+//
+//    // Method to retrieve the maximum "YYYY" value for a specific "XXXX" prefix
+//    public Long getMaMonFromDatabase(String prefix) {
+//        Session session = HibernateUtils.getFactory().openSession();
+//        Transaction transaction = null;
+//        Long maxSuffix = null;
+//
+//        try {
+//            transaction = session.beginTransaction();
+//
+//            // Query to fetch IDs starting with the given "XXXX" prefix
+//            String query = "SELECT maMonAn FROM MonAn WHERE maMonAn LIKE :prefix";
+//            List<String> maMonAns = session.createQuery(query, String.class)
+//                    .setParameter("prefix", prefix + "%") // Match IDs with the given prefix
+//                    .getResultList();
+//
+//            // Extract the "YYYY" part, convert to a number, and find the maximum
+//            maxSuffix = maMonAns.stream()
+//                    .map(id -> id.substring(prefix.length())) // Extract "YYYY" part
+//                    .filter(yy -> yy.matches("\\d+"))         // Ensure it is numeric
+//                    .map(Long::parseLong)                    // Convert to Long
+//                    .max(Long::compare)                      // Find the maximum
+//                    .orElse(0L);
+//
+//            transaction.commit();
+//        } catch (Exception e) {
+//            if (transaction != null) transaction.rollback();
+//            e.printStackTrace(); // Consider using a logger for better error handling
+//        } finally {
+//            if (session != null) {
+//                session.close(); // Ensure the session is closed properly
+//            }
+//        }
+//        return maxSuffix;
+//    }
 }
 
 

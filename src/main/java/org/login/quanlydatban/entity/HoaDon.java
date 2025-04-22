@@ -58,11 +58,7 @@ public class HoaDon implements Serializable {
 
     @PrePersist
     @PreUpdate
-    public void generateId() {
-        if (this.maHoaDon == null) {
-            this.maHoaDon = generateCustomId();
-        }
-
+    public void trigger() {
         if(trangThaiHoaDon == TrangThaiHoaDon.DA_THANH_TOAN){
             tongTien = tinhTongTien() + phuThu - chietKhau;
             if(khachHang != null){
@@ -74,60 +70,60 @@ public class HoaDon implements Serializable {
         }
     }
 
-    private String generateCustomId() {//generate HoaDon id when create(auto)
-        String prefix = "HD";
-        LocalDate today = LocalDate.now();
-        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("ddMMyyyy");
-        String datePart = today.format(dateFormatter);
-
-        int counterValue = getAndUpdateDailyCounter(today);
-
-        // Combine prefix, date part, and zero-padded counter (e.g., HD01102024001)
-        return prefix + datePart + String.format("%03d", counterValue);
-    }
-
-    public String generateCustomIdFuture(LocalDate date) {//generate HoaDon id when needed(manual), use for future booking
-        String prefix = "HD";
-        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("ddMMyyyy");
-        String datePart = date.format(dateFormatter);
-
-        int counterValue = getAndUpdateDailyCounter(date);
-
-        // Combine prefix, date part, and zero-padded counter (e.g., HD01102024001)
-        return prefix + datePart + String.format("%03d", counterValue);
-    }
-
-
-    private int getAndUpdateDailyCounter(LocalDate today) {
-        Session session = HibernateUtils.getFactory().openSession();
-        session.getTransaction().begin();
-//        DailyCounter dailyCounter = entityManager.find(DailyCounter.class, today);
-        DailyCounter dailyCounter = session.find(DailyCounter.class, today);
-
-        int counterValue;
-        if (dailyCounter != null) {
-            // Entry exists; increment the counter
-            counterValue = dailyCounter.getCounterValue() + 1;
-            dailyCounter.setCounterValue(counterValue);
-        } else {
-            // Entry doesn't exist; create a new one for today
-            counterValue = 1;
-            dailyCounter = new DailyCounter();
-            dailyCounter.setCounterDate(today);
-            dailyCounter.setCounterValue(counterValue);
-//            entityManager.persist(dailyCounter);
-            session.persist(dailyCounter);
-        }
-
-        session.getTransaction().commit();
-        session.close();
-        return counterValue;
-    }
+//    private String generateCustomId() {//generate HoaDon id when create(auto)
+//        String prefix = "HD";
+//        LocalDate today = LocalDate.now();
+//        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("ddMMyyyy");
+//        String datePart = today.format(dateFormatter);
+//
+//        int counterValue = getAndUpdateDailyCounter(today);
+//
+//        // Combine prefix, date part, and zero-padded counter (e.g., HD01102024001)
+//        return prefix + datePart + String.format("%03d", counterValue);
+//    }
+//
+//    public String generateCustomIdFuture(LocalDate date) {//generate HoaDon id when needed(manual), use for future booking
+//        String prefix = "HD";
+//        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("ddMMyyyy");
+//        String datePart = date.format(dateFormatter);
+//
+//        int counterValue = getAndUpdateDailyCounter(date);
+//
+//        // Combine prefix, date part, and zero-padded counter (e.g., HD01102024001)
+//        return prefix + datePart + String.format("%03d", counterValue);
+//    }
+//
+//
+//    private int getAndUpdateDailyCounter(LocalDate today) {
+//        Session session = HibernateUtils.getFactory().openSession();
+//        session.getTransaction().begin();
+////        DailyCounter dailyCounter = entityManager.find(DailyCounter.class, today);
+//        DailyCounter dailyCounter = session.find(DailyCounter.class, today);
+//
+//        int counterValue;
+//        if (dailyCounter != null) {
+//            // Entry exists; increment the counter
+//            counterValue = dailyCounter.getCounterValue() + 1;
+//            dailyCounter.setCounterValue(counterValue);
+//        } else {
+//            // Entry doesn't exist; create a new one for today
+//            counterValue = 1;
+//            dailyCounter = new DailyCounter();
+//            dailyCounter.setCounterDate(today);
+//            dailyCounter.setCounterValue(counterValue);
+////            entityManager.persist(dailyCounter);
+//            session.persist(dailyCounter);
+//        }
+//
+//        session.getTransaction().commit();
+//        session.close();
+//        return counterValue;
+//    }
 
     public HoaDon() {}
 
     public void setMaHoaDon(LocalDate date) {
-        this.maHoaDon = generateCustomIdFuture(date);
+//        this.maHoaDon = generateCustomIdFuture(date);
     }
 
     public void setNgayLap(LocalDate ngayLap) {

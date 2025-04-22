@@ -46,28 +46,13 @@ public class LichDat implements Serializable {
     @Column(name = "ghi_chu")
     private String ghiChu;
 
-    @Transient
-    private LichDatDAO lichDatDAO;
 
-    @PrePersist
-    public void generateId() {
-        if (this.maLichDat == null) {
-            this.maLichDat = generateCustomId();
-        }
-    }
-
-    private String generateCustomId() {
-        String prefix = "LD";
-
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("ddMMyyyyHHmmss");
-        String dateTimeSeries = LocalDateTime.now().format(formatter);
-
-        return prefix + dateTimeSeries;
-    }
     public LichDat() {
-        lichDatDAO = new LichDatDAO();
     }
 
+    public void setMaLichDat(String maLichDat) {
+        this.maLichDat = maLichDat;
+    }
 
     public String getMaLichDat() {
         return maLichDat;
@@ -139,22 +124,5 @@ public class LichDat implements Serializable {
     public void setGhiChu(String ghiChu) {
         this.ghiChu = ghiChu;
     }
-
-    @Override
-    public String toString() {
-        return "LichDat{" +
-                "maLichDat='" + maLichDat + '\'' +
-                ", thoiGianDat=" + thoiGianDat +
-                ", thoiGianNhanBan=" + thoiGianNhanBan +
-                ", khachHang=" + khachHang +
-                ", nhanVien=" + nhanVien +
-                ", soLuongNguoi=" + soLuongNguoi +
-                ", hoaDon=" + hoaDon +
-                ", tienCoc=" + tienCoc +
-                ", ghiChu='" + ghiChu + '\'' +
-                ", lichDatDAO=" + lichDatDAO +
-                '}';
-    }
-
 
 }
