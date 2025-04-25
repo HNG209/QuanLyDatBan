@@ -17,6 +17,7 @@ import org.login.quanlydatban.dao.HoaDonDAO;
 import org.login.quanlydatban.entity.Ban;
 import org.login.quanlydatban.entity.HoaDon;
 import org.login.quanlydatban.entity.enums.TrangThaiBan;
+//import org.login.entity.HoaDon;
 
 import java.io.IOException;
 import java.net.URL;
@@ -47,6 +48,7 @@ public class CardBanChonBanController implements Initializable {
     private Label trangThai;
     private Ban ban;
     private HoaDonDAO hoaDonDAO;
+
 
     private Stage currentStage;
     @FXML

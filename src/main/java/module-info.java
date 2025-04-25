@@ -9,6 +9,8 @@ module org.login.quanlydatban {
     requires org.apache.poi.ooxml;
     requires net.bytebuddy;
     requires net.datafaker;
+    requires QuanLyDatBanServer;
+    requires java.rmi;
 
 
     opens org.login.quanlydatban.entity.keygenerator to org.hibernate.orm.core;
