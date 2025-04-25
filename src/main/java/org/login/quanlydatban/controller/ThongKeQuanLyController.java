@@ -7,10 +7,15 @@ import javafx.scene.chart.*;
 import javafx.scene.control.*;
 import javafx.scene.control.Label;
 import javafx.util.converter.LocalDateStringConverter;
-import org.login.quanlydatban.dao.HoaDonDAO;
-import org.login.quanlydatban.entity.TaiKhoan;
-import org.login.quanlydatban.entity.enums.TrangThaiHoaDon;
 
+import org.login.service.HoaDonService;
+import org.login.entity.TaiKhoan;
+import org.login.entity.enums.TrangThaiHoaDon;
+
+import java.net.MalformedURLException;
+import java.rmi.Naming;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -38,35 +43,44 @@ public class ThongKeQuanLyController {
 
     @FXML
     private ComboBox<String> namThongKeBieuDoTron;
+
     @FXML
     private ComboBox<String> quyThongKeBieuDoTron;
+
     @FXML
     private ComboBox<String> thangThongKeBieuDoTron;
+
     @FXML
     private BarChart<String, Number> bieuDoCotDoanhThu; // Thay đổi tên thành bieuDoCotDoanhThu
 
     @FXML
     private DatePicker chooseDate;
 
-
     @FXML
     private BarChart<String, Number> bieuDoCotHoaDon;
 
     @FXML
     private PieChart bieuDoTronMonAn;
+
     @FXML
     private PieChart bieuDoTronTrangThaiHoaDon;
-    private HoaDonDAO hoaDonDAO;
+
+    private HoaDonService hoaDonService;
+
     private ObservableList<Object[]> bxh = FXCollections.observableArrayList();
+
     private TaiKhoan taiKhoan;
+
     private final DecimalFormat df = new DecimalFormat("#,### VND");
+
     public void setTaiKhoan(TaiKhoan taiKhoan) {
         this.taiKhoan = taiKhoan;
     }
 
     @FXML
-    public void initialize() {
-        hoaDonDAO = new HoaDonDAO();
+    public void initialize() throws RemoteException, MalformedURLException, NotBoundException {
+        String host = System.getenv("HOST_NAME");
+        hoaDonService = (HoaDonService) Naming.lookup("rmi://"+ host + ":2909/hoaDonService");
         capNhatComboBoxNamThongKe();
         tieuChiThongKeBieuDoCot.getSelectionModel().select("Theo tháng");
         namThongKeBieuDoCot.getSelectionModel().select(0);
@@ -82,11 +96,19 @@ public class ThongKeQuanLyController {
             } else {
                 namThongKeBieuDoCot.setVisible(false);
             }
-            capNhatDuLieuChoBieuDoCot();
+            try {
+                capNhatDuLieuChoBieuDoCot();
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
         });
 
         namThongKeBieuDoCot.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            capNhatDuLieuChoBieuDoCot();
+            try {
+                capNhatDuLieuChoBieuDoCot();
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
         });
 
         if ("Tất cả".equals(namThongKeBieuDoTron.getSelectionModel().getSelectedItem())) {
@@ -110,22 +132,34 @@ public class ThongKeQuanLyController {
                 thangThongKeBieuDoTron.setVisible(true);
             }
             chooseDate.setValue(null); // Reset DatePicker khi chọn năm
-            capNhatDuLieuThongKeTrangThaiHoaDon();
-            capNhatDuLieuThongKeLoaiMonAn();
+            try {
+                capNhatDuLieuThongKeTrangThaiHoaDon();
+                capNhatDuLieuThongKeLoaiMonAn();
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
         });
 
         thangThongKeBieuDoTron.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             quyThongKeBieuDoTron.getSelectionModel().select(0);
             thangThongKeBieuDoTron.getSelectionModel().select(newValue);
-            capNhatDuLieuThongKeLoaiMonAn();
-            capNhatDuLieuThongKeTrangThaiHoaDon();
+            try {
+                capNhatDuLieuThongKeLoaiMonAn();
+                capNhatDuLieuThongKeTrangThaiHoaDon();
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
         });
 
         quyThongKeBieuDoTron.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             thangThongKeBieuDoTron.getSelectionModel().select(0);
             quyThongKeBieuDoTron.getSelectionModel().select(newValue);
-            capNhatDuLieuThongKeTrangThaiHoaDon();
-            capNhatDuLieuThongKeLoaiMonAn();
+            try {
+                capNhatDuLieuThongKeTrangThaiHoaDon();
+                capNhatDuLieuThongKeLoaiMonAn();
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
         });
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         chooseDate.setConverter(new LocalDateStringConverter(formatter, formatter));
@@ -133,16 +167,20 @@ public class ThongKeQuanLyController {
         chooseDate.valueProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 namThongKeBieuDoTron.getSelectionModel().select("Tất cả"); // Reset năm về "Tất cả"
-                capNhatDuLieuThongKeTrangThaiHoaDon();
-                capNhatDuLieuThongKeLoaiMonAn();
+                try {
+                    capNhatDuLieuThongKeTrangThaiHoaDon();
+                    capNhatDuLieuThongKeLoaiMonAn();
+                } catch (RemoteException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
     }
 
 
-    private void capNhatDuLieuDoanhThuVaHoaDon() {
-        Object[] tongDoanhThuVaHoaDon = hoaDonDAO.layDoanhThuVaSoHoaDon(null, null);
-        Object[] tongDoanhThuVaHoaDonTheoNgay = hoaDonDAO.layDoanhThuVaSoHoaDon(null, LocalDate.now());
+    private void capNhatDuLieuDoanhThuVaHoaDon() throws RemoteException {
+        Object[] tongDoanhThuVaHoaDon = hoaDonService.layDoanhThuVaSoHoaDon(null, null);
+        Object[] tongDoanhThuVaHoaDonTheoNgay = hoaDonService.layDoanhThuVaSoHoaDon(null, LocalDate.now());
         if (tongDoanhThuVaHoaDonTheoNgay != null && tongDoanhThuVaHoaDonTheoNgay.length >= 2) {
             doanhThuTrongNgay.setText(tongDoanhThuVaHoaDonTheoNgay[0] == null ? df.format(0): df.format(tongDoanhThuVaHoaDonTheoNgay[0]));
             soHDTrongNgay.setText(String.valueOf(tongDoanhThuVaHoaDonTheoNgay[1]));
@@ -160,12 +198,12 @@ public class ThongKeQuanLyController {
         }
     }
 
-    private void capNhatDuLieuDoanhThuTheoThangHoacQuy(int nam, String donVi) {
+    private void capNhatDuLieuDoanhThuTheoThangHoacQuy(int nam, String donVi) throws RemoteException {
         List<Object[]> doanhThuVaHoaDon;
         if ("Tháng".equals(donVi)) {
-            doanhThuVaHoaDon = hoaDonDAO.layDoanhThuVaSoHoaDonTheoThang(null, nam);
+            doanhThuVaHoaDon = hoaDonService.layDoanhThuVaSoHoaDonTheoThang(null, nam);
         } else if ("Quý".equals(donVi)) {
-            doanhThuVaHoaDon = hoaDonDAO.layDoanhThuVaSoHoaDonTheoQuy(null, nam);
+            doanhThuVaHoaDon = hoaDonService.layDoanhThuVaSoHoaDonTheoQuy(null, nam);
         } else {
             return;
         }
@@ -185,12 +223,12 @@ public class ThongKeQuanLyController {
         bieuDoCotDoanhThu.getData().add(series);
     }
 
-    private void capNhatDuLieuHoaDonTheoThangHoacQuy(int nam, String donVi) {
+    private void capNhatDuLieuHoaDonTheoThangHoacQuy(int nam, String donVi) throws RemoteException {
         List<Object[]> doanhThuVaHoaDon;
         if ("Tháng".equals(donVi)) {
-            doanhThuVaHoaDon = hoaDonDAO.layDoanhThuVaSoHoaDonTheoThang(null, nam);
+            doanhThuVaHoaDon = hoaDonService.layDoanhThuVaSoHoaDonTheoThang(null, nam);
         } else if ("Quý".equals(donVi)) {
-            doanhThuVaHoaDon = hoaDonDAO.layDoanhThuVaSoHoaDonTheoQuy(null, nam);
+            doanhThuVaHoaDon = hoaDonService.layDoanhThuVaSoHoaDonTheoQuy(null, nam);
         } else {
             return;
         }
@@ -216,8 +254,8 @@ public class ThongKeQuanLyController {
         yAxis.setAutoRanging(false);
     }
 
-    private void capNhatDuLieuHoaDonTheoNam(String maNV) {
-        List<Object[]> hoaDonVaSoHoaDon = hoaDonDAO.layDoanhThuVaSoHoaDonTheoNam(maNV);
+    private void capNhatDuLieuHoaDonTheoNam(String maNV) throws RemoteException {
+        List<Object[]> hoaDonVaSoHoaDon = hoaDonService.layDoanhThuVaSoHoaDonTheoNam(maNV);
         long[] soHoaDonTheoNam = new long[hoaDonVaSoHoaDon.size()];
         for (int i = 0; i < hoaDonVaSoHoaDon.size(); i++) {
             soHoaDonTheoNam[i] = (long) hoaDonVaSoHoaDon.get(i)[2];
@@ -236,8 +274,8 @@ public class ThongKeQuanLyController {
         yAxis.setAutoRanging(false);
     }
 
-    private void capNhatDuLieuDoanhThuTheoNam(String maNV) {
-        List<Object[]> hoaDonVaSoHoaDon = hoaDonDAO.layDoanhThuVaSoHoaDonTheoNam(maNV);
+    private void capNhatDuLieuDoanhThuTheoNam(String maNV) throws RemoteException {
+        List<Object[]> hoaDonVaSoHoaDon = hoaDonService.layDoanhThuVaSoHoaDonTheoNam(maNV);
         Double[] soHoaDonTheoNam = new Double[hoaDonVaSoHoaDon.size()];
         for (int i = 0; i < hoaDonVaSoHoaDon.size(); i++) {
             soHoaDonTheoNam[i] = (Double) hoaDonVaSoHoaDon.get(i)[1];
@@ -252,7 +290,7 @@ public class ThongKeQuanLyController {
 
     }
 
-    private void capNhatDuLieuChoBieuDoCot() {
+    private void capNhatDuLieuChoBieuDoCot() throws RemoteException {
         String tieuChi = tieuChiThongKeBieuDoCot.getSelectionModel().getSelectedItem();
         int nam = 0;
         try {
@@ -284,7 +322,7 @@ public class ThongKeQuanLyController {
         bieuDoCotHoaDon.setVerticalGridLinesVisible(false);
     }
 
-    private void capNhatDuLieuThongKeLoaiMonAn() {
+    private void capNhatDuLieuThongKeLoaiMonAn() throws RemoteException {
         List<Object[]> dsMonAn;
         LocalDate ngay;
         int nam = 0, quy = 0, thang = 0;
@@ -309,9 +347,9 @@ public class ThongKeQuanLyController {
             ngay = null;
         }
         if(ngay != null) {
-            dsMonAn = hoaDonDAO.layDoanhThuLoaiMonAnTheoNgay(null, ngay);
+            dsMonAn = hoaDonService.layDoanhThuLoaiMonAnTheoNgay(null, ngay);
         } else {
-            dsMonAn = hoaDonDAO.layDoanhThuTheoLoaiMonAn(nam, quy, thang);
+            dsMonAn = hoaDonService.layDoanhThuTheoLoaiMonAn(nam, quy, thang);
         }
 
         bieuDoTronMonAn.getData().clear();
@@ -340,7 +378,7 @@ public class ThongKeQuanLyController {
         }
         bieuDoTronMonAn.setLabelsVisible(false);
     }
-    private void capNhatDuLieuThongKeTrangThaiHoaDon() {
+    private void capNhatDuLieuThongKeTrangThaiHoaDon() throws RemoteException {
         int nam = 0, quy = 0, thang = 0;
         LocalDate ngay = null;
 
@@ -369,9 +407,9 @@ public class ThongKeQuanLyController {
         List<Object[]> dsTrangThai;
 
         if (ngay != null) {
-            dsTrangThai = hoaDonDAO.laySoHoaDonTheoTrangThaiVaNgay(null, ngay);
+            dsTrangThai = hoaDonService.laySoHoaDonTheoTrangThaiVaNgay(null, ngay);
         } else {
-            dsTrangThai = hoaDonDAO.laySoHoaDonTheoTrangThaiHoaDon(null, nam, quy, thang);
+            dsTrangThai = hoaDonService.laySoHoaDonTheoTrangThaiHoaDon(null, nam, quy, thang);
         }
 
         bieuDoTronTrangThaiHoaDon.getData().clear();
@@ -417,8 +455,8 @@ public class ThongKeQuanLyController {
     }
 
 
-    private void capNhatComboBoxNamThongKe() {
-        List<Integer> dsNam = hoaDonDAO.layCacNamLapHoaDon(null);
+    private void capNhatComboBoxNamThongKe() throws RemoteException {
+        List<Integer> dsNam = hoaDonService.layCacNamLapHoaDon(null);
         namThongKeBieuDoCot.getItems().clear();
         namThongKeBieuDoTron.getItems().clear();
         namThongKeBieuDoTron.getItems().add("Tất cả");
@@ -433,6 +471,4 @@ public class ThongKeQuanLyController {
         }
 
     }
-
-
 }

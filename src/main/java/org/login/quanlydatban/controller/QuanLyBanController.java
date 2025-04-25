@@ -7,15 +7,20 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import org.login.quanlydatban.dao.BanDAO;
+//import org.login.quanlydatban.dao.BanDAO;
 
-import org.login.quanlydatban.entity.*;
-import org.login.quanlydatban.entity.enums.KhuVuc;
-import org.login.quanlydatban.entity.enums.LoaiBan;
-import org.login.quanlydatban.entity.enums.TrangThaiBan;
+import org.login.service.BanService;
+import org.login.entity.*;
+import org.login.entity.enums.KhuVuc;
+import org.login.entity.enums.LoaiBan;
+import org.login.entity.enums.TrangThaiBan;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 
+import java.rmi.Naming;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.util.*;
 
 
@@ -72,15 +77,25 @@ public class QuanLyBanController implements Initializable {
     private TableView<Ban> tableBan;
 
 
-    private BanDAO banDAO;
+    private BanService banService;
     private Map<KhuVuc, Integer> khuVucCounter = new HashMap<>();
     private boolean isEditing = false;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        String host = System.getenv("HOST_NAME");
 
-        banDAO = new BanDAO();
-        List<Ban> banList = banDAO.readAll();
+        try {
+            banService = (BanService) Naming.lookup("rmi://"+ host + ":2909/banService");
+        } catch (NotBoundException | MalformedURLException | RemoteException e) {
+            throw new RuntimeException(e);
+        }
+        List<Ban> banList = null;
+        try {
+            banList = banService.readAll();
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
         ObservableList<Ban> banObservableList = FXCollections.observableArrayList(banList);
         try {
             colSTT.setCellValueFactory(cellData ->
@@ -122,10 +137,18 @@ public class QuanLyBanController implements Initializable {
 
         });
         textKhuVuc.getSelectionModel().selectedItemProperty().addListener((obs, oldKhuVuc, newKhuVuc) -> {
-            updateMaBan();
+            try {
+                updateMaBan();
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
         });
         textLoaiBan.getSelectionModel().selectedItemProperty().addListener((obs, oldLoaiBan, newLoaiBan) -> {
-            updateMaBan();
+            try {
+                updateMaBan();
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
         });
 
     }
@@ -152,7 +175,7 @@ public class QuanLyBanController implements Initializable {
 
     }
     @FXML
-    private void handleThemBan() {
+    private void handleThemBan() throws RemoteException {
         String maBan = textMaBan.getText();
         KhuVuc khuVuc = textKhuVuc.getSelectionModel().getSelectedItem();
         LoaiBan loaiBan = textLoaiBan.getSelectionModel().getSelectedItem();
@@ -185,7 +208,7 @@ public class QuanLyBanController implements Initializable {
         if (result.isPresent() && result.get() == ButtonType.OK) {
 
             Ban newBan = new Ban(maBan, loaiBan, trangThai, khuVuc);
-            banDAO.themBan(newBan);
+            banService.themBan(newBan);
             tableBan.getItems().add(newBan);
             clearForm();
             checkTamNgungPV.setDisable(true);
@@ -215,7 +238,7 @@ public class QuanLyBanController implements Initializable {
     }
 
     @FXML
-    private void handleSuaBan() {
+    private void handleSuaBan() throws RemoteException {
         Ban selectedBan = tableBan.getSelectionModel().getSelectedItem();
         if (selectedBan == null) {
             showAlert("Vui lòng chọn bàn cần chỉnh sửa!");
@@ -234,9 +257,9 @@ public class QuanLyBanController implements Initializable {
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
 
-            banDAO.capnhatBan(selectedBan);
+            banService.capnhatBan(selectedBan);
             tableBan.refresh();
-            List<Ban> banList = banDAO.readAll();
+            List<Ban> banList = banService.readAll();
             ObservableList<Ban> banObservableList = FXCollections.observableArrayList(banList);
             tableBan.setItems(banObservableList);
             clearForm();
@@ -253,14 +276,14 @@ public class QuanLyBanController implements Initializable {
         alert.setContentText(message);
         alert.showAndWait();
     }
-    public void locBan() {
+    public void locBan() throws RemoteException {
 
         Object selectedKhuVuc = locKhuVuc.getSelectionModel().getSelectedItem();
         Object selectedLoaiBan = locLoaiBan.getSelectionModel().getSelectedItem();
         Object selectedTrangThai = locTrangThai.getSelectionModel().getSelectedItem();
 
         ObservableList<Ban> filteredList = FXCollections.observableArrayList();
-        List<Ban> danhSachBan = banDAO.readAll();
+        List<Ban> danhSachBan = banService.readAll();
 
         for (Ban ban : danhSachBan) {
 
@@ -276,9 +299,8 @@ public class QuanLyBanController implements Initializable {
         tableBan.setItems(filteredList);
     }
 
-    public void onClickReset() {
-        banDAO = new BanDAO();
-        List<Ban> banList = banDAO.readAll();
+    public void onClickReset() throws RemoteException {
+        List<Ban> banList = banService.readAll();
         ObservableList<Ban> banObservableList = FXCollections.observableArrayList(banList);
         tableBan.setItems(banObservableList);
         demTongBan(banList);
@@ -354,7 +376,7 @@ public class QuanLyBanController implements Initializable {
             clearForm();
         }
     }
-    private void updateMaBan() {
+    private void updateMaBan() throws RemoteException {
         if (isEditing) return;
         KhuVuc selectedKhuVuc = textKhuVuc.getSelectionModel().getSelectedItem();
         LoaiBan selectedLoaiBan = textLoaiBan.getSelectionModel().getSelectedItem();
@@ -370,8 +392,8 @@ public class QuanLyBanController implements Initializable {
 
         }
     }
-    private String generateMaBan(KhuVuc khuVuc, String yy) {
-        List<Ban> banList = banDAO.readAll();
+    private String generateMaBan(KhuVuc khuVuc, String yy) throws RemoteException {
+        List<Ban> banList = banService.readAll();
 
         // Khởi tạo số thứ tự nếu khu vực chưa có mã bàn nào
         khuVucCounter.putIfAbsent(khuVuc, 1);

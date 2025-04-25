@@ -13,14 +13,18 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import org.login.quanlydatban.dao.HoaDonDAO;
-import org.login.quanlydatban.entity.Ban;
-import org.login.quanlydatban.entity.HoaDon;
-import org.login.quanlydatban.entity.enums.TrangThaiBan;
-//import org.login.entity.HoaDon;
+import org.login.service.HoaDonService;
+
+import org.login.entity.Ban;
+import org.login.entity.enums.TrangThaiBan;
+import org.login.entity.HoaDon;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.rmi.Naming;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
@@ -47,7 +51,7 @@ public class CardBanChonBanController implements Initializable {
     @FXML
     private Label trangThai;
     private Ban ban;
-    private HoaDonDAO hoaDonDAO;
+    private HoaDonService hoaDonService;
 
 
     private Stage currentStage;
@@ -61,7 +65,7 @@ public class CardBanChonBanController implements Initializable {
             controller.setBan(ban);
             controller.setPageSelected(0);
 
-            List<HoaDon> list = hoaDonDAO.getHoaDonFromBan(ban);
+            List<HoaDon> list = hoaDonService.getHoaDonFromBan(ban);
 
             if (!list.isEmpty()) {
                 HoaDon hoaDon = list.get(list.size() - 1);
@@ -115,7 +119,7 @@ public class CardBanChonBanController implements Initializable {
 
             ChuyenBanController chuyenBanController = loader.getController();
             chuyenBanController.setBanHienTai(ban);
-            chuyenBanController.setCurrentHD(hoaDonDAO.getHoaDonFromBan(ban).get(0));
+            chuyenBanController.setCurrentHD(hoaDonService.getHoaDonFromBan(ban).get(0));
 
             if(currentStage == null){
                 currentStage = new Stage();
@@ -132,6 +136,11 @@ public class CardBanChonBanController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        hoaDonDAO = new HoaDonDAO();
+        String host = System.getenv("HOST_NAME");
+        try {
+            hoaDonService = (HoaDonService) Naming.lookup("rmi://"+ host + ":2909/hoaDonService");
+        } catch (NotBoundException | MalformedURLException | RemoteException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

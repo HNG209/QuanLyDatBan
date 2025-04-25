@@ -8,14 +8,20 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import org.login.quanlydatban.dao.TaiKhoanDAO;
+//import org.login.quanlydatban.dao.TaiKhoanDAO;
+
+import org.login.service.TaiKhoanService;
 import org.login.quanlydatban.encryptionUtils.EncryptionUtils;
-import org.login.quanlydatban.entity.NhanVien;
-import org.login.quanlydatban.entity.TaiKhoan;
-import org.login.quanlydatban.entity.enums.ChucVu;
+import org.login.entity.NhanVien;
+import org.login.entity.TaiKhoan;
+import org.login.entity.enums.ChucVu;
 import org.login.quanlydatban.notification.Notification;
 
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.rmi.Naming;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.util.ResourceBundle;
 
 public class ThongTinCaNhanController implements Initializable {
@@ -55,10 +61,15 @@ public class ThongTinCaNhanController implements Initializable {
     @FXML
     private TextField nhapLaiMKmoi;
 
-    private TaiKhoanDAO taiKhoanDAO;
+    private TaiKhoanService taiKhoanService;
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        taiKhoanDAO = new TaiKhoanDAO();
+        String host = System.getenv("HOST_NAME");
+        try {
+            taiKhoanService = (TaiKhoanService) Naming.lookup("rmi://"+ host + ":2909/taiKhoanService");
+        } catch (NotBoundException | MalformedURLException | RemoteException e) {
+            throw new RuntimeException(e);
+        }
 
         NhanVien nhanVien = TrangChuController.getTaiKhoan().getNhanVien();
 
@@ -93,7 +104,7 @@ public class ThongTinCaNhanController implements Initializable {
             if(nhapLaiMKmoi.getText().equals(mkMoi.getText())){
                 if(!matKhau.getText().equals(mkMoi.getText())){
                     taiKhoan.setPassword(EncryptionUtils.encrypt(mkMoi.getText(), System.getenv("ENCRYPTION_KEY")));
-                    TrangChuController.taiKhoan = taiKhoanDAO.updateTaiKhoan(taiKhoan);
+                    TrangChuController.taiKhoan = taiKhoanService.updateTaiKhoan(taiKhoan);
 
                     matKhau.setText(mkMoi.getText());
                     nhapLaiMK.clear();

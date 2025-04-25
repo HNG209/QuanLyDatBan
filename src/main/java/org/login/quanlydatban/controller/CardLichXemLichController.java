@@ -8,8 +8,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
-import org.login.quanlydatban.entity.LichDat;
-import org.login.quanlydatban.entity.enums.TrangThaiHoaDon;
+
+import org.login.entity.LichDat;
+import org.login.entity.enums.TrangThaiHoaDon;
 
 import java.io.IOException;
 import java.net.URL;

@@ -13,14 +13,18 @@
     import javafx.scene.input.KeyCode;
     import javafx.scene.layout.AnchorPane;
     import javafx.stage.Stage;
-    import org.login.quanlydatban.dao.TaiKhoanDAO;
+//    import org.login.quanlydatban.TaiKhoanDAO;
+    import org.login.service.TaiKhoanService;
     import org.login.quanlydatban.encryptionUtils.EncryptionUtils;
-    import org.login.quanlydatban.entity.TaiKhoan;
+    import org.login.entity.TaiKhoan;
     import org.login.quanlydatban.notification.Notification;
 
     import java.io.IOException;
+    import java.net.MalformedURLException;
     import java.net.URL;
-    import java.text.ParsePosition;
+    import java.rmi.Naming;
+    import java.rmi.NotBoundException;
+    import java.rmi.RemoteException;
     import java.util.Objects;
     import java.util.ResourceBundle;
 
@@ -35,7 +39,7 @@
         private ImageView img;
 
         public static boolean isAdmin;
-        private TaiKhoanDAO taiKhoanDAO;
+        private TaiKhoanService taiKhoanService;
 
         @FXML
         public void nhanEnterDeDangNhap(){
@@ -96,7 +100,7 @@
                 }
                 TaiKhoan taiKhoan;
 
-                taiKhoan = taiKhoanDAO.getTaiKhoan(inputUsername);
+                taiKhoan = taiKhoanService.getTaiKhoan(inputUsername);
 
 
                 if (taiKhoan == null) {
@@ -142,8 +146,12 @@
 
         @Override
         public void initialize(URL url, ResourceBundle resourceBundle) {
-
-            taiKhoanDAO = new TaiKhoanDAO();
+            String host = System.getenv("HOST_NAME");
+            try {
+                taiKhoanService = (TaiKhoanService) Naming.lookup("rmi://"+ host + ":2909/taiKhoanService");
+            } catch (NotBoundException | MalformedURLException | RemoteException e) {
+                throw new RuntimeException(e);
+            }
         }
 
         public void showTrangChu(TaiKhoan taiKhoan) throws IOException {

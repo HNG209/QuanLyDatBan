@@ -20,17 +20,27 @@ import javafx.stage.Modality;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import org.login.quanlydatban.dao.*;
-import org.login.quanlydatban.entity.*;
-import org.login.quanlydatban.entity.enums.TrangThaiBan;
-import org.login.quanlydatban.entity.enums.TrangThaiHoaDon;
-import org.login.quanlydatban.entity.keygenerator.CTHDCompositeKey;
+//import org.login.quanlydatban.dao.*;
+//import org.login.quanlydatban.entity.*;
+//import org.login.quanlydatban.entity.enums.TrangThaiBan;
+//import org.login.quanlydatban.entity.enums.TrangThaiHoaDon;
+//import org.login.quanlydatban.entity.keygenerator.CTHDCompositeKey;
+
+import org.login.entity.*;
+import org.login.entity.enums.TrangThaiBan;
+import org.login.entity.enums.TrangThaiHoaDon;
+import org.login.entity.keygenerator.CTHDCompositeKey;
 import org.login.quanlydatban.notification.Notification;
 import org.login.quanlydatban.utilities.NumberFormatter;
+
+//services
+import org.login.service.*;
 
 import javax.persistence.NoResultException;
 import java.io.IOException;
 import java.net.URL;
+import java.rmi.Naming;
+import java.rmi.RemoteException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
@@ -130,17 +140,17 @@ public class DatMonController implements Initializable {
     private Pagination pagination;
 
     //DAO
-    private HoaDonDAO hoaDonDAO;
+    private HoaDonService hoaDonService;
 
-    private KhachHangDAO khachHangDAO;
+    private KhachHangService khachHangService;
 
-    private ChiTietHoaDonDAO chiTietHoaDonDAO;
+    private CTHDService cthdService;
 
-    private LichDatDAO lichDatDAO;
+    private LichDatService lichDatService;
 
-    private MonAnDAO monAnDAO;
+    private MonAnService monAnService;
 
-    private BanDAO banDAO;
+    private BanService banService;
 
     private HoaDon hoaDon;
 
@@ -162,14 +172,21 @@ public class DatMonController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
-            monAnDAO = new MonAnDAO();
-            banDAO = new BanDAO();
-            hoaDonDAO = new HoaDonDAO();
-            chiTietHoaDonDAO = new ChiTietHoaDonDAO();
-            khachHangDAO = new KhachHangDAO();
-            lichDatDAO = new LichDatDAO();
+            String host = System.getenv("HOST_NAME");
+            monAnService = (MonAnService) Naming.lookup("rmi://"+ host + ":2909/monAnService");
+            banService = (BanService) Naming.lookup("rmi://"+ host + ":2909/banService");
+            hoaDonService = (HoaDonService) Naming.lookup("rmi://"+ host + ":2909/hoaDonService");
+            cthdService = (CTHDService) Naming.lookup("rmi://"+ host + ":2909/cthdService");
+            khachHangService = (KhachHangService) Naming.lookup("rmi://"+ host + ":2909/khachHangService");
+            lichDatService = (LichDatService) Naming.lookup("rmi://"+ host + ":2909/lichDatService");
 
-            pagination.setPageFactory(this::createPageContent);
+            pagination.setPageFactory(pageIndex -> {
+                try {
+                    return createPageContent(pageIndex);
+                } catch (RemoteException e) {
+                    throw new RuntimeException(e);
+                }
+            });
 
             tenKhachHang.focusedProperty().addListener((observable, oldValue, newValue) -> {
                 try {
@@ -179,11 +196,11 @@ public class DatMonController implements Initializable {
                             khachHang.setCccd(tfCCCD.getText());
                             khachHang.setTenKhachHang(tenKhachHang.getText());
 
-                            khachHangDAO.themKhachHang(khachHang);
+                            khachHangService.themKhachHang(khachHang);
                             this.khachHang = khachHang;
 
                             hoaDon.setKhachHang(khachHang);
-                            hoaDonDAO.updateHoaDon(hoaDon);
+                            hoaDonService.updateHoaDon(hoaDon);
 
                             tenKhachHang.setEditable(false);
 
@@ -202,11 +219,20 @@ public class DatMonController implements Initializable {
             tfCCCD.focusedProperty().addListener((observable, oldValue, newValue) -> {
                 if (!newValue && khachHang != null && tfCCCD.getText().length() == 12) { // If newValue is false, the TextField has lost focus
                     if (Notification.xacNhan("Khách hàng sẽ được thêm vào hoá đơn")) {
-                        KhachHang khachHang = khachHangDAO.getKHByCCCD(tfCCCD.getText());
+                        KhachHang khachHang = null;
+                        try {
+                            khachHang = khachHangService.getKHByCCCD(tfCCCD.getText());
+                        } catch (RemoteException e) {
+                            throw new RuntimeException(e);
+                        }
 
                         prevCCCD = khachHang.getCccd();
                         hoaDon.setKhachHang(khachHang);
-                        hoaDonDAO.updateHoaDon(hoaDon);
+                        try {
+                            hoaDonService.updateHoaDon(hoaDon);
+                        } catch (RemoteException e) {
+                            throw new RuntimeException(e);
+                        }
                     }
                 }
             });
@@ -307,7 +333,11 @@ public class DatMonController implements Initializable {
                             chiTietHoaDon.setGhiChu(note);
                             chiTietHoaDon.setSoLuong(Integer.parseInt(String.valueOf(objects[3])));
 
-                            chiTietHoaDonDAO.capNhatCTHD(chiTietHoaDon);
+                            try {
+                                cthdService.capNhatCTHD(chiTietHoaDon);
+                            } catch (RemoteException e) {
+                                throw new RuntimeException(e);
+                            }
 
                             popup.hide();
                         }
@@ -320,7 +350,12 @@ public class DatMonController implements Initializable {
                                 Object[] objects = getTableView().getItems().get(getIndex());
                                 CTHDCompositeKey key = new CTHDCompositeKey(hoaDon.getMaHoaDon(), String.valueOf(objects[0]));
 
-                                ChiTietHoaDon chiTietHoaDon = chiTietHoaDonDAO.getCTHD(key);
+                                ChiTietHoaDon chiTietHoaDon = null;
+                                try {
+                                    chiTietHoaDon = cthdService.getCTHD(key);
+                                } catch (RemoteException e) {
+                                    throw new RuntimeException(e);
+                                }
 
                                 textArea.setText(chiTietHoaDon.getGhiChu());
                                 textArea.positionCaret(textArea.getLength());
@@ -360,7 +395,11 @@ public class DatMonController implements Initializable {
 
                     button.setOnAction(event -> {
                         Object[] objects = getTableView().getItems().get(getIndex());
-                        chiTietHoaDonDAO.deleteChiTietHoaDon(hoaDon.getMaHoaDon(), String.valueOf(objects[0]));
+                        try {
+                            cthdService.deleteChiTietHoaDon(hoaDon.getMaHoaDon(), String.valueOf(objects[0]));
+                        } catch (RemoteException e) {
+                            throw new RuntimeException(e);
+                        }
                         getTableView().getItems().remove(getIndex());
                         capNhatTongTien();
                     });
@@ -396,7 +435,11 @@ public class DatMonController implements Initializable {
 
                         CTHDCompositeKey key = new CTHDCompositeKey(hoaDon.getMaHoaDon(), String.valueOf(objects[0]));
 
-                        chiTietHoaDonDAO.capNhatSoLuong(key, sl);
+                        try {
+                            cthdService.capNhatSoLuong(key, sl);
+                        } catch (RemoteException e) {
+                            throw new RuntimeException(e);
+                        }
 
                         objects[3] = sl;
                         orderTable.refresh();
@@ -437,7 +480,11 @@ public class DatMonController implements Initializable {
 
                         CTHDCompositeKey key = new CTHDCompositeKey(hoaDon.getMaHoaDon(), String.valueOf(objects[0]));
 
-                        chiTietHoaDonDAO.capNhatSoLuong(key, sl);
+                        try {
+                            cthdService.capNhatSoLuong(key, sl);
+                        } catch (RemoteException e) {
+                            throw new RuntimeException(e);
+                        }
 
                         objects[3] = sl;
                         orderTable.refresh();
@@ -464,13 +511,13 @@ public class DatMonController implements Initializable {
             });
 
             orderTable.setItems(objectsObservableList);
-            monAnDAO.readAll();
+            monAnService.readAll();
         } catch (Exception e) {
             Notification.thongBao(e.getMessage(), Alert.AlertType.WARNING);
         }
     }
 
-    private ScrollPane createPageContent(int pageIndex) {
+    private ScrollPane createPageContent(int pageIndex) throws RemoteException {
         FlowPane fp = new FlowPane();
         fp.setAlignment(Pos.CENTER);
         fp.setHgap(15);
@@ -481,8 +528,8 @@ public class DatMonController implements Initializable {
         double giaTT = timTheoGiaTT.getText().isEmpty() ? 0.0 : Double.parseDouble(timTheoGiaTT.getText().replace(".", ""));
         double giaTD = timTheoGiaTD.getText().isEmpty() ? 0.0 : Double.parseDouble(timTheoGiaTD.getText().replace(".", ""));
 
-        List<MonAn> monAnList = monAnDAO.getMonAnBy(tenMon, giaTT, giaTD, loaiMon, pageIndex, 5);
-        int size = monAnDAO.countMonAnBy(tenMon, giaTT, giaTD, loaiMon);
+        List<MonAn> monAnList = monAnService.getMonAnBy(tenMon, giaTT, giaTD, loaiMon, pageIndex, 5);
+        int size = monAnService.countMonAnBy(tenMon, giaTT, giaTD, loaiMon);
         int maximumPageCount;
 
         if(size % 5 == 0)
@@ -567,7 +614,7 @@ public class DatMonController implements Initializable {
         orderTable.getItems().clear();
     }
 
-    public void setHoaDon(HoaDon hoaDon) {
+    public void setHoaDon(HoaDon hoaDon) throws RemoteException {
         this.hoaDon = hoaDon;
         if(hoaDon != null){
             tfCCCD.setEditable(true);
@@ -584,7 +631,7 @@ public class DatMonController implements Initializable {
             phuThu.setText(NumberFormatter.formatPrice(String.valueOf((int) hoaDon.getPhuThu())));
             capNhatTongTien();
         }
-        chiTietHoaDonDAO.getCTHDfromHD(hoaDon).forEach(
+        cthdService.getCTHDfromHD(hoaDon).forEach(
                 i -> loadBang(new Object[] {i.getMonAn().getMaMonAn(),
                         i.getMonAn().getTenMonAn(),
                         i.getMonAn().getDonGia(),
@@ -597,7 +644,7 @@ public class DatMonController implements Initializable {
     @FXML
     void giuBan(ActionEvent event) throws IOException {
 //        try {
-            List<LichDat> lichDatBanHienTai = lichDatDAO.getLichDatIf(ban);
+            List<LichDat> lichDatBanHienTai = lichDatService.getLichDatIf(ban);
 
             if (!lichDatBanHienTai.isEmpty()) {
                 if(Notification.xacNhan("Bàn hiện tại đang có lịch đặt, vui lòng kiểm tra lịch")){
@@ -610,7 +657,7 @@ public class DatMonController implements Initializable {
 
             if (Notification.xacNhan("Xác nhận giữ bàn, bạn có thể huỷ ngay nếu muốn")) {
                 this.ban.setTrangThaiBan(TrangThaiBan.DANG_PHUC_VU);
-                this.ban = banDAO.updateBan(ban);
+                this.ban = banService.updateBan(ban);
                 this.trangThaiBanText.setText(ban.getTrangThaiBan().toString());
                 this.btnHuy.setVisible(true);
                 this.btnGiuBan.setVisible(false);
@@ -622,7 +669,7 @@ public class DatMonController implements Initializable {
                 hoaDon.setNgayLap(LocalDate.now());
                 hoaDon.setKhachHang(null);
 
-                this.hoaDon = hoaDonDAO.lapHoaDon(hoaDon);
+                this.hoaDon = hoaDonService.lapHoaDon(hoaDon);
 
                 Notification.thongBao("Giữ bàn thành công", Alert.AlertType.INFORMATION);
             }
@@ -637,14 +684,14 @@ public class DatMonController implements Initializable {
         try {
             if (orderTable.getItems().size() == 0) {
                 ban.setTrangThaiBan(TrangThaiBan.BAN_TRONG);
-                this.ban = banDAO.updateBan(ban);
+                this.ban = banService.updateBan(ban);
                 this.trangThaiBanText.setText(ban.getTrangThaiBan().toString());
                 this.btnHuy.setVisible(false);
                 this.btnGiuBan.setVisible(true);
 
                 if (hoaDon != null) {
                     hoaDon.setTrangThaiHoaDon(TrangThaiHoaDon.DA_HUY);
-                    hoaDonDAO.updateHoaDon(hoaDon);
+                    hoaDonService.updateHoaDon(hoaDon);
                     hoaDon = null;
                 }
             } else throw new IllegalArgumentException("Không thể huỷ, hãy tiến hành thanh toán");
@@ -711,7 +758,7 @@ public class DatMonController implements Initializable {
                 if(khachHang != null){
                     int amount = Integer.parseInt(tfDiemTichLuyDung.getText().isEmpty() ? "0" : tfDiemTichLuyDung.getText());
                     khachHang.setDiemTichLuy(khachHang.getDiemTichLuy() - amount);
-                    khachHangDAO.suaKhachHang(khachHang);
+                    khachHangService.suaKhachHang(khachHang);
                 }
 
                 tongTienTxt.clear();
@@ -721,8 +768,8 @@ public class DatMonController implements Initializable {
                 tfDiemTichLuyht.clear();
                 tfDiemTichLuyDung.clear();
 
-                hoaDonDAO.updateHoaDon(hoaDon);
-                banDAO.updateBan(ban);
+                hoaDonService.updateHoaDon(hoaDon);
+                banService.updateBan(ban);
 
                 if (Notification.xacNhan("Thanh toán thành công, in hoá đơn?")) {
                     FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/org/login/quanlydatban/views/TrangXuatHoaDon.fxml")));
@@ -759,17 +806,17 @@ public class DatMonController implements Initializable {
         }
     }
 
-    public void themChiTietHoaDon(MonAn monAn){//tao 1 lan
+    public void themChiTietHoaDon(MonAn monAn) throws RemoteException {//tao 1 lan
         ChiTietHoaDon chiTietHoaDon = new ChiTietHoaDon();
 
         chiTietHoaDon.setHoaDon(hoaDon);
         chiTietHoaDon.setMonAn(monAn);
         chiTietHoaDon.setSoLuong(1);
 
-        chiTietHoaDonDAO.luuCTHD(chiTietHoaDon);
+        cthdService.luuCTHD(chiTietHoaDon);
     }
 
-    public void themDuLieuVaoBangMonAn(Object[] objects, MonAn monAn){
+    public void themDuLieuVaoBangMonAn(Object[] objects, MonAn monAn) throws RemoteException {
         boolean trungMaMonAn = false;
         String maMonAnMoi = objects[0].toString();
         int soLuongMoi = Integer.parseInt(objects[3].toString());
@@ -783,7 +830,7 @@ public class DatMonController implements Initializable {
 
                 CTHDCompositeKey key = new CTHDCompositeKey(hoaDon.getMaHoaDon(), maMonAnHienTai);
 
-                chiTietHoaDonDAO.capNhatSoLuong(key, soLuongMoi + soLuongHienTai);
+                cthdService.capNhatSoLuong(key, soLuongMoi + soLuongHienTai);
                 break;
             }
         }
@@ -805,7 +852,7 @@ public class DatMonController implements Initializable {
                 hoaDon.setPhuThu(0.0);
                 capNhatTongTien();
 
-                hoaDonDAO.updateHoaDon(hoaDon);
+                hoaDonService.updateHoaDon(hoaDon);
                 return;
             }
             phuThu.setText(NumberFormatter.formatPrice(phuThu.getText()));
@@ -816,7 +863,7 @@ public class DatMonController implements Initializable {
             else throw new IllegalArgumentException("Chỉ được nhập số");
 
             capNhatTongTien();
-            hoaDonDAO.updateHoaDon(hoaDon);
+            hoaDonService.updateHoaDon(hoaDon);
         }
         catch (Exception e) {
             phuThu.setText(phuThu.getText().substring(0, phuThu.getLength() - 1));
@@ -891,7 +938,13 @@ public class DatMonController implements Initializable {
 
     @FXML
     void timKiem(MouseEvent event) {
-        pagination.setPageFactory(this::createPageContent);
+        pagination.setPageFactory(pageIndex -> {
+            try {
+                return createPageContent(pageIndex);
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 
     @FXML
@@ -949,7 +1002,7 @@ public class DatMonController implements Initializable {
             if (tfCCCD.getText().length() == 12) {
                 KhachHang khachHang = new KhachHang();
                 khachHang.setCccd(tfCCCD.getText());
-                khachHang = khachHangDAO.getKHByCCCD(tfCCCD.getText());
+                khachHang = khachHangService.getKHByCCCD(tfCCCD.getText());
                 tenKhachHang.setText(khachHang.getTenKhachHang());
                 tfDiemTichLuyht.setText(String.valueOf(khachHang.getDiemTichLuy()));
                 this.khachHang = khachHang;

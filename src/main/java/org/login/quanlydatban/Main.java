@@ -7,9 +7,9 @@ import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.hibernate.Session;
-import org.login.quanlydatban.dao.LichDatDAO;
-import org.login.quanlydatban.dao.MonAnDAO;
-import org.login.quanlydatban.hibernate.HibernateUtils;
+//import org.login.quanlydatban.dao.LichDatDAO;
+//import org.login.quanlydatban.dao.MonAnDAO;
+//import org.login.quanlydatban.hibernate.HibernateUtils;
 import org.login.quanlydatban.notification.Notification;
 
 import java.time.LocalDate;
@@ -21,8 +21,8 @@ public class Main extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/org/login/quanlydatban/views/TrangDangNhap.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
 
-        Session session = HibernateUtils.getFactory().openSession();
-        session.close();
+//        Session session = HibernateUtils.getFactory().openSession();
+//        session.close();
 
         stage.setTitle("Đăng nhập");
         stage.setScene(scene);

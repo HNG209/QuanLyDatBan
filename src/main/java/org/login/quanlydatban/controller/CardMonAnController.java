@@ -12,15 +12,18 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import org.login.quanlydatban.dao.ChiTietHoaDonDAO;
-import org.login.quanlydatban.entity.MonAn;
+import org.login.service.CTHDService;
+import org.login.entity.MonAn;
 import org.login.quanlydatban.notification.Notification;
 import org.login.quanlydatban.utilities.NumberFormatter;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Objects;
+import java.rmi.Naming;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.util.ResourceBundle;
 
 public class CardMonAnController implements Initializable {
@@ -38,7 +41,8 @@ public class CardMonAnController implements Initializable {
 
     private DatMonController controller;
 
-    private ChiTietHoaDonDAO chiTietHoaDonDAO;
+    private CTHDService cthdService;
+
     private Stage chiTiet;
 
     public DatMonController getController() {
@@ -50,16 +54,16 @@ public class CardMonAnController implements Initializable {
     }
 
     @FXML
-    public void them(){
-        if(controller != null) {
-            if(controller.daLapHoaDon()){
-                Object[] row = new Object[]{monAn.getMaMonAn(), monAn.getTenMonAn(), monAn.getDonGia(), 1, monAn.getDonViTinh(),""};
+    public void them() throws RemoteException {
+        if (controller != null) {
+            if (controller.daLapHoaDon()) {
+                Object[] row = new Object[]{monAn.getMaMonAn(), monAn.getTenMonAn(), monAn.getDonGia(), 1, monAn.getDonViTinh(), ""};
                 controller.themDuLieuVaoBangMonAn(row, monAn);
                 controller.capNhatTongTien();
-            }
-            else Notification.thongBao("Hãy xác nhận giữ bàn trước khi thêm món ăn", Alert.AlertType.INFORMATION);
+            } else Notification.thongBao("Hãy xác nhận giữ bàn trước khi thêm món ăn", Alert.AlertType.INFORMATION);
         }
     }
+
     @FXML
     public void xemChiTietMonAn() throws IOException {
         if (chiTiet == null || !chiTiet.isShowing()) {
@@ -82,12 +86,11 @@ public class CardMonAnController implements Initializable {
         }
     }
 
-
     public void setMonAn(MonAn monAn, DatMonController controller) {
         this.monAn = monAn;
         this.controller = controller;
 
-        if(monAn.getHinhAnh() != null && !monAn.getHinhAnh().isEmpty())
+        if (monAn.getHinhAnh() != null && !monAn.getHinhAnh().isEmpty())
             image.setImage(new Image(new File(monAn.getHinhAnh()).toURI().toString()));
         tenMon.setText(monAn.getTenMonAn());
         giaTien.setText(NumberFormatter.formatPrice(String.valueOf((int) monAn.getDonGia())) + "đ/" + monAn.getDonViTinh());
@@ -95,7 +98,15 @@ public class CardMonAnController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        chiTietHoaDonDAO = new ChiTietHoaDonDAO();
+        String host = System.getenv("HOST_NAME");
+        try {
+            cthdService = (CTHDService) Naming.lookup("rmi://" + host + ":2909/cthdService");
+        } catch (NotBoundException e) {
+            throw new RuntimeException(e);
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
     }
-
 }

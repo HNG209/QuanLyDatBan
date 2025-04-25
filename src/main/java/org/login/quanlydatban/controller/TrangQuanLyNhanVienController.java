@@ -22,24 +22,26 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.login.quanlydatban.dao.NhanVienDAO;
-import org.login.quanlydatban.dao.TaiKhoanDAO;
-import org.login.quanlydatban.encryptionUtils.EncryptionUtils;
-import org.login.quanlydatban.entity.NhanVien;
-import org.login.quanlydatban.entity.TaiKhoan;
-import org.login.quanlydatban.entity.enums.ChucVu;
-import org.login.quanlydatban.entity.enums.TrangThaiNhanVien;
+//import org.login.quanlydatban.dao.NhanVienDAO;
+//import org.login.quanlydatban.dao.TaiKhoanDAO;
+
+import org.login.service.NhanVienService;
+
+import org.login.entity.NhanVien;
+import org.login.entity.enums.ChucVu;
+import org.login.entity.enums.TrangThaiNhanVien;
 import org.login.quanlydatban.notification.Notification;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.URISyntaxException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
-import java.time.LocalDate;
-import java.time.Period;
+import java.rmi.Naming;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -70,7 +72,7 @@ public class TrangQuanLyNhanVienController implements Initializable {
     private ComboBox<String> chucVu; // cbx chuc vu
     @FXML
     private DatePicker ngaySinh;
-    private NhanVienDAO nhanVienDAO;
+    private NhanVienService nhanVienService;
 
     private String duongdananh;
     @FXML
@@ -81,7 +83,7 @@ public class TrangQuanLyNhanVienController implements Initializable {
 
     // bien ten nhan vien
     private String nhanvien;
-    private NhanVienDAO nvdao;
+
     @FXML
     private TableView<NhanVien> tableNhanVien;
     @FXML
@@ -101,12 +103,10 @@ public class TrangQuanLyNhanVienController implements Initializable {
     @FXML
     private TableColumn<NhanVien, String> soDienThoai; // 4 Cột sdt
 
-    private NhanVienDAO employeeList1;
     private String maNhanVien;
     private String cellValue;
 
-
-    public void XuatFile(){
+    public void XuatFile() {
         btnxuatFile.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -124,9 +124,10 @@ public class TrangQuanLyNhanVienController implements Initializable {
     }
 
     // them nhan vien
-    public void themNhanVien(){
-        employeeList1 = new NhanVienDAO();
-        List<NhanVien>  employeeList = employeeList1.getAllTaiKhoan();
+    public void themNhanVien() throws MalformedURLException, NotBoundException, RemoteException {
+        String host = System.getenv("HOST_NAME");
+        nhanVienService = (NhanVienService) Naming.lookup("rmi://" + host + ":2909/nhanVienService");
+        List<NhanVien> employeeList = nhanVienService.getAllTaiKhoan();
         btnthem.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
@@ -152,15 +153,14 @@ public class TrangQuanLyNhanVienController implements Initializable {
     }
 
     // xet lai du lieu cho bang nhan vien
-    public void xetLaiduLieuChoBang(){
+    public void xetLaiduLieuChoBang() {
         try {
-            nhanVienDAO = new NhanVienDAO();
-            List<NhanVien>  listNhanVien = nhanVienDAO.getAllTaiKhoan();
+            List<NhanVien> listNhanVien = nhanVienService.getAllTaiKhoan();
             nhanVienID.setCellValueFactory(new PropertyValueFactory<>("maNhanVien"));
             tenNhanVien.setCellValueFactory(new PropertyValueFactory<>("tenNhanVien"));
             diaChi.setCellValueFactory(new PropertyValueFactory<>("diaChi"));
             gioiTinh.setCellValueFactory(cellData -> {
-                boolean isNam = cellData.getValue().isGioiTinh();
+                boolean isNam = cellData.getValue().getGioiTinh();
                 return new SimpleStringProperty(!isNam ? "Nam" : "Nữ");
             });
 
@@ -227,7 +227,6 @@ public class TrangQuanLyNhanVienController implements Initializable {
     }
 
 
-
     private void showWarn(String message) {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle("Kết Quả");
@@ -235,16 +234,18 @@ public class TrangQuanLyNhanVienController implements Initializable {
         alert.setContentText(message);
         alert.showAndWait();
     }
+
     public String getNhanvien() {
         return nhanvien;
     }
+
     // su dung de lay ten nhan vien
     public void setNhanvien(String nhanvien) {
         this.nhanvien = nhanvien;
     }
 
     // xuat ra file excel
-    public void xuatFileExcel(Stage primaryStage){
+    public void xuatFileExcel(Stage primaryStage) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Lưu File Excel");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Excel Files", "*.xlsx"));
@@ -283,15 +284,10 @@ public class TrangQuanLyNhanVienController implements Initializable {
             }
         }
     }
-    public void loaddulieulenform(NhanVien nhanVien){
+
+    public void loaddulieulenform(NhanVien nhanVien) {
 
         image11 = nhanVien.getHinhAnh();
-//        if(image11 != null || image11.isEmpty()){
-//            Image image = new Image("file:" + image11);
-//            // Tạo ImageView và đặt hình ảnh vào
-//            System.out.println("lll"+image11);
-//
-//        }
         duongdananh = image11;
         Image image = new Image("file:" + image11);
         image1.setImage(image);
@@ -302,27 +298,28 @@ public class TrangQuanLyNhanVienController implements Initializable {
         cccd.setText(nhanVien.getCccd());
         dienThoai.setText(nhanVien.getSdt());
         ngaySinh.setValue(nhanVien.getNgaySinh());
-        if(nhanVien.getChucVuNhanVien().equals(ChucVu.NHAN_VIEN)){
+        if (nhanVien.getChucVuNhanVien().equals(ChucVu.NHAN_VIEN)) {
             chucVu.setValue("Nhân viên");
-        }else{
+        } else {
             chucVu.setValue("Quản Lý");
         }
         // gioi tinh
-        if(!nhanVien.isGioiTinh()){
+        if (!nhanVien.getGioiTinh()) {
             gioiTinh1.setValue("NAM");
-        }else{
+        } else {
             gioiTinh1.setValue("NỮ");
         }
         //Trang thai nhan vien
-        if(nhanVien.getTrangThaiNhanVien().equals(TrangThaiNhanVien.DANG_LAM)){
+        if (nhanVien.getTrangThaiNhanVien().equals(TrangThaiNhanVien.DANG_LAM)) {
             trangThaiLamViec.setValue("ĐANG LÀM");
 
-        }else if(nhanVien.getTrangThaiNhanVien().equals(TrangThaiNhanVien.NGHI_PHEP)){
+        } else if (nhanVien.getTrangThaiNhanVien().equals(TrangThaiNhanVien.NGHI_PHEP)) {
             trangThaiLamViec.setValue("NGHỈ PHÉP");
-        }else
+        } else
             trangThaiLamViec.setValue("NGHI_VIEC");
 
     }
+
     private void showAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Kết Quả");
@@ -333,8 +330,12 @@ public class TrangQuanLyNhanVienController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        nhanVienDAO = new NhanVienDAO();
-        List<NhanVien>  listNhanVien = nhanVienDAO.getAllTaiKhoan();
+        List<NhanVien> listNhanVien = null;
+        try {
+            listNhanVien = nhanVienService.getAllTaiKhoan();
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
         tableNhanVien.setPrefHeight(60);
         // Thiết lập các cột cho TableView
         try {
@@ -342,7 +343,7 @@ public class TrangQuanLyNhanVienController implements Initializable {
             tenNhanVien.setCellValueFactory(new PropertyValueFactory<>("tenNhanVien"));
             diaChi.setCellValueFactory(new PropertyValueFactory<>("diaChi"));
             gioiTinh.setCellValueFactory(cellData -> {
-                boolean isNam = cellData.getValue().isGioiTinh();
+                boolean isNam = cellData.getValue().getGioiTinh();
                 return new SimpleStringProperty(!isNam ? "Nam" : "Nữ");
             });
 
@@ -377,8 +378,12 @@ public class TrangQuanLyNhanVienController implements Initializable {
         btnLuu.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                NhanVienDAO nvd = new NhanVienDAO();
-                List<NhanVien> nvs = nvd.getAllTaiKhoan();
+                List<NhanVien> nvs = null;
+                try {
+                    nvs = nhanVienService.getAllTaiKhoan();
+                } catch (RemoteException e) {
+                    throw new RuntimeException(e);
+                }
 
                 long countNhanViensdt = nvs.stream()
                         .filter(x -> x.getSdt().equals(dienThoai.getText()))
@@ -388,11 +393,11 @@ public class TrangQuanLyNhanVienController implements Initializable {
                         .filter(x -> x.getSdt().equals(dienThoai.getText()))
                         .count();
 
-                if(countNhanViencccd >= 2){
+                if (countNhanViencccd >= 2) {
                     showWarn("Căn cước công dân này đã được sử dụng, vui lòng sử dụng số căn cước công dân khác");
                     return;
                 }
-                if(countNhanViensdt >=2){
+                if (countNhanViensdt >= 2) {
                     showWarn("Số điện thoại này đã được sử dụng, vui lòng sử dụng số điện thoại khác");
                     return;
                 }
@@ -410,7 +415,7 @@ public class TrangQuanLyNhanVienController implements Initializable {
                 } else if (chucVu.getValue().equals("Quản Lý")) {
                     cv = ChucVu.QUAN_LY;
                 }
-                Boolean gt = gioiTinh1.getValue().equals("NAM") ? false : true;
+                Boolean gt = !gioiTinh1.getValue().equals("NAM");
                 NhanVien nv = new NhanVien();
                 try {
                     nv.setGioiTinh(gt);
@@ -422,7 +427,7 @@ public class TrangQuanLyNhanVienController implements Initializable {
                     nv.setTrangThaiNhanVien(TrangThaiNhanVien.DANG_LAM);
                     nv.setHinhAnh(duongdananh);
                     nv.setNgaySinh(ngaySinh.getValue());
-                    nvd.updateNhanVien(cellValue,nv);
+                    nhanVienService.updateNhanVien(cellValue, nv);
                     showAlert("Cập nhật nhân viên thành công");
                     xetLaiduLieuChoBang();
                 } catch (Exception e) {
@@ -450,9 +455,9 @@ public class TrangQuanLyNhanVienController implements Initializable {
                     // Duyệt theo mã nhân viên
                 } else
                     return employee.getTenNhanVien() != null && employee.getTenNhanVien().contains(lowerCaseFilter) ||
-                            employee.getDiaChi() != null && employee.getDiaChi().contains(lowerCaseFilter)||
-                            employee.getTrangThaiNhanVien().toString().contains(lowerCaseFilter)||employee.getMaNhanVien().contains(lowerCaseFilter);
-                    // Duyệt theo địa chỉ
+                            employee.getDiaChi() != null && employee.getDiaChi().contains(lowerCaseFilter) ||
+                            employee.getTrangThaiNhanVien().toString().contains(lowerCaseFilter) || employee.getMaNhanVien().contains(lowerCaseFilter);
+                // Duyệt theo địa chỉ
 
             });
         });
@@ -466,19 +471,21 @@ public class TrangQuanLyNhanVienController implements Initializable {
             }
         });
 
-        // khi click mo dong tren table, thi hien len thong tin day du
-
         tableNhanVien.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 if (mouseEvent.getClickCount() == 1) { // Kiểm tra nhấp chuột đơn,nv.getNgaySinh()
-                        int rowIndex = tableNhanVien.getSelectionModel().getSelectedIndex();
-                        cellValue = tableNhanVien.getItems().get(rowIndex).getMaNhanVien();
-                        NhanVienDAO nvdao = new  NhanVienDAO();
-                        NhanVien nvtim = nvdao.getNhanVien(cellValue);
-                        loaddulieulenform(nvtim);
+                    int rowIndex = tableNhanVien.getSelectionModel().getSelectedIndex();
+                    cellValue = tableNhanVien.getItems().get(rowIndex).getMaNhanVien();
+                    NhanVien nvtim = null;
+                    try {
+                        nvtim = nhanVienService.getNhanVien(cellValue);
+                    } catch (RemoteException e) {
+                        throw new RuntimeException(e);
+                    }
+                    loaddulieulenform(nvtim);
                 }
-           }
+            }
         });
     }
 }

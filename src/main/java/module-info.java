@@ -13,8 +13,8 @@ module org.login.quanlydatban {
     requires java.rmi;
 
 
-    opens org.login.quanlydatban.entity.keygenerator to org.hibernate.orm.core;
-    opens org.login.quanlydatban.entity to org.hibernate.orm.core, javafx.base;
+    opens org.login.entity.keygenerator to org.hibernate.orm.core;
+    opens org.login.entity to org.hibernate.orm.core, javafx.base;
     opens org.login.quanlydatban to javafx.fxml;
     opens org.login.quanlydatban.controller to javafx.fxml;
     opens org.login.quanlydatban.uicomponents to javafx.fxml;
@@ -22,7 +22,7 @@ module org.login.quanlydatban {
     opens org.login.quanlydatban.stylesheets to javafx.fxml;
     exports org.login.quanlydatban;
     exports org.login.quanlydatban.controller;
-    opens org.login.quanlydatban.entity.enums to org.hibernate.orm.core;
+    opens org.login.entity.enums to org.hibernate.orm.core;
     opens org.login.quanlydatban.views to javafx.fxml;
     exports org.login.quanlydatban.utilities;
     opens org.login.quanlydatban.utilities to javafx.fxml;

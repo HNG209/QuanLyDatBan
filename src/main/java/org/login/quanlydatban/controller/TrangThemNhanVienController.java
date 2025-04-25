@@ -3,37 +3,31 @@ package org.login.quanlydatban.controller;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import org.login.quanlydatban.dao.NhanVienDAO;
-import org.login.quanlydatban.dao.TaiKhoanDAO;
-import org.login.quanlydatban.encryptionUtils.EncryptionUtils;
-import org.login.quanlydatban.entity.NhanVien;
-import org.login.quanlydatban.entity.TaiKhoan;
-import org.login.quanlydatban.entity.enums.ChucVu;
-import org.login.quanlydatban.entity.enums.TrangThaiNhanVien;
-import org.login.quanlydatban.hibernate.HibernateUtils;
+//import org.login.quanlydatban.dao.NhanVienDAO;
+//import org.login.quanlydatban.dao.TaiKhoanDAO;
+
+import org.login.service.*;
+import org.login.entity.NhanVien;
+import org.login.entity.TaiKhoan;
+import org.login.entity.enums.ChucVu;
+import org.login.entity.enums.TrangThaiNhanVien;
 import org.login.quanlydatban.notification.Notification;
 
-import javax.crypto.Cipher;
-import javax.crypto.KeyGenerator;
-import javax.crypto.SecretKey;
 import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.Period;
-import java.util.Base64;
+import java.rmi.Naming;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -65,7 +59,7 @@ public class TrangThemNhanVienController implements Initializable {
     private ComboBox<String> chucVu; // cbx chuc vu
     @FXML
     private DatePicker ngaySinh;
-    private TaiKhoanDAO taiKhoanDAO;
+    private TaiKhoanService taiKhoanService;
     private TrangQuanLyNhanVienController trangQuanLyNhanVien;
     public void SetTrangQuanLyNhanVien(TrangQuanLyNhanVienController trangQuanLyNhanVien) {
         this.trangQuanLyNhanVien = trangQuanLyNhanVien;
@@ -132,8 +126,10 @@ public class TrangThemNhanVienController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-           maNhanVien.setEditable(false);
-           btnLuu.setOnAction(new EventHandler<ActionEvent>() {
+        String host = System.getenv("HOST_NAME");
+
+        maNhanVien.setEditable(false);
+        btnLuu.setOnAction(new EventHandler<ActionEvent>() {
                @Override
                public void handle(ActionEvent event) {
                        if (gioiTinh.getValue() == null) {
@@ -144,9 +140,26 @@ public class TrangThemNhanVienController implements Initializable {
                            showWarn("Phải chọn chức vụ của nhân viên.");
                            return;
                        }
-                       NhanVienDAO nvd = new NhanVienDAO();
-                       List<NhanVien> nvs = nvd.getAllTaiKhoan();
-                       NhanVien nvsdt = nvs.stream().filter(x -> x.getSdt().equals(dienThoai.getText())).findFirst().orElse(null);
+
+                   NhanVienService nvd = null;
+                   try {
+                       nvd = (NhanVienService) Naming.lookup("rmi://"+ host + ":2909/nhanVienService");
+                       taiKhoanService = (TaiKhoanService) Naming.lookup("rmi://"+ host + ":2909/taiKhoanService");
+                   } catch (NotBoundException e) {
+                       throw new RuntimeException(e);
+                   } catch (MalformedURLException e) {
+                       throw new RuntimeException(e);
+                   } catch (RemoteException e) {
+                       throw new RuntimeException(e);
+                   }
+
+                   List<NhanVien> nvs = null;
+                   try {
+                       nvs = nvd.getAllTaiKhoan();
+                   } catch (RemoteException e) {
+                       throw new RuntimeException(e);
+                   }
+                   NhanVien nvsdt = nvs.stream().filter(x -> x.getSdt().equals(dienThoai.getText())).findFirst().orElse(null);
                        NhanVien nvscccd = nvs.stream().filter(x -> x.getCccd().equals(cccd.getText())).findFirst().orElse(null);
                        if (nvscccd != null) {
                            showWarn("Căn cước công dân này đã được sử dụng, vui lòng sử dụng số căn cước công dân khác");
@@ -156,7 +169,7 @@ public class TrangThemNhanVienController implements Initializable {
                            showWarn("Số điện thoại này đã được sử dụng, vui lòng sử dụng số điện thoại khác");
                            return;
                        }
-                       taiKhoanDAO = new TaiKhoanDAO();
+
                        ChucVu cv = null;
                        if (chucVu.getValue().equals("Nhân viên")) {
                            cv = ChucVu.NHAN_VIEN;
@@ -178,7 +191,7 @@ public class TrangThemNhanVienController implements Initializable {
                            nvd.addNhanVien(nv);
                            String tenTaiKhoan = hoTen.getText().toString().replaceAll("\\s+", "");
                            TaiKhoan takKhoan = new TaiKhoan(tenTaiKhoan, "1111", nvd.getNhanVien(nv.getMaNhanVien().toString()));
-                           taiKhoanDAO.addNhanVien(takKhoan);
+                           taiKhoanService.addNhanVien(takKhoan);
                            Stage stage = (Stage) btnLuu.getScene().getWindow();
                            showWarn("Thêm nhân viên thành công");
                            stage.close();

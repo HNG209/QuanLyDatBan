@@ -3,7 +3,7 @@ package org.login.quanlydatban.controller;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-import org.login.quanlydatban.entity.Ban;
+import org.login.entity.Ban;
 
 public class CardBanChuyenBanController {
     private Ban ban;

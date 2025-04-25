@@ -12,13 +12,19 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
-import org.login.quanlydatban.dao.ChiTietHoaDonDAO;
-import org.login.quanlydatban.dao.HoaDonDAO;
-import org.login.quanlydatban.entity.ChiTietHoaDon;
-import org.login.quanlydatban.entity.HoaDon;
+//import org.login.quanlydatban.dao.ChiTietHoaDonDAO;
+//import org.login.quanlydatban.dao.HoaDonDAO;
+
+import org.login.service.*;
+import org.login.entity.ChiTietHoaDon;
+import org.login.entity.HoaDon;
 import org.login.quanlydatban.utilities.NumberFormatter;
 
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.rmi.Naming;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 import java.util.ResourceBundle;
@@ -26,9 +32,9 @@ import java.util.ResourceBundle;
 public class XuatHoaDonController implements Initializable {
     private HoaDon hoaDon;
 
-    private HoaDonDAO hoaDonDAO;
+    private HoaDonService hoaDonService;
 
-    private ChiTietHoaDonDAO chiTietHoaDonDAO;
+    private CTHDService cthdService;
 
     @FXML
     private TextFlow hdArea;
@@ -37,7 +43,7 @@ public class XuatHoaDonController implements Initializable {
         return hoaDon;
     }
 
-    public void setHoaDon(HoaDon hoaDon) {
+    public void setHoaDon(HoaDon hoaDon) throws RemoteException {
         this.hoaDon = hoaDon;
         ImageView img = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/org/login/quanlydatban/icons/logoHD.png"))));
         ColorAdjust grayscale = new ColorAdjust();
@@ -71,7 +77,7 @@ public class XuatHoaDonController implements Initializable {
         headerText.setFont(Font.font("Courier New", FontWeight.BOLD, 12));
         hdArea.getChildren().add(headerText);
         int index = 1;
-        for (ChiTietHoaDon item : chiTietHoaDonDAO.fetchChiTietHoaDonNative(hoaDon.getMaHoaDon())) {
+        for (ChiTietHoaDon item : cthdService.fetchChiTietHoaDonNative(hoaDon.getMaHoaDon())) {
             String line = String.format("   %-5d| %-20s| %15s| %10d| %15s\n",
                     index++,
                     item.getMonAn().getTenMonAn(),
@@ -106,8 +112,18 @@ public class XuatHoaDonController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        hoaDonDAO = new HoaDonDAO();
-        chiTietHoaDonDAO = new ChiTietHoaDonDAO();
+        String host = System.getenv("HOST_NAME");
+
+        try {
+            hoaDonService = (HoaDonService) Naming.lookup("rmi://"+ host + ":2909/hoaDonService");
+            cthdService = (CTHDService) Naming.lookup("rmi://"+ host + ":2909/cthdService");
+        } catch (NotBoundException e) {
+            throw new RuntimeException(e);
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @FXML

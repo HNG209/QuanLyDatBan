@@ -9,23 +9,27 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.util.StringConverter;
-import net.bytebuddy.asm.Advice;
-import org.login.quanlydatban.dao.BanDAO;
-import org.login.quanlydatban.dao.HoaDonDAO;
-import org.login.quanlydatban.dao.LichDatDAO;
-import org.login.quanlydatban.entity.Ban;
-import org.login.quanlydatban.entity.HoaDon;
-import org.login.quanlydatban.entity.LichDat;
-import org.login.quanlydatban.entity.enums.TrangThaiBan;
-import org.login.quanlydatban.entity.enums.TrangThaiHoaDon;
+//import org.login.quanlydatban.dao.BanDAO;
+//import org.login.quanlydatban.dao.HoaDonDAO;
+//import org.login.quanlydatban.dao.LichDatDAO;
+import org.login.service.*;
+
+import org.login.entity.Ban;
+import org.login.entity.HoaDon;
+import org.login.entity.LichDat;
+import org.login.entity.enums.TrangThaiBan;
+import org.login.entity.enums.TrangThaiHoaDon;
 import org.login.quanlydatban.notification.Notification;
 import org.login.quanlydatban.utilities.NumberFormatter;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.rmi.Naming;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -170,11 +174,11 @@ public class XemLichDatController implements Initializable {
 
     private LocalDate currentDate;
 
-    private LichDatDAO lichDatDAO;
+    private LichDatService lichDatService;
 
-    private BanDAO banDAO;
+    private BanService banService;
 
-    private HoaDonDAO hoaDonDAO;
+    private HoaDonService hoaDonService;
 
     private LichDat selectedLichDat;
 
@@ -298,7 +302,7 @@ public class XemLichDatController implements Initializable {
 
     public void loadLichDatFromCurrentWeek(TrangThaiHoaDon trangThaiHoaDon) throws IOException {
         refreshBox();
-        List<LichDat> list = lichDatDAO.getDSLichDatFrom(getFirstDayOfWeek(), getLastDayOfWeek(), trangThaiHoaDon);
+        List<LichDat> list = lichDatService.getDSLichDatFrom(getFirstDayOfWeek(), getLastDayOfWeek(), trangThaiHoaDon);
         for(LichDat i : list) {
             LocalDateTime time = i.getThoiGianNhanBan();
 
@@ -373,9 +377,20 @@ public class XemLichDatController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        lichDatDAO = new LichDatDAO();
-        banDAO = new BanDAO();
-        hoaDonDAO = new HoaDonDAO();
+        String host = System.getenv("HOST_NAME");
+
+        try {
+            lichDatService = (LichDatService) Naming.lookup("rmi://"+ host + ":2909/lichDatService");
+            banService = (BanService) Naming.lookup("rmi://"+ host + ":2909/banService");
+            hoaDonService = (HoaDonService) Naming.lookup("rmi://"+ host + ":2909/hoaDonService");
+
+        } catch (NotBoundException e) {
+            throw new RuntimeException(e);
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
 
         currentDate = LocalDate.now();
         refreshCurrentWeek();
@@ -446,7 +461,7 @@ public class XemLichDatController implements Initializable {
                 if (Notification.xacNhan("Xác nhận huỷ lịch này?, không thể hoàn tác")) {
                     HoaDon hoaDon = selectedLichDat.getHoaDon();
                     hoaDon.setTrangThaiHoaDon(TrangThaiHoaDon.DA_HUY);
-                    hoaDonDAO.updateHoaDon(hoaDon);
+                    hoaDonService.updateHoaDon(hoaDon);
 
                     loadLichDatFromCurrentWeek(null);
 
@@ -473,17 +488,17 @@ public class XemLichDatController implements Initializable {
                 throw new IllegalArgumentException("Chưa đến thời gian để nhận bàn");
 
             //check if there're any served table at the time
-            for(Ban i : banDAO.readByStatus(TrangThaiBan.DANG_PHUC_VU)){
+            for(Ban i : banService.readByStatus(TrangThaiBan.DANG_PHUC_VU)){
                 if(i.getMaBan().equals(b.getMaBan()))
                     throw new IllegalArgumentException("Không thể nhận bàn, vui lòng thanh toán bàn " + i.getMaBan() + " trước khi nhận bàn");
             }
 
             if(Notification.xacNhan("Nhận bàn?")){
                 b.setTrangThaiBan(TrangThaiBan.DANG_PHUC_VU);
-                banDAO.updateBan(b);
+                banService.updateBan(b);
 
                 hoaDon.setTrangThaiHoaDon(TrangThaiHoaDon.CHUA_THANH_TOAN);
-                hoaDonDAO.updateHoaDon(hoaDon);
+                hoaDonService.updateHoaDon(hoaDon);
 
                 loadLichDatFromCurrentWeek(null);
 

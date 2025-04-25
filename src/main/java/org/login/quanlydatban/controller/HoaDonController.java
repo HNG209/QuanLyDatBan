@@ -12,13 +12,18 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import org.login.quanlydatban.dao.ChiTietHoaDonDAO;
-import org.login.quanlydatban.dao.HoaDonDAO;
-import org.login.quanlydatban.entity.*;
-import org.login.quanlydatban.entity.enums.TrangThaiHoaDon;
+
+import org.login.service.CTHDService;
+import org.login.service.HoaDonService;
+import org.login.entity.*;
+import org.login.entity.enums.TrangThaiHoaDon;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.rmi.Naming;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
@@ -52,7 +57,6 @@ public class HoaDonController implements Initializable {
     private ComboBox<String> cbTrangThai;
     @FXML
     private DatePicker dpNgayLap;
-
 
 
     @FXML
@@ -92,14 +96,27 @@ public class HoaDonController implements Initializable {
     private TableColumn<ChiTietHoaDon, String> colCTHDTongTien;
     @FXML
     private TableView<ChiTietHoaDon> tableCTHD;
-    private HoaDonDAO HoaDonDAO;
+
+    private HoaDonService hoaDonService;
+    private CTHDService cthdService;
     private MonAn monAn;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        HoaDonDAO = new HoaDonDAO();
-        ChiTietHoaDonDAO chiTietHoaDonDAO = new ChiTietHoaDonDAO();
-        List<HoaDon> hoaDonList = HoaDonDAO.getAllHoaDon();
+        String host = System.getenv("HOST_NAME");
+
+        try {
+            hoaDonService = (HoaDonService) Naming.lookup("rmi://"+ host + ":2909/hoaDonService");
+            cthdService = (CTHDService) Naming.lookup("rmi://"+ host + ":2909/cthdService");
+        } catch (NotBoundException | MalformedURLException | RemoteException e) {
+            throw new RuntimeException(e);
+        }
+        List<HoaDon> hoaDonList = null;
+        try {
+            hoaDonList = hoaDonService.getAllHoaDon();
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
         System.out.println(hoaDonList);
         ObservableList<HoaDon> observableList = FXCollections.observableArrayList(hoaDonList);
 
@@ -112,10 +129,10 @@ public class HoaDonController implements Initializable {
                 return new SimpleStringProperty(khachHang != null ? khachHang.getMaKhachHang() : "");
             });
             colTrangThai.setCellValueFactory(new PropertyValueFactory<>("trangThaiHoaDon"));
-           colMaBan.setCellValueFactory(cellData -> {
-               Ban ban = cellData.getValue().getBan();
-               return new SimpleStringProperty(ban != null ? ban.getMaBan() : "");
-           });
+            colMaBan.setCellValueFactory(cellData -> {
+                Ban ban = cellData.getValue().getBan();
+                return new SimpleStringProperty(ban != null ? ban.getMaBan() : "");
+            });
             colMaNhanVien.setCellValueFactory(cellData -> {
                 NhanVien nhanVien = cellData.getValue().getNhanVien();
                 return new SimpleStringProperty(nhanVien != null ? nhanVien.getMaNhanVien() : "");
@@ -155,7 +172,12 @@ public class HoaDonController implements Initializable {
                 if (event.getClickCount() == 1) {
                     String maHoaDon = tabTatCa.getSelectionModel().getSelectedItem().getMaHoaDon();
 
-                    List<ChiTietHoaDon> chiTietList = chiTietHoaDonDAO.getChiTietHoaDonByMaHoaDon(maHoaDon);
+                    List<ChiTietHoaDon> chiTietList = null;
+                    try {
+                        chiTietList = cthdService.getChiTietHoaDonByMaHoaDon(maHoaDon);
+                    } catch (RemoteException e) {
+                        throw new RuntimeException(e);
+                    }
 
 
                     ObservableList<ChiTietHoaDon> observableList1 = FXCollections.observableArrayList(chiTietList);
@@ -164,7 +186,7 @@ public class HoaDonController implements Initializable {
                     HoaDon hoaDon = tabTatCa.getSelectionModel().getSelectedItem();
                     if (hoaDon != null) {
                         btnXuatHD.setDisable(false);
-                        if(hoaDon.getTrangThaiHoaDon() != TrangThaiHoaDon.DA_THANH_TOAN)
+                        if (hoaDon.getTrangThaiHoaDon() != TrangThaiHoaDon.DA_THANH_TOAN)
                             btnXuatHD.setDisable(true);
                         NhanVien nhanVien = hoaDon.getNhanVien();
                         KhachHang khachHang = hoaDon.getKhachHang();
@@ -182,7 +204,7 @@ public class HoaDonController implements Initializable {
                             textMaKH.setText(khachHang.getMaKhachHang());
                             textTenKH.setText(khachHang.getTenKhachHang());
                             textcccdKH.setText(khachHang.getCccd());
-                        }else {
+                        } else {
                             textMaKH.setText("");
                             textTenKH.setText("");
                             textcccdKH.setText("");
@@ -193,7 +215,7 @@ public class HoaDonController implements Initializable {
             });
         } catch (Exception e) {
             e.printStackTrace();
-       }
+        }
         ObservableList<String> trangThaiList = FXCollections.observableArrayList(
                 "Trạng thái",
                 "Đã thanh toán",
@@ -205,9 +227,9 @@ public class HoaDonController implements Initializable {
         cbTrangThai.setItems(trangThaiList);
 
 
-
     }
-    public void onTimKiemClicked() {
+
+    public void onTimKiemClicked() throws RemoteException {
         // Lấy thông tin từ các trường đầu vào
         String maHoaDon = tfMaHoaDon.getText().trim();
         String tenKhachHang = tfTenKhachHang.getText().trim();
@@ -216,14 +238,13 @@ public class HoaDonController implements Initializable {
 
         LocalDate ngayLap = dpNgayLap.getValue();
 
-        HoaDonDAO = new HoaDonDAO();
-        List<HoaDon> danhSachGoc = HoaDonDAO.getAllHoaDon();
+        List<HoaDon> danhSachGoc = hoaDonService.getAllHoaDon();
 
 
         // Lọc danh sách dựa trên các tiêu chí
         List<HoaDon> ketQuaLoc = danhSachGoc.stream()
                 .filter(hoaDon -> maHoaDon.isEmpty() || hoaDon.getMaHoaDon().contains(maHoaDon))
-                .filter(hoaDon -> tenKhachHang.isEmpty() ||  (hoaDon.getKhachHang() != null && hoaDon.getKhachHang().getMaKhachHang().contains(tenKhachHang)))
+                .filter(hoaDon -> tenKhachHang.isEmpty() || (hoaDon.getKhachHang() != null && hoaDon.getKhachHang().getMaKhachHang().contains(tenKhachHang)))
                 .filter(hoaDon -> maBan.isEmpty() || (hoaDon.getBan() != null && hoaDon.getBan().getMaBan().contains(maBan)))
                 .filter(hoaDon -> {
                     TrangThaiHoaDon trangThaiEnum = convertStringToEnum(trangThai);
@@ -237,7 +258,8 @@ public class HoaDonController implements Initializable {
         // Cập nhật bảng với danh sách hóa đơn đã lọc
         tabTatCa.getItems().setAll(ketQuaLoc);
     }
-    public void onResetClicked() {
+
+    public void onResetClicked() throws RemoteException {
 
         tfMaHoaDon.clear();
         tfTenKhachHang.clear();
@@ -255,12 +277,12 @@ public class HoaDonController implements Initializable {
 
         tableCTHD.getItems().clear();
         //Cập nhật lại bảng
-        HoaDonDAO hoaDonDAO = new HoaDonDAO();
-        List<HoaDon> danhSachGoc = hoaDonDAO.getAllHoaDon();
+        List<HoaDon> danhSachGoc = hoaDonService.getAllHoaDon();
 
         ObservableList<HoaDon> observableList = FXCollections.observableArrayList(danhSachGoc);
         tabTatCa.setItems(observableList);
     }
+
     private TrangThaiHoaDon convertStringToEnum(String trangThai) {
         if ("Đã thanh toán".equalsIgnoreCase(trangThai)) {
             return TrangThaiHoaDon.DA_THANH_TOAN;
@@ -269,26 +291,27 @@ public class HoaDonController implements Initializable {
         }
         return null;
     }
-    public double tinhTongTien() {
-        ChiTietHoaDonDAO chiTietHoaDonDAO = new ChiTietHoaDonDAO();
+
+    public double tinhTongTien() throws RemoteException {
 
         // Lấy danh sách các chi tiết hóa đơn cho hóa đơn hiện tại
-        List<ChiTietHoaDon> chiTietList = chiTietHoaDonDAO.getChiTietHoaDonByMaHoaDon(String.valueOf(this.colMaHoaDon));
+        List<ChiTietHoaDon> chiTietList = cthdService.getChiTietHoaDonByMaHoaDon(String.valueOf(this.colMaHoaDon));
 
         if (chiTietList == null || chiTietList.isEmpty()) {
             return 0.0;
         }
         return chiTietList.stream()
-                .mapToDouble(chiTiet -> chiTiet.tinhTongCTHD())
+                .mapToDouble(ChiTietHoaDon::tinhTongCTHD)
                 .sum();
     }
+
     public void XuatHD() throws IOException {
         HoaDon selectedHoaDon = tabTatCa.getSelectionModel().getSelectedItem();
-        if(selectedHoaDon == null){
-           showAlert("Vui lòng chọn 1 hoá đơn để xuất!");
+        if (selectedHoaDon == null) {
+            showAlert("Vui lòng chọn 1 hoá đơn để xuất!");
             return;
         }
-        if(selectedHoaDon.getTrangThaiHoaDon() == TrangThaiHoaDon.DA_THANH_TOAN){
+        if (selectedHoaDon.getTrangThaiHoaDon() == TrangThaiHoaDon.DA_THANH_TOAN) {
             FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/org/login/quanlydatban/views/TrangXuatHoaDon.fxml")));
             AnchorPane pane = loader.load();
             XuatHoaDonController controller = loader.getController();
@@ -298,13 +321,9 @@ public class HoaDonController implements Initializable {
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setScene(new Scene(pane));
             stage.showAndWait();
-        }
-        else {
+        } else {
             showAlert("Hóa đơn chưa được thanh toán!");
         }
-
-
-
     }
 
     private void showAlert(String message) {
@@ -314,10 +333,4 @@ public class HoaDonController implements Initializable {
         alert.setContentText(message);
         alert.showAndWait();
     }
-
-
-
-
-
-
 }

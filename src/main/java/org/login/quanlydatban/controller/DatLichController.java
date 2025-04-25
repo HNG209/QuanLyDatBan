@@ -16,18 +16,23 @@ import javafx.scene.layout.FlowPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
-import org.login.quanlydatban.dao.*;
-import org.login.quanlydatban.entity.Ban;
-import org.login.quanlydatban.entity.HoaDon;
-import org.login.quanlydatban.entity.KhachHang;
-import org.login.quanlydatban.entity.LichDat;
-import org.login.quanlydatban.entity.enums.*;
+//import org.login.quanlydatban.dao.*;
+import org.login.service.*;
+import org.login.entity.Ban;
+import org.login.entity.HoaDon;
+import org.login.entity.KhachHang;
+import org.login.entity.LichDat;
+import org.login.entity.enums.*;
 import org.login.quanlydatban.notification.Notification;
 import org.login.quanlydatban.utilities.NumberFormatter;
 
 import javax.persistence.NoResultException;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.rmi.Naming;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -132,19 +137,19 @@ public class DatLichController implements Initializable {
 
     double ckd = 0.0;
 
-    private KhachHangDAO khachHangDAO;
+    private KhachHangService khachHangService;
 
-    private ChiTietHoaDonDAO chiTietHoaDonDAO;
+    private CTHDService cthdService;
 
-    private HoaDon hoaDon;
+    private HoaDonService hoaDonService;
 
-    private HoaDonDAO hoaDonDAO;
+    private LichDatService lichDatService;
 
-    private LichDatDAO lichDatDAO;
-
-    private BanDAO banDAO;
+    private BanService banService;
 
     private Ban ban;
+
+    private HoaDon hoaDon;
 
     private String prevCCCD = "";
 
@@ -172,6 +177,7 @@ public class DatLichController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        String host = System.getenv("HOST_NAME");
 
         cbKhuVuc.getItems().add(null);
         cbKhuVuc.getItems().addAll(KhuVuc.values());
@@ -182,11 +188,23 @@ public class DatLichController implements Initializable {
         cbTrangThai.getItems().add(null);
         cbTrangThai.getItems().addAll(TrangThaiHoaDon.values());
 
-        hoaDonDAO = new HoaDonDAO();
-        lichDatDAO = new LichDatDAO();
-        khachHangDAO = new KhachHangDAO();
-        chiTietHoaDonDAO = new ChiTietHoaDonDAO();
-        banDAO = new BanDAO();
+        try {
+            hoaDonService = (HoaDonService) Naming.lookup("rmi://"+ host + ":2909/hoaDonService");
+            lichDatService = (LichDatService) Naming.lookup("rmi://"+ host + ":2909/lichDatService");
+            khachHangService = (KhachHangService) Naming.lookup("rmi://"+ host + ":2909/khachHangService");
+            cthdService = (CTHDService) Naming.lookup("rmi://"+ host + ":2909/cthdService");
+            banService = (BanService) Naming.lookup("rmi://"+ host + ":2909/banService");
+        } catch (NotBoundException e) {
+            throw new RuntimeException(e);
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
+
+
+
+
 
         maLichDatCol.setCellValueFactory(data -> new SimpleStringProperty((String)data.getValue()[0]));
         ngayDatCol.setCellValueFactory(data -> new SimpleStringProperty((String)data.getValue()[1]));
@@ -211,7 +229,7 @@ public class DatLichController implements Initializable {
 
                         prevCCCD = tfCCCD.getText();
 
-                        khachHangDAO.themKhachHang(khachHang);
+                        khachHangService.themKhachHang(khachHang);
                         tfTenKhachHang.setEditable(false);
                     }
                 }
@@ -246,8 +264,12 @@ public class DatLichController implements Initializable {
         listViewBan.prefWidthProperty().bind(scrollPane.widthProperty());
         listViewBan.prefHeightProperty().bind(scrollPane.heightProperty());
 
-        refreshBang();
-        refreshViewBan();
+        try {
+            refreshBang();
+            refreshViewBan();
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
         refeshTextFieldsAndButtons();
     }
 
@@ -272,14 +294,14 @@ public class DatLichController implements Initializable {
                     case LoaiBan.BAN_10_NGUOI -> sl = 10;
                 }
 
-                if(!lichDatDAO.getDSLichDatBy(selectedLD.getThoiGianNhanBan(), ban).isEmpty())
+                if(!lichDatService.getDSLichDatBy(selectedLD.getThoiGianNhanBan(), ban).isEmpty())
                     throw new IllegalArgumentException("Bàn này đã tồn tại lịch đặt có cùng thời gian");
 
                 if(selectedLD.getSoLuongNguoi() > sl){
                     if(Notification.xacNhan("Số lượng khách trong lịch đặt vượt quá sức chứa của bàn đã chọn. Bạn có chắc chắn muốn đổi bàn không?")) {
                         hoaDon.setBan(ban);
 
-                        hoaDon = hoaDonDAO.updateHoaDon(hoaDon);
+                        hoaDon = hoaDonService.updateHoaDon(hoaDon);
                         refreshBang();
                         this.ban = ban;
                         tfBan.setText(ban.getMaBan());
@@ -289,7 +311,7 @@ public class DatLichController implements Initializable {
                     if(Notification.xacNhan("Xác nhận đổi bàn cho lịch đặt")) {
                         hoaDon.setBan(ban);
 
-                        hoaDon = hoaDonDAO.updateHoaDon(hoaDon);
+                        hoaDon = hoaDonService.updateHoaDon(hoaDon);
                         refreshBang();
                         this.ban = ban;
                         tfBan.setText(ban.getMaBan());
@@ -306,9 +328,9 @@ public class DatLichController implements Initializable {
         }
     }
 
-    public void refreshViewBan() {
+    public void refreshViewBan() throws RemoteException {
         listViewBan.getChildren().clear();
-        for (Ban i : banDAO.readAll()){
+        for (Ban i : banService.readAll()){
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/uicomponents/CardBan_TrangDatLich.fxml"));
             try {
                 AnchorPane pane = loader.load();
@@ -340,9 +362,9 @@ public class DatLichController implements Initializable {
         }
     }
 
-    public void refreshBang() {
+    public void refreshBang() throws RemoteException {
         tableLichDat.getItems().clear();
-        lichDatDAO.getDSLichDat().forEach(i -> loadBang(new Object[]{i.getMaLichDat(),
+        lichDatService.getDSLichDat().forEach(i -> loadBang(new Object[]{i.getMaLichDat(),
                 i.getThoiGianDat().format(DateTimeFormatter.ofPattern("dd/MM/yyyy - HH:mm")),
                 i.getThoiGianNhanBan().format(DateTimeFormatter.ofPattern("dd/MM/yyyy - HH:mm")),
                 i.getHoaDon().getBan().getLoaiBan().toString(),
@@ -362,7 +384,7 @@ public class DatLichController implements Initializable {
                         : i.getThoiGianNhanBan().isBefore(LocalDateTime.now()) ? TrangThaiHoaDon.DA_DAT + " (có thể nhận bàn)" : TrangThaiHoaDon.DA_DAT.toString()}));
     }
 
-    public void capNhatCoc() {
+    public void capNhatCoc() throws RemoteException {
         double tongTien = hoaDon.tinhTongTien();
         if(tongTien < 200_000.0)
             selectedLD.setTienCoc(0.0);
@@ -371,7 +393,7 @@ public class DatLichController implements Initializable {
         c = selectedLD.getTienCoc();
 
         tfCoc.setText(NumberFormatter.formatPrice(String.valueOf((int) selectedLD.getTienCoc())));
-        lichDatDAO.capNhatLichDat(selectedLD);
+        lichDatService.capNhatLichDat(selectedLD);
     }
 
     public void refeshTextFieldsAndButtons() {
@@ -405,23 +427,23 @@ public class DatLichController implements Initializable {
         try {
             if(tableLichDat.getSelectionModel().getSelectedIndex() != -1){
                 Ban b = hoaDon.getBan();
-                LichDat lichDat = lichDatDAO.getLichDat((String) tableLichDat.getSelectionModel().getSelectedItem()[0]);
+                LichDat lichDat = lichDatService.getLichDat((String) tableLichDat.getSelectionModel().getSelectedItem()[0]);
 
                 if(lichDat.getThoiGianNhanBan().isAfter(LocalDateTime.now()))
                     throw new IllegalArgumentException("Chưa đến thời gian để nhận bàn");
 
                 //check if there're any served table at the time
-                for(Ban i : banDAO.readByStatus(TrangThaiBan.DANG_PHUC_VU)) {
+                for(Ban i : banService.readByStatus(TrangThaiBan.DANG_PHUC_VU)) {
                     if (i.getMaBan().equals(b.getMaBan()))
                         throw new IllegalArgumentException("Không thể nhận bàn, vui lòng thanh toán bàn " + i.getMaBan() + " trước khi nhận bàn");
                 }
 
                 if(Notification.xacNhan("Nhận bàn?")){
                     b.setTrangThaiBan(TrangThaiBan.DANG_PHUC_VU);
-                    banDAO.updateBan(b);
+                    banService.updateBan(b);
 
                     hoaDon.setTrangThaiHoaDon(TrangThaiHoaDon.CHUA_THANH_TOAN);
-                    hoaDonDAO.updateHoaDon(hoaDon);
+                    hoaDonService.updateHoaDon(hoaDon);
                     refreshBang();
                     refreshViewBan();
                     refeshTextFieldsAndButtons();
@@ -477,8 +499,8 @@ public class DatLichController implements Initializable {
     }
 
     @FXML
-    void chonDong(MouseEvent event) {
-        selectedLD = lichDatDAO.getLichDat((String) tableLichDat.getSelectionModel().getSelectedItem()[0]);
+    void chonDong(MouseEvent event) throws RemoteException {
+        selectedLD = lichDatService.getLichDat((String) tableLichDat.getSelectionModel().getSelectedItem()[0]);
 
         tgNhanBan.setValue(selectedLD.getThoiGianNhanBan().toLocalDate());
         cbGio.getSelectionModel().select((Integer) selectedLD.getThoiGianNhanBan().getHour());
@@ -530,14 +552,14 @@ public class DatLichController implements Initializable {
                 int sl = Integer.parseInt(tfSoLuongNguoi.getText());
                 if(sl <= 2 && sl > 0) {
                     cbBanLoaiBan.setValue(LoaiBan.BAN_2_NGUOI);
-                    refreshViewBan(banDAO.getListBanBy("", null, LoaiBan.BAN_2_NGUOI, null));
+                    refreshViewBan(banService.getListBanBy("", null, LoaiBan.BAN_2_NGUOI, null));
                 } else if (sl > 2 && sl <= 5) {
                     cbBanLoaiBan.setValue(LoaiBan.BAN_5_NGUOI);
-                    refreshViewBan(banDAO.getListBanBy("", null, LoaiBan.BAN_5_NGUOI, null));
+                    refreshViewBan(banService.getListBanBy("", null, LoaiBan.BAN_5_NGUOI, null));
                 }
                 else if (sl > 5 && sl <= 10) {
                     cbBanLoaiBan.setValue(LoaiBan.BAN_10_NGUOI);
-                    refreshViewBan(banDAO.getListBanBy("", null, LoaiBan.BAN_10_NGUOI, null));
+                    refreshViewBan(banService.getListBanBy("", null, LoaiBan.BAN_10_NGUOI, null));
                 }
             }
             else throw new IllegalArgumentException("Vui lòng nhập số");
@@ -559,7 +581,7 @@ public class DatLichController implements Initializable {
             lichDat.setGhiChu(txtGhiChu.getText());
 
             if (prevCCCD != null && !prevCCCD.isEmpty())
-                lichDat.setKhachHang(khachHangDAO.getKHByCCCD(prevCCCD));
+                lichDat.setKhachHang(khachHangService.getKHByCCCD(prevCCCD));
             else throw new IllegalArgumentException("Vui lòng nhập CCCD của khách hàng");
 
             if (!tfSoLuongNguoi.getText().isEmpty())
@@ -573,7 +595,7 @@ public class DatLichController implements Initializable {
             hoaDon.setNgayLap(LocalDate.now());
 //            hoaDon.setNhanVien(TrangChuController.getTaiKhoan().getNhanVien());
             hoaDon.setTrangThaiHoaDon(TrangThaiHoaDon.DA_DAT);
-            hoaDon.setKhachHang(khachHangDAO.getKHByCCCD(prevCCCD));
+            hoaDon.setKhachHang(khachHangService.getKHByCCCD(prevCCCD));
             if (ban != null)
                 hoaDon.setBan(ban);
             else throw new IllegalArgumentException("Vui lòng chọn bàn");
@@ -586,11 +608,11 @@ public class DatLichController implements Initializable {
 
             lichDat.setTienCoc(0);
 
-            hoaDon.setMaHoaDon(date);
+            hoaDon.setNgayLap(date);
             lichDat.setHoaDon(hoaDon);
 
-            hoaDonDAO.lapHoaDon(hoaDon);
-            lichDatDAO.taoLichDat(lichDat);
+            hoaDonService.lapHoaDon(hoaDon);
+            lichDatService.taoLichDat(lichDat);
 
 
             Notification.thongBao("Đặt lịch thành công, mã lịch đặt: " + lichDat.getMaLichDat(), Alert.AlertType.INFORMATION);
@@ -665,7 +687,7 @@ public class DatLichController implements Initializable {
             if(hoaDon != null) {
                 if(Notification.xacNhan("Xác nhận huỷ lịch này?, không thể hoàn tác")){
                     hoaDon.setTrangThaiHoaDon(TrangThaiHoaDon.DA_HUY);
-                    hoaDonDAO.updateHoaDon(hoaDon);
+                    hoaDonService.updateHoaDon(hoaDon);
 
                     refreshBang();
                     refeshTextFieldsAndButtons();
@@ -678,7 +700,7 @@ public class DatLichController implements Initializable {
     }
 
     @FXML
-    void resetFilterBan(MouseEvent event) {
+    void resetFilterBan(MouseEvent event) throws RemoteException {
         cbBanLoaiBan.setValue(null);
         cbKhuVuc.setValue(null);
         tfTKmaBan.clear();
@@ -687,7 +709,7 @@ public class DatLichController implements Initializable {
     }
 
     @FXML
-    void resetFilterLich(MouseEvent event) {
+    void resetFilterLich(MouseEvent event) throws RemoteException {
         tfTKmaLichDat.clear();
         tKngayNhanBan.setValue(null);
         cbTrangThai.setValue(null);
@@ -697,22 +719,22 @@ public class DatLichController implements Initializable {
     }
 
     @FXML
-    void searchLich(MouseEvent event) {
+    void searchLich(MouseEvent event) throws RemoteException {
         String maLD = tfTKmaLichDat.getText();
         LocalDate ngayNhanBan = tKngayNhanBan.getValue();
         TrangThaiHoaDon trangThaiHoaDon = cbTrangThai.getSelectionModel().getSelectedItem();
         String cccd = tfTKCCCD.getText();
 
-        refreshBang(lichDatDAO.getDSLichDatBy(maLD, ngayNhanBan, trangThaiHoaDon, cccd));
+        refreshBang(lichDatService.getDSLichDatBy(maLD, ngayNhanBan, trangThaiHoaDon, cccd));
     }
 
     @FXML
-    void searchBan(MouseEvent event) {
+    void searchBan(MouseEvent event) throws RemoteException {
         String maBan = tfTKmaBan.getText();
         LoaiBan loaiBan = cbBanLoaiBan.getSelectionModel().getSelectedItem();
         KhuVuc khuVuc = cbKhuVuc.getSelectionModel().getSelectedItem();
 
-        refreshViewBan(banDAO.getListBanBy(maBan, null, loaiBan, khuVuc));
+        refreshViewBan(banService.getListBanBy(maBan, null, loaiBan, khuVuc));
     }
 
     @FXML
@@ -721,7 +743,7 @@ public class DatLichController implements Initializable {
             if (tfCCCD.getText().length() == 12) {
                 KhachHang khachHang = new KhachHang();
                 khachHang.setCccd(tfCCCD.getText());
-                khachHang = khachHangDAO.getKHByCCCD(tfCCCD.getText());
+                khachHang = khachHangService.getKHByCCCD(tfCCCD.getText());
                 tfTenKhachHang.setText(khachHang.getTenKhachHang());
                 prevCCCD = tfCCCD.getText();
             }

@@ -12,12 +12,16 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
-import org.login.quanlydatban.dao.ChiTietHoaDonDAO;
-import org.login.quanlydatban.entity.ChiTietHoaDon;
-import org.login.quanlydatban.entity.LichDat;
+import org.login.service.CTHDService;
+import org.login.entity.ChiTietHoaDon;
+import org.login.entity.LichDat;
 import org.login.quanlydatban.utilities.NumberFormatter;
 
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.rmi.Naming;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 import java.util.ResourceBundle;
@@ -28,13 +32,13 @@ public class PhieuDatLichController implements Initializable {
 
     private LichDat lichDat;
 
-    private ChiTietHoaDonDAO chiTietHoaDonDAO;
+    private CTHDService cthdService;
 
     public LichDat getLichDat() {
         return lichDat;
     }
 
-    public void setLichDat(LichDat lichDat) {
+    public void setLichDat(LichDat lichDat) throws RemoteException {
         this.lichDat = lichDat;
         ImageView img = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/org/login/quanlydatban/icons/logoHD.png"))));
         ColorAdjust grayscale = new ColorAdjust();
@@ -77,7 +81,7 @@ public class PhieuDatLichController implements Initializable {
         phieuDatArea.getChildren().add(headerText);
 
         int index = 1;
-        for (ChiTietHoaDon item : chiTietHoaDonDAO.fetchChiTietHoaDonNative(lichDat.getHoaDon().getMaHoaDon())) {
+        for (ChiTietHoaDon item : cthdService.fetchChiTietHoaDonNative(lichDat.getHoaDon().getMaHoaDon())) {
             String line = String.format("   %-5d| %-20s| %15s| %10d| %15s\n",
                     index++,
                     item.getMonAn().getTenMonAn(),
@@ -112,6 +116,11 @@ public class PhieuDatLichController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        chiTietHoaDonDAO = new ChiTietHoaDonDAO();
+        String host = System.getenv("HOST_NAME");
+        try {
+            cthdService = (CTHDService) Naming.lookup("rmi://"+ host + ":2909/cthdService");
+        } catch (NotBoundException | MalformedURLException | RemoteException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

@@ -16,20 +16,24 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.FileChooser;
-import org.login.quanlydatban.dao.LoaiMonDAO;
-import org.login.quanlydatban.dao.MonAnDAO;
-import org.login.quanlydatban.entity.LoaiMonAn;
-import org.login.quanlydatban.entity.MonAn;
-import org.login.quanlydatban.entity.enums.TrangThaiMonAn;
+import org.login.service.*;
+
+import org.login.entity.LoaiMonAn;
+import org.login.entity.MonAn;
+import org.login.entity.enums.TrangThaiMonAn;
 import org.login.quanlydatban.notification.Notification;
 import org.login.quanlydatban.utilities.NumberFormatter;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.rmi.Naming;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -81,28 +85,17 @@ public class ThucDonController implements Initializable {
     @FXML
     private Button btnThemMon;
 
-//    @FXML
-//    private Button btnXoaMon;
-
     @FXML
     private Button btnCapNhat;
-
 
     @FXML
     private Button btnXoaRong;
 
-//    @FXML
-//    private Button btnTimKiem;
-//
-//    @FXML
-//    private Button btnRefresh;
-
-
     private MonAn monAn;
 
-    private MonAnDAO monAnDAO;
+    private MonAnService monAnService;
 
-    private LoaiMonDAO loaiMonDAO;
+    private LoaiMonService loaiMonService;
 
     private double donGia = 0.0;
 
@@ -111,22 +104,45 @@ public class ThucDonController implements Initializable {
         cbloaiMonAn.getSelectionModel().selectFirst();
         cbtrangThaiMon.getSelectionModel().selectFirst();
         cbSapXep.getSelectionModel().selectFirst();
-        monAnDAO = new MonAnDAO();
-        loaiMonDAO = new LoaiMonDAO();
+
+        String host = System.getenv("HOST_NAME");
+
+        try {
+            monAnService = (MonAnService) Naming.lookup("rmi://" + host + ":2909/monAnService");
+            loaiMonService = (LoaiMonService) Naming.lookup("rmi://" + host + ":2909/loaiMonService");
+        } catch (NotBoundException | MalformedURLException | RemoteException e) {
+            throw new RuntimeException(e);
+        }
+
         ObservableList<String> sharedList = FXCollections.observableArrayList();
         cbloaiMonAn.setItems(sharedList);
         cbTimLoaiMon.setItems(sharedList);
-        System.out.println(monAnDAO.getAllMonAn());
+
+//        try {
+//            System.out.println(monAnService.getAllMonAn());
+//        } catch (RemoteException e) {
+//            throw new RuntimeException(e);
+//        }
 
         loadLoaiMonAnComboBox();
         loadDonViTinhComboBox();
 
-        List<MonAn> monAnList = monAnDAO.getAllMonAn();
+        List<MonAn> monAnList;
+        try {
+            monAnList = monAnService.getAllMonAn();
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
         if (monAnList == null) {
             Notification.thongBao("Danh sach mon an bi trong", Alert.AlertType.WARNING);
         }
 
-        List<LoaiMonAn> loaiMonAnList = loaiMonDAO.getListLoai();
+        List<LoaiMonAn> loaiMonAnList = null;
+        try {
+            loaiMonAnList = loaiMonService.getListLoai();
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
         if (loaiMonAnList == null) {
             Notification.thongBao("Danh sach loai mon an bi trong", Alert.AlertType.WARNING);
         }
@@ -146,7 +162,6 @@ public class ThucDonController implements Initializable {
                 File file = fileChooser.showOpenDialog(null);
 
                 if (file != null) {
-
 
 
                     // Cập nhật ImageView với ảnh mới
@@ -227,22 +242,30 @@ public class ThucDonController implements Initializable {
             }
         });
 
-        monAnDAO.getAllMonAn();
+        try {
+            monAnService.getAllMonAn();
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
         flowPane.prefHeightProperty().bind(scrollPane.heightProperty());
         flowPane.prefWidthProperty().bind(scrollPane.widthProperty());
 
-        for (MonAn i : monAnDAO.getAllMonAn()) {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/uicomponents/CardMonAn_TrangThucDon.fxml"));
-            try {
-                AnchorPane pane = loader.load();
+        try {
+            for (MonAn i : monAnService.getAllMonAn()) {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/uicomponents/CardMonAn_TrangThucDon.fxml"));
+                try {
+                    AnchorPane pane = loader.load();
 
-                CardMonAnThucDonController controller = loader.getController();
-                controller.setMonAnThucDon(i, this);
-                controller.setController(this);
-                flowPane.getChildren().add(pane);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+                    CardMonAnThucDonController controller = loader.getController();
+                    controller.setMonAnThucDon(i, this);
+                    controller.setController(this);
+                    flowPane.getChildren().add(pane);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
         }
 
         //monAnDAO.getListMonAn();
@@ -328,7 +351,6 @@ public class ThucDonController implements Initializable {
     @FXML
     void capNhatControl(ActionEvent event) {
         MonAn monMoi = new MonAn();
-        LoaiMonDAO loaiMonDAO = new LoaiMonDAO();
         Object source = event.getSource();
         if (source == btnCapNhat) {
             try {
@@ -347,12 +369,12 @@ public class ThucDonController implements Initializable {
                     }
 
                     String loaiMonMoiName = cbloaiMonAn.getValue();
-                    LoaiMonAn loaiMonMoi = loaiMonDAO.getLoaiMonByName(loaiMonMoiName);
+                    LoaiMonAn loaiMonMoi = loaiMonService.getLoaiMonByName(loaiMonMoiName);
 
                     // If LoaiMonAn doesn't exist, add it
                     if (loaiMonMoi == null) {
                         themLoaiMon(); // This will add the new LoaiMonAn
-                        loaiMonMoi = loaiMonDAO.getLoaiMonByName(loaiMonMoiName); // Retrieve the newly added LoaiMonAn
+                        loaiMonMoi = loaiMonService.getLoaiMonByName(loaiMonMoiName); // Retrieve the newly added LoaiMonAn
                     }
 
                     String moTa = txfMoTa.getText();
@@ -365,7 +387,7 @@ public class ThucDonController implements Initializable {
 
                     if (result == ButtonType.OK) {
                         monMoi = new MonAn(monAn.getMaMonAn(), loaiMonMoi, tenMonMoi, giaMoi, donViMoi, anhMoi, trangThaiMoi, moTa);
-                        monAnDAO.capNhatMonAn(monAn, monMoi);
+                        monAnService.capNhatMonAn(monMoi);
                         Notification.thongBao("Đã cập nhật thành công!", Alert.AlertType.INFORMATION);
                         refreshControl(event);
 
@@ -377,7 +399,6 @@ public class ThucDonController implements Initializable {
             } catch (Exception e) {
                 System.out.println(e);
             }
-
         }
     }
 
@@ -410,37 +431,42 @@ public class ThucDonController implements Initializable {
 //            Notification.thongBao("Bạn cần nhập/chọn một trong các cách tìm trước khi tiến hành tìm kiếm", Alert.AlertType.WARNING);
 //        }
 //        else {
-            // Clear the previous list
-            flowPane.getChildren().clear();
-            flowPane.prefHeightProperty().bind(scrollPane.heightProperty());
-            flowPane.prefWidthProperty().bind(scrollPane.widthProperty());
+        // Clear the previous list
+        flowPane.getChildren().clear();
+        flowPane.prefHeightProperty().bind(scrollPane.heightProperty());
+        flowPane.prefWidthProperty().bind(scrollPane.widthProperty());
 
-            // Fetch all items
-            List<MonAn> allItems = monAnDAO.getAllMonAn();
+        // Fetch all items
+        List<MonAn> allItems = null;
+        try {
+            allItems = monAnService.getAllMonAn();
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
 
-            // Filter items based on criteria
-            List<MonAn> filteredItems = allItems.stream()
-                    .filter(item ->
-                            (keyword.isEmpty() || item.getTenMonAn().toLowerCase().contains(keyword.toLowerCase())) &&
-                                    (selectedType == null || item.getLoaiMonAn().getTenLoaiMonAn().toLowerCase().contains(selectedType.toLowerCase()))
-                    )
-                    .collect(Collectors.toList());
+        // Filter items based on criteria
+        List<MonAn> filteredItems = allItems.stream()
+                .filter(item ->
+                        (keyword.isEmpty() || item.getTenMonAn().toLowerCase().contains(keyword.toLowerCase())) &&
+                                (selectedType == null || item.getLoaiMonAn().getTenLoaiMonAn().toLowerCase().contains(selectedType.toLowerCase()))
+                )
+                .collect(Collectors.toList());
 
-            // Sort items if a sort option is selected
-            if (sortOption == 0) {
-                filteredItems.sort(Comparator.comparing(MonAn::getDonGia).thenComparing(MonAn::getTenMonAn));
-            } else {
-                filteredItems.sort(Comparator.comparing(MonAn::getDonGia).reversed().thenComparing(MonAn::getTenMonAn));
-            }
+        // Sort items if a sort option is selected
+        if (sortOption == 0) {
+            filteredItems.sort(Comparator.comparing(MonAn::getDonGia).thenComparing(MonAn::getTenMonAn));
+        } else {
+            filteredItems.sort(Comparator.comparing(MonAn::getDonGia).reversed().thenComparing(MonAn::getTenMonAn));
+        }
 
-            // Display items
-            filteredItems.forEach(this::addItemToFlowPane);
+        // Display items
+        filteredItems.forEach(this::addItemToFlowPane);
 
-            // Show warning if no items are found
-            if (filteredItems.isEmpty()) {
-                Notification.thongBao("Không tìm thấy món ăn phù hợp với tiêu chí tìm kiếm!", Alert.AlertType.WARNING);
+        // Show warning if no items are found
+        if (filteredItems.isEmpty()) {
+            Notification.thongBao("Không tìm thấy món ăn phù hợp với tiêu chí tìm kiếm!", Alert.AlertType.WARNING);
 
-      }
+        }
 
 
 //        else if (cbTimLoaiMon.getSelectionModel().getSelectedIndex() == 0) {
@@ -471,7 +497,7 @@ public class ThucDonController implements Initializable {
 //            }
 //        }
 
-}
+    }
 
 //    //FINDING
 //    void timKiemTheoTen (String tenMonAn) {
@@ -551,7 +577,12 @@ public class ThucDonController implements Initializable {
             cbSapXep.getSelectionModel().selectFirst();
             flowPane.getChildren().clear(); // Clear existing items
 
-            List<MonAn> monAnList = monAnDAO.getAllMonAn(); // Retrieve the latest data from the database
+            List<MonAn> monAnList = null; // Retrieve the latest data from the database
+            try {
+                monAnList = monAnService.getAllMonAn();
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
 
             for (MonAn monAn : monAnList) {
                 try {
@@ -574,7 +605,12 @@ public class ThucDonController implements Initializable {
 
     private void loadLoaiMonAnComboBox() {
         cbloaiMonAn.getItems().clear();  // Clear current items to avoid duplicates
-        List<LoaiMonAn> loaiMonAnList = loaiMonDAO.getListLoai();
+        List<LoaiMonAn> loaiMonAnList = null;
+        try {
+            loaiMonAnList = loaiMonService.getListLoai();
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
 
         if (loaiMonAnList != null) {
             for (LoaiMonAn loaiMonAn : loaiMonAnList) {
@@ -587,7 +623,12 @@ public class ThucDonController implements Initializable {
 
     private void loadDonViTinhComboBox() {
         cbDonViTinh.getItems().clear();  // Clear current items to avoid duplicates
-        List<String> donViList = monAnDAO.getListDon();
+        List<String> donViList = null;
+        try {
+            donViList = monAnService.getListDon();
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
 
         if (donViList != null) {
             for (String monan : donViList) {
@@ -607,16 +648,15 @@ public class ThucDonController implements Initializable {
 //    }
 
     //CRUD
-    public void themMon() {
-        MonAnDAO monAnDAO = new MonAnDAO(); // DAO for MonAn
+    public void themMon() throws RemoteException {
         MonAn monAn = new MonAn();
         String selectedLoaiMon = cbloaiMonAn.getValue(); // Get the selected or entered value
-        LoaiMonAn loaiMon = loaiMonDAO.getLoaiMonByName(selectedLoaiMon);
+        LoaiMonAn loaiMon = loaiMonService.getLoaiMonByName(selectedLoaiMon);
         //double gia;
-         //If it doesn't exist, add it
+        //If it doesn't exist, add it
         if (loaiMon == null) {
             themLoaiMon(); // Adds the new LoaiMonAn
-            loaiMon = loaiMonDAO.getLoaiMonByName(selectedLoaiMon); // Retrieve the newly added LoaiMonAn
+            loaiMon = loaiMonService.getLoaiMonByName(selectedLoaiMon); // Retrieve the newly added LoaiMonAn
         }
 
         TrangThaiMonAn ttMonAn = comboTTValue();
@@ -636,7 +676,7 @@ public class ThucDonController implements Initializable {
 //                File defaultImageFile = new File(getClass().getResource("/org/login/quanlydatban/icons/empty.png").getPath());
 //                duongDanAnh = defaultImageFile.getAbsolutePath();
 //            } else {
-                duongDanAnh = imageUrl.substring(5); // Remove "file:" prefix to get the file path
+            duongDanAnh = imageUrl.substring(5); // Remove "file:" prefix to get the file path
 //            }
 
         }
@@ -653,18 +693,18 @@ public class ThucDonController implements Initializable {
 //        MonAn monAn = new MonAn(maMonAn, loaiMon, tenMonAn, gia, donViTinh, duongDanAnh, ttMonAn);
 
         // Save MonAn to the database
-        monAnDAO.themMonAn(monAn);
+        monAnService.themMonAn(monAn);
     }
 
-    public void themLoaiMon () {
-        LoaiMonDAO loaiMonDAO = new LoaiMonDAO();
+    public void themLoaiMon() throws RemoteException {
 //        String maLoai = generateLoaiMonAn(cbloaiMonAn.getValue());
         String tenLoai = cbloaiMonAn.getValue();
         //String moTa = txfMoTa.getText();
 
-        LoaiMonAn loaiMonAn = new LoaiMonAn(tenLoai);
-        loaiMonDAO.themLoaiMonAn(loaiMonAn);
-
+        LoaiMonAn loaiMonAn = LoaiMonAn.builder()
+                .tenLoaiMonAn(tenLoai)
+                .build();
+        loaiMonService.themLoaiMonAn(loaiMonAn);
     }
 
 //    public LoaiMonAn comboLoaiMonValue () {
@@ -700,21 +740,19 @@ public class ThucDonController implements Initializable {
 
     @FXML
     void formatGia(KeyEvent event) {
-        if(event.getSource().equals(txtGia)){
-            if(txtGia.getText().isEmpty()) {
+        if (event.getSource().equals(txtGia)) {
+            if (txtGia.getText().isEmpty()) {
                 return;
             }
             txtGia.setText(NumberFormatter.formatPrice(txtGia.getText()));
             txtGia.positionCaret(txtGia.getText().length());
 
-            if (!txtGia.getText().replace(".", "").matches("\\d+"))
-            {
+            if (!txtGia.getText().replace(".", "").matches("\\d+")) {
                 Notification.thongBao("Chỉ được nhập số", Alert.AlertType.INFORMATION);
                 txtGia.setText(txtGia.getText().substring(0, txtGia.getLength() - 1));
                 txtGia.setText(NumberFormatter.formatPrice(txtGia.getText()));
                 txtGia.positionCaret(txtGia.getText().length());
-            }
-            else {
+            } else {
                 donGia = Double.parseDouble(txtGia.getText().replace(".", "").trim());
             }
         }

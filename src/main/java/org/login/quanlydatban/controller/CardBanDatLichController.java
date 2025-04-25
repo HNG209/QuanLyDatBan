@@ -6,7 +6,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import org.login.quanlydatban.entity.Ban;
+import org.login.entity.Ban;
 
 import java.io.IOException;
 import java.util.Objects;

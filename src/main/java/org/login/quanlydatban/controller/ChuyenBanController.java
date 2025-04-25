@@ -12,17 +12,23 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Stage;
-import org.login.quanlydatban.dao.BanDAO;
-import org.login.quanlydatban.dao.HoaDonDAO;
-import org.login.quanlydatban.entity.Ban;
-import org.login.quanlydatban.entity.HoaDon;
-import org.login.quanlydatban.entity.enums.KhuVuc;
-import org.login.quanlydatban.entity.enums.LoaiBan;
-import org.login.quanlydatban.entity.enums.TrangThaiBan;
+//import org.login.dao.BanDAO;
+//import org.login.dao.HoaDonDAO;
+import org.login.service.BanService;
+import org.login.entity.Ban;
+import org.login.entity.HoaDon;
+import org.login.entity.enums.KhuVuc;
+import org.login.entity.enums.LoaiBan;
+import org.login.entity.enums.TrangThaiBan;
 import org.login.quanlydatban.notification.Notification;
+import org.login.service.HoaDonService;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.rmi.Naming;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -61,9 +67,10 @@ public class ChuyenBanController implements Initializable {
     private TextField maBanHT;
     private Ban banHienTai;
     private Ban banChuyen;
-    private BanDAO banDAO;
 
-    private HoaDonDAO hoaDonDAO;
+    private BanService banService;
+    private HoaDonService hoaDonService;
+
     private HoaDon currentHD;
 
     private DatMonController datMonController;
@@ -132,13 +139,13 @@ public class ChuyenBanController implements Initializable {
         if (banChuyen != null) {
             if (Notification.xacNhan("Xác nhận chuyển bàn?")) {
                 currentHD.setBan(banChuyen);
-                hoaDonDAO.updateHoaDon(currentHD);
+                hoaDonService.updateHoaDon(currentHD);
 
                 banHienTai.setTrangThaiBan(TrangThaiBan.BAN_TRONG);
                 banChuyen.setTrangThaiBan(TrangThaiBan.DANG_PHUC_VU);
 
-                banDAO.updateBan(banHienTai);
-                banDAO.updateBan(banChuyen);
+                banService.updateBan(banHienTai);
+                banService.updateBan(banChuyen);
 
                 //(1) called from CardBanController, datMonController = null
                 //(2) called from DatMonController, datMonController != null, point: to update the current table in datMonController
@@ -159,16 +166,16 @@ public class ChuyenBanController implements Initializable {
     }
 
     @FXML
-    void timKiem(MouseEvent event) {
-        loadBan(banDAO.getListBanBy(tfMaBan.getText(),
+    void timKiem(MouseEvent event) throws RemoteException {
+        loadBan(banService.getListBanBy(tfMaBan.getText(),
                 TrangThaiBan.BAN_TRONG,
                 cbLoaiBan.getSelectionModel().getSelectedItem(),
                 cbKhuVuc.getSelectionModel().getSelectedItem()));
     }
 
-    public void loadBan(){
+    public void loadBan() throws RemoteException {
         flowPane.getChildren().clear();
-        for (Ban i : banDAO.getListBanTrong()){
+        for (Ban i : banService.getListBanTrong()){
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/uicomponents/CardBan_TrangChuyenBan.fxml"));
             try {
                 AnchorPane pane = loader.load();
@@ -201,7 +208,7 @@ public class ChuyenBanController implements Initializable {
     }
 
     @FXML
-    void resetBan(MouseEvent event) {
+    void resetBan(MouseEvent event) throws RemoteException {
         tfMaBan.clear();
         cbLoaiBan.setValue(null);
         cbKhuVuc.setValue(null);
@@ -210,8 +217,17 @@ public class ChuyenBanController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        banDAO = new BanDAO();
-        hoaDonDAO = new HoaDonDAO();
+        String host = System.getenv("HOST_NAME");
+        try {
+            banService = (BanService) Naming.lookup("rmi://"+ host + ":2909/banService");
+            hoaDonService = (HoaDonService) Naming.lookup("rmi://"+ host + ":2909/hoaDonService");
+        } catch (NotBoundException e) {
+            throw new RuntimeException(e);
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
 
         cbKhuVuc.getItems().add(null);
         cbKhuVuc.getItems().addAll(KhuVuc.values());
@@ -219,6 +235,10 @@ public class ChuyenBanController implements Initializable {
         cbLoaiBan.getItems().add(null);
         cbLoaiBan.getItems().addAll(LoaiBan.values());
 
-        loadBan();
+        try {
+            loadBan();
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

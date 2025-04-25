@@ -5,7 +5,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import org.login.quanlydatban.entity.MonAn;
+import org.login.entity.MonAn;
 import org.login.quanlydatban.utilities.NumberFormatter;
 
 import java.io.File;

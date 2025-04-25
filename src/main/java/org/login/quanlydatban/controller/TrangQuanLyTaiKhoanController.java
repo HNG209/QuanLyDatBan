@@ -6,23 +6,24 @@ import javafx.collections.transformation.FilteredList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import org.login.quanlydatban.dao.NhanVienDAO;
-import org.login.quanlydatban.dao.TaiKhoanDAO;
+//import org.login.quanlydatban.dao.NhanVienDAO;
+//import org.login.quanlydatban.dao.TaiKhoanDAO;
+import org.login.service.*;
+
 import org.login.quanlydatban.encryptionUtils.EncryptionUtils;
-import org.login.quanlydatban.entity.NhanVien;
+import org.login.entity.NhanVien;
 import org.login.quanlydatban.notification.Notification;
 
-import javax.crypto.Cipher;
-import javax.crypto.KeyGenerator;
-import javax.crypto.SecretKey;
+import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Base64;
+import java.rmi.Naming;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -35,7 +36,6 @@ public class TrangQuanLyTaiKhoanController implements Initializable {
     private TableView<NhanVien> tableTaiKhoan;
     @FXML
     private TextField maNhanVien;
-    private TaiKhoanDAO taiKhoanDAO = new TaiKhoanDAO();
     @FXML
     private TextField tenNhanVienn;
     @FXML
@@ -51,11 +51,11 @@ public class TrangQuanLyTaiKhoanController implements Initializable {
     private TableColumn<NhanVien, String> tableTenNhanVien; // 1 Cột Họ Tên
     @FXML
     private TableColumn<NhanVien, String> tableTenTaiKhoan; // 2
-    private NhanVienDAO nhanVienDAO;
-    private String matKhauHien;
-    public TrangQuanLyTaiKhoanController() throws Exception {
-    }
 
+    private TaiKhoanService taiKhoanService;
+    private NhanVienService nhanVienService;
+
+    private String matKhauHien;
 
     public String getTenNhanVien() {
         return tenNhanVien;
@@ -67,10 +67,21 @@ public class TrangQuanLyTaiKhoanController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        nhanVienDAO = new NhanVienDAO();
-        try {
+        String host = System.getenv("HOST_NAME");
 
-            List<NhanVien> listNhanVien = nhanVienDAO.getNhanVienWithTaiKhoan();
+        try {
+            nhanVienService = (NhanVienService) Naming.lookup("rmi://" + host + ":2909/nhanVienService");
+            taiKhoanService = (TaiKhoanService) Naming.lookup("rmi://" + host + ":2909/taiKhoanService");
+        } catch (NotBoundException e) {
+            throw new RuntimeException(e);
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
+
+        try {
+            List<NhanVien> listNhanVien = nhanVienService.getNhanVienWithTaiKhoan();
             tableMaNhanVien.setCellValueFactory(new PropertyValueFactory<>("maNhanVien"));
             tableTenNhanVien.setCellValueFactory(new PropertyValueFactory<>("tenNhanVien"));
             tableTenTaiKhoan.setCellValueFactory(new PropertyValueFactory<>("tenTaiKhoan"));
@@ -82,7 +93,12 @@ public class TrangQuanLyTaiKhoanController implements Initializable {
             e.printStackTrace(); // In ra thông tin lỗi
         }
 
-        List<NhanVien> listNhanVien = nhanVienDAO.getNhanVienWithTaiKhoan();
+        List<NhanVien> listNhanVien = null;
+        try {
+            listNhanVien = nhanVienService.getNhanVienWithTaiKhoan();
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
         FilteredList<NhanVien> filteredList = new FilteredList<>(FXCollections.observableArrayList(listNhanVien), b -> true);
 
         tim.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -102,22 +118,20 @@ public class TrangQuanLyTaiKhoanController implements Initializable {
                     try {
                         int rowIndex = tableTaiKhoan.getSelectionModel().getSelectedIndex();
                         String cellValue = tableTaiKhoan.getItems().get(rowIndex).getMaNhanVien();
-                        NhanVienDAO nvdao = new  NhanVienDAO();
-                        NhanVien nvtim = nvdao.getNhanVien(cellValue);
-                        matKhauHien = taiKhoanDAO.getTaiKhoanNhanVien(cellValue).getPassword().toString();
-                        if(nvtim != null){
+                        NhanVien nvtim = nhanVienService.getNhanVien(cellValue);
+                        matKhauHien = taiKhoanService.getTaiKhoanNhanVien(cellValue).getPassword().toString();
+                        if (nvtim != null) {
                             //String mk = themNhanVienController.decrypt(matKhauHien,themNhanVienController.generateKey());
                             tenNhanVienn.setText(nvtim.getTenNhanVien());
                             maNhanVien.setText(nvtim.getMaNhanVien());
-                            tenTaiKhoan.setText(taiKhoanDAO.getTaiKhoanNhanVien(cellValue).getUserName().toString());
-                            if(taiKhoanDAO.getTaiKhoanNhanVien(cellValue).getPassword().toString().equals("1111")) {
-                                hienthi="1111";
+                            tenTaiKhoan.setText(taiKhoanService.getTaiKhoanNhanVien(cellValue).getUserName().toString());
+                            if (taiKhoanService.getTaiKhoanNhanVien(cellValue).getPassword().toString().equals("1111")) {
+                                hienthi = "1111";
                                 password.setText("1111");
-                            } else{
-                                password.setText(EncryptionUtils.decrypt(taiKhoanDAO.getTaiKhoanNhanVien(cellValue).getPassword().toString(), System.getenv("ENCRYPTION_KEY")));
-                                hienthi = EncryptionUtils.decrypt(taiKhoanDAO.getTaiKhoanNhanVien(cellValue).getPassword().toString(), System.getenv("ENCRYPTION_KEY"));
+                            } else {
+                                password.setText(EncryptionUtils.decrypt(taiKhoanService.getTaiKhoanNhanVien(cellValue).getPassword().toString(), System.getenv("ENCRYPTION_KEY")));
+                                hienthi = EncryptionUtils.decrypt(taiKhoanService.getTaiKhoanNhanVien(cellValue).getPassword().toString(), System.getenv("ENCRYPTION_KEY"));
                             }
-
                             //hienthi = EncryptionUtils.decrypt(nvd.getTaiKhoanNhanVien(cellValue).getPassword().toString(), System.getenv("ENCRYPTION_KEY"));
                             Tooltip tooltip = new Tooltip(hienthi);
                             Tooltip.install(password, tooltip); // Cài đặt Tooltip cho PasswordField

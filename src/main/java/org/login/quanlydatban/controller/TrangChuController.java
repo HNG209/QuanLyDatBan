@@ -17,14 +17,19 @@ import javafx.scene.shape.Circle;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import org.login.quanlydatban.dao.HoaDonDAO;
-import org.login.quanlydatban.entity.TaiKhoan;
-import org.login.quanlydatban.entity.enums.ChucVu;
+//import org.login.quanlydatban.dao.HoaDonDAO;
+import org.login.service.HoaDonService;
+import org.login.entity.TaiKhoan;
+import org.login.entity.enums.ChucVu;
 import org.login.quanlydatban.notification.Notification;
 import org.login.quanlydatban.utilities.Clock;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.rmi.Naming;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
@@ -36,6 +41,7 @@ public class TrangChuController implements Initializable {
 
     @FXML
     private VBox rankingBoard;
+
     public static TaiKhoan taiKhoan;
 
     @FXML
@@ -83,6 +89,8 @@ public class TrangChuController implements Initializable {
 
     private static BorderPane borderPaneStatic;
 
+    private HoaDonService hoaDonService;
+
     @FXML
     private ImageView setting;
 
@@ -92,7 +100,7 @@ public class TrangChuController implements Initializable {
         TrangChuController.taiKhoan = taiKhoan;
         showTooltipForAvatar();
         showMenu();
-        if(TrangChuController.taiKhoan.getNhanVien().getChucVuNhanVien().equals(ChucVu.NHAN_VIEN)) {
+        if (TrangChuController.taiKhoan.getNhanVien().getChucVuNhanVien().equals(ChucVu.NHAN_VIEN)) {
             if (stage == null || !stage.isShowing()) {
                 try {
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/TrangBaoCaoVaoCa.fxml"));
@@ -116,7 +124,7 @@ public class TrangChuController implements Initializable {
                 stage.toFront();
             }
         }
-        if(TrangChuController.taiKhoan.getNhanVien().getChucVuNhanVien().equals(ChucVu.NHAN_VIEN)) {
+        if (TrangChuController.taiKhoan.getNhanVien().getChucVuNhanVien().equals(ChucVu.NHAN_VIEN)) {
             nhanVienMenu.setVisible(false);
             thucDonMenu.setVisible(false);
             quanLyBanMenuItem.setVisible(false);
@@ -126,12 +134,6 @@ public class TrangChuController implements Initializable {
 
     @FXML
     public void datMon() throws IOException {
-        //first go to chonBan -> datMon
-//        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/TrangChonBan.fxml"));
-//        AnchorPane anchorPane = loader.load();
-//
-//        ChonBanController controller = loader.getController();
-
         borderPane.setCenter(ChonBanController.getInstance().getRoot());
 
         ChonBanController.getInstance().refresh();
@@ -196,9 +198,7 @@ public class TrangChuController implements Initializable {
 
     @FXML
     public void ketCa() throws IOException {
-
-        try
-        {
+        try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/TrangBaoCaoKetCa.fxml"));
             AnchorPane anchorPane = loader.load();
             KetCaController ketCa = loader.getController();
@@ -212,8 +212,7 @@ public class TrangChuController implements Initializable {
             stage.setResizable(false);
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.showAndWait();
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             Notification.thongBao("Bạn chưa làm báo cáo vào ca", Alert.AlertType.ERROR);
         }
 
@@ -310,6 +309,16 @@ public class TrangChuController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        String host = System.getenv("HOST_NAME");
+        try {
+            hoaDonService = (HoaDonService) Naming.lookup("rmi://" + host + ":2909/hoaDonService");
+        } catch (NotBoundException e) {
+            throw new RuntimeException(e);
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
         Clock clock = new Clock();
         clock.startClock(time);
         logo.setImage(new Image(String.valueOf(getClass().getResource("/org/login/quanlydatban/icons/tobologo.png"))));
@@ -341,7 +350,7 @@ public class TrangChuController implements Initializable {
         SeparatorMenuItem separatorMenuItem = new SeparatorMenuItem();
         MenuItem itemDangXuat = new MenuItem("Đăng xuất");
         itemDangXuat.setOnAction(event -> {
-            if(DangNhapController.isAdmin || TrangChuController.taiKhoan.getNhanVien().getChucVuNhanVien().equals(ChucVu.QUAN_LY)) {
+            if (DangNhapController.isAdmin || TrangChuController.taiKhoan.getNhanVien().getChucVuNhanVien().equals(ChucVu.QUAN_LY)) {
                 Stage stage = (Stage) setting.getScene().getWindow();
                 stage.close();
                 try {
@@ -349,8 +358,7 @@ public class TrangChuController implements Initializable {
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
-            }
-            else if (KetCaController.isKetCa) {
+            } else if (KetCaController.isKetCa) {
                 Stage stage = (Stage) setting.getScene().getWindow();
                 stage.close();
 
@@ -373,7 +381,7 @@ public class TrangChuController implements Initializable {
             }
         });
 
-        if(DangNhapController.isAdmin) {
+        if (DangNhapController.isAdmin) {
             trangChuMenu.setVisible(false);
             baoCaoMenu.setVisible(false);
             lichDatMenu.setVisible(false);
@@ -383,8 +391,6 @@ public class TrangChuController implements Initializable {
             nhaHangMenu.setVisible(false);
             menuTienIch.setVisible(false);
         }
-
-
 
 
     }
@@ -423,7 +429,7 @@ public class TrangChuController implements Initializable {
 
         if (taiKhoan != null && taiKhoan.getNhanVien() != null) {
             String url = taiKhoan.getNhanVien().getHinhAnh();
-            avatar.setImage(new Image("file:"+ url));
+            avatar.setImage(new Image("file:" + url));
             avatar.setFitWidth(40); // Chiều rộng
             avatar.setFitHeight(60); // Chiều cao
             avatar.setPreserveRatio(true);
@@ -464,9 +470,8 @@ public class TrangChuController implements Initializable {
     }
 
     public void loadRankingBoard() throws IOException {
-        HoaDonDAO hoaDonDAO = new HoaDonDAO();
 
-        List<Object[]> rankingFood = hoaDonDAO.layTop10MonAnTheoDoanhThuVaSoLuongBan();
+        List<Object[]> rankingFood = hoaDonService.layTop10MonAnTheoDoanhThuVaSoLuongBan();
         FXMLLoader titleLoader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/uicomponents/RankingCardTitle.fxml"));
         Node rankingTitleCard = titleLoader.load();
         tilePane.getChildren().add(rankingTitleCard);
@@ -496,6 +501,7 @@ public class TrangChuController implements Initializable {
         anchorPane.prefWidthProperty().bind(borderPane.widthProperty());
         anchorPane.prefHeightProperty().bind(borderPane.heightProperty());
     }
+
     public void showMenu() {
         trangChuMenu.setVisible(true);
         baoCaoMenu.setVisible(true);
@@ -508,5 +514,4 @@ public class TrangChuController implements Initializable {
         quanLyBanMenuItem.setVisible(true);
         menuTienIch.setVisible(true);
     }
-
 }

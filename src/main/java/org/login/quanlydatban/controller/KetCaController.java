@@ -1,26 +1,20 @@
 package org.login.quanlydatban.controller;
 
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.Window;
-import javafx.util.Duration;
-import org.login.quanlydatban.dao.BaoCaoDAO;
-import org.login.quanlydatban.dao.HoaDonDAO;
-import org.login.quanlydatban.dao.NhanVienDAO;
-import org.login.quanlydatban.entity.BaoCao;
-import org.login.quanlydatban.entity.NhanVien;
-import org.login.quanlydatban.entity.TaiKhoan;
-import org.login.quanlydatban.notification.Notification;
+//import org.login.quanlydatban.dao.BaoCaoDAO;
+//import org.login.quanlydatban.dao.HoaDonDAO;
+//import org.login.quanlydatban.dao.NhanVienDAO;
+
+import org.login.service.HoaDonService;
+import org.login.entity.BaoCao;
+import org.login.entity.TaiKhoan;
 import org.login.quanlydatban.utilities.Clock;
 
 import javax.swing.*;
@@ -28,10 +22,12 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.rmi.Naming;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 public class KetCaController {
 
@@ -86,9 +82,11 @@ public class KetCaController {
     @FXML
     private Label tongSoHoaDon;
     private TaiKhoan taiKhoan;
-    private HoaDonDAO hoaDonDAO;
-    private DecimalFormat df = new DecimalFormat("#,### VND");;
+    private HoaDonService hoaDonService;
+    private DecimalFormat df = new DecimalFormat("#,### VND");
+    ;
     public static boolean isKetCa;
+
     public TaiKhoan getTaiKhoan() {
         return taiKhoan;
     }
@@ -102,10 +100,11 @@ public class KetCaController {
     }
 
     @FXML
-    public void initialize() {
+    public void initialize() throws RemoteException, MalformedURLException, NotBoundException {
+        String host = System.getenv("HOST_NAME");
         Clock clock = new Clock();
         clock.startClock(thoiGianHienTai);
-        hoaDonDAO = new HoaDonDAO();
+        hoaDonService = (HoaDonService) Naming.lookup("rmi://"+ host + ":2909/hoaDonService");
         loadDuLieu();
         loadTienCuoiCaVaChenhLech();
         menhGia1K.textProperty().addListener((observable, oldValue, newValue) -> tinhTongMenhGia());
@@ -119,12 +118,13 @@ public class KetCaController {
         menhGia500K.textProperty().addListener((observable, oldValue, newValue) -> tinhTongMenhGia());
         tienVaoCa.textProperty().addListener((observable, oldValue, newValue) -> loadTienCuoiCaVaChenhLech());
 
-}
-    public void loadDuLieu() {
+    }
+
+    public void loadDuLieu() throws RemoteException {
         String maNV = TrangChuController.taiKhoan.getNhanVien().getMaNhanVien();
         tenNhanVien.setText(TrangChuController.taiKhoan.getNhanVien().getTenNhanVien());
         Object[] doanhThuVaSoHD;
-        doanhThuVaSoHD = hoaDonDAO.layDoanhThuVaSoHoaDon(maNV, LocalDate.now());
+        doanhThuVaSoHD = hoaDonService.layDoanhThuVaSoHoaDon(maNV, LocalDate.now());
         tienVaoCa.setText(VaoCaController.tongTienVaoCa.isEmpty() ? df.format(0) : VaoCaController.tongTienVaoCa);
         if (doanhThuVaSoHD.length == 0) {
             tongSoHoaDon.setText("0");
@@ -134,6 +134,7 @@ public class KetCaController {
             tongSoHoaDon.setText(doanhThuVaSoHD[1].toString());
         }
     }
+
     @FXML
     private void tinhTongMenhGia() {
         int tien1K = parseTextField(menhGia1K);
@@ -154,12 +155,12 @@ public class KetCaController {
         double tienVao = tienVaoCa.getText().isEmpty() ? 0.0 : Double.parseDouble(tienVaoCa.getText().replace(" VND", "").replace(",", ""));
 
         double tienChenhLech = tongMenhGiaTien - tienVao;
-        if(tienChenhLech < 0) {
+        if (tienChenhLech < 0) {
             chenhLech.setTextFill(Color.RED);
-        }
-        else chenhLech.setTextFill(Color.BLACK);
+        } else chenhLech.setTextFill(Color.BLACK);
         chenhLech.setText(df.format(Math.abs(tienChenhLech)));
     }
+
     private int parseTextField(TextField textField) {
         try {
             return textField.getText().isEmpty() ? 0 : Integer.parseInt(textField.getText());
@@ -168,23 +169,24 @@ public class KetCaController {
             return 0;
         }
     }
+
     @FXML
     private void loadTienCuoiCaVaChenhLech() {
-        double tienVao = tienVaoCa.getText().isEmpty() ? 0.0 : Double.parseDouble(tienVaoCa.getText().replace(" VND", "").replace(",",""));
+        double tienVao = tienVaoCa.getText().isEmpty() ? 0.0 : Double.parseDouble(tienVaoCa.getText().replace(" VND", "").replace(",", ""));
 
-        double doanhThu = tongDoanhThu.getText().isEmpty() ? 0.0 : Double.parseDouble(tongDoanhThu.getText().replace(" VND", "").replace(",",""));
+        double doanhThu = tongDoanhThu.getText().isEmpty() ? 0.0 : Double.parseDouble(tongDoanhThu.getText().replace(" VND", "").replace(",", ""));
         double tienCuoiCaValue = tienVao + doanhThu;
-        double tongMenhGiaTien = tongMenhGia.getText().isEmpty() ? 0.0 : Double.parseDouble(tongMenhGia.getText().replace(" VND", "").replace(",",""));
+        double tongMenhGiaTien = tongMenhGia.getText().isEmpty() ? 0.0 : Double.parseDouble(tongMenhGia.getText().replace(" VND", "").replace(",", ""));
         double tienChenhLech = tongMenhGiaTien - tienCuoiCaValue;
-        if(tienChenhLech < 0.0){
+        if (tienChenhLech < 0.0) {
             chenhLech.setTextFill(Color.RED);
-        }
-        else {
+        } else {
             chenhLech.setTextFill(Color.BLACK);
         }
         chenhLech.setText(df.format(Math.abs(tienChenhLech)));
         tienCuoiCa.setText(df.format(tienCuoiCaValue));
     }
+
     @FXML
     private void thoat() {
         int option = JOptionPane.showConfirmDialog(
@@ -206,9 +208,8 @@ public class KetCaController {
     }
 
 
-
     @FXML
-    private void lamMoi(){
+    private void lamMoi() {
         menhGia1K.setText("");
         menhGia2K.setText("");
         menhGia5K.setText("");
@@ -222,6 +223,7 @@ public class KetCaController {
         chenhLech.setText("");
 
     }
+
     @FXML
     private void xuatBaoCaoKetCa() {
         String maNhanVien = taiKhoan.getNhanVien().getMaNhanVien();
@@ -293,9 +295,9 @@ public class KetCaController {
                 writer.write("Chênh lệch: " + chenhLechText);
                 writer.newLine();
 
-                BaoCao bc = new BaoCao(null, VaoCaController.thoiGianVaoCa, thoiGianHienTai.getText(), Double.parseDouble(tienVaoCaText.replace(" VND", "").replace(",", "")), Double.parseDouble(tongDoanhThuText.replace(" VND", "").replace(",", "")), Double.parseDouble(tongMenhGiaText.replace(" VND", "").replace(",", "")), taiKhoan.getNhanVien());
-                BaoCaoDAO baoCaoDAO = new BaoCaoDAO();
-                baoCaoDAO.themBaoCao(bc);
+//                BaoCao bc = new BaoCao(null, VaoCaController.thoiGianVaoCa, thoiGianHienTai.getText(), Double.parseDouble(tienVaoCaText.replace(" VND", "").replace(",", "")), Double.parseDouble(tongDoanhThuText.replace(" VND", "").replace(",", "")), Double.parseDouble(tongMenhGiaText.replace(" VND", "").replace(",", "")), taiKhoan.getNhanVien());
+//                BaoCaoDAO baoCaoDAO = new BaoCaoDAO();
+//                baoCaoDAO.themBaoCao(bc);
 
                 JOptionPane.showMessageDialog(null, "Xuất báo cáo kết ca thành công");
                 isKetCa = true;
@@ -316,14 +318,4 @@ public class KetCaController {
             JOptionPane.showMessageDialog(null, "Không có tệp nào được chọn. Báo cáo không được lưu.");
         }
     }
-
-
-
-
-
-
-
-
-
-
 }

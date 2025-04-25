@@ -6,7 +6,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import javafx.stage.Window;
-import org.login.quanlydatban.entity.MonAn;
+import org.login.entity.MonAn;
 import org.login.quanlydatban.utilities.NumberFormatter;
 
 import java.io.File;

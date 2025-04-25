@@ -5,20 +5,23 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
-import org.login.quanlydatban.dao.BanDAO;
-import org.login.quanlydatban.entity.Ban;
-import org.login.quanlydatban.entity.enums.KhuVuc;
-import org.login.quanlydatban.entity.enums.LoaiBan;
-import org.login.quanlydatban.entity.enums.TrangThaiBan;
+import org.login.service.BanService;
+import org.login.entity.Ban;
+import org.login.entity.enums.KhuVuc;
+import org.login.entity.enums.LoaiBan;
+import org.login.entity.enums.TrangThaiBan;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.rmi.Naming;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -41,7 +44,7 @@ public class ChonBanController implements Initializable {
     @FXML
     private ComboBox<TrangThaiBan> cbTrangThaiBan;
 
-    private BanDAO banDAO;
+    private BanService banService;
 
     private static ChonBanController instance;
     private static Parent root;
@@ -64,10 +67,15 @@ public class ChonBanController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        String host = System.getenv("HOST_NAME");
         flowPane.prefHeightProperty().bind(scrollPane.heightProperty());
         flowPane.prefWidthProperty().bind(scrollPane.widthProperty());
 
-        banDAO = new BanDAO();
+        try {
+            banService = (BanService) Naming.lookup("rmi://"+ host + ":2909/banService");
+        } catch (NotBoundException | MalformedURLException | RemoteException e) {
+            throw new RuntimeException(e);
+        }
         cbKhuVuc.getItems().add(null);
         cbKhuVuc.getItems().addAll(KhuVuc.values());
 
@@ -77,23 +85,27 @@ public class ChonBanController implements Initializable {
         cbLoaiBan.getItems().add(null);
         cbLoaiBan.getItems().addAll(LoaiBan.values());
 
-        for (Ban i : banDAO.readAll()){
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/uicomponents/CardBan_TrangChonBan.fxml"));
-            try {
-                AnchorPane pane = loader.load();
-                CardBanChonBanController controller = loader.getController();
-                controller.setBan(i);
+        try {
+            for (Ban i : banService.readAll()){
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/uicomponents/CardBan_TrangChonBan.fxml"));
+                try {
+                    AnchorPane pane = loader.load();
+                    CardBanChonBanController controller = loader.getController();
+                    controller.setBan(i);
 
-                flowPane.getChildren().add(pane);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+                    flowPane.getChildren().add(pane);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
         }
     }
 
-    public void refresh() {
+    public void refresh() throws RemoteException {
         flowPane.getChildren().clear();
-        for (Ban i : banDAO.readAll()){
+        for (Ban i : banService.readAll()){
             FXMLLoader loader = new FXMLLoader(ChonBanController.class.getResource("/org/login/quanlydatban/uicomponents/CardBan_TrangChonBan.fxml"));
             try {
                 AnchorPane pane = loader.load();
@@ -124,15 +136,15 @@ public class ChonBanController implements Initializable {
     }
 
     @FXML
-    void timKiem(MouseEvent event) {
-        refresh(banDAO.getListBanBy(tfMaBan.getText(),
+    void timKiem(MouseEvent event) throws RemoteException {
+        refresh(banService.getListBanBy(tfMaBan.getText(),
                 cbTrangThaiBan.getSelectionModel().getSelectedItem(),
                 cbLoaiBan.getSelectionModel().getSelectedItem(),
                 cbKhuVuc.getSelectionModel().getSelectedItem()));
     }
 
     @FXML
-    void refresh(MouseEvent event) {
+    void refresh(MouseEvent event) throws RemoteException {
         tfMaBan.clear();
 
         cbLoaiBan.setValue(null);
