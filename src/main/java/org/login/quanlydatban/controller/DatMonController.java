@@ -253,7 +253,11 @@ public class DatMonController implements Initializable {
                     Notification.thongBao(e.getMessage(), Alert.AlertType.WARNING);
                     tfDiemTichLuyDung.clear();
                     tienTL = 0.0;
-                    capNhatTongTien();
+                    try {
+                        capNhatTongTien();
+                    } catch (RemoteException ex) {
+                        throw new RuntimeException(ex);
+                    }
                 }
             });
 
@@ -401,7 +405,11 @@ public class DatMonController implements Initializable {
                             throw new RuntimeException(e);
                         }
                         getTableView().getItems().remove(getIndex());
-                        capNhatTongTien();
+                        try {
+                            capNhatTongTien();
+                        } catch (RemoteException e) {
+                            throw new RuntimeException(e);
+                        }
                     });
 
                     button.setStyle("-fx-background-color: #F3B664");
@@ -444,7 +452,11 @@ public class DatMonController implements Initializable {
                         objects[3] = sl;
                         orderTable.refresh();
 
-                        capNhatTongTien();
+                        try {
+                            capNhatTongTien();
+                        } catch (RemoteException e) {
+                            throw new RuntimeException(e);
+                        }
                     });
 
                     button.setStyle("-fx-background-color: #9FBB73");
@@ -489,7 +501,11 @@ public class DatMonController implements Initializable {
                         objects[3] = sl;
                         orderTable.refresh();
 
-                        capNhatTongTien();
+                        try {
+                            capNhatTongTien();
+                        } catch (RemoteException e) {
+                            throw new RuntimeException(e);
+                        }
                     });
 
                     button.setStyle("-fx-background-color: #F3B664");
@@ -559,11 +575,11 @@ public class DatMonController implements Initializable {
         return sc;
     }
     
-    public void capNhatTongTien() {
+    public void capNhatTongTien() throws RemoteException {
         if(tienTL > 0.0)
-            tongTienTxt.setText(NumberFormatter.formatPrice(String.valueOf((int) (hoaDon.tinhTongTien() + hoaDon.getPhuThu() - tienTL))) + " (-" + NumberFormatter.formatPrice(String.valueOf((int) tienTL)) + ")");
+            tongTienTxt.setText(NumberFormatter.formatPrice(String.valueOf((int) (hoaDonService.tinhTongTien(hoaDon) + hoaDon.getPhuThu() - tienTL))) + " (-" + NumberFormatter.formatPrice(String.valueOf((int) tienTL)) + ")");
         else
-            tongTienTxt.setText(NumberFormatter.formatPrice(String.valueOf((int) (hoaDon.tinhTongTien() + hoaDon.getPhuThu()))));
+            tongTienTxt.setText(NumberFormatter.formatPrice(String.valueOf((int) (hoaDonService.tinhTongTien(hoaDon) + hoaDon.getPhuThu()))));
     }
 
     public void setPageSelected(int i) {
@@ -1024,7 +1040,7 @@ public class DatMonController implements Initializable {
     }
 
     @FXML
-    void nhapDTL(KeyEvent event) {
+    void nhapDTL(KeyEvent event) throws RemoteException {
         try {
             if(hoaDon == null) throw new IllegalArgumentException("Hãy lập hoá đơn trước khi nhập");
 

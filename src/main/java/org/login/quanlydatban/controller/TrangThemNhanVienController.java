@@ -60,6 +60,7 @@ public class TrangThemNhanVienController implements Initializable {
     @FXML
     private DatePicker ngaySinh;
     private TaiKhoanService taiKhoanService;
+    private NhanVienService nhanVienService;
     private TrangQuanLyNhanVienController trangQuanLyNhanVien;
     public void SetTrangQuanLyNhanVien(TrangQuanLyNhanVienController trangQuanLyNhanVien) {
         this.trangQuanLyNhanVien = trangQuanLyNhanVien;
@@ -141,21 +142,16 @@ public class TrangThemNhanVienController implements Initializable {
                            return;
                        }
 
-                   NhanVienService nvd = null;
                    try {
-                       nvd = (NhanVienService) Naming.lookup("rmi://"+ host + ":2909/nhanVienService");
+                       nhanVienService = (NhanVienService) Naming.lookup("rmi://"+ host + ":2909/nhanVienService");
                        taiKhoanService = (TaiKhoanService) Naming.lookup("rmi://"+ host + ":2909/taiKhoanService");
-                   } catch (NotBoundException e) {
-                       throw new RuntimeException(e);
-                   } catch (MalformedURLException e) {
-                       throw new RuntimeException(e);
-                   } catch (RemoteException e) {
+                   } catch (NotBoundException | MalformedURLException | RemoteException e) {
                        throw new RuntimeException(e);
                    }
 
                    List<NhanVien> nvs = null;
                    try {
-                       nvs = nvd.getAllTaiKhoan();
+                       nvs = nhanVienService.getAllTaiKhoan();
                    } catch (RemoteException e) {
                        throw new RuntimeException(e);
                    }
@@ -176,7 +172,7 @@ public class TrangThemNhanVienController implements Initializable {
                        } else if (chucVu.getValue().equals("Quản Lý")) {
                            cv = ChucVu.QUAN_LY;
                        }
-                       Boolean gt = gioiTinh.getValue().equals("NAM") ? false : true;
+                       Boolean gt = !gioiTinh.getValue().equals("NAM");
                        NhanVien nv = new NhanVien();
                        try {
                            nv.setGioiTinh(gt);
@@ -188,9 +184,9 @@ public class TrangThemNhanVienController implements Initializable {
                            nv.setTrangThaiNhanVien(TrangThaiNhanVien.DANG_LAM);
                            nv.setHinhAnh(duongdananh);
                            nv.setNgaySinh(ngaySinh.getValue());
-                           nvd.addNhanVien(nv);
-                           String tenTaiKhoan = hoTen.getText().toString().replaceAll("\\s+", "");
-                           TaiKhoan takKhoan = new TaiKhoan(tenTaiKhoan, "1111", nvd.getNhanVien(nv.getMaNhanVien().toString()));
+                           nv = nhanVienService.addNhanVien(nv);
+                           String tenTaiKhoan = hoTen.getText().replaceAll("\\s+", "");
+                           TaiKhoan takKhoan = new TaiKhoan(tenTaiKhoan, "1111", nhanVienService.getNhanVien(nv.getMaNhanVien().toString()));
                            taiKhoanService.addNhanVien(takKhoan);
                            Stage stage = (Stage) btnLuu.getScene().getWindow();
                            showWarn("Thêm nhân viên thành công");

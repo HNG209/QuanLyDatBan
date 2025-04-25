@@ -11,7 +11,9 @@ import org.hibernate.Session;
 //import org.login.quanlydatban.dao.MonAnDAO;
 //import org.login.quanlydatban.hibernate.HibernateUtils;
 import org.login.quanlydatban.notification.Notification;
+import org.login.service.BanService;
 
+import java.rmi.Naming;
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -20,9 +22,6 @@ public class Main extends Application {
     public void start(Stage stage) throws Exception {
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/org/login/quanlydatban/views/TrangDangNhap.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
-
-//        Session session = HibernateUtils.getFactory().openSession();
-//        session.close();
 
         stage.setTitle("Đăng nhập");
         stage.setScene(scene);

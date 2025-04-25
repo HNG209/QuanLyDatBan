@@ -102,7 +102,6 @@
 
                 taiKhoan = taiKhoanService.getTaiKhoan(inputUsername);
 
-
                 if (taiKhoan == null) {
                     throw new IllegalArgumentException("Tài khoản không tồn tại");
                 } else {
@@ -150,6 +149,7 @@
             try {
                 taiKhoanService = (TaiKhoanService) Naming.lookup("rmi://"+ host + ":2909/taiKhoanService");
             } catch (NotBoundException | MalformedURLException | RemoteException e) {
+                Notification.thongBao("Không thể kết nối tới server", e.getMessage(), Alert.AlertType.WARNING);
                 throw new RuntimeException(e);
             }
         }

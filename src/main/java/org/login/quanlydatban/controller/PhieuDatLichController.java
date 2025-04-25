@@ -16,6 +16,7 @@ import org.login.service.CTHDService;
 import org.login.entity.ChiTietHoaDon;
 import org.login.entity.LichDat;
 import org.login.quanlydatban.utilities.NumberFormatter;
+import org.login.service.HoaDonService;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -33,6 +34,8 @@ public class PhieuDatLichController implements Initializable {
     private LichDat lichDat;
 
     private CTHDService cthdService;
+
+    private HoaDonService hoaDonService;
 
     public LichDat getLichDat() {
         return lichDat;
@@ -95,7 +98,7 @@ public class PhieuDatLichController implements Initializable {
         }
 
         String total = String.format("\n   %73s\n   %73s",
-                "Tổng tiền: " + NumberFormatter.formatPrice(String.valueOf((int) lichDat.getHoaDon().tinhTongTien())),
+                "Tổng tiền: " + NumberFormatter.formatPrice(String.valueOf((int) hoaDonService.tinhTongTien(lichDat.getHoaDon()))),
                 "Tiền cọc: " + NumberFormatter.formatPrice(String.valueOf((int) lichDat.getTienCoc())));
         Text totalLine = new Text(total);
         totalLine.setFont(Font.font("Courier New", FontWeight.NORMAL, 12));
@@ -119,6 +122,7 @@ public class PhieuDatLichController implements Initializable {
         String host = System.getenv("HOST_NAME");
         try {
             cthdService = (CTHDService) Naming.lookup("rmi://"+ host + ":2909/cthdService");
+            hoaDonService = (HoaDonService) Naming.lookup("rmi://"+ host + ":2909/hoaDonService");
         } catch (NotBoundException | MalformedURLException | RemoteException e) {
             throw new RuntimeException(e);
         }

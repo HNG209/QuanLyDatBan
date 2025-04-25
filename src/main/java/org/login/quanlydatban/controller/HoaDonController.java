@@ -117,7 +117,6 @@ public class HoaDonController implements Initializable {
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
-        System.out.println(hoaDonList);
         ObservableList<HoaDon> observableList = FXCollections.observableArrayList(hoaDonList);
 
 

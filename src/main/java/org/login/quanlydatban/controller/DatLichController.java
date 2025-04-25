@@ -385,7 +385,7 @@ public class DatLichController implements Initializable {
     }
 
     public void capNhatCoc() throws RemoteException {
-        double tongTien = hoaDon.tinhTongTien();
+        double tongTien = hoaDonService.tinhTongTien(hoaDon);
         if(tongTien < 200_000.0)
             selectedLD.setTienCoc(0.0);
         else selectedLD.setTienCoc(tongTien / 2);
@@ -607,12 +607,11 @@ public class DatLichController implements Initializable {
             } else throw new IllegalArgumentException("Vui lòng chọn thời gian nhận bàn");
 
             lichDat.setTienCoc(0);
-
             hoaDon.setNgayLap(date);
-            lichDat.setHoaDon(hoaDon);
 
-            hoaDonService.lapHoaDon(hoaDon);
-            lichDatService.taoLichDat(lichDat);
+            hoaDon = hoaDonService.lapHoaDon(hoaDon);
+            lichDat.setHoaDon(hoaDon);
+            lichDat = lichDatService.taoLichDat(lichDat);
 
 
             Notification.thongBao("Đặt lịch thành công, mã lịch đặt: " + lichDat.getMaLichDat(), Alert.AlertType.INFORMATION);
@@ -624,57 +623,6 @@ public class DatLichController implements Initializable {
            Notification.thongBao(e.getMessage(), e.getStackTrace().clone()[0].toString(), Alert.AlertType.WARNING);
         }
     }
-
-//    @FXML
-//    void nhapCoc(KeyEvent event) {
-//        try {
-//            if (event.getSource().equals(tfCoc)) {
-//                if (tfCoc.getText().equals(""))
-//                    return;
-//                tfCoc.setText(NumberFormatter.formatPrice(tfCoc.getText()));
-//                tfCoc.positionCaret(tfCoc.getText().length());
-//
-//                if (tfCoc.getText().replace(".", "").matches("\\d+"))
-//                    c = Double.parseDouble(tfCoc.getText().replace(".", ""));
-//                else throw new IllegalArgumentException("Chỉ được nhập số");
-//                capNhatTienTraLai();
-//            } else {
-//                if (tfCocKD.getText().equals("")) {
-//                    ckd = 0.0;
-//                    capNhatTienTraLai();
-//                    return;
-//                }
-//
-//                tfCocKD.setText(NumberFormatter.formatPrice(tfCocKD.getText()));
-//                tfCocKD.positionCaret(tfCocKD.getText().length());
-//
-//                if (tfCocKD.getText().replace(".", "").matches("\\d+"))
-//                    ckd = Double.parseDouble(tfCocKD.getText().replace(".", ""));
-//                else throw new IllegalArgumentException("Chỉ được nhập số");
-//                capNhatTienTraLai();
-//            }
-//        }
-//        catch (Exception e){
-//            Notification.thongBao(e.getMessage(), Alert.AlertType.WARNING);
-//            if(event.getSource().equals(tfCoc)){
-//                tfCoc.setText(tfCoc.getText().substring(0, tfCoc.getLength() - 1));
-//                tfCoc.setText(NumberFormatter.formatPrice(tfCoc.getText()));
-//                tfCoc.positionCaret(tfCoc.getText().length());
-//            }
-//            else {
-//                tfCocKD.setText(tfCocKD.getText().substring(0, tfCocKD.getLength() - 1));
-//                tfCocKD.setText(NumberFormatter.formatPrice(tfCocKD.getText()));
-//                tfCocKD.positionCaret(tfCocKD.getText().length());
-//            }
-//            capNhatTienTraLai();
-//        }
-//    }
-
-//    public void capNhatTienTraLai() {
-//        if(ckd - c >= 0)
-//            tfTienTraLai.setText(NumberFormatter.formatPrice(String.valueOf((int) (ckd - c))));
-//        else tfTienTraLai.clear();
-//    }
 
     @FXML
     void refreshInput(MouseEvent event) {

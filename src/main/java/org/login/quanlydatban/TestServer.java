@@ -1,5 +1,8 @@
 package org.login.quanlydatban;
 
+import org.login.entity.Ban;
+import org.login.service.BanService;
+import org.login.service.HoaDonService;
 import org.login.service.TaiKhoanService;
 
 import java.net.MalformedURLException;
@@ -10,9 +13,19 @@ import java.rmi.RemoteException;
 public class TestServer {
     public static void main(String[] args) throws MalformedURLException, NotBoundException, RemoteException {
         String host = System.getenv("HOST_NAME");
-        TaiKhoanService taiKhoanService = (TaiKhoanService) Naming.lookup("rmi://"+ host + ":2909/taiKhoanService");
+        TaiKhoanService taiKhoanService = (TaiKhoanService) Naming.lookup("rmi://" + host + ":2909/taiKhoanService");
 
-        System.out.println(taiKhoanService.getTaiKhoan("LeNgocDung"));
+        HoaDonService hoaDonService = (HoaDonService) Naming.lookup("rmi://" + host + ":2909/hoaDonService");
+        BanService banService = (BanService) Naming.lookup("rmi://" + host + ":2909/banService");
+
+        Ban ban = banService.readAll().getFirst();
+        System.out.println(ban);
+
+        hoaDonService.getAllHoaDon();
+        hoaDonService.getHoaDonFromBan(ban).forEach(
+                i -> System.out.println(i.getMaHoaDon())
+        );
+//        System.out.println(taiKhoanService.getTaiKhoan("LeNgocDung"));
 //        String host = System.getenv("HOST_NAME");
 //
 //        context.bind("rmi://"+ host + ":2909/banService", banService);

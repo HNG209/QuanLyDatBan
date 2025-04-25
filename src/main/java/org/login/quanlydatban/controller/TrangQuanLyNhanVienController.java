@@ -330,6 +330,16 @@ public class TrangQuanLyNhanVienController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        String host = System.getenv("HOST_NAME");
+        try {
+            nhanVienService = (NhanVienService) Naming.lookup("rmi://"+ host + ":2909/nhanVienService");
+        } catch (NotBoundException e) {
+            throw new RuntimeException(e);
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
         List<NhanVien> listNhanVien = null;
         try {
             listNhanVien = nhanVienService.getAllTaiKhoan();

@@ -66,12 +66,15 @@ public class CardBanChonBanController implements Initializable {
             controller.setPageSelected(0);
 
             List<HoaDon> list = hoaDonService.getHoaDonFromBan(ban);
+            list.forEach(i -> System.out.println(i.getMaHoaDon()));
 
             if (!list.isEmpty()) {
+                System.out.println("inside");
                 HoaDon hoaDon = list.get(list.size() - 1);
                 controller.setHoaDon(hoaDon);
                 controller.capNhatTongTien();
             }
+            System.out.println("ok then");
 
             TrangChuController.getBorderPaneStatic().setCenter(anchorPane);
         }
