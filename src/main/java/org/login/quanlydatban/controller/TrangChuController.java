@@ -284,6 +284,8 @@ public class TrangChuController implements Initializable {
         Stage stage = new Stage();
         VaoCaController.setIsBaoCaoSaved(false);
         KetCaController.setIsKetCa(false);
+        taiKhoan = null;
+        DangNhapController.isAdmin = false;
         if (stage != null) {
             stage.setTitle("Đăng nhập");
             stage.setScene(scene);
@@ -333,7 +335,8 @@ public class TrangChuController implements Initializable {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        showTooltipForAvatar();
+        if(taiKhoan != null)
+            showTooltipForAvatar();
         ContextMenu contextMenu = new ContextMenu();
         setBorderPaneStatic(borderPane);
         MenuItem itemTaiKhoan = new MenuItem("Tài khoản");
