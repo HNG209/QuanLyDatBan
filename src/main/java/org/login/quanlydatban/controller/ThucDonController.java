@@ -364,8 +364,7 @@ public class ThucDonController implements Initializable {
 
                     String anhMoi = anhMon.getImage().getUrl();
                     if (anhMoi.startsWith("file:")) {
-                        Path path = Paths.get(URI.create(anhMoi)); // Convert the URI to a Path
-                        anhMoi = path.toString(); // Get the standard file path
+                        anhMoi = anhMoi.substring(5);
                     }
 
                     String loaiMonMoiName = cbloaiMonAn.getValue();
