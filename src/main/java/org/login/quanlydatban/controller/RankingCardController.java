@@ -23,6 +23,6 @@ public class RankingCardController {
         rank.setText(String.valueOf(i));
         this.tenMonAn.setText(tenMonAn);
         this.doanhSo.setText(String.valueOf(doanhSo));
-        this.doanhThu.setText(NumberFormatter.formatPrice(String.valueOf(doanhThu)));
+        this.doanhThu.setText(NumberFormatter.decimalFormatPrice(doanhThu));
     }
 }
