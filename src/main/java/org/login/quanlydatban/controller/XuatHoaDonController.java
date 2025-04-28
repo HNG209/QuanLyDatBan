@@ -99,7 +99,7 @@ public class XuatHoaDonController implements Initializable {
         ckLine.setFont(Font.font("Courier New", FontWeight.NORMAL, 12));
         hdArea.getChildren().add(ckLine);
 
-        String total = String.format("\n   %73s", "Tổng tiền: " + NumberFormatter.formatPrice(String.valueOf((int) hoaDon.getTongTien())));
+        String total = String.format("\n   %73s", "Tổng tiền: " + NumberFormatter.formatPrice(String.valueOf((int) hoaDonService.tinhTongTien(hoaDon))));
         Text totalLine = new Text(total);
         totalLine.setFont(Font.font("Courier New", FontWeight.NORMAL, 12));
         hdArea.getChildren().add(totalLine);
