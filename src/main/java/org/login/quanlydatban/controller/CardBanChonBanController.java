@@ -13,6 +13,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import org.login.quanlydatban.utilities.RMIServiceUtils;
 import org.login.service.HoaDonService;
 
 import org.login.entity.Ban;
@@ -52,7 +53,6 @@ public class CardBanChonBanController implements Initializable {
     private Label trangThai;
     private Ban ban;
     private HoaDonService hoaDonService;
-
 
     private Stage currentStage;
     @FXML
@@ -139,9 +139,8 @@ public class CardBanChonBanController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        String host = System.getenv("HOST_NAME");
         try {
-            hoaDonService = (HoaDonService) Naming.lookup("rmi://"+ host + ":2909/hoaDonService");
+            hoaDonService = RMIServiceUtils.useHoaDonService();
         } catch (NotBoundException | MalformedURLException | RemoteException e) {
             throw new RuntimeException(e);
         }

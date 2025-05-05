@@ -12,21 +12,15 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import org.login.service.CTHDService;
 import org.login.entity.MonAn;
 import org.login.quanlydatban.notification.Notification;
 import org.login.quanlydatban.utilities.NumberFormatter;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.rmi.Naming;
-import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
-import java.util.ResourceBundle;
 
-public class CardMonAnController implements Initializable {
+public class CardMonAnController {
 
     @FXML
     private Label giaTien;
@@ -40,8 +34,6 @@ public class CardMonAnController implements Initializable {
     private MonAn monAn;
 
     private DatMonController controller;
-
-    private CTHDService cthdService;
 
     private Stage chiTiet;
 
@@ -94,19 +86,5 @@ public class CardMonAnController implements Initializable {
             image.setImage(new Image(new File(monAn.getHinhAnh()).toURI().toString()));
         tenMon.setText(monAn.getTenMonAn());
         giaTien.setText(NumberFormatter.formatPrice(String.valueOf((int) monAn.getDonGia())) + "đ/" + monAn.getDonViTinh());
-    }
-
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        String host = System.getenv("HOST_NAME");
-        try {
-            cthdService = (CTHDService) Naming.lookup("rmi://" + host + ":2909/cthdService");
-        } catch (NotBoundException e) {
-            throw new RuntimeException(e);
-        } catch (MalformedURLException e) {
-            throw new RuntimeException(e);
-        } catch (RemoteException e) {
-            throw new RuntimeException(e);
-        }
     }
 }

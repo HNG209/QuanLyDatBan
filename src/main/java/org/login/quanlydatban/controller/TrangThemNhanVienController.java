@@ -12,6 +12,7 @@ import javafx.stage.Stage;
 //import org.login.quanlydatban.dao.NhanVienDAO;
 //import org.login.quanlydatban.dao.TaiKhoanDAO;
 
+import org.login.quanlydatban.utilities.RMIServiceUtils;
 import org.login.service.*;
 import org.login.entity.NhanVien;
 import org.login.entity.TaiKhoan;
@@ -127,8 +128,6 @@ public class TrangThemNhanVienController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        String host = System.getenv("HOST_NAME");
-
         maNhanVien.setEditable(false);
         btnLuu.setOnAction(new EventHandler<ActionEvent>() {
                @Override
@@ -143,8 +142,8 @@ public class TrangThemNhanVienController implements Initializable {
                        }
 
                    try {
-                       nhanVienService = (NhanVienService) Naming.lookup("rmi://"+ host + ":2909/nhanVienService");
-                       taiKhoanService = (TaiKhoanService) Naming.lookup("rmi://"+ host + ":2909/taiKhoanService");
+                       nhanVienService = RMIServiceUtils.useNhanVienService();
+                       taiKhoanService = RMIServiceUtils.useTaiKhoanService();
                    } catch (NotBoundException | MalformedURLException | RemoteException e) {
                        throw new RuntimeException(e);
                    }

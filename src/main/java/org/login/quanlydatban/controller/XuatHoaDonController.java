@@ -15,6 +15,7 @@ import javafx.stage.Stage;
 //import org.login.quanlydatban.dao.ChiTietHoaDonDAO;
 //import org.login.quanlydatban.dao.HoaDonDAO;
 
+import org.login.quanlydatban.utilities.RMIServiceUtils;
 import org.login.service.*;
 import org.login.entity.ChiTietHoaDon;
 import org.login.entity.HoaDon;
@@ -112,16 +113,10 @@ public class XuatHoaDonController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        String host = System.getenv("HOST_NAME");
-
         try {
-            hoaDonService = (HoaDonService) Naming.lookup("rmi://"+ host + ":2909/hoaDonService");
-            cthdService = (CTHDService) Naming.lookup("rmi://"+ host + ":2909/cthdService");
-        } catch (NotBoundException e) {
-            throw new RuntimeException(e);
-        } catch (MalformedURLException e) {
-            throw new RuntimeException(e);
-        } catch (RemoteException e) {
+            hoaDonService = RMIServiceUtils.useHoaDonService();
+            cthdService = RMIServiceUtils.useCTHDService();
+        } catch (NotBoundException | MalformedURLException | RemoteException e) {
             throw new RuntimeException(e);
         }
     }
@@ -131,10 +126,4 @@ public class XuatHoaDonController implements Initializable {
         Stage stage = (Stage) hdArea.getScene().getWindow();
         stage.close();
     }
-
-    @FXML
-    void xuatHoaDon(ActionEvent event) {
-
-    }
-
 }

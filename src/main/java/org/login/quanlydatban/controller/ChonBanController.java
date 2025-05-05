@@ -10,6 +10,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
+import org.login.quanlydatban.utilities.RMIServiceUtils;
 import org.login.service.BanService;
 import org.login.entity.Ban;
 import org.login.entity.enums.KhuVuc;
@@ -67,12 +68,11 @@ public class ChonBanController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        String host = System.getenv("HOST_NAME");
         flowPane.prefHeightProperty().bind(scrollPane.heightProperty());
         flowPane.prefWidthProperty().bind(scrollPane.widthProperty());
 
         try {
-            banService = (BanService) Naming.lookup("rmi://"+ host + ":2909/banService");
+            banService = RMIServiceUtils.useBanService();
         } catch (NotBoundException | MalformedURLException | RemoteException e) {
             throw new RuntimeException(e);
         }

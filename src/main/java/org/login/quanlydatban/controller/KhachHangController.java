@@ -5,6 +5,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import org.login.quanlydatban.utilities.RMIServiceUtils;
 import org.login.service.KhachHangService;
 import org.login.entity.KhachHang;
 import org.login.quanlydatban.notification.Notification;
@@ -71,8 +72,7 @@ public class KhachHangController {
     @FXML
     public void initialize() {
         try {
-            String host = System.getenv("HOST_NAME");
-            khachHangService = (KhachHangService) Naming.lookup("rmi://"+ host + ":2909/khachHangService");
+            khachHangService = RMIServiceUtils.useKhachHangService();
 
             tableKhachHang.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
             List<Object[]> dsKhachHang = khachHangService.layDSKhachHang();

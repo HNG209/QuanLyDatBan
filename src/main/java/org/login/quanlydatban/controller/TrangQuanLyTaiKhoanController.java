@@ -11,8 +11,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-//import org.login.quanlydatban.dao.NhanVienDAO;
-//import org.login.quanlydatban.dao.TaiKhoanDAO;
+import org.login.quanlydatban.utilities.RMIServiceUtils;
 import org.login.service.*;
 
 import org.login.quanlydatban.encryptionUtils.EncryptionUtils;
@@ -67,16 +66,10 @@ public class TrangQuanLyTaiKhoanController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        String host = System.getenv("HOST_NAME");
-
         try {
-            nhanVienService = (NhanVienService) Naming.lookup("rmi://" + host + ":2909/nhanVienService");
-            taiKhoanService = (TaiKhoanService) Naming.lookup("rmi://" + host + ":2909/taiKhoanService");
-        } catch (NotBoundException e) {
-            throw new RuntimeException(e);
-        } catch (MalformedURLException e) {
-            throw new RuntimeException(e);
-        } catch (RemoteException e) {
+            nhanVienService = RMIServiceUtils.useNhanVienService();
+            taiKhoanService = RMIServiceUtils.useTaiKhoanService();
+        } catch (NotBoundException | MalformedURLException | RemoteException e) {
             throw new RuntimeException(e);
         }
 

@@ -12,6 +12,7 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
+import org.login.quanlydatban.utilities.RMIServiceUtils;
 import org.login.service.CTHDService;
 import org.login.entity.ChiTietHoaDon;
 import org.login.entity.LichDat;
@@ -119,10 +120,9 @@ public class PhieuDatLichController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        String host = System.getenv("HOST_NAME");
         try {
-            cthdService = (CTHDService) Naming.lookup("rmi://"+ host + ":2909/cthdService");
-            hoaDonService = (HoaDonService) Naming.lookup("rmi://"+ host + ":2909/hoaDonService");
+            cthdService = RMIServiceUtils.useCTHDService();
+            hoaDonService = RMIServiceUtils.useHoaDonService();
         } catch (NotBoundException | MalformedURLException | RemoteException e) {
             throw new RuntimeException(e);
         }

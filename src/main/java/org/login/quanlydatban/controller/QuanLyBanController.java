@@ -9,6 +9,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 //import org.login.quanlydatban.dao.BanDAO;
 
+import org.login.quanlydatban.utilities.RMIServiceUtils;
 import org.login.service.BanService;
 import org.login.entity.*;
 import org.login.entity.enums.KhuVuc;
@@ -83,10 +84,9 @@ public class QuanLyBanController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        String host = System.getenv("HOST_NAME");
 
         try {
-            banService = (BanService) Naming.lookup("rmi://"+ host + ":2909/banService");
+            banService = RMIServiceUtils.useBanService();
         } catch (NotBoundException | MalformedURLException | RemoteException e) {
             throw new RuntimeException(e);
         }

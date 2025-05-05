@@ -7,6 +7,7 @@ import javafx.scene.chart.*;
 import javafx.scene.control.*;
 import javafx.util.converter.LocalDateStringConverter;
 //import org.login.quanlydatban.dao.HoaDonDAO;
+import org.login.quanlydatban.utilities.RMIServiceUtils;
 import org.login.service.HoaDonService;
 import org.login.entity.TaiKhoan;
 import org.login.entity.enums.TrangThaiHoaDon;
@@ -73,8 +74,7 @@ public class ThongKeNhanVienController {
 
     @FXML
     public void initialize() throws RemoteException, MalformedURLException, NotBoundException {
-        String host = System.getenv("HOST_NAME");
-        hoaDonService = (HoaDonService) Naming.lookup("rmi://"+ host + ":2909/hoaDonService");
+        hoaDonService = RMIServiceUtils.useHoaDonService();
         String maNV = TrangChuController.taiKhoan.getNhanVien().getMaNhanVien();
         capNhatComboBoxNamThongKe(maNV);
         tieuChiThongKeBieuDoCot.getSelectionModel().select("Theo tháng");

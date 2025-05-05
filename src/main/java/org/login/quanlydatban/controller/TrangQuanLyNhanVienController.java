@@ -25,6 +25,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 //import org.login.quanlydatban.dao.NhanVienDAO;
 //import org.login.quanlydatban.dao.TaiKhoanDAO;
 
+import org.login.quanlydatban.utilities.RMIServiceUtils;
 import org.login.service.NhanVienService;
 
 import org.login.entity.NhanVien;
@@ -330,14 +331,9 @@ public class TrangQuanLyNhanVienController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        String host = System.getenv("HOST_NAME");
         try {
-            nhanVienService = (NhanVienService) Naming.lookup("rmi://"+ host + ":2909/nhanVienService");
-        } catch (NotBoundException e) {
-            throw new RuntimeException(e);
-        } catch (MalformedURLException e) {
-            throw new RuntimeException(e);
-        } catch (RemoteException e) {
+            nhanVienService = RMIServiceUtils.useNhanVienService();
+        } catch (NotBoundException | MalformedURLException | RemoteException e) {
             throw new RuntimeException(e);
         }
         List<NhanVien> listNhanVien = null;

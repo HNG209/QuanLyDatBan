@@ -17,6 +17,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
 //import org.login.quanlydatban.dao.*;
+import org.login.quanlydatban.utilities.RMIServiceUtils;
 import org.login.service.*;
 import org.login.entity.Ban;
 import org.login.entity.HoaDon;
@@ -177,8 +178,6 @@ public class DatLichController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        String host = System.getenv("HOST_NAME");
-
         cbKhuVuc.getItems().add(null);
         cbKhuVuc.getItems().addAll(KhuVuc.values());
 
@@ -189,21 +188,14 @@ public class DatLichController implements Initializable {
         cbTrangThai.getItems().addAll(TrangThaiHoaDon.values());
 
         try {
-            hoaDonService = (HoaDonService) Naming.lookup("rmi://"+ host + ":2909/hoaDonService");
-            lichDatService = (LichDatService) Naming.lookup("rmi://"+ host + ":2909/lichDatService");
-            khachHangService = (KhachHangService) Naming.lookup("rmi://"+ host + ":2909/khachHangService");
-            cthdService = (CTHDService) Naming.lookup("rmi://"+ host + ":2909/cthdService");
-            banService = (BanService) Naming.lookup("rmi://"+ host + ":2909/banService");
-        } catch (NotBoundException e) {
-            throw new RuntimeException(e);
-        } catch (MalformedURLException e) {
-            throw new RuntimeException(e);
-        } catch (RemoteException e) {
+            hoaDonService = RMIServiceUtils.useHoaDonService();
+            lichDatService = RMIServiceUtils.useLichDatService();
+            khachHangService = RMIServiceUtils.useKhachHangService();
+            cthdService = RMIServiceUtils.useCTHDService();
+            banService = RMIServiceUtils.useBanService();
+        } catch (NotBoundException | MalformedURLException | RemoteException e) {
             throw new RuntimeException(e);
         }
-
-
-
 
 
         maLichDatCol.setCellValueFactory(data -> new SimpleStringProperty((String)data.getValue()[0]));
@@ -364,7 +356,8 @@ public class DatLichController implements Initializable {
 
     public void refreshBang() throws RemoteException {
         tableLichDat.getItems().clear();
-        lichDatService.getDSLichDat().forEach(i -> loadBang(new Object[]{i.getMaLichDat(),
+        List<LichDat> lichDatList = lichDatService.getDSLichDat();
+        lichDatList.forEach(i -> loadBang(new Object[]{i.getMaLichDat(),
                 i.getThoiGianDat().format(DateTimeFormatter.ofPattern("dd/MM/yyyy - HH:mm")),
                 i.getThoiGianNhanBan().format(DateTimeFormatter.ofPattern("dd/MM/yyyy - HH:mm")),
                 i.getHoaDon().getBan().getLoaiBan().toString(),

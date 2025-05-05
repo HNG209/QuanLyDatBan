@@ -8,6 +8,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.Label;
 import javafx.util.converter.LocalDateStringConverter;
 
+import org.login.quanlydatban.utilities.RMIServiceUtils;
 import org.login.service.HoaDonService;
 import org.login.entity.TaiKhoan;
 import org.login.entity.enums.TrangThaiHoaDon;
@@ -79,8 +80,7 @@ public class ThongKeQuanLyController {
 
     @FXML
     public void initialize() throws RemoteException, MalformedURLException, NotBoundException {
-        String host = System.getenv("HOST_NAME");
-        hoaDonService = (HoaDonService) Naming.lookup("rmi://"+ host + ":2909/hoaDonService");
+        hoaDonService = RMIServiceUtils.useHoaDonService();
         capNhatComboBoxNamThongKe();
         tieuChiThongKeBieuDoCot.getSelectionModel().select("Theo tháng");
         namThongKeBieuDoCot.getSelectionModel().select(0);

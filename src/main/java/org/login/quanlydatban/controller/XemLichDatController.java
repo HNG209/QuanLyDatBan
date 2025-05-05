@@ -14,6 +14,7 @@ import javafx.util.StringConverter;
 //import org.login.quanlydatban.dao.BanDAO;
 //import org.login.quanlydatban.dao.HoaDonDAO;
 //import org.login.quanlydatban.dao.LichDatDAO;
+import org.login.quanlydatban.utilities.RMIServiceUtils;
 import org.login.service.*;
 
 import org.login.entity.Ban;
@@ -377,18 +378,12 @@ public class XemLichDatController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        String host = System.getenv("HOST_NAME");
-
         try {
-            lichDatService = (LichDatService) Naming.lookup("rmi://"+ host + ":2909/lichDatService");
-            banService = (BanService) Naming.lookup("rmi://"+ host + ":2909/banService");
-            hoaDonService = (HoaDonService) Naming.lookup("rmi://"+ host + ":2909/hoaDonService");
+            lichDatService = RMIServiceUtils.useLichDatService();
+            banService = RMIServiceUtils.useBanService();
+            hoaDonService = RMIServiceUtils.useHoaDonService();
 
-        } catch (NotBoundException e) {
-            throw new RuntimeException(e);
-        } catch (MalformedURLException e) {
-            throw new RuntimeException(e);
-        } catch (RemoteException e) {
+        } catch (NotBoundException | MalformedURLException | RemoteException e) {
             throw new RuntimeException(e);
         }
 

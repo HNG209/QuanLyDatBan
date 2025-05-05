@@ -12,6 +12,7 @@ import javafx.stage.Window;
 //import org.login.quanlydatban.dao.HoaDonDAO;
 //import org.login.quanlydatban.dao.NhanVienDAO;
 
+import org.login.quanlydatban.utilities.RMIServiceUtils;
 import org.login.service.HoaDonService;
 import org.login.entity.BaoCao;
 import org.login.entity.TaiKhoan;
@@ -101,10 +102,9 @@ public class KetCaController {
 
     @FXML
     public void initialize() throws RemoteException, MalformedURLException, NotBoundException {
-        String host = System.getenv("HOST_NAME");
         Clock clock = new Clock();
         clock.startClock(thoiGianHienTai);
-        hoaDonService = (HoaDonService) Naming.lookup("rmi://"+ host + ":2909/hoaDonService");
+        hoaDonService = RMIServiceUtils.useHoaDonService();
         loadDuLieu();
         loadTienCuoiCaVaChenhLech();
         menhGia1K.textProperty().addListener((observable, oldValue, newValue) -> tinhTongMenhGia());

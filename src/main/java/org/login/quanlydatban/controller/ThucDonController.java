@@ -16,6 +16,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.FileChooser;
+import org.login.quanlydatban.utilities.RMIServiceUtils;
 import org.login.service.*;
 
 import org.login.entity.LoaiMonAn;
@@ -105,11 +106,9 @@ public class ThucDonController implements Initializable {
         cbtrangThaiMon.getSelectionModel().selectFirst();
         cbSapXep.getSelectionModel().selectFirst();
 
-        String host = System.getenv("HOST_NAME");
-
         try {
-            monAnService = (MonAnService) Naming.lookup("rmi://" + host + ":2909/monAnService");
-            loaiMonService = (LoaiMonService) Naming.lookup("rmi://" + host + ":2909/loaiMonService");
+            monAnService = RMIServiceUtils.useMonAnService();
+            loaiMonService = RMIServiceUtils.useLoaiMonService();
         } catch (NotBoundException | MalformedURLException | RemoteException e) {
             throw new RuntimeException(e);
         }

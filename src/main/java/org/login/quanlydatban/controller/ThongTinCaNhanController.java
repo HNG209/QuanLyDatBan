@@ -10,6 +10,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 //import org.login.quanlydatban.dao.TaiKhoanDAO;
 
+import org.login.quanlydatban.utilities.RMIServiceUtils;
 import org.login.service.TaiKhoanService;
 import org.login.quanlydatban.encryptionUtils.EncryptionUtils;
 import org.login.entity.NhanVien;
@@ -64,9 +65,8 @@ public class ThongTinCaNhanController implements Initializable {
     private TaiKhoanService taiKhoanService;
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        String host = System.getenv("HOST_NAME");
         try {
-            taiKhoanService = (TaiKhoanService) Naming.lookup("rmi://"+ host + ":2909/taiKhoanService");
+            taiKhoanService = RMIServiceUtils.useTaiKhoanService();
         } catch (NotBoundException | MalformedURLException | RemoteException e) {
             throw new RuntimeException(e);
         }

@@ -34,6 +34,7 @@ import org.login.quanlydatban.notification.Notification;
 import org.login.quanlydatban.utilities.NumberFormatter;
 
 //services
+import org.login.quanlydatban.utilities.RMIServiceUtils;
 import org.login.service.*;
 
 import javax.persistence.NoResultException;
@@ -172,13 +173,12 @@ public class DatMonController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
-            String host = System.getenv("HOST_NAME");
-            monAnService = (MonAnService) Naming.lookup("rmi://"+ host + ":2909/monAnService");
-            banService = (BanService) Naming.lookup("rmi://"+ host + ":2909/banService");
-            hoaDonService = (HoaDonService) Naming.lookup("rmi://"+ host + ":2909/hoaDonService");
-            cthdService = (CTHDService) Naming.lookup("rmi://"+ host + ":2909/cthdService");
-            khachHangService = (KhachHangService) Naming.lookup("rmi://"+ host + ":2909/khachHangService");
-            lichDatService = (LichDatService) Naming.lookup("rmi://"+ host + ":2909/lichDatService");
+            monAnService = RMIServiceUtils.useMonAnService();
+            banService = RMIServiceUtils.useBanService();
+            hoaDonService = RMIServiceUtils.useHoaDonService();
+            cthdService = RMIServiceUtils.useCTHDService();
+            khachHangService = RMIServiceUtils.useKhachHangService();
+            lichDatService = RMIServiceUtils.useLichDatService();
 
             pagination.setPageFactory(pageIndex -> {
                 try {

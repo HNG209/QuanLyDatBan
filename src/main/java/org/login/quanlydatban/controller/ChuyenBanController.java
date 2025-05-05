@@ -14,6 +14,7 @@ import javafx.scene.layout.FlowPane;
 import javafx.stage.Stage;
 //import org.login.dao.BanDAO;
 //import org.login.dao.HoaDonDAO;
+import org.login.quanlydatban.utilities.RMIServiceUtils;
 import org.login.service.BanService;
 import org.login.entity.Ban;
 import org.login.entity.HoaDon;
@@ -74,6 +75,7 @@ public class ChuyenBanController implements Initializable {
     private HoaDon currentHD;
 
     private DatMonController datMonController;
+
     @FXML
     void huy(ActionEvent event) {
         Stage currentStage = (Stage) btnHuy.getScene().getWindow();
@@ -87,12 +89,11 @@ public class ChuyenBanController implements Initializable {
     public void setBanHienTai(Ban banHienTai) {
         this.banHienTai = banHienTai;
 
-        if (banHienTai != null){
+        if (banHienTai != null) {
             maBanHT.setText(banHienTai.getMaBan());
             khuVucBanHT.setText(banHienTai.getKhuVuc().toString());
             loaiBanHT.setText(banHienTai.getLoaiBan().toString());
-        }
-        else {
+        } else {
             maBanHT.clear();
             khuVucBanHT.clear();
             loaiBanHT.clear();
@@ -106,12 +107,11 @@ public class ChuyenBanController implements Initializable {
     public void setBanChuyen(Ban banChuyen) {
         this.banChuyen = banChuyen;
 
-        if(banChuyen != null){
+        if (banChuyen != null) {
             maBanChuyen.setText(banChuyen.getMaBan());
             khuVucBanChuyen.setText(banChuyen.getKhuVuc().toString());
             loaiBanChuyen.setText(banChuyen.getLoaiBan().toString());
-        }
-        else {
+        } else {
             maBanChuyen.clear();
             khuVucBanChuyen.clear();
             loaiBanChuyen.clear();
@@ -149,7 +149,7 @@ public class ChuyenBanController implements Initializable {
 
                 //(1) called from CardBanController, datMonController = null
                 //(2) called from DatMonController, datMonController != null, point: to update the current table in datMonController
-                if(datMonController != null)
+                if (datMonController != null)
                     datMonController.setBan(banChuyen);
                 else
                     ChonBanController.getInstance().refresh();
@@ -175,7 +175,7 @@ public class ChuyenBanController implements Initializable {
 
     public void loadBan() throws RemoteException {
         flowPane.getChildren().clear();
-        for (Ban i : banService.getListBanTrong()){
+        for (Ban i : banService.getListBanTrong()) {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/uicomponents/CardBan_TrangChuyenBan.fxml"));
             try {
                 AnchorPane pane = loader.load();
@@ -190,9 +190,9 @@ public class ChuyenBanController implements Initializable {
         }
     }
 
-    public void loadBan(List<Ban> list){
+    public void loadBan(List<Ban> list) {
         flowPane.getChildren().clear();
-        for (Ban i : list){
+        for (Ban i : list) {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/uicomponents/CardBan_TrangChuyenBan.fxml"));
             try {
                 AnchorPane pane = loader.load();
@@ -217,15 +217,10 @@ public class ChuyenBanController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        String host = System.getenv("HOST_NAME");
         try {
-            banService = (BanService) Naming.lookup("rmi://"+ host + ":2909/banService");
-            hoaDonService = (HoaDonService) Naming.lookup("rmi://"+ host + ":2909/hoaDonService");
-        } catch (NotBoundException e) {
-            throw new RuntimeException(e);
-        } catch (MalformedURLException e) {
-            throw new RuntimeException(e);
-        } catch (RemoteException e) {
+            banService = RMIServiceUtils.useBanService();
+            hoaDonService = RMIServiceUtils.useHoaDonService();
+        } catch (NotBoundException | MalformedURLException | RemoteException e) {
             throw new RuntimeException(e);
         }
 

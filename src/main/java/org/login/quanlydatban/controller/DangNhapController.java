@@ -14,6 +14,7 @@
     import javafx.scene.layout.AnchorPane;
     import javafx.stage.Stage;
 //    import org.login.quanlydatban.TaiKhoanDAO;
+    import org.login.quanlydatban.utilities.RMIServiceUtils;
     import org.login.service.TaiKhoanService;
     import org.login.quanlydatban.encryptionUtils.EncryptionUtils;
     import org.login.entity.TaiKhoan;
@@ -42,8 +43,8 @@
         private TaiKhoanService taiKhoanService;
 
         @FXML
-        public void nhanEnterDeDangNhap(){
-             showPasswordField.textProperty().addListener((observable, oldValue, newValue) -> {
+        public void nhanEnterDeDangNhap() {
+            showPasswordField.textProperty().addListener((observable, oldValue, newValue) -> {
                 if (!password.getText().equals(newValue)) {
                     password.setText(newValue);
                 }
@@ -79,6 +80,7 @@
                 }
             });
         }
+
         @FXML
         public void dangNhap() throws Exception {
             try {
@@ -111,8 +113,7 @@
                     } else
                         throw new IllegalArgumentException("Sai mật khẩu");
                 }
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 Notification.thongBao(e.getMessage(), Alert.AlertType.ERROR);
             }
         }
@@ -139,15 +140,14 @@
         }
 
         @FXML
-        public void thoat(){
+        public void thoat() {
             System.exit(0);
         }
 
         @Override
         public void initialize(URL url, ResourceBundle resourceBundle) {
-            String host = System.getenv("HOST_NAME");
             try {
-                taiKhoanService = (TaiKhoanService) Naming.lookup("rmi://"+ host + ":2909/taiKhoanService");
+                taiKhoanService = RMIServiceUtils.useTaiKhoanService();
             } catch (NotBoundException | MalformedURLException | RemoteException e) {
                 Notification.thongBao("Không thể kết nối tới server", e.getMessage(), Alert.AlertType.WARNING);
                 throw new RuntimeException(e);
@@ -166,10 +166,9 @@
             scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/org/login/quanlydatban/stylesheets/style.css")).toExternalForm());
 
             TrangChuController trangChuController = loader.getController();
-            if(taiKhoan != null) {
+            if (taiKhoan != null) {
                 trangChuController.setTaiKhoan(taiKhoan);
-            }
-            else {
+            } else {
                 FXMLLoader loaderNhanVien = new FXMLLoader(getClass().getResource("/org/login/quanlydatban/views/QuanLyNhanVien_XemDS.fxml"));
                 AnchorPane anchorPaneNhanVien = loaderNhanVien.load();
                 trangChuController.showTrangNhanVien(anchorPaneNhanVien);

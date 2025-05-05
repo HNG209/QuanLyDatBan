@@ -13,6 +13,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import org.login.quanlydatban.utilities.RMIServiceUtils;
 import org.login.service.CTHDService;
 import org.login.service.HoaDonService;
 import org.login.entity.*;
@@ -103,11 +104,9 @@ public class HoaDonController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        String host = System.getenv("HOST_NAME");
-
         try {
-            hoaDonService = (HoaDonService) Naming.lookup("rmi://"+ host + ":2909/hoaDonService");
-            cthdService = (CTHDService) Naming.lookup("rmi://"+ host + ":2909/cthdService");
+            hoaDonService = RMIServiceUtils.useHoaDonService();
+            cthdService = RMIServiceUtils.useCTHDService();
         } catch (NotBoundException | MalformedURLException | RemoteException e) {
             throw new RuntimeException(e);
         }

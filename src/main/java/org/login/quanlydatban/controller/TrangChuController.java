@@ -18,6 +18,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 //import org.login.quanlydatban.dao.HoaDonDAO;
+import org.login.quanlydatban.utilities.RMIServiceUtils;
 import org.login.service.HoaDonService;
 import org.login.entity.TaiKhoan;
 import org.login.entity.enums.ChucVu;
@@ -311,14 +312,9 @@ public class TrangChuController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        String host = System.getenv("HOST_NAME");
         try {
-            hoaDonService = (HoaDonService) Naming.lookup("rmi://" + host + ":2909/hoaDonService");
-        } catch (NotBoundException e) {
-            throw new RuntimeException(e);
-        } catch (MalformedURLException e) {
-            throw new RuntimeException(e);
-        } catch (RemoteException e) {
+            hoaDonService = RMIServiceUtils.useHoaDonService();
+        } catch (NotBoundException | MalformedURLException | RemoteException e) {
             throw new RuntimeException(e);
         }
         Clock clock = new Clock();
